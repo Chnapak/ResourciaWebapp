@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Resourcia.Api;
 
-namespace Resorcia.Api.Controllers;
+namespace Resourcia.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

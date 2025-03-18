@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ResourciaApi.Data.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
+using Resourcia.Data.Interfaces;
 
-namespace ResourciaApi.Data.Entities.Identity;
+namespace Resourcia.Data.Entities.Identity;
+[Table(nameof(AppUser))]
 
 public class AppUser : IdentityUser<Guid>, ITrackable
 {

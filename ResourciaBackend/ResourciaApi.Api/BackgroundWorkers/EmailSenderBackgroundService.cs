@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
-using ResourciaApi.Api.Options;
-using ResourciaApi.Api.Services;
+using Resourcia.Api.Options;
+using Resourcia.Api.Services;
 
-namespace ResourciaApi.Api.BackgroundWorkers;
+namespace Resourcia.Api.BackgroundWorkers;
 
 public class EmailSenderBackgroundService : BackgroundService
 {

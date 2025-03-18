@@ -1,6 +1,33 @@
 [
   {
-    "ContainingType": "Resorcia.Api.Controllers.WeatherForecastController",
+    "ContainingType": "Resourcia.Api.Controllers.ResourceController",
+    "Method": "Create",
+    "RelativePath": "Resource",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "Resourcia.Api.Models.Resources.CreateResourceModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Resourcia.Data.Entities.Resource",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "CreateResource"
+  },
+  {
+    "ContainingType": "Resourcia.Api.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",
     "HttpMethod": "GET",
@@ -9,7 +36,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[Resourcia.Api.WeatherForecast, ResourciaApi.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Resourcia.Api.WeatherForecast, Resourcia.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

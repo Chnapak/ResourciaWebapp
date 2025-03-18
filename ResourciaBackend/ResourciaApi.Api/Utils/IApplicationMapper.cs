@@ -1,6 +1,6 @@
 ﻿using NodaTime;
 
-namespace ResourciaApi.Api.Utils;
+namespace Resourcia.Api.Utils;
 
 public interface IApplicationMapper
 {

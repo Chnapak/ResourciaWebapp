@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ResourciaApi.Data.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ResourciaApi.Data.Entities;
+using Resourcia.Data.Entities.Identity;
+using Resourcia.Data.Entities;
 
-namespace ResourciaApi.Data
+namespace Resourcia.Data
 {
     public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
@@ -18,7 +18,7 @@ namespace ResourciaApi.Data
         }
 
         public DbSet<AppUser> Users { get; set; }
-
+        public DbSet<Resource> Resources { get; set; }
         public DbSet<EmailMessage> Emails { get; set; }
     }
 }

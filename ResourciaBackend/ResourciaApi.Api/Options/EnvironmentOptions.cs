@@ -1,4 +1,4 @@
-﻿namespace ResourciaApi.Api.Options;
+﻿namespace Resourcia.Api.Options;
 
 public class EnvironmentOptions
 {

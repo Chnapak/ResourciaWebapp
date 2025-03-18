@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ResourciaApi.Data.Entities;
+namespace Resourcia.Data.Entities.Identity;
 [Table(nameof(EmailMessage))]
 public class EmailMessage
 {

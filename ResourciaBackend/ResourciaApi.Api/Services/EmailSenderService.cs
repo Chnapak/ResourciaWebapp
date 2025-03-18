@@ -4,12 +4,13 @@ using MimeKit;
 using MailKit;
 using NodaTime;
 using System.Net.Mail;
-using ResourciaApi.Api.Options;
-using ResourciaApi.Data;
-using ResourciaApi.Data.Entities;
-using ResourciaApi.Data.Interfaces;
+using Resourcia.Data.Entities;
+using Resourcia.Data.Interfaces;
+using Resourcia.Api.Options;
+using Resourcia.Data;
+using Resourcia.Data.Entities.Identity;
 
-namespace ResourciaApi.Api.Services;
+namespace Resourcia.Api.Services;
 
 public class EmailSenderService
 {

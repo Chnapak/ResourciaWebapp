@@ -2,19 +2,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using ResourciaApi.Data;
-using ResourciaApi.Data.Entities.Identity;
-using ResourciaApi.Api.BackgroundWorkers;
-using ResourciaApi.Api.Options;
 using System;
 using System.Text;
 using Microsoft.AspNetCore.Builder.Extensions;
 using NodaTime;
-using ResourciaApi.Api.Services;
-using ResourciaApi.Api.Utils;
 using Microsoft.OpenApi.Models;
+using Resourcia.Api.Utils;
+using Resourcia.Api.Services;
+using Resourcia.Api.BackgroundWorkers;
+using Resourcia.Api.Options;
+using Resourcia.Data;
+using Resourcia.Data.Entities.Identity;
 
-namespace ResourciaApi.Api;
+namespace Resourcia.Api;
 
 public class Program
 {

@@ -1,6 +1,6 @@
 ﻿using NodaTime;
 
-namespace ResourciaApi.Data.Interfaces;
+namespace Resourcia.Data.Interfaces;
 public interface ITrackable
 {
     public Instant CreatedAt { get; set; }
