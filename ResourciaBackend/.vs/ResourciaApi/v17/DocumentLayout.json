@@ -1,0 +1,377 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\backgroundworkers\\emailsenderbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\backgroundworkers\\emailsenderbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\resourciaapi.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\resourciaapi.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\resourciaapi.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\resourciaapi.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.data\\migrations\\20250311161600_changedb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|solutionrelative:resourciaapi.data\\migrations\\20250311161600_changedb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\services\\emailsenderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\services\\emailsenderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Migrations\\20250311161112_First Migraton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ResourciaApi.Data\\Migrations\\20250311161112_First Migraton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.data\\resourciaapi.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|solutionrelative:resourciaapi.data\\resourciaapi.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Migrations\\20250311160650_FirstMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ResourciaApi.Api\\Migrations\\20250311160650_FirstMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|solutionrelative:resourciaapi.data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.data\\entities\\identity\\emailmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|solutionrelative:resourciaapi.data\\entities\\identity\\emailmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\utils\\iapplicationmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\utils\\iapplicationmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\options\\smtpoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\options\\smtpoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\options\\jwtsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\options\\jwtsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.api\\options\\environmentoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BCDE414-776F-450C-8184-0B4BB5EBCF3D}|ResourciaApi.Api\\ResourciaApi.Api.csproj|solutionrelative:resourciaapi.api\\options\\environmentoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\src\\resourciaapi.data\\migrations\\20250311161212_firstmigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6B57FD8-E3B3-487A-961F-A29C119596F5}|ResourciaApi.Data\\ResourciaApi.Data.csproj|solutionrelative:resourciaapi.data\\migrations\\20250311161212_firstmigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\WeatherForecast.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\WeatherForecast.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T11:34:44.715Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T11:30:51.939Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Program.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Program.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Program.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Program.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAAAFAAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-04T20:30:53.499Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ResourciaApi.http",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\ResourciaApi.http",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\ResourciaApi.http",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\ResourciaApi.http",
+              "RelativeToolTip": "ResourciaApi.Api\\ResourciaApi.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-03-11T15:30:50.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\appsettings.Development.json",
+              "RelativeToolTip": "ResourciaApi.Api\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-11T15:41:42.391Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "20250311161212_FirstMigration.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Migrations\\20250311161212_FirstMigration.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Data\\Migrations\\20250311161212_FirstMigration.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Migrations\\20250311161212_FirstMigration.cs",
+              "RelativeToolTip": "ResourciaApi.Data\\Migrations\\20250311161212_FirstMigration.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T16:12:12.907Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EmailSenderBackgroundService.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\BackgroundWorkers\\EmailSenderBackgroundService.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\BackgroundWorkers\\EmailSenderBackgroundService.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\BackgroundWorkers\\EmailSenderBackgroundService.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\BackgroundWorkers\\EmailSenderBackgroundService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:53:59.549Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ResourciaApi.Api.csproj",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\ResourciaApi.Api.csproj",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\ResourciaApi.Api.csproj",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\ResourciaApi.Api.csproj",
+              "RelativeToolTip": "ResourciaApi.Api\\ResourciaApi.Api.csproj",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAAgAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-11T15:48:20.222Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Properties\\launchSettings.json",
+              "RelativeToolTip": "ResourciaApi.Api\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-11T15:53:43.435Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "EmailSenderService.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Services\\EmailSenderService.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Services\\EmailSenderService.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Services\\EmailSenderService.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Services\\EmailSenderService.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAwDAAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:06:13.368Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\appsettings.json",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\appsettings.json",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\appsettings.json",
+              "RelativeToolTip": "ResourciaApi.Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-04T20:37:18.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "20250311160650_FirstMigration.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Migrations\\20250311160650_FirstMigration.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Migrations\\20250311160650_FirstMigration.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Migrations\\20250311160650_FirstMigration.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Migrations\\20250311160650_FirstMigration.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T16:06:50.295Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "20250311161600_ChangeDb.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Migrations\\20250311161600_ChangeDb.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Data\\Migrations\\20250311161600_ChangeDb.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Migrations\\20250311161600_ChangeDb.cs",
+              "RelativeToolTip": "ResourciaApi.Data\\Migrations\\20250311161600_ChangeDb.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T16:16:00.877Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ResourciaApi.Data.csproj",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\ResourciaApi.Data.csproj",
+              "RelativeDocumentMoniker": "ResourciaApi.Data\\ResourciaApi.Data.csproj",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\ResourciaApi.Data.csproj",
+              "RelativeToolTip": "ResourciaApi.Data\\ResourciaApi.Data.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-11T16:09:34.911Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "20250311161112_First Migraton.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Migrations\\20250311161112_First Migraton.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Data\\Migrations\\20250311161112_First Migraton.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Migrations\\20250311161112_First Migraton.cs",
+              "RelativeToolTip": "ResourciaApi.Data\\Migrations\\20250311161112_First Migraton.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T16:11:12.201Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\AppDbContext.cs",
+              "RelativeToolTip": "ResourciaApi.Data\\AppDbContext.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAjwBUAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:32:53.398Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "EmailMessage.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Entities\\Identity\\EmailMessage.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Data\\Entities\\Identity\\EmailMessage.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Data\\Entities\\Identity\\EmailMessage.cs",
+              "RelativeToolTip": "ResourciaApi.Data\\Entities\\Identity\\EmailMessage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:11:50.844Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IApplicationMapper.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Utils\\IApplicationMapper.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Utils\\IApplicationMapper.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Utils\\IApplicationMapper.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Utils\\IApplicationMapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:59:25.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "SmtpOptions.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Options\\SmtpOptions.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Options\\SmtpOptions.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Options\\SmtpOptions.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Options\\SmtpOptions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:29:31.533Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "JwtSettings.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Options\\JwtSettings.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Options\\JwtSettings.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Options\\JwtSettings.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Options\\JwtSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:29:29.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "EnvironmentOptions.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Options\\EnvironmentOptions.cs",
+              "RelativeDocumentMoniker": "ResourciaApi.Api\\Options\\EnvironmentOptions.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\src\\ResourciaApi.Api\\Options\\EnvironmentOptions.cs",
+              "RelativeToolTip": "ResourciaApi.Api\\Options\\EnvironmentOptions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T15:27:16.072Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
