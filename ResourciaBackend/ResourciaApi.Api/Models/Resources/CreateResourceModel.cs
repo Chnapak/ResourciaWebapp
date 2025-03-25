@@ -11,4 +11,6 @@ public class CreateResourceModel
     public string Name { get; set; } = null!;
     public string Url { get; set; } = null!;
     public int AvailabilityTag { get; set; }
+    public int DeweyNumber { get; set; }
+    public int Digits { get; set; }
 }

@@ -5,6 +5,19 @@
     "version": "v1"
   },
   "paths": {
+    "/Auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Resource": {
       "post": {
         "tags": [
@@ -113,6 +126,14 @@
           "availabilityTag": {
             "type": "integer",
             "format": "int32"
+          },
+          "deweyNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "digits": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -122,6 +143,7 @@
           "availabilityTag",
           "id",
           "name",
+          "topicId",
           "url"
         ],
         "type": "object",
@@ -139,6 +161,10 @@
             "nullable": true
           },
           "availabilityTag": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "topicId": {
             "type": "integer",
             "format": "int32"
           },

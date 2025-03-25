@@ -15,5 +15,6 @@ public class Resource
     public required string Name { get; set; } = null!;
     public required string Url { get; set; } = null!;
     public required int AvailabilityTag { get; set; }
+    public required ushort TopicId { get; set; }
     public string Description { get; set; } = null!;
 }

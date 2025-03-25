@@ -299,6 +299,9 @@ namespace ResourciaApi.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");

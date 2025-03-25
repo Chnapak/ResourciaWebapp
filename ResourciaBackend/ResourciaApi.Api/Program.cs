@@ -13,6 +13,7 @@ using Resourcia.Api.BackgroundWorkers;
 using Resourcia.Api.Options;
 using Resourcia.Data;
 using Resourcia.Data.Entities.Identity;
+using Resourcia.Api.Services.Interfaces;
 
 namespace Resourcia.Api;
 
@@ -68,6 +69,8 @@ public class Program
         builder.Services.Configure<EnvironmentOptions>(builder.Configuration.GetSection("EnvironmentSettings"));
 
         // Add services to the container.
+
+        builder.Services.AddScoped<IDeweyService, DeweyService>();
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
         builder.Services.AddScoped<IApplicationMapper, ApplicationMapper>();
         builder.Services.AddScoped<EmailSenderService>();
@@ -122,6 +125,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

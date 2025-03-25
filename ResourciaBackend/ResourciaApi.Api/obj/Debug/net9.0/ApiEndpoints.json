@@ -1,5 +1,16 @@
 [
   {
+    "ContainingType": "Resourcia.Api.Controllers.Auth.AuthController",
+    "Method": "Login",
+    "RelativePath": "Auth",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [],
+    "EndpointName": "Login"
+  },
+  {
     "ContainingType": "Resourcia.Api.Controllers.ResourceController",
     "Method": "Create",
     "RelativePath": "Resource",
