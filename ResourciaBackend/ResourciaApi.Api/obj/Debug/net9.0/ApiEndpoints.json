@@ -11,6 +11,57 @@
     "EndpointName": "Login"
   },
   {
+    "ContainingType": "Resourcia.Api.Controllers.Auth.AuthController",
+    "Method": "GetPong",
+    "RelativePath": "Auth/api/ping",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Resourcia.Api.Controllers.Auth.AuthController",
+    "Method": "Register",
+    "RelativePath": "Auth/api/Register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "Resourcia.Api.Models.Auth.RegisterModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      }
+    ]
+  },
+  {
     "ContainingType": "Resourcia.Api.Controllers.ResourceController",
     "Method": "Create",
     "RelativePath": "Resource",

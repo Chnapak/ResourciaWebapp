@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("c0144e48-0e6f-4824-b0d5-a84c8a3ece90")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Resourcia.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d06599317272881f95530519802cd272ddc6333")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5c9e7faf018f0482773cba0709bdf54a11b3161e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Resourcia.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Resourcia.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

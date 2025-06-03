@@ -75,6 +75,9 @@ public class Program
         builder.Services.AddScoped<IApplicationMapper, ApplicationMapper>();
         builder.Services.AddScoped<EmailSenderService>();
 
+        // You can also use the following code to register the EnvironmentOptions class if you have using IOptions<EnvironmentOptions> envSettings in the AuthController.
+        //builder.Services.AddScoped<EnvironmentOptions, EnvironmentOptions>();
+
         builder.Services.AddHostedService<EmailSenderBackgroundService>();
 
         builder.Services.AddControllers();

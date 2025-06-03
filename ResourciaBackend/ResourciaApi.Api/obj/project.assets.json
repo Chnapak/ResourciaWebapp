@@ -28,10 +28,10 @@
           }
         }
       },
-      "MailKit/4.9.0": {
+      "MailKit/4.11.0": {
         "type": "package",
         "dependencies": {
-          "MimeKit": "4.9.0",
+          "MimeKit": "4.11.0",
           "System.Formats.Asn1": "8.0.1"
         },
         "compile": {
@@ -1876,10 +1876,10 @@
         "logo.png"
       ]
     },
-    "MailKit/4.9.0": {
-      "sha512": "wRUVzYXRWbjdUixwtSp7ivVHPhWw17h+BvwIVaouBike68B56Xk9b5+QRT39EK/QN8XF7MtOgt9caHvUaCvhIQ==",
+    "MailKit/4.11.0": {
+      "sha512": "JVoRxJ+QRqFMRtEM4veStj3pMLBPRulQGV+iZm6Tq1pnr66Dy6dFYOW9Uw02nxAVzdZAN8G+y3BsUPtgZcKXhA==",
       "type": "package",
-      "path": "mailkit/4.9.0",
+      "path": "mailkit/4.11.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1912,7 +1912,7 @@
         "lib/netstandard2.1/MailKit.dll.config",
         "lib/netstandard2.1/MailKit.pdb",
         "lib/netstandard2.1/MailKit.xml",
-        "mailkit.4.9.0.nupkg.sha512",
+        "mailkit.4.11.0.nupkg.sha512",
         "mailkit.nuspec"
       ]
     },
@@ -4796,7 +4796,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "MailKit >= 4.9.0",
+      "MailKit >= 4.11.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 9.0.2",
       "Microsoft.AspNetCore.Identity >= 2.2.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.2",
@@ -4869,7 +4869,7 @@
         "dependencies": {
           "MailKit": {
             "target": "Package",
-            "version": "[4.9.0, )"
+            "version": "[4.11.0, )"
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
