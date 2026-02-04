@@ -45,6 +45,8 @@ public class EmailSenderService
         await _dbContext.SaveChangesAsync();
     }
 
+    //public async Task ResendEmail(string)
+
     public async Task SendEmailsAsync()
     {
         var unsentMails = await _dbContext.Emails.Where(x => !x.Sent).ToListAsync();

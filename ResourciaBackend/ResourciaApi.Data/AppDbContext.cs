@@ -20,5 +20,8 @@ namespace Resourcia.Data
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Resource> Resources { get; set; }
         public DbSet<EmailMessage> Emails { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<ResourceSubject> ResourceSubjects { get; set; }
     }
 }

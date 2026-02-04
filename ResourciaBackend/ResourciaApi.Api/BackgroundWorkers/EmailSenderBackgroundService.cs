@@ -31,7 +31,7 @@ public class EmailSenderBackgroundService : BackgroundService
             var emailSenderService = scope.ServiceProvider.GetRequiredService<EmailSenderService>();
             await emailSenderService.SendEmailsAsync();
 
-            await Task.Delay(TimeSpan.FromSeconds(300));
+            await Task.Delay(TimeSpan.FromSeconds(120));
         }
     }
 }

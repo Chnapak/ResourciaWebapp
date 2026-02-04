@@ -1,14 +1,18 @@
-$primary-color: #c6538c;
+.nav-link {
+    transition: all 0.3s ease;
 
-.interactive {
-    cursor: pointer;
+}
+.search-bar:focus {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 }
 
-.explore-button {
-  background: none;
-  border: none;
-  color: $primary-color;
-  font-size: 24px;
-  padding: 0;
-  margin: 0
+.warning {
+  opacity: 1;
+  transform: translateY(10px);
+  transition: all 0.4s ease-out;
+  
+  &.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }

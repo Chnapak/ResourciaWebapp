@@ -17,4 +17,7 @@ public class RegisterModel
     [Required]
     [Compare("Password")]
     public string ConfirmPassword { get; set; } = null!;
+
+    [Required]
+    public string CaptchaToken { get; set; } = null!;
 }

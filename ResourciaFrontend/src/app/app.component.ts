@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-
+import { RouterOutlet } from '@angular/router';
+import { initFlowbite } from 'flowbite';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -12,5 +13,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 export class AppComponent {
   title = 'ResourciaFrontend';
 
-  
+  ngOnInit(): void {
+    initFlowbite();
+  }
 }

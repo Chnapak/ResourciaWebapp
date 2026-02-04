@@ -1,0 +1,358 @@
+<!-- Page Content -->
+<div class="max-w-6xl mx-auto px-6 py-8">
+  <!-- Page Header -->
+  <div class="mb-6">
+    <a routerLink="/search"
+      class="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+    >
+      <!-- ArrowLeft icon -->
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      <span class="font-medium">Back to Resources</span>
+    </a>
+
+    <h2 class="text-3xl font-bold text-gray-900 mb-2">Add Resource</h2>
+    <p class="text-gray-600">
+      Fill out the form below to add a new learning resource to Resourcia.
+    </p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+    <form action="#" method="post">
+      <div class="p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
+          <!-- Resource Title -->
+          <div class="lg:col-span-6">
+            <label for="title" class="block text-sm font-medium text-gray-900 mb-2">
+              Resource Title <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="title"
+              name="title"
+              type="text"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <!-- Static error placeholder -->
+            <!-- <p class="mt-1 text-sm text-red-500">Resource title is required</p> -->
+          </div>
+
+          <!-- URL/Link -->
+          <div class="lg:col-span-6">
+            <label for="url" class="block text-sm font-medium text-gray-900 mb-2">
+              URL/Link <span class="text-red-500">*</span>
+            </label>
+            <div class="flex">
+              <span
+                class="inline-flex items-center px-4 bg-gray-50 border border-r-0 border-gray-300 rounded-l-lg text-gray-600 text-sm"
+              >
+                https://
+              </span>
+              <input
+                id="url"
+                name="url"
+                type="text"
+                placeholder="example.com"
+                class="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <!-- Static error placeholder -->
+            <!-- <p class="mt-1 text-sm text-red-500">Please enter a valid URL</p> -->
+          </div>
+
+          <!-- Description -->
+          <div class="lg:col-span-6">
+            <label for="description" class="block text-sm font-medium text-gray-900 mb-2">
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              placeholder="Write a brief description of the resource..."
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            ></textarea>
+          </div>
+
+          <!-- Subject -->
+          <div class="lg:col-span-3">
+            <label for="subject" class="block text-sm font-medium text-gray-900 mb-2">
+              Subject
+            </label>
+            <div class="relative">
+              <select
+                id="subject"
+                name="subject"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700"
+              >
+                <option value="" selected disabled>Select subject...</option>
+                <option>Math</option>
+                <option>Science</option>
+                <option>History</option>
+                <option>English</option>
+                <option>Computer Science</option>
+                <option>Art</option>
+                <option>Music</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Biology</option>
+              </select>
+
+              <!-- ChevronDown icon -->
+              <svg
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Resource Type -->
+          <div class="lg:col-span-3">
+            <label for="resourceType" class="block text-sm font-medium text-gray-900 mb-2">
+              Resource Type
+            </label>
+            <div class="relative">
+              <select
+                id="resourceType"
+                name="resourceType"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700"
+              >
+                <option value="" selected disabled>Select type...</option>
+                <option>Interactive</option>
+                <option>Video</option>
+                <option>Course</option>
+                <option>Article</option>
+                <option>Book</option>
+                <option>Problem Set</option>
+                <option>Tool</option>
+                <option>Tutorial</option>
+              </select>
+
+              <!-- ChevronDown icon -->
+              <svg
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Upload Thumbnail (static) -->
+          <div class="lg:col-span-6">
+            <div class="border-2 border-dashed border-blue-300 bg-blue-50 rounded-lg p-8 text-center hover:bg-blue-100 transition-colors">
+              <!-- Upload icon -->
+              <svg class="w-12 h-12 text-blue-500 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M16 8l-4-4-4 4M12 4v12" />
+              </svg>
+
+              <p class="text-base font-medium text-gray-900 mb-2">Upload Thumbnail</p>
+              <p class="text-sm text-gray-600 mb-1">Drop an image here, or click to upload</p>
+              <p class="text-xs text-gray-500 mb-4">JPG or PNG • Max size of 5MB</p>
+
+              <label
+                class="inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+              >
+                Choose file
+                <input type="file" name="thumbnail" accept="image/jpeg,image/png" class="sr-only" />
+              </label>
+            </div>
+
+            <!-- If you want to show a preview state, duplicate another block and toggle server-side/CMS-side. -->
+          </div>
+
+          <!-- Add more licenses link -->
+          <div class="lg:col-span-6 flex justify-center">
+            <button type="button" class="text-sm text-blue-600 hover:text-blue-700 underline font-medium">
+              Add [more licenses]
+            </button>
+          </div>
+
+          <!-- Advanced Options (pure HTML toggle) -->
+          <div class="lg:col-span-6 pt-2">
+            <details class="border-t border-gray-100 pt-4">
+              <summary class="list-none cursor-pointer flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                <!-- Chevron icon -->
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                </svg>
+                <span>Advanced Options</span>
+              </summary>
+
+              <div class="mt-6 grid grid-cols-1 lg:grid-cols-6 gap-6">
+                <!-- Author/Provider -->
+                <div class="lg:col-span-3">
+                  <label for="authorProvider" class="block text-sm font-medium text-gray-900 mb-2">
+                    Author/Provider
+                  </label>
+                  <input
+                    id="authorProvider"
+                    name="authorProvider"
+                    type="text"
+                    placeholder="Enter name..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <!-- Free or Paid -->
+                <div class="lg:col-span-3">
+                  <label for="pricing" class="block text-sm font-medium text-gray-900 mb-2">
+                    Free or Paid
+                  </label>
+                  <div class="relative">
+                    <select
+                      id="pricing"
+                      name="pricing"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700"
+                    >
+                      <option value="" selected disabled>Select option...</option>
+                      <option>Free</option>
+                      <option>Paid</option>
+                      <option>Freemium</option>
+                      <option>Free trial</option>
+                    </select>
+
+                    <svg
+                      class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Year -->
+                <div class="lg:col-span-2">
+                  <label for="year" class="block text-sm font-medium text-gray-900 mb-2">Year</label>
+                  <input
+                    id="year"
+                    name="year"
+                    type="number"
+                    min="1900"
+                    max="2100"
+                    placeholder="Optional"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <!-- Difficulty -->
+                <div class="lg:col-span-2">
+                  <label for="difficulty" class="block text-sm font-medium text-gray-900 mb-2">Difficulty Level</label>
+                  <div class="relative">
+                    <select
+                      id="difficulty"
+                      name="difficulty"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700"
+                    >
+                      <option value="" selected disabled>Select level...</option>
+                      <option>Beginner</option>
+                      <option>Intermediate</option>
+                      <option>Advanced</option>
+                      <option>Expert</option>
+                    </select>
+                    <svg
+                      class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Duration -->
+                <div class="lg:col-span-2">
+                  <label for="duration" class="block text-sm font-medium text-gray-900 mb-2">Duration</label>
+                  <input
+                    id="duration"
+                    name="duration"
+                    type="text"
+                    placeholder="e.g., 2 hours, 6 weeks..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <!-- Language -->
+                <div class="lg:col-span-3">
+                  <label for="language" class="block text-sm font-medium text-gray-900 mb-2">Language</label>
+                  <div class="relative">
+                    <select
+                      id="language"
+                      name="language"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700"
+                    >
+                      <option value="" selected disabled>Select language...</option>
+                      <option>English</option>
+                      <option>Spanish</option>
+                      <option>French</option>
+                      <option>German</option>
+                      <option>Chinese</option>
+                      <option>Other</option>
+                    </select>
+                    <svg
+                      class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Prerequisites -->
+                <div class="lg:col-span-3">
+                  <label for="prerequisites" class="block text-sm font-medium text-gray-900 mb-2">Prerequisites</label>
+                  <input
+                    id="prerequisites"
+                    name="prerequisites"
+                    type="text"
+                    placeholder="Enter any prerequisites..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <!-- Tags -->
+                <div class="lg:col-span-6">
+                  <label for="tags" class="block text-sm font-medium text-gray-900 mb-2">Tags</label>
+                  <input
+                    id="tags"
+                    name="tags"
+                    type="text"
+                    placeholder="Enter tags separated by commas..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Footer -->
+      <div class="px-8 py-6 border-t border-gray-200 flex flex-col items-center gap-3">
+        <button
+          type="submit"
+          class="w-full max-w-md px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+        >
+          Submit Resource
+        </button>
+        <a href="#" class="text-gray-600 hover:text-gray-800 font-medium transition-colors underline">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

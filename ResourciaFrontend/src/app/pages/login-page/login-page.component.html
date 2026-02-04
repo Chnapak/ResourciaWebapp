@@ -1,1 +1,59 @@
-<p>lpla</p>
+<div class="flex w-full h-150">
+  <img class="grayscale brightness-40 h-full w-1/2 object-cover" src="./img/authbanner.jpg" alt="registration banner">
+  <div class="flex flex-col w-1/2 h-full items-center justify-center text-center">
+    <h1 class="text-4xl md:text-5xl font-bold m-3">Login</h1>
+    <form class="w-2/3 flex flex-col justify-center items-center" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="flex flex-col w-fit max-w-240 relative">
+        @let email = form.get('email');
+        <label for="email" class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit"
+        [class.text-red-500]="email?.touched && email?.invalid"
+        >Email:</label>
+        <input type="text" placeholder="Write here..." name="email" formControlName="email" class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-400 focus:outline-none"
+        [class.border-red-500]="email?.touched && email?.invalid">
+
+        @if (email?.touched && email?.invalid) {
+          <div class="w-70 text-left text-xs text-red-700">Email is required.</div>
+          @if (email?.errors?.['required']) {
+            <!--NO need to put the error texts here, if there aren't any other errors-->
+          }
+        }
+      </div>
+      <div class="flex flex-col w-fit max-w-240 relative">
+        @let password = form.get('password');
+        <label for="password" class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit"
+        [class.text-red-500]="password?.touched && password?.invalid"
+        >Password:</label>
+        <input type="password" placeholder="Write here..." name="password" 
+        formControlName="password"
+        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-400 focus:outline-none"
+        [class.border-red-500]="password?.touched && password?.invalid">
+
+        @if (password?.touched && password?.invalid) {
+          @if (password?.errors?.['required']) {
+            <div class="w-70 text-left text-xs text-red-700">Password is required.</div>
+          }
+          @if (password?.errors?.['passwordStrength'] || password?.errors?.['minlength'] || password?.errors?.['maxlength']) {
+            <div class="w-70 text-left text-xs text-red-700">Password must be between 8-32 characters long contain a capital character, a digit and a special character.</div>
+          }
+        }
+      </div>
+      <div id="turnstile-container" class="flex flex-col w-fit max-w-240 relative mt-2">
+      </div>
+      @if (captchaFailed) {
+        <div class="w-70 text-left text-xs text-red-700">Something went wrong, please try again.</div>
+      }
+      @else if (generalError) {
+        <div class="w-70 text-left text-xs text-red-700">Something went wrong, please try again.</div>
+      }
+      <div class="w-70 max-w-240 border-2 border-blue-400 rounded"
+      [class.border-gray-400]="isSubmitting">
+        @if (!isSubmitting){
+          <button class="w-full py-2 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition" type="submit">Log In</button>
+        }
+        @else{
+          <button class="w-full py-2 text-sm font-bold text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition" type="submit">Submitting...</button>
+        }
+      </div>
+  </form>
+  </div>
+</div>

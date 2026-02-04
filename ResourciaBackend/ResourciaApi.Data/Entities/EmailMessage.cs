@@ -1,6 +1,7 @@
 ﻿using NodaTime;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Resourcia.Data.Entities;
 [Table(nameof(EmailMessage))]
 public class EmailMessage
 {
+    [Key]
     public Guid Id { get; set; }
     public required string RecipientEmail { get; set; }
     public string? RecipientName { get; set; }
