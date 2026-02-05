@@ -1,6 +1,0 @@
-@ResourciaApi_HostAddress = http://localhost:5212
-
-GET {{ResourciaApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

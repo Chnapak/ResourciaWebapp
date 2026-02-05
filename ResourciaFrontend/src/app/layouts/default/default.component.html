@@ -77,7 +77,10 @@
                     </svg>
                 </button>
                 <div class="absolute hidden group-hover:block top-full left-0 mt-1 w-36 bg-white rounded-md shadow-lg -translate-x-2 -translate-y-1 z-10">
-                    <a routerLink="/profile/{{user.name}}" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">Profile</a>
+                    <a routerLink="/profile/{{user.name}}" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-t-md">Profile</a>
+                    @if (user.isAdmin == true) {
+                        <a routerLink="admin" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">Admin Hub</a>
+                    }
                     <a class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-b-md" (click)="logout()">Log Out</a>
                 </div>
             </div>
