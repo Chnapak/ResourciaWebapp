@@ -21,4 +21,5 @@ export class FiltersAdminPageComponent {
       this.schema = data; 
     })
   }
+  
 }
