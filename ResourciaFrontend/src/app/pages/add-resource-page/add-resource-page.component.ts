@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ResourceService } from '../../services/resource.service';
+import { ResourceService } from '../../core/services/resource.service';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({

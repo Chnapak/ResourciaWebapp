@@ -13,10 +13,14 @@ namespace Resourcia.Api.Controllers;
 public class AdminUsersController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly DbContext _dbContext;
 
-    public AdminUsersController(UserManager<AppUser> userManager)
+
+    public AdminUsersController(UserManager<AppUser> userManager, DbContext dbContext)
     {
         _userManager = userManager;
+        _dbContext = dbContext;
+
     }
 
     [HttpGet]
@@ -45,5 +49,19 @@ public class AdminUsersController : ControllerBase
             page,
             pageSize
         });
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        _userManager.DeleteAsync(user);
+        await _dbContext.SaveChangesAsync();
+        return NoContent();
+
     }
 }
