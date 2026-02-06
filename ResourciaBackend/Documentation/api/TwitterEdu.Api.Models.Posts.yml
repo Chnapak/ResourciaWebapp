@@ -1,0 +1,78 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Api.Models.Posts
+  commentId: N:TwitterEdu.Api.Models.Posts
+  id: TwitterEdu.Api.Models.Posts
+  children:
+  - TwitterEdu.Api.Models.Posts.CreatePostModel
+  - TwitterEdu.Api.Models.Posts.DetailPostModel
+  - TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Api.Models.Posts
+  nameWithType: TwitterEdu.Api.Models.Posts
+  fullName: TwitterEdu.Api.Models.Posts
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Api
+references:
+- uid: TwitterEdu.Api.Models.Posts.CreatePostModel
+  commentId: T:TwitterEdu.Api.Models.Posts.CreatePostModel
+  parent: TwitterEdu.Api.Models.Posts
+  href: TwitterEdu.Api.Models.Posts.CreatePostModel.html
+  name: CreatePostModel
+  nameWithType: CreatePostModel
+  fullName: TwitterEdu.Api.Models.Posts.CreatePostModel
+- uid: TwitterEdu.Api.Models.Posts.DetailPostModel
+  commentId: T:TwitterEdu.Api.Models.Posts.DetailPostModel
+  parent: TwitterEdu.Api.Models.Posts
+  href: TwitterEdu.Api.Models.Posts.DetailPostModel.html
+  name: DetailPostModel
+  nameWithType: DetailPostModel
+  fullName: TwitterEdu.Api.Models.Posts.DetailPostModel
+- uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+  commentId: T:TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+  parent: TwitterEdu.Api.Models.Posts
+  href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html
+  name: DetailPostModelExtensions
+  nameWithType: DetailPostModelExtensions
+  fullName: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+- uid: TwitterEdu.Api.Models.Posts
+  commentId: N:TwitterEdu.Api.Models.Posts
+  href: TwitterEdu.html
+  name: TwitterEdu.Api.Models.Posts
+  nameWithType: TwitterEdu.Api.Models.Posts
+  fullName: TwitterEdu.Api.Models.Posts
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Models
+    name: Models
+    href: TwitterEdu.Api.Models.html
+  - name: .
+  - uid: TwitterEdu.Api.Models.Posts
+    name: Posts
+    href: TwitterEdu.Api.Models.Posts.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Models
+    name: Models
+    href: TwitterEdu.Api.Models.html
+  - name: .
+  - uid: TwitterEdu.Api.Models.Posts
+    name: Posts
+    href: TwitterEdu.Api.Models.Posts.html

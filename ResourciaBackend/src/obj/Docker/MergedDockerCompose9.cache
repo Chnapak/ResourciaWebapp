@@ -1,0 +1,75 @@
+name: dockercompose5059264794122952065
+services:
+  resourcia.api:
+    build:
+      context: C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src
+      dockerfile: Resourcia.Api/Dockerfile
+    container_name: resourcia.api
+    depends_on:
+      resourcia.db:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "5000"
+      ASPNETCORE_HTTPS_PORTS: "5001"
+    image: resourciaapi
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5000
+        published: "5000"
+        protocol: tcp
+      - mode: ingress
+        target: 5001
+        published: "5001"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\matej\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\matej\AppData\Roaming/Microsoft/UserSecrets
+        target: /root/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\matej\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\matej\AppData\Roaming/ASP.NET/Https
+        target: /root/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+  resourcia.db:
+    container_name: resourcia.db
+    environment:
+      POSTGRES_DB: resourciadb
+      POSTGRES_PASSWORD: ResourciaPassword123!
+      POSTGRES_USER: resourcia
+    image: postgres:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\.containers\resourcia-db
+        target: /var/lib/postgresql/data
+        bind:
+          create_host_path: true
+networks:
+  default:
+    name: dockercompose5059264794122952065_default

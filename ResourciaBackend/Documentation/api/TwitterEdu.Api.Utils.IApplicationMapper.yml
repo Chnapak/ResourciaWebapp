@@ -1,0 +1,222 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Api.Utils.IApplicationMapper
+  commentId: T:TwitterEdu.Api.Utils.IApplicationMapper
+  id: IApplicationMapper
+  parent: TwitterEdu.Api.Utils
+  children:
+  - TwitterEdu.Api.Utils.IApplicationMapper.Now
+  langs:
+  - csharp
+  - vb
+  name: IApplicationMapper
+  nameWithType: IApplicationMapper
+  fullName: TwitterEdu.Api.Utils.IApplicationMapper
+  type: Interface
+  source:
+    remote:
+      path: src/TwitterEdu.Api/Utils/IApplicationMapper.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: IApplicationMapper
+    path: ../src/TwitterEdu.Api/Utils/IApplicationMapper.cs
+    startLine: 4
+  assemblies:
+  - TwitterEdu.Api
+  namespace: TwitterEdu.Api.Utils
+  syntax:
+    content: public interface IApplicationMapper
+    content.vb: Public Interface IApplicationMapper
+  extensionMethods:
+  - TwitterEdu.Api.Utils.IApplicationMapper.TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Data.Entities.Post)
+- uid: TwitterEdu.Api.Utils.IApplicationMapper.Now
+  commentId: P:TwitterEdu.Api.Utils.IApplicationMapper.Now
+  id: Now
+  parent: TwitterEdu.Api.Utils.IApplicationMapper
+  langs:
+  - csharp
+  - vb
+  name: Now
+  nameWithType: IApplicationMapper.Now
+  fullName: TwitterEdu.Api.Utils.IApplicationMapper.Now
+  type: Property
+  source:
+    remote:
+      path: src/TwitterEdu.Api/Utils/IApplicationMapper.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: Now
+    path: ../src/TwitterEdu.Api/Utils/IApplicationMapper.cs
+    startLine: 6
+  assemblies:
+  - TwitterEdu.Api
+  namespace: TwitterEdu.Api.Utils
+  syntax:
+    content: Instant Now { get; }
+    parameters: []
+    return:
+      type: NodaTime.Instant
+    content.vb: ReadOnly Property Now As Instant
+  overload: TwitterEdu.Api.Utils.IApplicationMapper.Now*
+references:
+- uid: TwitterEdu.Api.Utils
+  commentId: N:TwitterEdu.Api.Utils
+  href: TwitterEdu.html
+  name: TwitterEdu.Api.Utils
+  nameWithType: TwitterEdu.Api.Utils
+  fullName: TwitterEdu.Api.Utils
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Utils
+    name: Utils
+    href: TwitterEdu.Api.Utils.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Utils
+    name: Utils
+    href: TwitterEdu.Api.Utils.html
+- uid: TwitterEdu.Api.Utils.IApplicationMapper.TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Data.Entities.Post)
+  commentId: M:TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+  parent: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+  definition: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+  href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html#TwitterEdu_Api_Models_Posts_DetailPostModelExtensions_ToDetail_TwitterEdu_Api_Utils_IApplicationMapper_TwitterEdu_Data_Entities_Post_
+  name: ToDetail(IApplicationMapper, Post)
+  nameWithType: DetailPostModelExtensions.ToDetail(IApplicationMapper, Post)
+  fullName: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper, TwitterEdu.Data.Entities.Post)
+  spec.csharp:
+  - uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+    name: ToDetail
+    href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html#TwitterEdu_Api_Models_Posts_DetailPostModelExtensions_ToDetail_TwitterEdu_Api_Utils_IApplicationMapper_TwitterEdu_Data_Entities_Post_
+  - name: (
+  - uid: TwitterEdu.Api.Utils.IApplicationMapper
+    name: IApplicationMapper
+    href: TwitterEdu.Api.Utils.IApplicationMapper.html
+  - name: ','
+  - name: " "
+  - uid: TwitterEdu.Data.Entities.Post
+    name: Post
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+    name: ToDetail
+    href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html#TwitterEdu_Api_Models_Posts_DetailPostModelExtensions_ToDetail_TwitterEdu_Api_Utils_IApplicationMapper_TwitterEdu_Data_Entities_Post_
+  - name: (
+  - uid: TwitterEdu.Api.Utils.IApplicationMapper
+    name: IApplicationMapper
+    href: TwitterEdu.Api.Utils.IApplicationMapper.html
+  - name: ','
+  - name: " "
+  - uid: TwitterEdu.Data.Entities.Post
+    name: Post
+  - name: )
+- uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+  commentId: M:TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+  href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html#TwitterEdu_Api_Models_Posts_DetailPostModelExtensions_ToDetail_TwitterEdu_Api_Utils_IApplicationMapper_TwitterEdu_Data_Entities_Post_
+  name: ToDetail(IApplicationMapper, Post)
+  nameWithType: DetailPostModelExtensions.ToDetail(IApplicationMapper, Post)
+  fullName: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper, TwitterEdu.Data.Entities.Post)
+  spec.csharp:
+  - uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+    name: ToDetail
+    href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html#TwitterEdu_Api_Models_Posts_DetailPostModelExtensions_ToDetail_TwitterEdu_Api_Utils_IApplicationMapper_TwitterEdu_Data_Entities_Post_
+  - name: (
+  - uid: TwitterEdu.Api.Utils.IApplicationMapper
+    name: IApplicationMapper
+    href: TwitterEdu.Api.Utils.IApplicationMapper.html
+  - name: ','
+  - name: " "
+  - uid: TwitterEdu.Data.Entities.Post
+    name: Post
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.ToDetail(TwitterEdu.Api.Utils.IApplicationMapper,TwitterEdu.Data.Entities.Post)
+    name: ToDetail
+    href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html#TwitterEdu_Api_Models_Posts_DetailPostModelExtensions_ToDetail_TwitterEdu_Api_Utils_IApplicationMapper_TwitterEdu_Data_Entities_Post_
+  - name: (
+  - uid: TwitterEdu.Api.Utils.IApplicationMapper
+    name: IApplicationMapper
+    href: TwitterEdu.Api.Utils.IApplicationMapper.html
+  - name: ','
+  - name: " "
+  - uid: TwitterEdu.Data.Entities.Post
+    name: Post
+  - name: )
+- uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+  commentId: T:TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+  parent: TwitterEdu.Api.Models.Posts
+  href: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html
+  name: DetailPostModelExtensions
+  nameWithType: DetailPostModelExtensions
+  fullName: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+- uid: TwitterEdu.Api.Models.Posts
+  commentId: N:TwitterEdu.Api.Models.Posts
+  href: TwitterEdu.html
+  name: TwitterEdu.Api.Models.Posts
+  nameWithType: TwitterEdu.Api.Models.Posts
+  fullName: TwitterEdu.Api.Models.Posts
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Models
+    name: Models
+    href: TwitterEdu.Api.Models.html
+  - name: .
+  - uid: TwitterEdu.Api.Models.Posts
+    name: Posts
+    href: TwitterEdu.Api.Models.Posts.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Models
+    name: Models
+    href: TwitterEdu.Api.Models.html
+  - name: .
+  - uid: TwitterEdu.Api.Models.Posts
+    name: Posts
+    href: TwitterEdu.Api.Models.Posts.html
+- uid: TwitterEdu.Api.Utils.IApplicationMapper.Now*
+  commentId: Overload:TwitterEdu.Api.Utils.IApplicationMapper.Now
+  href: TwitterEdu.Api.Utils.IApplicationMapper.html#TwitterEdu_Api_Utils_IApplicationMapper_Now
+  name: Now
+  nameWithType: IApplicationMapper.Now
+  fullName: TwitterEdu.Api.Utils.IApplicationMapper.Now
+- uid: NodaTime.Instant
+  commentId: T:NodaTime.Instant
+  parent: NodaTime
+  isExternal: true
+  href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  name: Instant
+  nameWithType: Instant
+  fullName: NodaTime.Instant
+- uid: NodaTime
+  commentId: N:NodaTime
+  isExternal: true
+  name: NodaTime
+  nameWithType: NodaTime
+  fullName: NodaTime

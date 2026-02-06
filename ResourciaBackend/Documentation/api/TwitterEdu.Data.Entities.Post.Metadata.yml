@@ -1,0 +1,373 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Data.Entities.Post.Metadata
+  commentId: T:TwitterEdu.Data.Entities.Post.Metadata
+  id: Post.Metadata
+  parent: TwitterEdu.Data.Entities
+  children:
+  - TwitterEdu.Data.Entities.Post.Metadata.ContentLength
+  - TwitterEdu.Data.Entities.Post.Metadata.TrackableByLength
+  langs:
+  - csharp
+  - vb
+  name: Post.Metadata
+  nameWithType: Post.Metadata
+  fullName: TwitterEdu.Data.Entities.Post.Metadata
+  type: Class
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Entities/Post.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: Metadata
+    path: ../src/TwitterEdu.Data/Entities/Post.cs
+    startLine: 35
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Entities
+  syntax:
+    content: public static class Post.Metadata
+    content.vb: Public Module Post.Metadata
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: TwitterEdu.Data.Entities.Post.Metadata.ContentLength
+  commentId: F:TwitterEdu.Data.Entities.Post.Metadata.ContentLength
+  id: ContentLength
+  parent: TwitterEdu.Data.Entities.Post.Metadata
+  langs:
+  - csharp
+  - vb
+  name: ContentLength
+  nameWithType: Post.Metadata.ContentLength
+  fullName: TwitterEdu.Data.Entities.Post.Metadata.ContentLength
+  type: Field
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Entities/Post.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: ContentLength
+    path: ../src/TwitterEdu.Data/Entities/Post.cs
+    startLine: 37
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Entities
+  syntax:
+    content: public const int ContentLength = 250
+    return:
+      type: System.Int32
+    content.vb: Public Const ContentLength As Integer = 250
+- uid: TwitterEdu.Data.Entities.Post.Metadata.TrackableByLength
+  commentId: F:TwitterEdu.Data.Entities.Post.Metadata.TrackableByLength
+  id: TrackableByLength
+  parent: TwitterEdu.Data.Entities.Post.Metadata
+  langs:
+  - csharp
+  - vb
+  name: TrackableByLength
+  nameWithType: Post.Metadata.TrackableByLength
+  fullName: TwitterEdu.Data.Entities.Post.Metadata.TrackableByLength
+  type: Field
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Entities/Post.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: TrackableByLength
+    path: ../src/TwitterEdu.Data/Entities/Post.cs
+    startLine: 38
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Entities
+  syntax:
+    content: public const int TrackableByLength = 200
+    return:
+      type: System.Int32
+    content.vb: Public Const TrackableByLength As Integer = 200
+references:
+- uid: TwitterEdu.Data.Entities
+  commentId: N:TwitterEdu.Data.Entities
+  href: TwitterEdu.html
+  name: TwitterEdu.Data.Entities
+  nameWithType: TwitterEdu.Data.Entities
+  fullName: TwitterEdu.Data.Entities
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities
+    name: Entities
+    href: TwitterEdu.Data.Entities.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities
+    name: Entities
+    href: TwitterEdu.Data.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer

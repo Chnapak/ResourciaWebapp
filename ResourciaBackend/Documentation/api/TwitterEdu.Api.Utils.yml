@@ -1,0 +1,68 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Api.Utils
+  commentId: N:TwitterEdu.Api.Utils
+  id: TwitterEdu.Api.Utils
+  children:
+  - TwitterEdu.Api.Utils.ApplicationMapper
+  - TwitterEdu.Api.Utils.ClaimsPrincipalExtensions
+  - TwitterEdu.Api.Utils.IApplicationMapper
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Api.Utils
+  nameWithType: TwitterEdu.Api.Utils
+  fullName: TwitterEdu.Api.Utils
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Api
+references:
+- uid: TwitterEdu.Api.Utils.ClaimsPrincipalExtensions
+  commentId: T:TwitterEdu.Api.Utils.ClaimsPrincipalExtensions
+  href: TwitterEdu.Api.Utils.ClaimsPrincipalExtensions.html
+  name: ClaimsPrincipalExtensions
+  nameWithType: ClaimsPrincipalExtensions
+  fullName: TwitterEdu.Api.Utils.ClaimsPrincipalExtensions
+- uid: TwitterEdu.Api.Utils.IApplicationMapper
+  commentId: T:TwitterEdu.Api.Utils.IApplicationMapper
+  parent: TwitterEdu.Api.Utils
+  href: TwitterEdu.Api.Utils.IApplicationMapper.html
+  name: IApplicationMapper
+  nameWithType: IApplicationMapper
+  fullName: TwitterEdu.Api.Utils.IApplicationMapper
+- uid: TwitterEdu.Api.Utils.ApplicationMapper
+  commentId: T:TwitterEdu.Api.Utils.ApplicationMapper
+  href: TwitterEdu.Api.Utils.ApplicationMapper.html
+  name: ApplicationMapper
+  nameWithType: ApplicationMapper
+  fullName: TwitterEdu.Api.Utils.ApplicationMapper
+- uid: TwitterEdu.Api.Utils
+  commentId: N:TwitterEdu.Api.Utils
+  href: TwitterEdu.html
+  name: TwitterEdu.Api.Utils
+  nameWithType: TwitterEdu.Api.Utils
+  fullName: TwitterEdu.Api.Utils
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Utils
+    name: Utils
+    href: TwitterEdu.Api.Utils.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Utils
+    name: Utils
+    href: TwitterEdu.Api.Utils.html

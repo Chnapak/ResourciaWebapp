@@ -1,0 +1,1023 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Data.Interfaces.ITrackable
+  commentId: T:TwitterEdu.Data.Interfaces.ITrackable
+  id: ITrackable
+  parent: TwitterEdu.Data.Interfaces
+  children:
+  - TwitterEdu.Data.Interfaces.ITrackable.CreatedAt
+  - TwitterEdu.Data.Interfaces.ITrackable.CreatedBy
+  - TwitterEdu.Data.Interfaces.ITrackable.DeletedAt
+  - TwitterEdu.Data.Interfaces.ITrackable.DeletedBy
+  - TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt
+  - TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy
+  langs:
+  - csharp
+  - vb
+  name: ITrackable
+  nameWithType: ITrackable
+  fullName: TwitterEdu.Data.Interfaces.ITrackable
+  type: Interface
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Interfaces/ITrackable.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: ITrackable
+    path: ../src/TwitterEdu.Data/Interfaces/ITrackable.cs
+    startLine: 3
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Interfaces
+  syntax:
+    content: public interface ITrackable
+    content.vb: Public Interface ITrackable
+  extensionMethods:
+  - TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(NodaTime.Instant)
+  - TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(System.String,NodaTime.Instant)
+  - TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(NodaTime.Instant)
+  - TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(System.String,NodaTime.Instant)
+  - TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(NodaTime.Instant)
+  - TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(System.String,NodaTime.Instant)
+- uid: TwitterEdu.Data.Interfaces.ITrackable.CreatedAt
+  commentId: P:TwitterEdu.Data.Interfaces.ITrackable.CreatedAt
+  id: CreatedAt
+  parent: TwitterEdu.Data.Interfaces.ITrackable
+  langs:
+  - csharp
+  - vb
+  name: CreatedAt
+  nameWithType: ITrackable.CreatedAt
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.CreatedAt
+  type: Property
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Interfaces/ITrackable.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: CreatedAt
+    path: ../src/TwitterEdu.Data/Interfaces/ITrackable.cs
+    startLine: 5
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Interfaces
+  syntax:
+    content: Instant CreatedAt { get; set; }
+    parameters: []
+    return:
+      type: NodaTime.Instant
+    content.vb: Property CreatedAt As Instant
+  overload: TwitterEdu.Data.Interfaces.ITrackable.CreatedAt*
+- uid: TwitterEdu.Data.Interfaces.ITrackable.CreatedBy
+  commentId: P:TwitterEdu.Data.Interfaces.ITrackable.CreatedBy
+  id: CreatedBy
+  parent: TwitterEdu.Data.Interfaces.ITrackable
+  langs:
+  - csharp
+  - vb
+  name: CreatedBy
+  nameWithType: ITrackable.CreatedBy
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.CreatedBy
+  type: Property
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Interfaces/ITrackable.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: CreatedBy
+    path: ../src/TwitterEdu.Data/Interfaces/ITrackable.cs
+    startLine: 6
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Interfaces
+  syntax:
+    content: string CreatedBy { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Property CreatedBy As String
+  overload: TwitterEdu.Data.Interfaces.ITrackable.CreatedBy*
+- uid: TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt
+  commentId: P:TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt
+  id: ModifiedAt
+  parent: TwitterEdu.Data.Interfaces.ITrackable
+  langs:
+  - csharp
+  - vb
+  name: ModifiedAt
+  nameWithType: ITrackable.ModifiedAt
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt
+  type: Property
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Interfaces/ITrackable.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: ModifiedAt
+    path: ../src/TwitterEdu.Data/Interfaces/ITrackable.cs
+    startLine: 7
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Interfaces
+  syntax:
+    content: Instant ModifiedAt { get; set; }
+    parameters: []
+    return:
+      type: NodaTime.Instant
+    content.vb: Property ModifiedAt As Instant
+  overload: TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt*
+- uid: TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy
+  commentId: P:TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy
+  id: ModifiedBy
+  parent: TwitterEdu.Data.Interfaces.ITrackable
+  langs:
+  - csharp
+  - vb
+  name: ModifiedBy
+  nameWithType: ITrackable.ModifiedBy
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy
+  type: Property
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Interfaces/ITrackable.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: ModifiedBy
+    path: ../src/TwitterEdu.Data/Interfaces/ITrackable.cs
+    startLine: 8
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Interfaces
+  syntax:
+    content: string ModifiedBy { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Property ModifiedBy As String
+  overload: TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy*
+- uid: TwitterEdu.Data.Interfaces.ITrackable.DeletedAt
+  commentId: P:TwitterEdu.Data.Interfaces.ITrackable.DeletedAt
+  id: DeletedAt
+  parent: TwitterEdu.Data.Interfaces.ITrackable
+  langs:
+  - csharp
+  - vb
+  name: DeletedAt
+  nameWithType: ITrackable.DeletedAt
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.DeletedAt
+  type: Property
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Interfaces/ITrackable.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: DeletedAt
+    path: ../src/TwitterEdu.Data/Interfaces/ITrackable.cs
+    startLine: 9
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Interfaces
+  syntax:
+    content: Instant? DeletedAt { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{NodaTime.Instant}
+    content.vb: Property DeletedAt As Instant?
+  overload: TwitterEdu.Data.Interfaces.ITrackable.DeletedAt*
+- uid: TwitterEdu.Data.Interfaces.ITrackable.DeletedBy
+  commentId: P:TwitterEdu.Data.Interfaces.ITrackable.DeletedBy
+  id: DeletedBy
+  parent: TwitterEdu.Data.Interfaces.ITrackable
+  langs:
+  - csharp
+  - vb
+  name: DeletedBy
+  nameWithType: ITrackable.DeletedBy
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.DeletedBy
+  type: Property
+  source:
+    remote:
+      path: src/TwitterEdu.Data/Interfaces/ITrackable.cs
+      branch: main
+      repo: https://github.com/1-IT-Gymnazium/TwitterEduApi.git
+    id: DeletedBy
+    path: ../src/TwitterEdu.Data/Interfaces/ITrackable.cs
+    startLine: 10
+  assemblies:
+  - TwitterEdu.Data
+  namespace: TwitterEdu.Data.Interfaces
+  syntax:
+    content: string? DeletedBy { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Property DeletedBy As String
+  overload: TwitterEdu.Data.Interfaces.ITrackable.DeletedBy*
+references:
+- uid: TwitterEdu.Data.Interfaces
+  commentId: N:TwitterEdu.Data.Interfaces
+  href: TwitterEdu.html
+  name: TwitterEdu.Data.Interfaces
+  nameWithType: TwitterEdu.Data.Interfaces
+  fullName: TwitterEdu.Data.Interfaces
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Interfaces
+    name: Interfaces
+    href: TwitterEdu.Data.Interfaces.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Interfaces
+    name: Interfaces
+    href: TwitterEdu.Data.Interfaces.html
+- uid: TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(``0,NodaTime.Instant)
+  parent: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  definition: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(``0,NodaTime.Instant)
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBySystem__1___0_NodaTime_Instant_
+  name: SetCreateBySystem<ITrackable>(ITrackable, Instant)
+  nameWithType: ITrackableExtensions.SetCreateBySystem<ITrackable>(ITrackable, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem<TwitterEdu.Data.Interfaces.ITrackable>(TwitterEdu.Data.Interfaces.ITrackable, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetCreateBySystem(Of ITrackable)(ITrackable, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem(Of TwitterEdu.Data.Interfaces.ITrackable)(TwitterEdu.Data.Interfaces.ITrackable, NodaTime.Instant)
+  name.vb: SetCreateBySystem(Of ITrackable)(ITrackable, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(TwitterEdu.Data.Interfaces.ITrackable,NodaTime.Instant)
+    name: SetCreateBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBySystem__1___0_NodaTime_Instant_
+  - name: <
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: '>'
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(TwitterEdu.Data.Interfaces.ITrackable,NodaTime.Instant)
+    name: SetCreateBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBySystem__1___0_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: )
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(System.String,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(``0,System.String,NodaTime.Instant)
+  parent: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  definition: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(``0,System.String,NodaTime.Instant)
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBy__1___0_System_String_NodaTime_Instant_
+  name: SetCreateBy<ITrackable>(ITrackable, string, Instant)
+  nameWithType: ITrackableExtensions.SetCreateBy<ITrackable>(ITrackable, string, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy<TwitterEdu.Data.Interfaces.ITrackable>(TwitterEdu.Data.Interfaces.ITrackable, string, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetCreateBy(Of ITrackable)(ITrackable, String, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy(Of TwitterEdu.Data.Interfaces.ITrackable)(TwitterEdu.Data.Interfaces.ITrackable, String, NodaTime.Instant)
+  name.vb: SetCreateBy(Of ITrackable)(ITrackable, String, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(TwitterEdu.Data.Interfaces.ITrackable,System.String,NodaTime.Instant)
+    name: SetCreateBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBy__1___0_System_String_NodaTime_Instant_
+  - name: <
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: '>'
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(TwitterEdu.Data.Interfaces.ITrackable,System.String,NodaTime.Instant)
+    name: SetCreateBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBy__1___0_System_String_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: )
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(``0,NodaTime.Instant)
+  parent: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  definition: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(``0,NodaTime.Instant)
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBySystem__1___0_NodaTime_Instant_
+  name: SetDeleteBySystem<ITrackable>(ITrackable, Instant)
+  nameWithType: ITrackableExtensions.SetDeleteBySystem<ITrackable>(ITrackable, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem<TwitterEdu.Data.Interfaces.ITrackable>(TwitterEdu.Data.Interfaces.ITrackable, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetDeleteBySystem(Of ITrackable)(ITrackable, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem(Of TwitterEdu.Data.Interfaces.ITrackable)(TwitterEdu.Data.Interfaces.ITrackable, NodaTime.Instant)
+  name.vb: SetDeleteBySystem(Of ITrackable)(ITrackable, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(TwitterEdu.Data.Interfaces.ITrackable,NodaTime.Instant)
+    name: SetDeleteBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBySystem__1___0_NodaTime_Instant_
+  - name: <
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: '>'
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(TwitterEdu.Data.Interfaces.ITrackable,NodaTime.Instant)
+    name: SetDeleteBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBySystem__1___0_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: )
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(System.String,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(``0,System.String,NodaTime.Instant)
+  parent: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  definition: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(``0,System.String,NodaTime.Instant)
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBy__1___0_System_String_NodaTime_Instant_
+  name: SetDeleteBy<ITrackable>(ITrackable, string, Instant)
+  nameWithType: ITrackableExtensions.SetDeleteBy<ITrackable>(ITrackable, string, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy<TwitterEdu.Data.Interfaces.ITrackable>(TwitterEdu.Data.Interfaces.ITrackable, string, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetDeleteBy(Of ITrackable)(ITrackable, String, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy(Of TwitterEdu.Data.Interfaces.ITrackable)(TwitterEdu.Data.Interfaces.ITrackable, String, NodaTime.Instant)
+  name.vb: SetDeleteBy(Of ITrackable)(ITrackable, String, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(TwitterEdu.Data.Interfaces.ITrackable,System.String,NodaTime.Instant)
+    name: SetDeleteBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBy__1___0_System_String_NodaTime_Instant_
+  - name: <
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: '>'
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(TwitterEdu.Data.Interfaces.ITrackable,System.String,NodaTime.Instant)
+    name: SetDeleteBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBy__1___0_System_String_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: )
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(``0,NodaTime.Instant)
+  parent: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  definition: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(``0,NodaTime.Instant)
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBySystem__1___0_NodaTime_Instant_
+  name: SetModifyBySystem<ITrackable>(ITrackable, Instant)
+  nameWithType: ITrackableExtensions.SetModifyBySystem<ITrackable>(ITrackable, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem<TwitterEdu.Data.Interfaces.ITrackable>(TwitterEdu.Data.Interfaces.ITrackable, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetModifyBySystem(Of ITrackable)(ITrackable, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem(Of TwitterEdu.Data.Interfaces.ITrackable)(TwitterEdu.Data.Interfaces.ITrackable, NodaTime.Instant)
+  name.vb: SetModifyBySystem(Of ITrackable)(ITrackable, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(TwitterEdu.Data.Interfaces.ITrackable,NodaTime.Instant)
+    name: SetModifyBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBySystem__1___0_NodaTime_Instant_
+  - name: <
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: '>'
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(TwitterEdu.Data.Interfaces.ITrackable,NodaTime.Instant)
+    name: SetModifyBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBySystem__1___0_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: )
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackable.TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(System.String,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(``0,System.String,NodaTime.Instant)
+  parent: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  definition: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(``0,System.String,NodaTime.Instant)
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBy__1___0_System_String_NodaTime_Instant_
+  name: SetModifyBy<ITrackable>(ITrackable, string, Instant)
+  nameWithType: ITrackableExtensions.SetModifyBy<ITrackable>(ITrackable, string, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy<TwitterEdu.Data.Interfaces.ITrackable>(TwitterEdu.Data.Interfaces.ITrackable, string, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetModifyBy(Of ITrackable)(ITrackable, String, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy(Of TwitterEdu.Data.Interfaces.ITrackable)(TwitterEdu.Data.Interfaces.ITrackable, String, NodaTime.Instant)
+  name.vb: SetModifyBy(Of ITrackable)(ITrackable, String, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(TwitterEdu.Data.Interfaces.ITrackable,System.String,NodaTime.Instant)
+    name: SetModifyBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBy__1___0_System_String_NodaTime_Instant_
+  - name: <
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: '>'
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(TwitterEdu.Data.Interfaces.ITrackable,System.String,NodaTime.Instant)
+    name: SetModifyBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBy__1___0_System_String_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: )
+  - name: (
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    href: TwitterEdu.Data.Interfaces.ITrackable.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(``0,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(``0,NodaTime.Instant)
+  isExternal: true
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBySystem__1___0_NodaTime_Instant_
+  name: SetCreateBySystem<T>(T, Instant)
+  nameWithType: ITrackableExtensions.SetCreateBySystem<T>(T, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem<T>(T, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetCreateBySystem(Of T)(T, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem(Of T)(T, NodaTime.Instant)
+  name.vb: SetCreateBySystem(Of T)(T, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(``0,NodaTime.Instant)
+    name: SetCreateBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBySystem__1___0_NodaTime_Instant_
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBySystem``1(``0,NodaTime.Instant)
+    name: SetCreateBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBySystem__1___0_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  commentId: T:TwitterEdu.Data.Interfaces.ITrackableExtensions
+  parent: TwitterEdu.Data.Interfaces
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html
+  name: ITrackableExtensions
+  nameWithType: ITrackableExtensions
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(``0,System.String,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(``0,System.String,NodaTime.Instant)
+  isExternal: true
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBy__1___0_System_String_NodaTime_Instant_
+  name: SetCreateBy<T>(T, string, Instant)
+  nameWithType: ITrackableExtensions.SetCreateBy<T>(T, string, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy<T>(T, string, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetCreateBy(Of T)(T, String, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy(Of T)(T, String, NodaTime.Instant)
+  name.vb: SetCreateBy(Of T)(T, String, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(``0,System.String,NodaTime.Instant)
+    name: SetCreateBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBy__1___0_System_String_NodaTime_Instant_
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetCreateBy``1(``0,System.String,NodaTime.Instant)
+    name: SetCreateBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetCreateBy__1___0_System_String_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(``0,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(``0,NodaTime.Instant)
+  isExternal: true
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBySystem__1___0_NodaTime_Instant_
+  name: SetDeleteBySystem<T>(T, Instant)
+  nameWithType: ITrackableExtensions.SetDeleteBySystem<T>(T, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem<T>(T, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetDeleteBySystem(Of T)(T, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem(Of T)(T, NodaTime.Instant)
+  name.vb: SetDeleteBySystem(Of T)(T, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(``0,NodaTime.Instant)
+    name: SetDeleteBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBySystem__1___0_NodaTime_Instant_
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBySystem``1(``0,NodaTime.Instant)
+    name: SetDeleteBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBySystem__1___0_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(``0,System.String,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(``0,System.String,NodaTime.Instant)
+  isExternal: true
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBy__1___0_System_String_NodaTime_Instant_
+  name: SetDeleteBy<T>(T, string, Instant)
+  nameWithType: ITrackableExtensions.SetDeleteBy<T>(T, string, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy<T>(T, string, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetDeleteBy(Of T)(T, String, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy(Of T)(T, String, NodaTime.Instant)
+  name.vb: SetDeleteBy(Of T)(T, String, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(``0,System.String,NodaTime.Instant)
+    name: SetDeleteBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBy__1___0_System_String_NodaTime_Instant_
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetDeleteBy``1(``0,System.String,NodaTime.Instant)
+    name: SetDeleteBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetDeleteBy__1___0_System_String_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(``0,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(``0,NodaTime.Instant)
+  isExternal: true
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBySystem__1___0_NodaTime_Instant_
+  name: SetModifyBySystem<T>(T, Instant)
+  nameWithType: ITrackableExtensions.SetModifyBySystem<T>(T, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem<T>(T, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetModifyBySystem(Of T)(T, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem(Of T)(T, NodaTime.Instant)
+  name.vb: SetModifyBySystem(Of T)(T, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(``0,NodaTime.Instant)
+    name: SetModifyBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBySystem__1___0_NodaTime_Instant_
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBySystem``1(``0,NodaTime.Instant)
+    name: SetModifyBySystem
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBySystem__1___0_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(``0,System.String,NodaTime.Instant)
+  commentId: M:TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(``0,System.String,NodaTime.Instant)
+  isExternal: true
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBy__1___0_System_String_NodaTime_Instant_
+  name: SetModifyBy<T>(T, string, Instant)
+  nameWithType: ITrackableExtensions.SetModifyBy<T>(T, string, Instant)
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy<T>(T, string, NodaTime.Instant)
+  nameWithType.vb: ITrackableExtensions.SetModifyBy(Of T)(T, String, Instant)
+  fullName.vb: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy(Of T)(T, String, NodaTime.Instant)
+  name.vb: SetModifyBy(Of T)(T, String, Instant)
+  spec.csharp:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(``0,System.String,NodaTime.Instant)
+    name: SetModifyBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBy__1___0_System_String_NodaTime_Instant_
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+  spec.vb:
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions.SetModifyBy``1(``0,System.String,NodaTime.Instant)
+    name: SetModifyBy
+    href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html#TwitterEdu_Data_Interfaces_ITrackableExtensions_SetModifyBy__1___0_System_String_NodaTime_Instant_
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackable.CreatedAt*
+  commentId: Overload:TwitterEdu.Data.Interfaces.ITrackable.CreatedAt
+  href: TwitterEdu.Data.Interfaces.ITrackable.html#TwitterEdu_Data_Interfaces_ITrackable_CreatedAt
+  name: CreatedAt
+  nameWithType: ITrackable.CreatedAt
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.CreatedAt
+- uid: NodaTime.Instant
+  commentId: T:NodaTime.Instant
+  parent: NodaTime
+  isExternal: true
+  href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  name: Instant
+  nameWithType: Instant
+  fullName: NodaTime.Instant
+- uid: NodaTime
+  commentId: N:NodaTime
+  isExternal: true
+  name: NodaTime
+  nameWithType: NodaTime
+  fullName: NodaTime
+- uid: TwitterEdu.Data.Interfaces.ITrackable.CreatedBy*
+  commentId: Overload:TwitterEdu.Data.Interfaces.ITrackable.CreatedBy
+  href: TwitterEdu.Data.Interfaces.ITrackable.html#TwitterEdu_Data_Interfaces_ITrackable_CreatedBy
+  name: CreatedBy
+  nameWithType: ITrackable.CreatedBy
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.CreatedBy
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt*
+  commentId: Overload:TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt
+  href: TwitterEdu.Data.Interfaces.ITrackable.html#TwitterEdu_Data_Interfaces_ITrackable_ModifiedAt
+  name: ModifiedAt
+  nameWithType: ITrackable.ModifiedAt
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.ModifiedAt
+- uid: TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy*
+  commentId: Overload:TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy
+  href: TwitterEdu.Data.Interfaces.ITrackable.html#TwitterEdu_Data_Interfaces_ITrackable_ModifiedBy
+  name: ModifiedBy
+  nameWithType: ITrackable.ModifiedBy
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.ModifiedBy
+- uid: TwitterEdu.Data.Interfaces.ITrackable.DeletedAt*
+  commentId: Overload:TwitterEdu.Data.Interfaces.ITrackable.DeletedAt
+  href: TwitterEdu.Data.Interfaces.ITrackable.html#TwitterEdu_Data_Interfaces_ITrackable_DeletedAt
+  name: DeletedAt
+  nameWithType: ITrackable.DeletedAt
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.DeletedAt
+- uid: System.Nullable{NodaTime.Instant}
+  commentId: T:System.Nullable{NodaTime.Instant}
+  parent: System
+  definition: System.Nullable`1
+  href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  name: Instant?
+  nameWithType: Instant?
+  fullName: NodaTime.Instant?
+  spec.csharp:
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: '?'
+  spec.vb:
+  - uid: NodaTime.Instant
+    name: Instant
+    isExternal: true
+    href: https://github.com/jskeet/nodatime/blob/4d0e4c04dd5f09304a7e53a0675dce1597ea0143/src/NodaTime/Instant.cs
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: TwitterEdu.Data.Interfaces.ITrackable.DeletedBy*
+  commentId: Overload:TwitterEdu.Data.Interfaces.ITrackable.DeletedBy
+  href: TwitterEdu.Data.Interfaces.ITrackable.html#TwitterEdu_Data_Interfaces_ITrackable_DeletedBy
+  name: DeletedBy
+  nameWithType: ITrackable.DeletedBy
+  fullName: TwitterEdu.Data.Interfaces.ITrackable.DeletedBy

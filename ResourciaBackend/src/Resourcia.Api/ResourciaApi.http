@@ -1,0 +1,6 @@
+@ResourciaApi_HostAddress = http://localhost:5026
+
+GET {{ResourciaApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

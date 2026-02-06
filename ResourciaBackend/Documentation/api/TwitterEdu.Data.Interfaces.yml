@@ -1,0 +1,62 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Data.Interfaces
+  commentId: N:TwitterEdu.Data.Interfaces
+  id: TwitterEdu.Data.Interfaces
+  children:
+  - TwitterEdu.Data.Interfaces.ITrackable
+  - TwitterEdu.Data.Interfaces.ITrackableExtensions
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Data.Interfaces
+  nameWithType: TwitterEdu.Data.Interfaces
+  fullName: TwitterEdu.Data.Interfaces
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Data
+references:
+- uid: TwitterEdu.Data.Interfaces.ITrackable
+  commentId: T:TwitterEdu.Data.Interfaces.ITrackable
+  parent: TwitterEdu.Data.Interfaces
+  href: TwitterEdu.Data.Interfaces.ITrackable.html
+  name: ITrackable
+  nameWithType: ITrackable
+  fullName: TwitterEdu.Data.Interfaces.ITrackable
+- uid: TwitterEdu.Data.Interfaces.ITrackableExtensions
+  commentId: T:TwitterEdu.Data.Interfaces.ITrackableExtensions
+  parent: TwitterEdu.Data.Interfaces
+  href: TwitterEdu.Data.Interfaces.ITrackableExtensions.html
+  name: ITrackableExtensions
+  nameWithType: ITrackableExtensions
+  fullName: TwitterEdu.Data.Interfaces.ITrackableExtensions
+- uid: TwitterEdu.Data.Interfaces
+  commentId: N:TwitterEdu.Data.Interfaces
+  href: TwitterEdu.html
+  name: TwitterEdu.Data.Interfaces
+  nameWithType: TwitterEdu.Data.Interfaces
+  fullName: TwitterEdu.Data.Interfaces
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Interfaces
+    name: Interfaces
+    href: TwitterEdu.Data.Interfaces.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Interfaces
+    name: Interfaces
+    href: TwitterEdu.Data.Interfaces.html

@@ -1,0 +1,46 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Data
+  commentId: N:TwitterEdu.Data
+  id: TwitterEdu.Data
+  children:
+  - TwitterEdu.Data.AppDbContext
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Data
+  nameWithType: TwitterEdu.Data
+  fullName: TwitterEdu.Data
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Data
+references:
+- uid: TwitterEdu.Data.AppDbContext
+  commentId: T:TwitterEdu.Data.AppDbContext
+  parent: TwitterEdu.Data
+  href: TwitterEdu.Data.AppDbContext.html
+  name: AppDbContext
+  nameWithType: AppDbContext
+  fullName: TwitterEdu.Data.AppDbContext
+- uid: TwitterEdu.Data
+  commentId: N:TwitterEdu.Data
+  href: TwitterEdu.html
+  name: TwitterEdu.Data
+  nameWithType: TwitterEdu.Data
+  fullName: TwitterEdu.Data
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html

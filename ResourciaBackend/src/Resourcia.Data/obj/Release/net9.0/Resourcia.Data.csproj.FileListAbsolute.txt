@@ -1,0 +1,16 @@
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\Resourcia.Data.deps.json
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\Resourcia.Data.runtimeconfig.json
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\Resourcia.Data.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\Resourcia.Data.pdb
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.csproj.AssemblyReference.cache
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.AssemblyInfoInputs.cache
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.AssemblyInfo.cs
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.csproj.CoreCompileInputs.cache
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\EFCoreNpgsqlNodaTime.cs
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.sourcelink.json
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\refint\Resourcia.Data.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.pdb
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\Resourcia.Data.genruntimeconfig.cache
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\obj\Release\net9.0\ref\Resourcia.Data.dll

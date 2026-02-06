@@ -1,0 +1,17 @@
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Resourcia.Data.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Resourcia.Data.runtimeconfig.json
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Resourcia.Data.pdb
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Microsoft.EntityFrameworkCore.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Microsoft.OpenApi.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\NodaTime.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Npgsql.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Npgsql.NodaTime.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Data\bin\Release\net9.0\publish\Resourcia.Data.deps.json

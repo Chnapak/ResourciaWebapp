@@ -1,0 +1,84 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Data.Entities
+  commentId: N:TwitterEdu.Data.Entities
+  id: TwitterEdu.Data.Entities
+  children:
+  - TwitterEdu.Data.Entities.Comment
+  - TwitterEdu.Data.Entities.Post
+  - TwitterEdu.Data.Entities.Post.Metadata
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Data.Entities
+  nameWithType: TwitterEdu.Data.Entities
+  fullName: TwitterEdu.Data.Entities
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Data
+references:
+- uid: TwitterEdu.Data.Entities.Comment
+  commentId: T:TwitterEdu.Data.Entities.Comment
+  href: TwitterEdu.Data.Entities.Comment.html
+  name: Comment
+  nameWithType: Comment
+  fullName: TwitterEdu.Data.Entities.Comment
+- uid: TwitterEdu.Data.Entities.Post
+  commentId: T:TwitterEdu.Data.Entities.Post
+  parent: TwitterEdu.Data.Entities
+  href: TwitterEdu.Data.Entities.Post.html
+  name: Post
+  nameWithType: Post
+  fullName: TwitterEdu.Data.Entities.Post
+- uid: TwitterEdu.Data.Entities.Post.Metadata
+  commentId: T:TwitterEdu.Data.Entities.Post.Metadata
+  href: TwitterEdu.Data.Entities.Post.html
+  name: Post.Metadata
+  nameWithType: Post.Metadata
+  fullName: TwitterEdu.Data.Entities.Post.Metadata
+  spec.csharp:
+  - uid: TwitterEdu.Data.Entities.Post
+    name: Post
+    href: TwitterEdu.Data.Entities.Post.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities.Post.Metadata
+    name: Metadata
+    href: TwitterEdu.Data.Entities.Post.Metadata.html
+  spec.vb:
+  - uid: TwitterEdu.Data.Entities.Post
+    name: Post
+    href: TwitterEdu.Data.Entities.Post.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities.Post.Metadata
+    name: Metadata
+    href: TwitterEdu.Data.Entities.Post.Metadata.html
+- uid: TwitterEdu.Data.Entities
+  commentId: N:TwitterEdu.Data.Entities
+  href: TwitterEdu.html
+  name: TwitterEdu.Data.Entities
+  nameWithType: TwitterEdu.Data.Entities
+  fullName: TwitterEdu.Data.Entities
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities
+    name: Entities
+    href: TwitterEdu.Data.Entities.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities
+    name: Entities
+    href: TwitterEdu.Data.Entities.html
