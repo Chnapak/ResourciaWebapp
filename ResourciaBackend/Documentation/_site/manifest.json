@@ -1,0 +1,458 @@
+{
+  "source_base_path": "D:/TwitterEduApi/Documentation",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Controllers.AuthController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Controllers.AuthController.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Controllers.PostController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Controllers.PostController.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Controllers.WeatherForecastController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Controllers.WeatherForecastController.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Controllers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Controllers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Auth.LoginModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Auth.LoginModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Auth.RegisterModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Auth.RegisterModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Auth.TokenModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Auth.TokenModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Auth.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Auth.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Posts.CreatePostModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Posts.CreatePostModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Posts.DetailPostModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Posts.DetailPostModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Posts.DetailPostModelExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Models.Posts.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Models.Posts.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Program.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Program.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Utils.ApplicationMapper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Utils.ApplicationMapper.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Utils.ClaimsPrincipalExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Utils.ClaimsPrincipalExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Utils.IApplicationMapper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Utils.IApplicationMapper.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.Utils.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.Utils.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.WeatherForecast.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.WeatherForecast.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Api.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Api.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.AppDbContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.AppDbContext.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Entities.Comment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Entities.Comment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Entities.Identity.AppUser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Entities.Identity.AppUser.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Entities.Identity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Entities.Identity.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Entities.Post.Metadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Entities.Post.Metadata.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Entities.Post.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Entities.Post.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Entities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Entities.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Interfaces.ITrackable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Interfaces.ITrackable.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Interfaces.ITrackableExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Interfaces.ITrackableExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Interfaces.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Interfaces.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Migrations.CommentsAdded.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Migrations.CommentsAdded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Migrations.ITrackableAdded.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Migrations.ITrackableAdded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Migrations.IdentityInit.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Migrations.IdentityInit.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Migrations.Init.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Migrations.Init.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Migrations.ModifiedAdded.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Migrations.ModifiedAdded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Migrations.UserToPostAdded.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Migrations.UserToPostAdded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.Migrations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.Migrations.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/TwitterEdu.Data.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/TwitterEdu.Data.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/introduction.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/introduction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

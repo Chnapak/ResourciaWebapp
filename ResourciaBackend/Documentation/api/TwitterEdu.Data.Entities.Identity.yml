@@ -1,0 +1,62 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Data.Entities.Identity
+  commentId: N:TwitterEdu.Data.Entities.Identity
+  id: TwitterEdu.Data.Entities.Identity
+  children:
+  - TwitterEdu.Data.Entities.Identity.AppUser
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Data.Entities.Identity
+  nameWithType: TwitterEdu.Data.Entities.Identity
+  fullName: TwitterEdu.Data.Entities.Identity
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Data
+references:
+- uid: TwitterEdu.Data.Entities.Identity.AppUser
+  commentId: T:TwitterEdu.Data.Entities.Identity.AppUser
+  parent: TwitterEdu.Data.Entities.Identity
+  href: TwitterEdu.Data.Entities.Identity.AppUser.html
+  name: AppUser
+  nameWithType: AppUser
+  fullName: TwitterEdu.Data.Entities.Identity.AppUser
+- uid: TwitterEdu.Data.Entities.Identity
+  commentId: N:TwitterEdu.Data.Entities.Identity
+  href: TwitterEdu.html
+  name: TwitterEdu.Data.Entities.Identity
+  nameWithType: TwitterEdu.Data.Entities.Identity
+  fullName: TwitterEdu.Data.Entities.Identity
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities
+    name: Entities
+    href: TwitterEdu.Data.Entities.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities.Identity
+    name: Identity
+    href: TwitterEdu.Data.Entities.Identity.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Data
+    name: Data
+    href: TwitterEdu.Data.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities
+    name: Entities
+    href: TwitterEdu.Data.Entities.html
+  - name: .
+  - uid: TwitterEdu.Data.Entities.Identity
+    name: Identity
+    href: TwitterEdu.Data.Entities.Identity.html
