@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oXHrhikOjlA=",
+  "dgSpecHash": "fefkKO4lN1M=",
   "success": true,
-  "projectFilePath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend2\\src\\Resourcia.Api\\Resourcia.Api.csproj",
+  "projectFilePath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Resourcia.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\matej\\.nuget\\packages\\bouncycastle.cryptography\\2.5.0\\bouncycastle.cryptography.2.5.0.nupkg.sha512",
     "C:\\Users\\matej\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
@@ -80,5 +80,15 @@
     "C:\\Users\\matej\\.nuget\\packages\\system.text.json\\9.0.0\\system.text.json.9.0.0.nupkg.sha512",
     "C:\\Users\\matej\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "projectPath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Resourcia.Api.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Resourcia.Api.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

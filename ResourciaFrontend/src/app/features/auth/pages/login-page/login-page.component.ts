@@ -1,0 +1,83 @@
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../../core/auth/auth.service';
+import { Router, RouterLink } from '@angular/router';
+import { environment } from '../../../../../environments/environment.development';
+
+declare var turnstile: any;
+
+@Component({
+  selector: 'app-login-page',
+  standalone: true,
+  imports: [ FormsModule , ReactiveFormsModule, RouterLink],
+  templateUrl: './login-page.component.html',
+  styleUrl: './login-page.component.scss'
+})
+export class LoginPageComponent {
+  protected readonly fb = inject(FormBuilder);
+  protected readonly authService = inject(AuthService);
+  protected readonly router = inject(Router);
+  
+  public readonly siteKey = environment.siteKey;
+  
+  public isSubmitting = false;
+  public loginFailed = false;
+  public generalError = false;
+  public captchaFailed = false;
+
+  ngAfterViewInit() {
+    turnstile.render('#turnstile-container', {
+    sitekey: this.siteKey,
+    theme: 'light'
+    });
+  }
+
+  protected form = this.fb.group({
+    email: new FormControl('', { nonNullable: true}),
+    password: new FormControl('', { nonNullable: true})
+  });
+
+  onSubmit(): void {
+    this.isSubmitting = true;
+    const tokenInput = document.querySelector('input[name="cf-turnstile-response"]');
+    const token = tokenInput ? tokenInput.getAttribute('value') : null;
+
+    if (token === null) {
+      // What do I write here?
+      this.isSubmitting = false;
+      console.error("Captcha not complete")
+      return;
+    }
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    
+    const data = this.form.getRawValue();
+    
+
+    this.authService.login(data).subscribe({
+      next: async () => {
+          await this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Registration failed:', error);
+        this.isSubmitting = false;
+      
+        const errors = error?.error?.errors;
+
+        if (errors) {
+          if (errors.Email?.includes('LOGIN_FAILED')) {
+            this.loginFailed = true;
+          }
+          
+          }
+          else {
+            this.generalError = true;
+        }
+      }
+    });
+  }
+
+}

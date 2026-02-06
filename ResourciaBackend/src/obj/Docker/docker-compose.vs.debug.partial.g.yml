@@ -14,8 +14,8 @@ services:
       - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
       - NUGET_FALLBACK_PACKAGES=/.nuget/fallbackpackages
     volumes:
-      - C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src\Resourcia.Api:/app:rw
-      - C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend2\src:/src:rw
+      - C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api:/app:rw
+      - C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src:/src:rw
       - C:\Users\matej\vsdbg\vs2017u5:/remote_debugger:rw
       - C:\Users\matej\.nuget\packages:/.nuget/packages:ro
       - C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages:/.nuget/fallbackpackages:ro

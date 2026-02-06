@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { HomePageComponent } from './features/public/pages/home-page/home-page.component';
+import { LoginPageComponent } from './features/auth/pages/login-page/login-page.component';
 import { DefaultComponent } from './layouts/default/default.component';
-import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
-import { TokenValidationPageComponent } from './pages/token-validation-page/token-validation-page.component';
-import { NotFoundPageComponent } from './pages/errors/not-found-page/not-found-page.component';
-import { PrivacyPolicyPageComponent } from './pages/privacy-policy-page/privacy-policy-page.component';
-import { TosPageComponent } from './pages/tos-page/tos-page.component';
-import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
-import { SearchResultPageComponent } from './pages/search-result-page/search-result-page.component';
+import { RegistrationPageComponent } from './features/auth/pages/registration-page/registration-page.component';
+import { TokenValidationPageComponent } from './features/auth/pages/token-validation-page/token-validation-page.component';
+import { NotFoundPageComponent } from './features/errors/pages/not-found-404-page/not-found-404-page.component';
+import { PrivacyPolicyPageComponent } from './features/public/pages/privacy-policy-page/privacy-policy-page.component';
+import { TosPageComponent } from './features/public/pages/tos-page/tos-page.component';
+import { ProfilePageComponent } from './features/profile/profile-page/profile-page.component';
+import { SearchResultPageComponent } from './features/search/pages/search-result-page/search-result-page.component';
 import { AddResourcePageComponent } from './pages/add-resource-page/add-resource-page.component';
 import { AdminHubComponent } from './pages/admin-hub-page/admin-hub-page.component';
-import { canActivateAdminGuard } from './components/guards/admin.guard';
-import { FiltersAdminPageComponent } from './pages/admin-hub-page/pages/filters/filters.component';
-import { UsersAdminPageComponent } from './pages/admin-hub-page/pages/users/users.component';
+import { canActivateAdminGuard } from './core/guards/admin.guard';
+import { FiltersAdminPageComponent } from './features/admin/pages/filters-page/filters-page.component';
+import { UsersAdminPageComponent } from './features/admin/pages/users-page/users-page.component';
 
 export const routes: Routes = [
     {
