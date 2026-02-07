@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { environment } from '../../../../../environments/environment.development';
 
 declare var turnstile: any;
@@ -9,7 +9,7 @@ declare var turnstile: any;
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ FormsModule , ReactiveFormsModule, RouterLink],
+  imports: [ FormsModule , ReactiveFormsModule ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
