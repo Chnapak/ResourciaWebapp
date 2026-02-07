@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './features/public/pages/home-page/home-page.component';
 import { LoginPageComponent } from './features/auth/pages/login-page/login-page.component';
-import { DefaultComponent } from './layouts/default/default.component';
+import { DefaultComponent } from './layouts/app-layout/app-layout.component';
 import { RegistrationPageComponent } from './features/auth/pages/registration-page/registration-page.component';
 import { TokenValidationPageComponent } from './features/auth/pages/token-validation-page/token-validation-page.component';
 import { NotFoundPageComponent } from './features/errors/pages/not-found-404-page/not-found-404-page.component';
@@ -9,8 +9,8 @@ import { PrivacyPolicyPageComponent } from './features/public/pages/privacy-poli
 import { TosPageComponent } from './features/public/pages/tos-page/tos-page.component';
 import { ProfilePageComponent } from './features/profile/profile-page/profile-page.component';
 import { SearchResultPageComponent } from './features/search/pages/search-result-page/search-result-page.component';
-import { AddResourcePageComponent } from './pages/add-resource-page/add-resource-page.component';
-import { AdminHubComponent } from './pages/admin-hub-page/admin-hub-page.component';
+import { AddResourcePageComponent } from './features/search/pages/add-resource-page/add-resource-page.component';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { canActivateAdminGuard } from './core/guards/admin.guard';
 import { FiltersAdminPageComponent } from './features/admin/pages/filters-page/filters-page.component';
 import { UsersAdminPageComponent } from './features/admin/pages/users-page/users-page.component';
@@ -29,7 +29,7 @@ export const routes: Routes = [
             { path: 'profile/:id', component: ProfilePageComponent, title: 'Profile'},
             { path: 'tos', component: TosPageComponent, title: 'Terms of Service'},
             { path: 'search', component: SearchResultPageComponent, title: 'Resources'},
-            { path: 'admin', component: AdminHubComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 
+            { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 
             children: [
                 { path: 'filters', component: FiltersAdminPageComponent},
                 { path: 'users', component: UsersAdminPageComponent}

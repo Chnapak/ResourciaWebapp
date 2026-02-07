@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { RegisterModel } from '../../models/register';
-import { MeInfoModel } from '../../models/me-info';
+import { RegisterModel } from '../../features/auth/models/register';
+import { MeInfoModel } from '../../shared/models/me-info';
 import { map, tap } from 'rxjs/operators';
-import { LoginModel } from '../../models/login';
+import { LoginModel } from '../../features/auth/models/login';
 import { Router } from '@angular/router';
-import { ResendConfirmationModel } from '../../models/resend-confirmation';
+import { ResendConfirmationModel } from '../../features/auth/models/resend-confirmation';
 
 
 @Injectable({

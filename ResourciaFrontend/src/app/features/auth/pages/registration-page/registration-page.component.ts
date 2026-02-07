@@ -5,9 +5,9 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { RegisterModel } from '../../../../models/register';
+import { RegisterModel } from '../../models/register';
 import { environment } from '../../../../../environments/environment.development';
-import { ResendConfirmationModel } from '../../../../models/resend-confirmation';
+import { ResendConfirmationModel } from '../../models/resend-confirmation';
 
 declare var turnstile: any;
 

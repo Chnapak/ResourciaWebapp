@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SubjectSimple } from '../../models/subject-simple';
+import { SubjectSimple } from '../../shared/models/subject-simple';
 import { Observable } from 'rxjs';
 
 @Injectable({
