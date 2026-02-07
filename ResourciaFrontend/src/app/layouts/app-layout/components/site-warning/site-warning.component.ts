@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'site-warning',
@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './site-warning.component.scss'
 })
 export class SiteWarningComponent {
+  @Input() message = '';
+
   closeWarning() {
     var notification = document.getElementById("warning");
     notification?.classList.add("fade-out");
