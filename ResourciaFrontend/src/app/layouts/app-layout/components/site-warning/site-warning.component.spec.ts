@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AppLayoutComponent } from './app-layout.component';
+import { SiteWarningComponent } from './site-warning.component';
 
-describe('DefaultComponent', () => {
-  let component: AppLayoutComponent;
-  let fixture: ComponentFixture<AppLayoutComponent>;
+describe('SiteWarningComponent', () => {
+  let component: SiteWarningComponent;
+  let fixture: ComponentFixture<SiteWarningComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppLayoutComponent]
+      imports: [SiteWarningComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AppLayoutComponent);
+    fixture = TestBed.createComponent(SiteWarningComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
