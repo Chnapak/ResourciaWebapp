@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { SchemaResponse, FilterKind } from '../../../../models/search-schema';
+import { SchemaResponse, FilterKind } from '../../../../shared/models/search-schema';
 import { SearchService } from '../../../../core/services/search.service';
 import { RouterLink } from '@angular/router';
 

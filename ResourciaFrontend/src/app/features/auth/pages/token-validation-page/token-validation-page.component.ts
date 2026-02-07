@@ -3,9 +3,9 @@ import { AuthService } from '../../../../core/auth/auth.service';
 import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SubjectService } from '../../../../core/services/subject.service';
-import { SubjectSimple } from '../../../../models/subject-simple';
+import { SubjectSimple } from '../../../../shared/models/subject-simple';
 import { ResourceService } from '../../../../core/services/resource.service';
-import { CreateResourceRequestModel } from '../../../../models/create-resource-request';
+import { CreateResourceRequestModel } from '../../../../shared/models/create-resource-request';
 
 
 @Component({

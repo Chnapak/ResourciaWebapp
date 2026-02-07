@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { CreateResourceRequestModel } from '../../models/create-resource-request';
-import { CreateResourceResponseModel } from '../../models/create-resource-response';
+import { CreateResourceRequestModel } from '../../shared/models/create-resource-request';
+import { CreateResourceResponseModel } from '../../shared/models/create-resource-response';
 
 
 @Injectable({

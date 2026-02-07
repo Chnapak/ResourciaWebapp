@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { SchemaResponse, FilterKind } from '../../../../models/search-schema';
+import { SchemaResponse, FilterKind } from '../../../../shared/models/search-schema';
 import { SearchService } from '../../../../core/services/search.service';
-import { PageHeaderComponent } from '../../../../pages/admin-hub-page/shared/page-header/page-header.component';
+import { AdminHeaderComponent } from '../../../../layouts/admin-layout/components/admin-header/admin-header.component';
 
 @Component({
   selector: 'app-filters',
-  imports: [PageHeaderComponent],
+  imports: [AdminHeaderComponent],
   templateUrl: './filters-page.component.html',
   styleUrl: './filters-page.component.scss'
 })
