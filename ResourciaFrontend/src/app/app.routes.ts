@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './features/public/pages/home-page/home-page.component';
 import { LoginPageComponent } from './features/auth/pages/login-page/login-page.component';
-import { DefaultComponent } from './layouts/app-layout/app-layout.component';
+import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { RegistrationPageComponent } from './features/auth/pages/registration-page/registration-page.component';
 import { TokenValidationPageComponent } from './features/auth/pages/token-validation-page/token-validation-page.component';
 import { NotFoundPageComponent } from './features/errors/pages/not-found-404-page/not-found-404-page.component';
@@ -18,7 +18,7 @@ import { UsersAdminPageComponent } from './features/admin/pages/users-page/users
 export const routes: Routes = [
     {
         path: '',
-        component: DefaultComponent,
+        component: AppLayoutComponent,
         children: [
             { path: '', component: HomePageComponent, title: 'Home' },
             { path: 'addresource', component: AddResourcePageComponent, title: "Add Resource"},
