@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageHeaderComponent } from './admin-header.component';
+import { AdminTableComponent } from './admin-table.component';
 
-describe('PageHeaderComponent', () => {
-  let component: PageHeaderComponent;
-  let fixture: ComponentFixture<PageHeaderComponent>;
+describe('AdminTableComponent', () => {
+  let component: AdminTableComponent;
+  let fixture: ComponentFixture<AdminTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageHeaderComponent]
+      imports: [AdminTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PageHeaderComponent);
+    fixture = TestBed.createComponent(AdminTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

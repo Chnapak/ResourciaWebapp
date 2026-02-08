@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-resources',
   imports: [],
-  templateUrl: './resources.component.html',
-  styleUrl: './resources.component.scss'
+  templateUrl: './resources-page.component.html',
+  styleUrl: './resources-page.component.scss'
 })
-export class ResourcesComponent {
+export class ResourcesAdminPageComponent {
 
 }

@@ -1,18 +1,13 @@
 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
 <!-- Users Section -->
-<app-admin-header [title]="'Users'"></app-admin-header>
-            <!-- User List Header -->
-            <div class="px-8 py-3 bg-slate-50 border-b border-slate-200 flex items-center text-xs font-semibold text-slate-600 uppercase tracking-wide">
-                <div class="w-10">
-                    <input type="checkbox" class="checkbox-custom" onchange="toggleSelectAll(this)">
-                </div>
-                <div class="flex-1">User</div>
-                <div class="w-32">Resources</div>
-                <div class="w-40">Last Active</div>
-                <div class="w-28">Status</div>
-                <div class="w-20"></div>
-            </div>
-
+    <app-admin-header [title]="'Users'"></app-admin-header>
+    <app-admin-table
+        [columns]="columns"
+        [selectable]="true"
+        [checked]="allSelected"
+        [indeterminate]="someSelected"
+        (toggleAll)="onToggleAll($event)"
+    ></app-admin-table>
             <!-- Users List -->
             <div id="usersList">
                 <!-- User Row 1: Active Pro User -->

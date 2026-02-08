@@ -1,8 +1,13 @@
 <!-- Filters Section -->
 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-    <app-admin-header [title]="'Filters'">
-
-    </app-admin-header>
+    <app-admin-header [title]="'Filters'"></app-admin-header>
+    <app-admin-table
+        [columns]="columns"
+        [selectable]="true"
+        [checked]="allSelected"
+        [indeterminate]="someSelected"
+        (toggleAll)="onToggleAll($event)"
+    ></app-admin-table>
 
     <!-- Filters List -->
     <div>

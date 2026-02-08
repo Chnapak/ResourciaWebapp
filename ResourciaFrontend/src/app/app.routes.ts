@@ -7,13 +7,15 @@ import { TokenValidationPageComponent } from './features/auth/pages/token-valida
 import { NotFoundPageComponent } from './features/errors/pages/not-found-404-page/not-found-404-page.component';
 import { PrivacyPolicyPageComponent } from './features/public/pages/privacy-policy-page/privacy-policy-page.component';
 import { TosPageComponent } from './features/public/pages/tos-page/tos-page.component';
-import { ProfilePageComponent } from './features/profile/profile-page/profile-page.component';
+import { ProfilePageComponent } from './features/profile/pages/profile-page/profile-page.component';
 import { SearchResultPageComponent } from './features/search/pages/search-result-page/search-result-page.component';
 import { AddResourcePageComponent } from './features/search/pages/add-resource-page/add-resource-page.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { canActivateAdminGuard } from './core/guards/admin.guard';
 import { FiltersAdminPageComponent } from './features/admin/pages/filters-page/filters-page.component';
 import { UsersAdminPageComponent } from './features/admin/pages/users-page/users-page.component';
+import { AdminsAdminPageComponent } from './features/admin/pages/admins-page/admins-page.component';
+import { ResourcesAdminPageComponent } from './features/admin/pages/resources-page/resources-page.component';
 
 export const routes: Routes = [
     {
@@ -32,7 +34,9 @@ export const routes: Routes = [
             { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 
             children: [
                 { path: 'filters', component: FiltersAdminPageComponent},
-                { path: 'users', component: UsersAdminPageComponent}
+                { path: 'users', component: UsersAdminPageComponent},
+                { path: 'admins', component: AdminsAdminPageComponent},
+                { path: 'resources', component: ResourcesAdminPageComponent}
             ]},
             {
                 path: '**',
