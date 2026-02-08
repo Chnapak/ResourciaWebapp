@@ -1,25 +1,16 @@
 <div class="max-w-7xl mx-auto px-8 py-8">
-        <!-- Section Tabs -->
-        <div class="bg-white rounded-lg p-2 mb-8 flex gap-2 shadow-sm">
-            <a routerLink="filters">
-                <button class="px-6 py-3 rounded-md bg-blue-600 text-white text-sm font-medium transition-all cursor-pointer">
-                    Filters
-                </button>
+    <!-- Section Tabs -->
+    <nav class="bg-white rounded-lg p-2 mb-8 flex gap-2 shadow-sm">
+        @for (item of navItems; track item) {
+            <a
+                [routerLink]="item.link"
+                routerLinkActive="bg-blue-600 text-white"
+                class="px-6 py-3 rounded-md text-sm font-medium transition-all cursor-pointer text-gray-600 hover:bg-gray-100"
+            >
+                {{ item.label }}
             </a>
-            <a routerLink="users">
-                <button class="px-6 py-3 rounded-md text-gray-600 text-sm font-medium hover:bg-gray-100 transition-all cursor-pointer">
-                    Users
-                </button>
-            </a>
-            <button class="px-6 py-3 rounded-md text-gray-600 text-sm font-medium hover:bg-gray-100 transition-all">
-                Admins
-            </button>
-            <button class="px-6 py-3 rounded-md text-gray-600 text-sm font-medium hover:bg-gray-100 transition-all">
-                Resources
-            </button>
-            <button class="px-6 py-3 rounded-md text-gray-600 text-sm font-medium hover:bg-gray-100 transition-all">
-                Settings
-            </button>
-        </div>
-        <router-outlet />
+        }
+    </nav>
+
+    <router-outlet />
 </div>
