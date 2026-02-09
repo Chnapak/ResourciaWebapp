@@ -1,0 +1,19 @@
+<nav class="bg-white shadow-lg py-3 px-6 w-full top-0 z-0">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Left Section -->
+        <div class="flex items-center space-x-4">
+            <app-explore-menu></app-explore-menu>
+            <app-nav-search></app-nav-search>
+        </div>
+        
+        <!-- Middle Section (Logo) -->
+        <div class="absolute left-1/2 transform -translate-x-1/2">
+            <app-brand-logo></app-brand-logo>
+        </div>
+        
+        <!-- Right Section -->
+        <div class="flex items-center space-x-4">
+            <app-auth-links [user]="user" (logout)="logout()"></app-auth-links>
+        </div>
+    </div>
+</nav>

@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
+using Resourcia.Data;
 using Resourcia.Data.Entities.Identity;
 
 namespace Resourcia.Api.Controllers;
@@ -13,14 +16,15 @@ namespace Resourcia.Api.Controllers;
 public class AdminUsersController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
-    private readonly DbContext _dbContext;
+    private readonly AppDbContext _dbContext;
+    private readonly IClock _clock;
 
 
-    public AdminUsersController(UserManager<AppUser> userManager, DbContext dbContext)
+    public AdminUsersController(UserManager<AppUser> userManager, AppDbContext dbContext, IClock clock)
     {
         _userManager = userManager;
         _dbContext = dbContext;
-
+        _clock = clock;
     }
 
     [HttpGet]
@@ -37,7 +41,7 @@ public class AdminUsersController : ControllerBase
             .Select(u => new
             {
                 u.Id,
-                u.UserName,
+                u.DisplayName,
                 u.Email
             })
             .ToListAsync();
@@ -51,7 +55,7 @@ public class AdminUsersController : ControllerBase
         });
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
@@ -59,8 +63,15 @@ public class AdminUsersController : ControllerBase
         {
             return NotFound();
         }
-        _userManager.DeleteAsync(user);
-        await _dbContext.SaveChangesAsync();
+
+        if (user.DeletedAt != null)
+        {
+            return NotFound("User is deactivated");
+        }
+
+        user.DeletedAt = _clock.GetCurrentInstant();
+        await _userManager.UpdateAsync(user);
+
         return NoContent();
 
     }
