@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { AdminHeaderComponent } from '../../components/admin-header/admin-header.component';
 import { AdminTableComponent } from '../../components/admin-table/admin-table.component';
 import { AdminTableColumn } from '../../models/admin-table.types';
+import { UserRowComponent } from './user-row.component';
 
 @Component({
   selector: 'app-users',
-  imports: [AdminHeaderComponent, AdminTableComponent],
+  imports: [AdminHeaderComponent, AdminTableComponent, UserRowComponent],
   templateUrl: './users-page.component.html',
   styleUrl: './users-page.component.scss'
 })

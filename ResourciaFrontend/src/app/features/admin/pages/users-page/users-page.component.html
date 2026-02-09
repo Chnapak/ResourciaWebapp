@@ -7,49 +7,17 @@
         [checked]="allSelected"
         [indeterminate]="someSelected"
         (toggleAll)="onToggleAll($event)"
-    ></app-admin-table>
+    >
+        @for (user of users; track user.id) {
+            <app-user-row
+                [user]="user"
+                [selected]="selectedIds.has(user.id)"
+                (toggle)="onToggleOne($event.id, $event.checked)"
+            ></app-user-row>
+        }
+    </app-admin-table>
             <!-- Users List -->
             <div id="usersList">
-                <!-- User Row 1: Active Pro User -->
-                <div class="user-row flex items-center px-8 py-4 border-b border-slate-100" data-status="active" data-plan="pro" data-name="alice johnson">
-                    <div class="w-10 flex items-center">
-                        <input type="checkbox" class="checkbox-custom user-checkbox" onchange="updateBulkActions()">
-                    </div>
-                    <div class="flex-1 flex items-center gap-4 cursor-pointer" onclick="openUserPanel('Alice Johnson', 'alice@example.com', 'Pro', 'Active', 147, 'Jan 15, 2024')">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring">
-                            AJ
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
-                                <span class="text-sm font-semibold text-slate-900">Alice Johnson</span>
-                                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-md border border-emerald-200">Pro</span>
-                            </div>
-                            <div class="text-xs text-slate-500 mt-0.5"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f594999c9690b5908d9498859990db969a98">[email&#160;protected]</a></div>
-                        </div>
-                    </div>
-                    <div class="w-32">
-                        <span class="text-sm font-mono font-medium text-slate-700">147</span>
-                        <span class="text-xs text-slate-400 ml-1">resources</span>
-                    </div>
-                    <div class="w-40">
-                        <span class="text-xs text-slate-500">2 hours ago</span>
-                    </div>
-                    <div class="w-28">
-                        <div class="flex items-center">
-                            <span class="status-dot active"></span>
-                            <span class="text-xs font-medium text-emerald-600">Active</span>
-                        </div>
-                    </div>
-                    <div class="w-20 flex justify-end">
-                        <div class="relative">
-                            <button onclick="toggleActionMenu(event, 'Alice Johnson', 'Pro', 'Active')" class="p-2 hover:bg-slate-100 rounded-lg transition-all">
-                                <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- User Row 2: Active Free User -->
                 <div class="user-row flex items-center px-8 py-4 border-b border-slate-100" data-status="active" data-plan="free" data-name="bob chen">
