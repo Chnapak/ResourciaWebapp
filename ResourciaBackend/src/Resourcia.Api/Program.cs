@@ -201,7 +201,7 @@ public class Program
                     Kind = FilterKind.Range, // use your enum value (Number/Range)
                     IsMulti = false,
                     IsActive = true,
-                    SortOrder = 4,
+                    SortOrder = -1,
                     ResourceField = "Year"
                 });
 
