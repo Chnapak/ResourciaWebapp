@@ -214,6 +214,12 @@ public class AuthController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
+        if (user.DeletedAt != null)
+        {
+            ModelState.AddModelError(string.Empty, "DEACTIVATED_ACCOUNT");
+            return Unauthorized(ModelState);
+        }
+
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = GenerateAccessToken(user.Id, model.Email, user.UserName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);

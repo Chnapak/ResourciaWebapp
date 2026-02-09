@@ -1,3 +1,5 @@
+import { FilterKind } from "./filter-kind";
+
 export interface SchemaResponse {
   filters: Filter[];
 }
@@ -16,10 +18,4 @@ export interface FilterValue {
   label: string;
 }
 
-export enum FilterKind {
-  Facet = 'Facet',
-  Range = 'Range',
-  Boolean = 'Boolean',
-  Text = 'Text'
-}
 
