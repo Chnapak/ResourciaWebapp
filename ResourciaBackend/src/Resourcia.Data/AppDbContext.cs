@@ -43,6 +43,9 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
 
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<AppUser>()
+        .HasQueryFilter(u => u.DeletedAt == null);
+
         modelBuilder.Entity<ResourceFacetValues>()
         .HasKey(x => new { x.ResourceId, x.FacetValuesId });
 
