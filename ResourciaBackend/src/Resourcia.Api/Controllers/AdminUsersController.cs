@@ -40,9 +40,10 @@ public class AdminUsersController : ControllerBase
             .Take(pageSize)
             .Select(u => new
             {
-                u.Id,
-                u.DisplayName,
-                u.Email
+                id = u.Id,
+                name = u.DisplayName,
+                email = u.Email,
+
             })
             .ToListAsync();
 

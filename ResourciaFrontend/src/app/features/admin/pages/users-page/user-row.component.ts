@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableRowBase } from '../../components/table-row-base';
 import { AdminUser } from '../../models/admin-user.model';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-user-row',
-  imports: [],
+  imports: [ RouterLink ],
   standalone: true,
   templateUrl: './user-row.component.html',
   styleUrl: './user-row.component.scss'
