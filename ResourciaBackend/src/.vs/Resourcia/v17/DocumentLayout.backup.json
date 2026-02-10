@@ -3,20 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\filtercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\filtercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.data\\entities\\identity\\approle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|solutionrelative:resourcia.data\\entities\\identity\\approle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\adminfilterscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\adminfilterscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.data\\entities\\filterdefinitions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|solutionrelative:resourcia.data\\entities\\filterdefinitions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\filtercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\filtercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,10 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|solutionrelative:resourcia.data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.data\\entities\\identity\\approle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|solutionrelative:resourcia.data\\entities\\identity\\approle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.data\\entities\\identity\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -41,10 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\searchcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{81DDED9D-158B-E303-5F62-77A2896D2A5A}|docker-compose.dcproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\docker-compose.override.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -80,10 +84,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.data\\entities\\filterdefinitions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37407EBE-CBD1-3D21-44C6-7B204C0B8756}|Resourcia.Data\\Resourcia.Data.csproj|solutionrelative:resourcia.data\\entities\\filterdefinitions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\models\\filters\\filterinfomodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -239,36 +239,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AdminUsersController.cs",
-              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminUsersController.cs",
-              "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\AdminUsersController.cs",
-              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminUsersController.cs",
-              "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminUsersController.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAAuwEMAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T07:51:00.913Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "AppUser.cs",
-              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\Identity\\AppUser.cs",
-              "RelativeDocumentMoniker": "Resourcia.Data\\Entities\\Identity\\AppUser.cs",
-              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\Identity\\AppUser.cs",
-              "RelativeToolTip": "Resourcia.Data\\Entities\\Identity\\AppUser.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBAAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-30T12:19:48.56Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\AuthController.cs",
@@ -280,20 +255,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Program.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Program.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Program.cs",
               "RelativeToolTip": "Resourcia.Api\\Program.cs",
-              "ViewState": "AgIAAJMAAAAAAAAAAIAwwMsAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAI0AAAAAAAAAAIAwwKIAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-21T20:31:54.98Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "Resourcia.Data\\AppDbContext.cs",
@@ -305,7 +280,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "AppRole.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\Identity\\AppRole.cs",
               "RelativeDocumentMoniker": "Resourcia.Data\\Entities\\Identity\\AppRole.cs",
@@ -313,36 +288,89 @@
               "RelativeToolTip": "Resourcia.Data\\Entities\\Identity\\AppRole.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-30T19:19:01.716Z"
+              "WhenOpened": "2026-01-30T19:19:01.716Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "AdminFiltersController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminFiltersController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\AdminFiltersController.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminFiltersController.cs",
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminFiltersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA4AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-09T19:50:02.358Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "FilterController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\FilterController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\FilterController.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\FilterController.cs",
               "RelativeToolTip": "Resourcia.Api\\Controllers\\FilterController.cs",
-              "ViewState": "AgIAAHkAAAAAAAAAAAAkwIUAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAYwFIAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T19:55:44.788Z"
+              "WhenOpened": "2026-01-26T19:55:44.788Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
+              "Title": "SearchController.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\SearchController.cs",
+              "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\SearchController.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\SearchController.cs",
+              "RelativeToolTip": "Resourcia.Api\\Controllers\\SearchController.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAwwDoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T23:14:31.492Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FilterDefinitions.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\FilterDefinitions.cs",
+              "RelativeDocumentMoniker": "Resourcia.Data\\Entities\\FilterDefinitions.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\FilterDefinitions.cs",
+              "RelativeToolTip": "Resourcia.Data\\Entities\\FilterDefinitions.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAIAwwBoAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:07:43.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AppUser.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\Identity\\AppUser.cs",
+              "RelativeDocumentMoniker": "Resourcia.Data\\Entities\\Identity\\AppUser.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\Identity\\AppUser.cs",
+              "RelativeToolTip": "Resourcia.Data\\Entities\\Identity\\AppUser.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBAAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T12:19:48.56Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AdminUsersController.cs",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminUsersController.cs",
+              "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\AdminUsersController.cs",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminUsersController.cs",
+              "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminUsersController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAqwCwAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-06T07:51:00.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "ResourceController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\ResourceController.cs",
@@ -354,7 +382,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "PostController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\PostController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\PostController.cs",
@@ -366,19 +394,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "SearchController.cs",
-              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\SearchController.cs",
-              "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\SearchController.cs",
-              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\SearchController.cs",
-              "RelativeToolTip": "Resourcia.Api\\Controllers\\SearchController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T23:14:31.492Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "Microsoft.VisualStudio.Docker.Compose.targets",
               "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
@@ -390,7 +406,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "docker-compose.override.yml",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\docker-compose.override.yml",
               "RelativeDocumentMoniker": "docker-compose.override.yml",
@@ -402,7 +418,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "IdentitySeed.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Seedings\\IdentitySeed.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Seedings\\IdentitySeed.cs",
@@ -414,7 +430,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "docker-compose.yml",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\docker-compose.yml",
               "RelativeDocumentMoniker": "docker-compose.yml",
@@ -426,7 +442,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\launchSettings.json",
               "RelativeDocumentMoniker": "launchSettings.json",
@@ -438,7 +454,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "docker-compose.dcproj",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\docker-compose.dcproj",
               "RelativeDocumentMoniker": "docker-compose.dcproj",
@@ -450,7 +466,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": ".dockerignore",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\.dockerignore",
               "RelativeDocumentMoniker": ".dockerignore",
@@ -462,7 +478,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\appsettings.json",
               "RelativeDocumentMoniker": "Resourcia.Api\\appsettings.json",
@@ -474,7 +490,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\appsettings.Development.json",
               "RelativeDocumentMoniker": "Resourcia.Api\\appsettings.Development.json",
@@ -519,18 +535,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-02T22:50:16.582Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "FilterDefinitions.cs",
-              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\FilterDefinitions.cs",
-              "RelativeDocumentMoniker": "Resourcia.Data\\Entities\\FilterDefinitions.cs",
-              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Data\\Entities\\FilterDefinitions.cs",
-              "RelativeToolTip": "Resourcia.Data\\Entities\\FilterDefinitions.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAYwAoAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-16T13:07:43.043Z"
             },
             {
               "$type": "Document",

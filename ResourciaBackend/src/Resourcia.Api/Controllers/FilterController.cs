@@ -17,7 +17,7 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
     private AppDbContext _dbContext = dbContext;
 
     [HttpGet]
-    public async Task<ActionResult<FilterInfoModel>> GetAllFilters()
+    public async Task<ActionResult<List<FilterInfoModel>>> GetAllFilters()
     {
         var filters = await _dbContext.Filters
             .Select(f => new FilterInfoModel
@@ -32,6 +32,7 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
                 FacetValues = f.FacetValues.Where(v => v.IsActive).OrderBy(v => v.SortOrder).ToList()
             })
             .ToListAsync();
+        Console.WriteLine(filters);
         return Ok(filters);
     }
 
@@ -78,7 +79,8 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
             Label = createRequest.Label,
             Description = createRequest.Description,
             Kind = createRequest.Kind,
-            IsMulti = createRequest.IsMulti
+            IsMulti = createRequest.IsMulti,
+            IsActive = false
         };
 
         _dbContext.Filters.Add(filter);

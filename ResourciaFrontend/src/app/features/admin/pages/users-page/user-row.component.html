@@ -3,15 +3,17 @@
         <input type="checkbox" class="checkbox-custom user-checkbox" onchange="updateBulkActions()">
     </div>
     <div class="flex-1 flex items-center gap-4 cursor-pointer" onclick="openUserPanel('Alice Johnson', 'alice@example.com', 'Pro', 'Active', 147, 'Jan 15, 2024')">
-        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring">
-            AJ
-        </div>
+        <a routerLink="../../profile/{{user.name}}" target="_blank">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring">
+                AJ
+            </div>
+        </a>
         <div class="flex-1">
             <div class="flex items-center gap-2">
-                <span class="text-sm font-semibold text-slate-900">Alice Johnson</span>
+                <span class="text-sm font-semibold text-slate-900">{{user.name}}</span>
                 <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-md border border-emerald-200">Pro</span>
             </div>
-            <div class="text-xs text-slate-500 mt-0.5"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f594999c9690b5908d9498859990db969a98">[email&#160;protected]</a></div>
+            <div class="text-xs text-slate-500 mt-0.5">{{user.email}}</div>
         </div>
     </div>
     <div class="w-32">

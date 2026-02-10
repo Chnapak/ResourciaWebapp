@@ -8,7 +8,7 @@
         [indeterminate]="someSelected"
         (toggleAll)="onToggleAll($event)"
     >
-        @for (filter of (schema?.filters ?? []); track $index) {
+        @for (filter of (schema ?? []); track $index) {
             <app-filter-row
                 [filter]="filter"
                 [selected]="selectedKeys.has(filter.key)"
@@ -20,7 +20,7 @@
 
     <!-- Filters List -->
     <div>
-        @if (schema?.filters == []){
+        @if (schema == []){
             <div class="bg-white rounded-lg shadow-sm">
                 <div class="py-16 px-8 text-center">
                     <div class="text-5xl text-gray-300 mb-4">📋</div>
