@@ -25,7 +25,7 @@ export class AuthLinksComponent {
     {
       type: 'action',
       label: 'Admin',
-      action: () => this.upgradeUser()
+      link: '/admin'
     },
     {
       type: 'divider'
@@ -33,7 +33,7 @@ export class AuthLinksComponent {
     {
       type: 'action',
       label: 'Logout',
-      action: () => this.deactivateUser(),
+      action: () => this.onLogoutClick(),
       danger: true
     }
   ];
