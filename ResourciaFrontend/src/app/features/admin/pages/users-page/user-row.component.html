@@ -31,11 +31,22 @@
     </div>
     <div class="w-20 flex justify-end">
         <div class="relative">
-            <button onclick="toggleActionMenu(event, 'Alice Johnson', 'Pro', 'Active')" class="p-2 hover:bg-slate-100 rounded-lg transition-all">
-                <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
-                </svg>
-            </button>
+            <app-dropdown [items]="userMenuItems">
+                <button
+                    dropdown-button
+                    class="p-2 hover:bg-slate-100 rounded-lg transition-all cursor-pointer"
+                >
+                    <svg
+                    class="w-4 h-4 text-slate-600"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    >
+                    <path
+                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                    ></path>
+                    </svg>
+                </button>
+            </app-dropdown>
         </div>
     </div>
 </div>
