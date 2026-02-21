@@ -16,27 +16,35 @@ export class AuthLinksComponent {
 
   constructor(private router: Router) {}
 
-  userMenuItems: DropdownItem[] = [
-    {
-      type: 'action',
-      label: 'Profile',
-      action: () => this.viewUser()
-    },
-    {
-      type: 'action',
-      label: 'Admin',
-      link: '/admin'
-    },
-    {
-      type: 'divider'
-    },
-    {
-      type: 'action',
-      label: 'Logout',
-      action: () => this.onLogoutClick(),
-      danger: true
+  get userMenuItems(): DropdownItem[] {
+    const items: DropdownItem[] = [
+      {
+        type: 'action',
+        label: 'Profile',
+        action: () => this.viewUser()
+      }
+    ];
+
+    if (this.user?.isAdmin) {
+      items.push({
+        type: 'action',
+        label: 'Admin',
+        link: '/admin'
+      });
     }
-  ];
+
+    items.push(
+      { type: 'divider' },
+      {
+        type: 'action',
+        label: 'Logout',
+        action: () => this.onLogoutClick(),
+        danger: true
+      }
+    );
+
+    return items;
+  }
 
   viewUser() {
     if (this.user) {
