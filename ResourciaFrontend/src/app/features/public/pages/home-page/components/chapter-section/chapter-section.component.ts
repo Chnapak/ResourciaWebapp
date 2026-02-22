@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, QueryList, Renderer2, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, input, QueryList, Renderer2, ViewChildren } from '@angular/core';
+
+export interface ChapterItem {
+  id: string;
+  number: string;
+  label: string;
+  heading: string;
+  subheading: string;
+  text: string;
+}
 
 @Component({
   selector: 'app-chapter-section',
@@ -7,6 +16,7 @@ import { AfterViewInit, Component, ElementRef, QueryList, Renderer2, ViewChildre
   styleUrl: './chapter-section.component.scss'
 })
 export class ChapterSectionComponent implements AfterViewInit {
+  @Input() items: ChapterItem[] = []; 
   @ViewChildren('chapter') chapters!: QueryList<ElementRef<HTMLElement>>;
 
   private chapterObserver!: IntersectionObserver;
