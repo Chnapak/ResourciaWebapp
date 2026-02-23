@@ -1,0 +1,40 @@
+<div (click)="toggle()" class="relative inline-block">
+  <ng-content select="[dropdown-button]"></ng-content>
+</div>
+
+<div
+  class="min-w-[200px] left-0 py-1 z-10 absolute bg-white rounded-lg border border-gray-200 shadow-lg transition transform duration-200 ease-out scale-95 opacity-0"
+  [class.scale-100]="isOpen"
+  [class.opacity-100]="isOpen"
+  [class.hidden]="!isVisible"
+>
+  <ul class="p-2 text-sm text-body font-medium">
+    @for (item of items; track item) {
+        @if (item.type == 'divider') {
+            <div class="border-t border-gray-300 my-1"></div>
+        } 
+
+        @if (item.type  == 'action') {
+            @if (item.link) {
+                <a
+                    [href]="item.link"
+                    class="inline-flex items-center w-full p-2 rounded"
+                    [class]="getItemClasses(item)"
+                >
+                    {{ item.label }}
+                </a>
+            }
+
+            @if (item.action) {
+                <button
+                    (click)="onClick(item)"
+                    class="inline-flex items-center w-full p-2 text-left rounded"
+                    [class]="getItemClasses(item)"
+                >
+                    {{ item.label }}
+                </button>
+            }
+        }
+    }
+  </ul>
+</div>

@@ -1,0 +1,15 @@
+<section>
+    @for (item of items; track item.id; let even = $even) {
+        <div #chapter class="chapter relative py-[100px] px-[24px]" 
+        [class.bg-gray-50]="even"
+        id="{{item.id}}">
+            <div class="chapter-inner max-w-[800px] my-0 mx-auto text-left">
+                <div class="mb-[18px] text-gray-400 text-[12px] font-[700]  uppercase tracking-[0.15em]"><span class="text-blue-500">{{item.number}}</span> - {{item.label}}</div>
+                <h2 class="chapter-heading mb-[24px] text-gray-600 font-[700] tracking-[-0.025em] leading-[1.18]">{{item.heading}}<br><em class="italic font-[400]">{{item.subheading}}</em></h2>
+                <p class="m-w-[65ch] text-[18px] leading-[1.75] text-gray-700">
+                    {{item.text}}
+                </p>
+            </div>
+        </div>
+    }
+</section>

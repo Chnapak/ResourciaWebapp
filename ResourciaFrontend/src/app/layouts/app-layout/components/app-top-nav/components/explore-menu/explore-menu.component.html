@@ -1,14 +1,12 @@
+
+
 <div class="hidden md:flex items-center space-x-2 relative group">
-    <button class="nav-link flex items-center text-gray-700 hover:text-blue-600">
-        <span>Explore</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-    </button>
-    <div class="absolute hidden group-hover:block top-full left-0 mt-1 w-36 bg-white rounded-md shadow-lg -translate-x-2 -translate-y-1 z-10">
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-t-md">Featured</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">Categories</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-100">Trending</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-b-md">New Releases</a>
-    </div>
+    <app-dropdown [items]="exploreMenuItems">
+        <button dropdown-button class="nav-link flex items-center text-gray-700 hover:text-blue-600">
+            <span>Explore</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+    </app-dropdown>
 </div>
