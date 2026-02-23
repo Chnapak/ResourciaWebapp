@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using Resourcia.Api.Models.Admin;
 using Resourcia.Data;
 using Resourcia.Data.Entities.Identity;
 
@@ -18,7 +19,6 @@ public class AdminUsersController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly AppDbContext _dbContext;
     private readonly IClock _clock;
-
 
     public AdminUsersController(UserManager<AppUser> userManager, AppDbContext dbContext, IClock clock)
     {
@@ -54,6 +54,25 @@ public class AdminUsersController : ControllerBase
             page,
             pageSize
         });
+    }
+
+    [HttpPost("{id:guid}/suspend")]
+    public async Task<IActionResult> SuspendUser(string id, [FromBody] AdminSuspensionModel suspensionRequest)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        if (user.DeletedAt != null)
+        {
+            return NotFound("User is deactivated");
+        }
+
+        user.Status = UserStatus.Suspended;
+        user.ModerationReason = suspensionRequest.reason;
+        await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddDays(suspensionRequest.durationDays));
+        return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
