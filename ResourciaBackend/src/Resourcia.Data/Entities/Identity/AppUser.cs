@@ -29,5 +29,6 @@ public class AppUser : IdentityUser<Guid>, ITrackable
     public Instant? DeletedAt { get; set; }
     public string? DeletedBy { get; set; }
     public UserStatus Status { get; set; } = UserStatus.Active;
-    public Instant? SuspensionUntil { get; set; }
+    public string? ModerationReason { get; set; }
+    public Guid? ModeratedBy { get; set; }
 }

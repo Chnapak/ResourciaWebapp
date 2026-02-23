@@ -360,6 +360,12 @@ namespace Resourcia.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("ModeratedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ModerationReason")
+                        .HasColumnType("text");
+
                     b.Property<Instant>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -389,9 +395,6 @@ namespace Resourcia.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
-
-                    b.Property<Instant?>("SuspensionUntil")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
