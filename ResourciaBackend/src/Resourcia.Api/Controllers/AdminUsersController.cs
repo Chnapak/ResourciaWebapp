@@ -75,6 +75,60 @@ public class AdminUsersController : ControllerBase
         return NoContent();
     }
 
+    [HttpPost("{id:guid}/unsuspend")]
+    public async Task<IActionResult> UnsuspendUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        if (user.DeletedAt != null)
+        {
+            return NotFound("User is deactivated");
+        }
+        user.Status = UserStatus.Active;
+        user.ModerationReason = null;
+        await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+        return NoContent();
+    }
+
+    [HttpPost("{id:guid}/ban")]
+    public async Task<IActionResult> BanUser(string id, [FromBody] AdminBanModel banRequest)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        if (user.DeletedAt != null)
+        {
+            return NotFound("User is deactivated");
+        }
+        user.Status = UserStatus.Banned;
+        user.ModerationReason = banRequest.reason;
+        await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+        return NoContent();
+    }
+
+    [HttpPost("{id:guid}/unban")]
+    public async Task<IActionResult> UnbanUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        if (user.DeletedAt != null)
+        {
+            return NotFound("User is deactivated");
+        }
+        user.Status = UserStatus.Active;
+        user.ModerationReason = null;
+        await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+        return NoContent();
+    }
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteUser(string id)
     {
