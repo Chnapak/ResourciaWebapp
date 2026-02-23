@@ -43,7 +43,7 @@ public class AdminUsersController : ControllerBase
                 id = u.Id,
                 name = u.DisplayName,
                 email = u.Email,
-
+                status = u.Status
             })
             .ToListAsync();
 

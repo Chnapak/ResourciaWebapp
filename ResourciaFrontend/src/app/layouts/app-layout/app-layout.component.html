@@ -1,4 +1,11 @@
 <site-warning [message]="'Website is in early testing, please be patient!'"></site-warning>
-<app-top-nav/>
-<router-outlet/>
-<app-footer/>
+
+<body class="min-h-screen flex flex-col">
+  <app-top-nav/>
+  <main class="flex-1">
+    <router-outlet/>
+  </main>
+  <app-footer/>
+</body>
+
+
