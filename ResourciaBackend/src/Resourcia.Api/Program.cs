@@ -96,7 +96,9 @@ public class Program
         builder.Services.AddControllers().AddNewtonsoftJson(options =>
         {
             options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
-            options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+            options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(
+                camelCaseText: true
+            ));
         });
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

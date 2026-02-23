@@ -39,6 +39,22 @@ public class SearchController : ControllerBase
                     })
             }).ToListAsync();
 
-        return Ok(new { filters });
+        return Ok(new {filters });
     }
+
+    [HttpGet("SchemaDebug")]
+    public async Task<IActionResult> SchemaDebug()
+    {
+        var total = await _db.Filters.CountAsync();
+        var active = await _db.Filters.CountAsync(f => f.IsActive);
+
+        var sample = await _db.Filters.AsNoTracking()
+            .OrderBy(f => f.SortOrder)
+            .Select(f => new { f.Key, f.IsActive })
+            .Take(20)
+            .ToListAsync();
+
+        return Ok(new { total, active, sample });
+    }
+
 }

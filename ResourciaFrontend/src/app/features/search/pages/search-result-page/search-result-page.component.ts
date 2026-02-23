@@ -3,11 +3,12 @@ import { SchemaResponse } from '../../../../shared/models/search-schema';
 import { FilterKind } from '../../../../shared/models/filter-kind';
 import { SearchService } from '../../../../core/services/search.service';
 import { RouterLink } from '@angular/router';
+import { ExploreToolbarComponent } from './components/explore-toolbar/explore-toolbar.component';
 
 
 @Component({
   selector: 'app-search-result-page',
-  imports: [ RouterLink ],
+  imports: [ RouterLink, ExploreToolbarComponent ],
   templateUrl: './search-result-page.component.html',
   styleUrl: './search-result-page.component.scss'
 })

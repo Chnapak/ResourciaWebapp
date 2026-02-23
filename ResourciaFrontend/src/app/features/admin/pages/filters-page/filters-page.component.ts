@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
-import { SchemaResponse } from '../../../../shared/models/search-schema';
+import { Component, inject, OnInit } from '@angular/core';
 import { FilterKind } from '../../../../shared/models/filter-kind';
-import { SearchService } from '../../../../core/services/search.service';
 import { AdminHeaderComponent } from '../../components/admin-header/admin-header.component';
 import { AdminTableColumn } from '../../models/admin-table.types';
 import { AdminTableComponent } from '../../components/admin-table/admin-table.component';
 import { FilterRowComponent } from './filter-row.component';
+import { AdminFilter } from '../../models/admin-filter.model';
+import { AdminService } from '../../../../core/services/admin.service';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { FilterRowComponent } from './filter-row.component';
   templateUrl: './filters-page.component.html',
   styleUrl: './filters-page.component.scss'
 })
-export class FiltersAdminPageComponent {
+export class FiltersAdminPageComponent implements OnInit {
   columns: AdminTableColumn[] = [
     { key: 'filter', label: 'Filter', widthClass: 'flex-1' },
     { key: 'type', label: 'Type', widthClass: 'w-32' },
@@ -53,14 +53,14 @@ export class FiltersAdminPageComponent {
   }
 
   // TODO: Remove?
-  schema: SchemaResponse | null = null;
+  schema: AdminFilter[] | null = null;
   FilterKind = FilterKind;
 
-  protected readonly SearchService = inject(SearchService);
+  protected readonly AdminService = inject(AdminService);
 
   ngOnInit(): void {
-    this.SearchService.schema().subscribe((data: SchemaResponse) => {
-      console.log(data.filters)
+    this.AdminService.getFilters().subscribe((data: AdminFilter[]) => {
+      console.log(data)
       this.schema = data; 
     })
   }

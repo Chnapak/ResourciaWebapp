@@ -3,15 +3,18 @@
         <input type="checkbox" class="checkbox-custom user-checkbox" onchange="updateBulkActions()">
     </div>
     <div class="flex-1 flex items-center gap-4 cursor-pointer" onclick="openUserPanel('Alice Johnson', 'alice@example.com', 'Pro', 'Active', 147, 'Jan 15, 2024')">
-        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring">
-            AJ
-        </div>
+        <a routerLink="../../profile/{{user.name}}" target="_blank">
+            <div class="w-10 h-10 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring"
+            [style.background]="getUserGradient(user.email)">
+                {{ getInitials(user.name) }}
+            </div>
+        </a>
         <div class="flex-1">
             <div class="flex items-center gap-2">
-                <span class="text-sm font-semibold text-slate-900">Alice Johnson</span>
+                <span class="text-sm font-semibold text-slate-900">{{user.name}}</span>
                 <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-md border border-emerald-200">Pro</span>
             </div>
-            <div class="text-xs text-slate-500 mt-0.5"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f594999c9690b5908d9498859990db969a98">[email&#160;protected]</a></div>
+            <div class="text-xs text-slate-500 mt-0.5">{{user.email}}</div>
         </div>
     </div>
     <div class="w-32">
@@ -23,17 +26,41 @@
     </div>
     <div class="w-28">
         <div class="flex items-center">
-            <span class="status-dot active"></span>
-            <span class="text-xs font-medium text-emerald-600">Active</span>
+            @if (user.status == 'active') 
+            {
+                <span class="status-dot active"></span>
+                <span class="text-xs font-medium text-emerald-600">Active</span>
+            }
+
+            @if (user.status == 'suspended') {
+                <span class="status-dot suspended"></span>
+                <span class="text-xs font-medium text-yellow-600">Suspended</span>
+            }
+
+            @if (user.status == 'banned') {
+                <span class="status-dot banned"></span>
+                <span class="text-xs font-medium text-red-600">Banned</span>
+            }
         </div>
     </div>
     <div class="w-20 flex justify-end">
         <div class="relative">
-            <button onclick="toggleActionMenu(event, 'Alice Johnson', 'Pro', 'Active')" class="p-2 hover:bg-slate-100 rounded-lg transition-all">
-                <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
-                </svg>
-            </button>
+            <app-dropdown [items]="userMenuItems">
+                <button
+                    dropdown-button
+                    class="p-2 hover:bg-slate-100 rounded-lg transition-all cursor-pointer"
+                >
+                    <svg
+                    class="w-4 h-4 text-slate-600"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    >
+                    <path
+                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                    ></path>
+                    </svg>
+                </button>
+            </app-dropdown>
         </div>
     </div>
 </div>

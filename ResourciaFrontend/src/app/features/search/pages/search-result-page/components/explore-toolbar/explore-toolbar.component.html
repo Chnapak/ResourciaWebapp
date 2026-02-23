@@ -1,0 +1,39 @@
+<ui-button variant="outline" size="lg">
+    <span>Hide Filters</span>
+</ui-button>
+
+<div class="flex justify-between items-center mb-[16px]">
+    <div class="text-[15px] text-gray-400">
+        Showing <strong>132 results</strong>
+    </div>
+    <div class="flex items-center gap-[12px]">
+        <ui-button variant="primary" size="md" [routerLink]="['/addresource']">
+            <span aria-hidden="true">+</span>
+            <span>Add Resource</span>
+        </ui-button>
+        <div>
+            <select class="px-[16px] py-[8px] text-[14px] bg-white border border-gray-400 rounded-[8px] cursor-pointer outline-0 focus:border-blue-500">
+                <option>Most relevant</option>
+                <option>Most popular</option>
+                <option>Highest rated</option>
+                <option>Newest</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="mb-[24px] flex gap-[10px] flex-wrap items-center">
+    <div class="px-[14px] py-[6px] text-[13px] bg-gray-100 border border-gray-400 rounded-[20px] inline-flex items-center gap-[8px]">
+        Math <span class="text-gray-400 cursor-pointer font-bold hover:text-blue-500">×</span>
+    </div>
+    <div class="px-[14px] py-[6px] text-[13px] bg-gray-100 border border-gray-400 rounded-[20px] inline-flex items-center gap-[8px]">
+        Math <span class="text-gray-400 cursor-pointer font-bold hover:text-blue-500">×</span>
+    </div>
+    <div class="px-[14px] py-[6px] text-[13px] bg-gray-100 border border-gray-400 rounded-[20px] inline-flex items-center gap-[8px]">
+        Math <span class="text-gray-400 cursor-pointer font-bold hover:text-blue-500">×</span>
+    </div>
+    <div class="px-[14px] py-[6px] text-[13px] bg-gray-100 border border-gray-400 rounded-[20px] inline-flex items-center gap-[8px]">
+        Math <span class="text-gray-400 cursor-pointer font-bold hover:text-blue-500">×</span>
+    </div>
+    <span class="text-[13px] text-blue-500 cursor-pointer underline">Clear all</span>
+</div>
