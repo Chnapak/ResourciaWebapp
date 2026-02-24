@@ -64,3 +64,12 @@
         </div>
     </div>
 </div>
+
+@if (modal) {
+    <app-reason-modal
+        [type]="modal.type"
+        [user]="modal.user"
+        (confirm)="handleConfirm($event)"
+        (close)="closeModal()"
+    ></app-reason-modal>
+}

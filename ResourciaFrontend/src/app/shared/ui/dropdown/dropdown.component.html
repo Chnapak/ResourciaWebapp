@@ -9,7 +9,7 @@
   [class.hidden]="!isVisible"
 >
   <ul class="p-2 text-sm text-body font-medium">
-    @for (item of items; track item) {
+    @for (item of items; track $index) {
         @if (item.type == 'divider') {
             <div class="border-t border-gray-300 my-1"></div>
         } 

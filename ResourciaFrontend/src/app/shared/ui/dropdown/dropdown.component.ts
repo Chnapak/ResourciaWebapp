@@ -66,6 +66,9 @@ export class DropdownComponent {
   clickOutside(event: Event) {
     if (!this.el.nativeElement.contains(event.target)) {
       this.isOpen = false;
+      setTimeout(() => {
+        this.isVisible = false;
+      }, 200);
     }
   }
 }
