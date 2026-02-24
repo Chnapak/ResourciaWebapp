@@ -1,0 +1,98 @@
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+     (click)="close.emit()">
+
+  <div class="bg-white rounded-xl w-full max-w-lg p-8 relative"
+       (click)="$event.stopPropagation()">
+
+    <h1 class="text-3xl font-bold mb-6 text-center">
+      {{ isSuspend ? 'Suspend User' : 'Ban User' }}
+    </h1>
+
+    <form class="flex flex-col items-center"
+          [formGroup]="form"
+          (ngSubmit)="onSubmit()">
+
+      <!-- Duration -->
+      @if (isSuspend) {
+        <div class="flex flex-col w-fit max-w-240 relative mb-4">
+          @let duration = form.get('duration');
+
+          <label class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit">
+            Duration:
+          </label>
+
+          <select formControlName="duration"
+                  class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-600 focus:outline-none">
+            <option value="1">1 day</option>
+            <option value="3">3 days</option>
+            <option value="7">7 days</option>
+            <option value="14">14 days</option>
+            <option value="30">30 days</option>
+          </select>
+        </div>
+      }
+
+      <!-- Reason -->
+      <div class="flex flex-col w-fit max-w-240 relative">
+        @let reason = form.get('reason');
+
+        <label class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit"
+               [class.text-red-500]="reason?.touched && reason?.invalid">
+          Reason:
+        </label>
+
+        <textarea
+          rows="4"
+          placeholder="Write here..."
+          formControlName="reason"
+          class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-600 focus:outline-none resize-none"
+          [class.border-red-500]="reason?.touched && reason?.invalid">
+        </textarea>
+
+        @if (reason?.touched && reason?.invalid) {
+          @if (reason?.errors?.['required']) {
+            <div class="w-70 text-left text-xs text-red-700">
+              Reason is required.
+            </div>
+          }
+          @if (reason?.errors?.['maxlength']) {
+            <div class="w-70 text-left text-xs text-red-700">
+              Reason cannot exceed 500 characters.
+            </div>
+          }
+        }
+
+        <div class="w-70 text-right text-xs text-gray-400 mt-1">
+          {{ reason?.value?.length || 0 }}/500
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="w-70 border-2 border-blue-400 rounded mt-6"
+           [class.border-gray-400]="isSubmitting">
+
+        @if (!isSubmitting) {
+          <button
+            class="w-full py-2 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-600 transition"
+            type="submit">
+            {{ isSuspend ? 'Suspend User' : 'Ban User' }}
+          </button>
+        }
+        @else {
+          <button
+            class="w-full py-2 text-sm font-bold text-white bg-gray-500 rounded"
+            type="submit">
+            Submitting...
+          </button>
+        }
+      </div>
+
+      <button type="button"
+              class="mt-4 text-sm text-gray-500 hover:text-gray-700"
+              (click)="close.emit()">
+        Cancel
+      </button>
+
+    </form>
+  </div>
+</div>

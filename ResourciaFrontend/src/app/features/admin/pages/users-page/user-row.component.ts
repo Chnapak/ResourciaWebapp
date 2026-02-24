@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableRowBase } from '../../components/table-row-base';
 import { AdminUser } from '../../models/admin-user.model';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { DropdownComponent, DropdownItem } from '../../../../shared/ui/dropdown/dropdown.component';
 import { NgStyle } from '@angular/common';
+import { ReasonModalComponent } from '../../components/reason-modal/reason-modal.component';
 
 
 @Component({
   selector: 'app-user-row',
-  imports: [ RouterLink, DropdownComponent, NgStyle ],
+  imports: [ RouterLink, DropdownComponent, NgStyle, ReasonModalComponent ],
   standalone: true,
   templateUrl: './user-row.component.html',
   styleUrl: './user-row.component.scss'
@@ -19,31 +20,68 @@ export class UserRowComponent extends TableRowBase {
 
   @Output() toggle = new EventEmitter<{ id: string; checked: boolean }>();
 
+  modal: { type: 'suspend' | 'ban'; user: any } | null = null;
+
   constructor(private router: Router) {
     super()
   }
 
-  userMenuItems: DropdownItem[] = [
-  {
-    type: 'action',
-    label: 'View Profile',
-    action: () => this.viewUser()
-  },
-  {
-    type: 'action',
-    label: 'Upgrade to Pro',
-    action: () => this.upgradeUser()
-  },
-  {
-    type: 'divider'
-  },
-  {
-    type: 'action',
-    label: 'Deactivate',
-    action: () => this.deactivateUser(),
-    danger: true
-  }
+  get userMenuItems(): DropdownItem[] {
+  const items: DropdownItem[] = [
+    {
+      type: 'action',
+      label: 'View Profile',
+      action: () => this.viewUser()
+    },
+    {
+      type: 'divider'
+    }
   ];
+
+  if (this.user.status === 'active') {
+    items.push(
+      {
+        type: 'action',
+        label: 'Suspend',
+        action: () => this.suspendUser(),
+        danger: true
+      },
+      {
+        type: 'action',
+        label: 'Ban',
+        action: () => this.banUser(),
+        danger: true
+      },
+    );
+  }
+  else if (this.user.status === 'suspended') {
+    items.push(
+      {
+        type: 'action',
+        label: 'Unsuspend',
+        action: () => this.unsuspendUser(),
+        danger: true
+      },
+      {
+        type: 'action',
+        label: 'Ban',
+        action: () => this.banUser(),
+        danger: true
+      },
+    );
+  }
+  else {
+    items.push(
+      {
+        type: 'action',
+        label: 'Unban',
+        action: () => this.unbanUser(),
+        danger: true
+      },
+    );
+  }
+    return items;
+  }
 
   viewUser() {
     let username = this.user.name;
@@ -54,12 +92,33 @@ export class UserRowComponent extends TableRowBase {
     window.open(url, '_blank');
   }
 
-  upgradeUser() {
-    console.log('Upgrade user');
+  suspendUser() {
+    this.openModal('suspend', this.user);
   }
 
-  deactivateUser() {
-    console.log('Deactivate user');
+  unsuspendUser() {
+    console.log(`Unsuspending user ${this.user.name}`);
+  }
+
+  banUser() {
+    this.openModal('ban', this.user);
+  }
+
+  unbanUser() {
+    console.log(`Unbanning user ${this.user.name}`);
+  }
+
+  openModal(type: 'suspend' | 'ban', user: any) {
+    this.modal = { type, user };
+  }
+
+  handleConfirm(data: { reason: string; duration?: string }) {
+    console.log('Confirmed:', data);
+    this.modal = null;
+  }
+
+  closeModal() {
+    this.modal = null;
   }
 
   getInitials(name: string): string {
