@@ -19,7 +19,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   })
   return next(req).pipe(
     catchError((error) => {
-      if (error.status === 401 && !req.url.includes('Auth/Refresh')) {
+      if (error.status === 401 && !req.url.includes('Auth/Refresh') && error.error?.error !== "USER_LOCKED_OUT") {
         return authService.refreshToken().pipe(
           switchMap((newToken: string) => {
             const clonedRequest = req.clone({

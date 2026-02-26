@@ -207,8 +207,30 @@ public class AuthController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password, lockoutOnFailure: true);
-        if (!signInResult.Succeeded)
+        var signInResult = await _userManager.CheckPasswordAsync(user, model.Password);
+
+
+        if (await _userManager.IsLockedOutAsync(user) && signInResult)
+        {
+            var lockoutEnd = user.LockoutEnd;
+
+            Instant? lockoutInstant = null;
+
+            if (lockoutEnd.HasValue)
+            {
+                lockoutInstant = Instant.FromDateTimeOffset(lockoutEnd.Value);
+            }
+            Console.WriteLine("Test");
+            return Unauthorized(new
+            {
+                error = "USER_LOCKED_OUT",
+                until = lockoutInstant?.ToString(),
+                reason = user.ModerationReason
+            });
+        }
+
+
+        if (!signInResult)
         {
             ModelState.AddModelError(string.Empty, "LOGIN_FAILED");
             return ValidationProblem(ModelState);

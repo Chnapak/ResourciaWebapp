@@ -16,6 +16,7 @@ import { FiltersAdminPageComponent } from './features/admin/pages/filters-page/f
 import { UsersAdminPageComponent } from './features/admin/pages/users-page/users-page.component';
 import { AdminsAdminPageComponent } from './features/admin/pages/admins-page/admins-page.component';
 import { ResourcesAdminPageComponent } from './features/admin/pages/resources-page/resources-page.component';
+import { SuspensionMessagePageComponent } from './features/auth/pages/suspension-message-page/suspension-message-page.component';
 
 export const routes: Routes = [
     {
@@ -31,6 +32,7 @@ export const routes: Routes = [
             { path: 'profile/:id', component: ProfilePageComponent, title: 'Profile'},
             { path: 'tos', component: TosPageComponent, title: 'Terms of Service'},
             { path: 'search', component: SearchResultPageComponent, title: 'Resources'},
+            { path: 'suspended', component: SuspensionMessagePageComponent, title: 'Account Suspended'},
             { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 
             children: [
                 { path: 'filters', component: FiltersAdminPageComponent},
