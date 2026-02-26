@@ -1,0 +1,90 @@
+<div class="flex-1 flex items-center justify-center px-5 py-12">
+    <div class="bg-white rounded-[18px] shadow-[0_24px_80px_rgba(0,0,0,0.28),0_2px_8px_rgba(0,0,0,0.08)] w-full max-w-[520px] px-11 py-12 animate-cardIn">
+
+        <!-- Icon -->
+        <div class="flex items-center justify-center w-[72px] h-[72px] rounded-full bg-amber-50 border-2 border-amber-200 mx-auto mb-7 animate-iconPulse">
+        <svg class="w-[34px] h-[34px] text-amber-600" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
+        </svg>
+        </div>
+
+        <!-- Heading -->
+        <h1 class="text-[26px] font-semibold text-slate-900 text-center tracking-tight leading-snug mb-3">
+        Account Access Restricted
+        </h1>
+        <p class="text-[14.5px] text-slate-500 font-light text-center leading-relaxed mb-8">
+        You currently cannot access Resourcia because your account has been suspended or banned. Please review the details below and reach out to our support team if you have questions.
+        </p>
+
+        <!-- Divider -->
+        <div class="h-px bg-slate-200 mb-6"></div>
+
+        <!-- Info rows -->
+        <div class="flex flex-col gap-2.5 mb-8">
+
+        <!-- Reason -->
+        <div class="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25Z"/>
+            </svg>
+            </div>
+            <div>
+            <p class="text-[11px] font-semibold tracking-widest uppercase text-slate-400 mb-0.5">Reason for Suspension</p>
+            <p class="text-sm font-medium text-slate-800 leading-snug">{{ reason }}</p>
+            </div>
+        </div>
+
+        <!-- Type -->
+        <div class="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            </div>
+            <div>
+            <p class="text-[11px] font-semibold tracking-widest uppercase text-slate-400 mb-1">Suspension Type</p>
+            <span class="inline-block text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                {{ type }}
+            </span>
+            </div>
+        </div>
+
+        <!-- Date -->
+        <div class="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+            <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
+            </svg>
+            </div>
+            <div>
+            <p class="text-[11px] font-semibold tracking-widest uppercase text-slate-400 mb-0.5">Access Restored On</p>
+            <p class="text-sm font-medium text-slate-800">
+                {{ restoreDate | date:'long' }} UTC
+            </p>
+            </div>
+        </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-col gap-2.5">
+        <button class="w-full py-3.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[14.5px] font-semibold transition-all duration-150 hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(37,99,235,0.3)]">
+            Contact Support
+        </button>
+        <button class="w-full py-3.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-500 hover:text-slate-700 text-[14.5px] font-semibold transition-all duration-150">
+            Return to Home
+        </button>
+        </div>
+
+        <!-- Footer note -->
+        <p class="text-center text-[12px] text-slate-400 mt-6 leading-relaxed">
+        If you believe this was an error, visit our <a href="#" class="text-blue-600 font-medium hover:underline">Appeals Center</a>.<br>
+        Case reference: <span class="font-semibold text-slate-500">#RSC-20260226-4471</span>
+        </p>
+
+    </div>
+</div>

@@ -5,6 +5,7 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 import { DropdownComponent, DropdownItem } from '../../../../shared/ui/dropdown/dropdown.component';
 import { NgStyle } from '@angular/common';
 import { ReasonModalComponent } from '../../components/reason-modal/reason-modal.component';
+import { AdminService } from '../../../../core/services/admin.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class UserRowComponent extends TableRowBase {
 
   modal: { type: 'suspend' | 'ban'; user: any } | null = null;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private adminService: AdminService) {
     super()
   }
 
@@ -97,7 +98,10 @@ export class UserRowComponent extends TableRowBase {
   }
 
   unsuspendUser() {
-    console.log(`Unsuspending user ${this.user.name}`);
+    this.adminService.unsuspendUser(this.user.id).subscribe(() => {
+      console.log('User unsuspended');
+      this.user.status = 'active';
+    });
   }
 
   banUser() {
@@ -105,16 +109,44 @@ export class UserRowComponent extends TableRowBase {
   }
 
   unbanUser() {
-    console.log(`Unbanning user ${this.user.name}`);
+    this.adminService.unbanUser(this.user.id).subscribe(() => {
+      console.log('User unbanned');
+      this.user.status = 'active';
+    });
   }
 
   openModal(type: 'suspend' | 'ban', user: any) {
     this.modal = { type, user };
   }
 
-  handleConfirm(data: { reason: string; duration?: string }) {
-    console.log('Confirmed:', data);
+  handleConfirm(data: { reason: string; durationDays?: number }) {
+    if (!this.modal) return;
+
+    const { type, user } = this.modal;
+
+    console.log(data)
+
+    if (type === 'suspend') {
+      this.adminService.suspendUser(user.id, data).subscribe({
+        next: () => {
+          console.log('User suspended');
+          this.user.status = 'suspended';
+        },
+        error: (error) => {
+          console.error('Failed to suspend user', error);
+        }
+      }
+      );
+    }
+    else {
+      this.adminService.banUser(user.id, data).subscribe(() => {
+        console.log('User banned');
+        this.user.status = 'banned';
+      });
+    }
+
     this.modal = null;
+
   }
 
   closeModal() {

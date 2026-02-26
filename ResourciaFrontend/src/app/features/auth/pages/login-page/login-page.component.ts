@@ -65,16 +65,27 @@ export class LoginPageComponent {
         console.error('Registration failed:', error);
         this.isSubmitting = false;
       
-        const errors = error?.error?.errors;
+        const validationErrors = error?.error?.errors;
+        const errorCode = error?.error;
 
-        if (errors) {
-          if (errors.Email?.includes('LOGIN_FAILED')) {
+        if (validationErrors) {
+          if (validationErrors.Email?.includes('LOGIN_FAILED')) {
             this.loginFailed = true;
           }
-          
-          }
-          else {
-            this.generalError = true;
+        }
+        else if (errorCode.error == 'USER_LOCKED_OUT') {
+            this.router.navigate(['/suspended'], {
+              state: {
+                reason: errorCode.reason,
+                type: 'Temporary',
+                restoreDate: errorCode.until,
+                caseId: 'RSC-20260226-4471'
+              }
+            });
+
+        }
+        else {
+          this.generalError = true;
         }
       }
     });

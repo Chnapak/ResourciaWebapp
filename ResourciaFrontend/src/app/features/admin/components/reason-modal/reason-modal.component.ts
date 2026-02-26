@@ -13,7 +13,7 @@ export class ReasonModalComponent {
   @Input() type!: 'suspend' | 'ban';
   @Input() user!: any;
 
-  @Output() confirm = new EventEmitter<{ reason: string; duration?: string }>();
+  @Output() confirm = new EventEmitter<{ reason: string; durationDays?: number }>();
   @Output() close = new EventEmitter<void>();
 
   form: FormGroup;
@@ -21,7 +21,7 @@ export class ReasonModalComponent {
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      duration: ['7'],
+      duration: [7],
       reason: ['', [Validators.required, Validators.maxLength(500)]]
     });
   }
@@ -42,7 +42,7 @@ export class ReasonModalComponent {
 
     this.confirm.emit({
       reason,
-      duration: this.isSuspend ? duration : undefined
+      durationDays: this.isSuspend ? Number(duration) : undefined
     });
 
     this.isSubmitting = false;

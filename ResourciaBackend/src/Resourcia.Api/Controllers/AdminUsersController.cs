@@ -71,6 +71,7 @@ public class AdminUsersController : ControllerBase
 
         user.Status = UserStatus.Suspended;
         user.ModerationReason = suspensionRequest.reason;
+        Console.WriteLine($"Suspending user {user.UserName} for reason: {suspensionRequest.reason} for {suspensionRequest.durationDays} days");
         await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddDays(suspensionRequest.durationDays));
         return NoContent();
     }

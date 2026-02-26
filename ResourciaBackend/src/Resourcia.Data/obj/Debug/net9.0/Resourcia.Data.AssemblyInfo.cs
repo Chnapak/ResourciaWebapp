@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Resourcia.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+27716f99dc2d0e94d94e3d09fc6fe5824b9dd76f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d5e3dc49d4e8f21ae139370091e522f211374b8c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Resourcia.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Resourcia.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
