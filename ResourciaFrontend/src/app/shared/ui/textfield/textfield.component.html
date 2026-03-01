@@ -1,0 +1,53 @@
+<div class="flex flex-col w-fit max-w-240 relative">
+
+  <label
+    [for]="label"
+    class="text-xs font-bold bg-gray-100 relative top-2 ml-2 px-1 w-fit transition-colors z-10"
+    [class.text-blue-400]="!showError"
+    [class.text-red-500]="showError">
+    {{ label }}:
+  </label>
+
+  <div class="relative">
+    <input
+      [id]="label"
+      class="p-[11px_10px] w-70 text-xs border-2 rounded bg-gray-100 focus:outline-none transition-all"
+      
+      [class.text-gray-400]="!value"
+      [class.text-gray-700]="value"
+      
+      [class.border-blue-400]="!showError"
+      [class.border-red-500]="showError"
+
+      [type]="type === 'password' && !showPassword ? 'password' : 'text'"
+      [placeholder]="placeholder"
+      [value]="value"
+      [disabled]="disabled"
+      (input)="updateValue($event)"
+      (blur)="onTouched()"
+    />
+
+    @if (type === 'password') {
+      <button
+        type="button"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-colors focus:outline-none"
+        (click)="togglePassword()"
+        aria-label="Toggle password visibility">
+        
+        <i class="fa-regular" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+        
+      </button>
+    }
+  </div>
+
+  @if (showError) {
+    <div class="w-70 text-left text-xs text-red-700 mt-1">
+      @if (control?.errors?.['required']) {
+        <span>{{ label }} is required.</span>
+      } @else if (control?.errors?.['passwordStrength'] || control?.errors?.['minlength'] || control?.errors?.['maxlength']) {
+        <span>Password must be 8–32 chars and contain a capital letter, digit and special character.</span>
+      }
+    </div>
+  }
+
+</div>

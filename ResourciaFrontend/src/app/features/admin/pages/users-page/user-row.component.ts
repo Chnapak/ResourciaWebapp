@@ -6,11 +6,13 @@ import { DropdownComponent, DropdownItem } from '../../../../shared/ui/dropdown/
 import { NgStyle } from '@angular/common';
 import { ReasonModalComponent } from '../../components/reason-modal/reason-modal.component';
 import { AdminService } from '../../../../core/services/admin.service';
+import { CheckboxComponent } from '../../../../shared/ui/checkbox/checkbox.component';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-user-row',
-  imports: [ RouterLink, DropdownComponent, NgStyle, ReasonModalComponent ],
+  imports: [ RouterLink, DropdownComponent, CheckboxComponent, NgStyle, ReasonModalComponent, FormsModule ],
   standalone: true,
   templateUrl: './user-row.component.html',
   styleUrl: './user-row.component.scss'
