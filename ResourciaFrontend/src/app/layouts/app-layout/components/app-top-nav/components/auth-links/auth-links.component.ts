@@ -3,6 +3,7 @@ import { MeInfoModel } from '../../../../../../shared/models/me-info';
 import { Router, RouterLink } from '@angular/router';
 import { Dropdown } from 'flowbite';
 import { DropdownComponent, DropdownItem } from '../../../../../../shared/ui/dropdown/dropdown.component';
+import { JwtPayloadModel } from '../../../../../../shared/models/jwt-payload-model';
 
 @Component({
   selector: 'app-auth-links',
@@ -11,7 +12,7 @@ import { DropdownComponent, DropdownItem } from '../../../../../../shared/ui/dro
   styleUrl: './auth-links.component.scss'
 })
 export class AuthLinksComponent {
-  @Input() user: MeInfoModel | null = null;
+  @Input() user: JwtPayloadModel | null = null;
   @Output() logout = new EventEmitter<void>();
 
   constructor(private router: Router) {}
