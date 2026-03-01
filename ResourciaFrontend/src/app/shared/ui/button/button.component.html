@@ -18,6 +18,11 @@
     [disabled]="disabled || loading"
     [attr.aria-busy]="loading ? 'true' : null"
   >
-    <ng-container [ngTemplateOutlet]="content" />
+    @if (loading) {
+      <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+      Submitting...
+    } @else {
+      <ng-container [ngTemplateOutlet]="content" />
+    }
   </button>
 }

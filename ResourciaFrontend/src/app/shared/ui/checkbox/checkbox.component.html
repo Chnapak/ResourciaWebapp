@@ -1,0 +1,43 @@
+<label 
+  (click)="onToggle(); $event.preventDefault(); $event.stopPropagation()"
+  [class.opacity-55]="disabled"
+  [class.cursor-not-allowed]="disabled"
+  class="group flex items-center px-1.5 py-[5px] rounded-[5px] cursor-pointer transition-colors duration-120 hover:bg-[#eff5ff]"
+  [ngClass]="{'hover:bg-transparent': disabled}">
+  
+    <input 
+        type="checkbox" 
+        class="sr-only" 
+        [checked]="value" 
+        [disabled]="disabled">
+
+    <div 
+        class="relative w-[15px] h-[15px] border-[1.5px] rounded-[3px] transition-all duration-130
+            flex items-center justify-center shrink-0
+            group-hover:border-[#93b8f8]"
+        [ngClass]="{
+        'bg-[#2563eb] border-[#2563eb]': value && !disabled,
+        'bg-white border-[#c5ccd8]': !value && !disabled,
+        'bg-[#f0f2f5] border-[#dde1e8]': disabled && !value,
+        'bg-[#b8c7e8] border-[#b8c7e8]': disabled && value,
+        'ring-3 ring-[#2563eb33]': !disabled && value
+        }">
+        
+        @if (value) {
+            <div 
+            class="w-[10px] h-[8px] bg-white transition-transform duration-100 scale-100"
+            style="mask-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 10 8\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 4l2.5 2.5L9 1\' stroke=\'white\' stroke-width=\'1.6\' stroke-linecap=\'round\' stroke-linejoin=\'round\' fill=\'none\'/%3E%3C/svg%3E'); -webkit-mask-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 10 8\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 4l2.5 2.5L9 1\' stroke=\'white\' stroke-width=\'1.6\' stroke-linecap=\'round\' stroke-linejoin=\'round\' fill=\'none\'/%3E%3C/svg%3E'); mask-repeat: no-repeat; mask-position: center;">
+            </div>
+        }
+    </div>
+
+    <span class="text-[13.5px] leading-none text-[#2d3748]" [class.text-[#9aa3b0]]="disabled">
+        {{ label }}
+    </span>
+
+    @if (badge) {
+        <span class="ml-auto text-[10px] font-medium tracking-wider text-[#b0b8c8] uppercase">
+            {{ badge }}
+        </span>
+    }   
+</label>
