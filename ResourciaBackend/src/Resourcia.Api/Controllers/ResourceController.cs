@@ -185,4 +185,47 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
 
         return Ok(resource);
     }
+
+    [HttpGet("/search")] 
+    public async Task<IActionResult> Search(CancellationToken ct)
+    {
+        var queryParams = Request.Query;
+
+        var dbQuery = _dbContext.Set<Resource>()
+        .AsNoTracking()
+        .AsQueryable();
+
+        // ----- TEXT SEARCH -----
+        if (queryParams.TryGetValue("q", out var qValue))
+        {
+            var trimmed = qValue.ToString().Trim();
+
+            dbQuery = dbQuery.Where(r =>
+                r.Title.Contains(trimmed) ||
+                r.Description!.Contains(trimmed));
+        }
+
+        // ----- DYNAMIC FACETS -----
+        var reservedKeys = new HashSet<string>
+        {
+            "q", "page", "pageSize"
+        };
+
+        var facetFilters = queryParams
+            .Where(p => !reservedKeys.Contains(p.Key))
+            .ToDictionary(
+                p => p.Key,
+                p => p.Value.ToList()
+            );
+
+        // facetFilters now contains:
+        // { "subject": ["math"], "difficulty": ["highschool"] }
+
+        // (we'll apply filtering here later)
+
+        var results = await dbQuery.Take(20).ToListAsync(ct);
+
+        return Ok(results);
+
+    }
 }
