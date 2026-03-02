@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\models\\resources\\createresourcemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\models\\resources\\createresourcemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\resourcecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\resourcecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\models\\resources\\createresourcemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\models\\resources\\createresourcemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\models\\resources\\resourcesearchquerymodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -263,7 +263,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
@@ -323,34 +323,32 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAOAAAAAAAAAAAAASwOgAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-27T21:42:50.022Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-27T21:42:50.022Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ResourceController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\ResourceController.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
               "RelativeToolTip": "Resourcia.Api\\Controllers\\ResourceController.cs",
-              "ViewState": "AgIAAM0AAAAAAAAAAAAiwNMAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAALoAAAAAAAAAAAAgwMgAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-16T13:00:29.353Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "CreateResourceModel.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Models\\Resources\\CreateResourceModel.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Models\\Resources\\CreateResourceModel.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Models\\Resources\\CreateResourceModel.cs",
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\CreateResourceModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-21T22:49:25.54Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-21T22:49:25.54Z"
             },
             {
               "$type": "Document",
@@ -362,8 +360,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\ResourceSearchQueryModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T18:56:26.688Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-02T18:56:26.688Z"
             },
             {
               "$type": "Document",

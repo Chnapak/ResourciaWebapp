@@ -198,11 +198,12 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
         // ----- TEXT SEARCH -----
         if (queryParams.TryGetValue("q", out var qValue))
         {
-            var trimmed = qValue.ToString().Trim();
+            var lowerTrimmed = qValue.ToString().Trim().ToLower();
 
             dbQuery = dbQuery.Where(r =>
-                r.Title.Contains(trimmed) ||
-                r.Description!.Contains(trimmed));
+                 r.Title.ToLower().Contains(lowerTrimmed) ||
+                 (r.Description != null && r.Description.ToLower().Contains(lowerTrimmed))
+             );
         }
 
         // ----- DYNAMIC FACETS -----
