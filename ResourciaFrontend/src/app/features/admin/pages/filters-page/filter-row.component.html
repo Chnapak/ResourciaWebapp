@@ -1,43 +1,69 @@
-<div class="flex items-center px-8 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors" draggable="true">
-    <div class="text-gray-400 cursor-grab active:cursor-grabbing mr-4 text-xl drag-handle">☰</div>
-    <div class="text-gray-400 text-sm min-w-[2rem] mr-4 filter-position">#{{filter.order}}</div>
-    <div class="flex-1 flex flex-col gap-1">
-        <div class="flex items-center gap-2">
-            <div class="text-base font-medium text-gray-900">{{filter.name}}</div>
-            
-            @if (filter.kind === FilterKind.Facet) {
-                <span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded">Facet Value</span>
-            }
-            @if (filter.kind === FilterKind.Range) {
-                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded">Number</span>
-            }
-            @if (filter.kind === FilterKind.Boolean) {
-                <span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded">Boolean</span>
-            }
-            @if (filter.kind === FilterKind.Text) {
-                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded">String</span>
-            }
+<div class="flex items-center px-8 py-4 border-b border-slate-100">
+
+    <!-- Checkbox (w-10) -->
+    <div class="w-10 flex items-center">
+        <app-checkbox 
+            [(ngModel)]="selected" 
+            (ngModelChange)="onCheckboxChange($event)">
+        </app-checkbox>
+    </div>
+
+    <!-- Filter (flex-1) -->
+    <div class="flex-1 flex items-center gap-3">
+        <div cdkDragHandle class="text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+            </svg>
         </div>
-        <div class="text-xs text-gray-600">Used by 1,247 resources • Last updated Jan 28, 2026</div>
+        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 font-semibold text-sm">
+            #
+        </div>
+        <div>
+            <div class="text-sm font-semibold text-slate-900">   filter.name   </div>
+            <div class="text-xs text-slate-500 mt-0.5">   filter.description   </div>
+        </div>
     </div>
-    <div class="flex gap-2 items-center">
-        <span class="text-xs text-green-600 min-w-[55px] text-right status-label">Enabled</span>
-        <label class="relative inline-block w-11 h-6 cursor-pointer">
-            <input type="checkbox" checked onchange="toggleFilterStatus(this, 'Subject')" class="sr-only peer">
-            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
-            <div class="absolute left-[3px] top-[3px] bg-white w-[18px] h-[18px] rounded-full transition-transform peer-checked:translate-x-5"></div>
-        </label>
-        <button 
-            onclick="alert('Edit Subject filter')" 
-            class="px-3 py-2 border border-gray-200 bg-white rounded-lg text-sm hover:border-blue-600 hover:text-blue-600 transition-all flex items-center gap-2"
-        >
-            ✏️ Edit
-        </button>
-        <button 
-            onclick="showDeleteModal('Subject', 1247)" 
-            class="px-3 py-2 bg-red-600 text-white border border-red-600 rounded-lg text-sm hover:bg-red-700 transition-colors flex items-center gap-2"
-        >
-            🗑️ Delete
-        </button>
+
+    <!-- Type (w-32) -->
+    <div class="w-32">
+        <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-md border border-blue-200">
+               filter.type   
+        </span>
     </div>
+
+    <!-- Resources (w-40) -->
+    <div class="w-40">
+        <span class="text-sm font-mono font-medium text-slate-700">   filter.resourceCount   </span>
+        <span class="text-xs text-slate-400 ml-1">resources</span>
+    </div>
+
+    <!-- Last Updated (w-28) -->
+    <div class="w-28">
+        <span class="text-xs text-slate-500">   filter.lastUpdated   </span>
+    </div>
+
+    <!-- Status (w-28) -->
+    <div class="w-28 flex items-center">
+        @if (filter.enabled) {
+            <span class="status-dot active"></span>
+            <span class="text-xs font-medium text-emerald-600">Enabled</span>
+        } @else {
+            <span class="status-dot banned"></span>
+            <span class="text-xs font-medium text-slate-400">Disabled</span>
+        }
+    </div>
+
+    <!-- Actions (w-20) -->
+    <div class="w-20 flex justify-end">
+        <div class="relative">
+            <app-dropdown [items]="filterMenuItems">
+                <button dropdown-button class="p-2 hover:bg-slate-100 rounded-lg transition-all cursor-pointer">
+                    <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </button>
+            </app-dropdown>
+        </div>
+    </div>
+
 </div>
