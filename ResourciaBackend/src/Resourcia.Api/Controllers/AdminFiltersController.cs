@@ -52,4 +52,17 @@ public class AdminFiltersController : ControllerBase
         await _dbContext.SaveChangesAsync();
         return NoContent();
     }
+
+    [HttpPatch("toggleActivation/{id:guid}")]
+    public async Task<IActionResult> ToggleFilterActivation(Guid id)
+    {
+        var filter = await _dbContext.Filters.FindAsync(id);
+        if (filter == null)
+        {
+            return NotFound();
+        }
+        filter.IsActive = !filter.IsActive;
+        await _dbContext.SaveChangesAsync();
+        return Ok(new { filter.Id, filter.IsActive });
+    }
 }
