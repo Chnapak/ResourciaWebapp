@@ -323,8 +323,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAOAAAAAAAAAAAAASwOgAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-27T21:42:50.022Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-27T21:42:50.022Z"
             },
             {
               "$type": "Document",
@@ -334,7 +333,7 @@
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\ResourceController.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
               "RelativeToolTip": "Resourcia.Api\\Controllers\\ResourceController.cs",
-              "ViewState": "AgIAANoAAAAAAAAAAAAkwOEAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAANEAAAAAAAAAAAAkwOQAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-16T13:00:29.353Z",
               "EditorCaption": ""
@@ -349,8 +348,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\CreateResourceModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-21T22:49:25.54Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-21T22:49:25.54Z"
             },
             {
               "$type": "Document",
@@ -362,8 +360,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\ResourceSearchQueryModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-02T18:56:26.688Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-02T18:56:26.688Z"
             },
             {
               "$type": "Document",
