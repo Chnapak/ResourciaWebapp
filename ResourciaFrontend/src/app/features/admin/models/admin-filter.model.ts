@@ -4,6 +4,7 @@ export interface AdminFilter {
   id: string;
   key: string;
   name: string;
+  description: string;
   kind: FilterKind;
   enabled: boolean;
 

@@ -16,18 +16,18 @@
             </svg>
         </div>
         <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 font-semibold text-sm">
-            #
+            # {{ filter.order }}
         </div>
         <div>
-            <div class="text-sm font-semibold text-slate-900">   filter.name   </div>
-            <div class="text-xs text-slate-500 mt-0.5">   filter.description   </div>
+            <div class="text-sm font-semibold text-slate-900">  {{ filter.key }}   </div>
+            <div class="text-xs text-slate-500 mt-0.5">   {{ filter.description }}   </div>
         </div>
     </div>
 
     <!-- Type (w-32) -->
     <div class="w-32">
         <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-md border border-blue-200">
-               filter.type   
+            {{ filter.kind }}
         </span>
     </div>
 
