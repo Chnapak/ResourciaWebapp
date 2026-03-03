@@ -42,6 +42,28 @@ export class FilterRowComponent extends TableRowBase {
     console.log('Delete filter', this.filter);
   }
 
+  hashString(str: string): number {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    return Math.abs(hash);
+  }
+
+  getFilterGradient(seed: string): string {
+    const hash = this.hashString(seed);
+
+    const hue1 = hash % 360;
+    const hue2 = (hue1 + 40) % 360; // small shift for gradient
+
+    return `linear-gradient(135deg, 
+      hsl(${hue1}, 70%, 55%), 
+      hsl(${hue2}, 70%, 45%)
+    )`;
+  }
+
   onCheckboxChange(ev: Event) {
     this.toggle.emit({ id: this.filter.id, checked: this.getChecked(ev) });
   }
