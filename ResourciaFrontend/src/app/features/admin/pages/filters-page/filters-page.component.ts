@@ -6,11 +6,12 @@ import { AdminTableComponent } from '../../components/admin-table/admin-table.co
 import { FilterRowComponent } from './filter-row.component';
 import { AdminFilter } from '../../models/admin-filter.model';
 import { AdminService } from '../../../../core/services/admin.service';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
   selector: 'app-filters',
-  imports: [AdminHeaderComponent, AdminTableComponent, FilterRowComponent],
+  imports: [AdminHeaderComponent, AdminTableComponent, FilterRowComponent, DragDropModule ],
   templateUrl: './filters-page.component.html',
   styleUrl: './filters-page.component.scss'
 })
@@ -53,7 +54,7 @@ export class FiltersAdminPageComponent implements OnInit {
   }
 
   // TODO: Remove?
-  schema: AdminFilter[] | null = null;
+  schema: AdminFilter[] = [];
   FilterKind = FilterKind;
 
   protected readonly AdminService = inject(AdminService);
@@ -63,5 +64,14 @@ export class FiltersAdminPageComponent implements OnInit {
       console.log(data)
       this.schema = data; 
     })
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
+    if (!this.schema) return;
+    if (event.previousIndex === event.currentIndex) return;
+
+    moveItemInArray(this.schema, event.previousIndex, event.currentIndex);
+
+    console.log('Reordered:', this.schema.map(f => f.key));
   }
 }
