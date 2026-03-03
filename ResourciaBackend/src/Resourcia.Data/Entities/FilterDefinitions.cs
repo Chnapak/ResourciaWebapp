@@ -39,7 +39,7 @@ public class FilterDefinitions
 
     public bool IsActive { get; set; } = false;
 
-    public int SortOrder { get; set; } = 0;
+    public decimal SortOrder { get; set; } = 0;
 
     [MaxLength(64)]
     public string? ResourceField { get; set; }

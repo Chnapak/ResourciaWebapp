@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Npgsql;
+using Resourcia.Api.Models.Admin;
 using Resourcia.Api.Models.Filters;
 using Resourcia.Data;
 using Resourcia.Data.Entities;
@@ -162,5 +163,82 @@ public class AdminFiltersController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    [HttpPatch("reorder")]
+    public async Task<IActionResult> ReorderFilters([FromBody] FractionalIndexingModel model)
+    {
+        if (model.aboveId is null && model.belowId is null)
+            return BadRequest("At least one of aboveId or belowId must be provided.");
+        if (model.aboveId is not null && model.belowId is not null && model.aboveId == model.belowId)
+            return BadRequest("aboveId and belowId cannot be the same.");
+
+        var moved = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.movedId);
+        if (moved is null) return NotFound($"Filter '{model.movedId}' not found.");
+
+        FilterDefinitions? above = null;
+        FilterDefinitions? below = null;
+
+        if (model.aboveId is not null)
+        {
+            above = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.aboveId.Value);
+            if (above is null) return NotFound($"Filter aboveId '{model.aboveId}' not found.");
+        }
+
+        if (model.belowId is not null)
+        {
+            below = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.belowId.Value);
+            if (below is null) return NotFound($"Filter belowId '{model.belowId}' not found.");
+        }
+
+        // Optional sanity check: ensure above is actually above below
+        if (above is not null && below is not null && above.SortOrder >= below.SortOrder)
+        {
+            // This can happen if client sent stale neighbors or IDs swapped.
+            return BadRequest("Invalid neighbors: above must have SortOrder < below.");
+        }
+
+        const decimal step = 10m;
+        const decimal minGap = 0.000001m; // depends on your precision
+
+        // If we need a key between two items, ensure there's space; else reindex.
+        if (above is not null && below is not null)
+        {
+            var gap = below.SortOrder - above.SortOrder;
+            if (gap <= minGap)
+            {
+                await ReindexAllFilters(step);
+                // Reload neighbor keys after reindex
+                above = await _dbContext.Filters.SingleAsync(f => f.Id == model.aboveId!.Value);
+                below = await _dbContext.Filters.SingleAsync(f => f.Id == model.belowId!.Value);
+            }
+
+            moved.SortOrder = (above.SortOrder + below.SortOrder) / 2m;
+        }
+        else if (above is null && below is not null)
+        {
+            // Move to top (before below)
+            moved.SortOrder = below.SortOrder - step;
+        }
+        else if (above is not null && below is null)
+        {
+            // Move to bottom (after above)
+            moved.SortOrder = above.SortOrder + step;
+        }
+
+        await _dbContext.SaveChangesAsync();
+        return Ok(new { moved.Id, moved.SortOrder });
+    }
+
+    private async Task ReindexAllFilters(decimal step)
+    {
+        var filters = await _dbContext.Filters
+        .OrderBy(f => f.SortOrder)
+        .ToListAsync();
+
+        for (var i = 0; i < filters.Count; i++)
+            filters[i].SortOrder = (i + 1) * step;
+
+        await _dbContext.SaveChangesAsync();
     }
 }

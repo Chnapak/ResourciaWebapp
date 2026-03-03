@@ -13,7 +13,7 @@ public class FilterInfoModel
     public FilterKind Kind { get; set; }
     public bool IsMulti { get; set; }
     public bool IsActive { get; set; }
-    public int SortOrder { get; set; }
+    public decimal SortOrder { get; set; }
     public ICollection<FacetValues> FacetValues { get; set; } = new List<FacetValues>();
     public int ResourceCount { get; set; }
     public Instant CreatedAt { get; set; }

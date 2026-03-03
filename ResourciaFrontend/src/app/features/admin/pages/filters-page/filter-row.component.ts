@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 })
 export class FilterRowComponent extends TableRowBase {
   @Input({ required: true }) filter!: AdminFilter;
+  @Input() index = 0;
   @Input() selected = false;
 
   @Output() toggle = new EventEmitter<{ id: string; checked: boolean }>();

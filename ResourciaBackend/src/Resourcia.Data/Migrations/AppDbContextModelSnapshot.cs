@@ -299,8 +299,9 @@ namespace Resourcia.Data.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("SortOrder")
+                        .HasPrecision(18, 9)
+                        .HasColumnType("numeric(18,9)");
 
                     b.HasKey("Id");
 
