@@ -8,9 +8,10 @@
         [indeterminate]="someSelected"
         (toggleAll)="onToggleAll($event)"
     >
-        @for (filter of (schema ?? []); track $index) {
+        @for (filter of (schema ?? []); track $index; let i = $index) {
             <app-filter-row
                 [filter]="filter"
+                [index]="i"
                 [selected]="selectedKeys.has(filter.key)"
                 (toggle)="onToggleOne($event.id, $event.checked)"
             ></app-filter-row>

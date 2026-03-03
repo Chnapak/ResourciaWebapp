@@ -16,7 +16,7 @@
             </svg>
         </div>
         <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 font-semibold text-sm">
-            # {{ filter.sortOrder }}
+            # {{ index + 1 }}
         </div>
         <div>
             <div class="text-sm font-semibold text-slate-900">  {{ filter.label }}   </div>
@@ -39,7 +39,7 @@
 
     <!-- Last Updated (w-28) -->
     <div class="w-28">
-        <span class="text-xs text-slate-500">   {{ filter.modifiedAt || date: 'dd.MM.yyyy HH:mm' }}   </span>
+        <span class="text-xs text-slate-500">   {{ filter.modifiedAt | date: 'dd.MM.yyyy HH:mm' }}   </span>
     </div>
 
     <!-- Status (w-28) -->
