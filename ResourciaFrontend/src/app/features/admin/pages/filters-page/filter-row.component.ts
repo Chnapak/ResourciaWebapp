@@ -5,10 +5,11 @@ import { FilterKind } from '../../../../shared/models/filter-kind';
 import { CheckboxComponent } from '../../../../shared/ui/checkbox/checkbox.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownComponent, DropdownItem } from '../../../../shared/ui/dropdown/dropdown.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-filter-row',
-  imports: [ CheckboxComponent, FormsModule, DropdownComponent ],
+  imports: [ CheckboxComponent, FormsModule, DropdownComponent, DatePipe ],
   standalone: true,
   templateUrl: './filter-row.component.html',
   styleUrl: './filter-row.component.scss'

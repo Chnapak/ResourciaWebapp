@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -44,4 +45,16 @@ public class FilterDefinitions
     public string? ResourceField { get; set; }
 
     public ICollection<FacetValues> FacetValues { get; set; } = new List<FacetValues>();
+
+    public Instant CreatedAt { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
+
+    public Instant ModifiedAt { get; set; }
+
+    public string ModifiedBy { get; set; } = null!;
+
+    public Instant? DeletedAt { get; set; }
+
+    public string? DeletedBy { get; set; }
 }
