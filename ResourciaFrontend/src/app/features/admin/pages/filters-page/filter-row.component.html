@@ -15,7 +15,8 @@
                 <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
             </svg>
         </div>
-        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 font-semibold text-sm">
+        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+        [style.background]="getFilterGradient(filter.key)">
             # {{ index + 1 }}
         </div>
         <div>
