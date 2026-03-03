@@ -2,14 +2,18 @@
 <div class="bg-white rounded-lg shadow-sm">
     <app-admin-header [title]="'Filters'"></app-admin-header>
     <app-admin-table
+        cdkDropList
+        [cdkDropListData]="schema"
+        (cdkDropListDropped)="drop($event)"
         [columns]="columns"
         [selectable]="true"
         [checked]="allSelected"
         [indeterminate]="someSelected"
         (toggleAll)="onToggleAll($event)"
     >
-        @for (filter of (schema ?? []); track $index; let i = $index) {
+        @for (filter of (schema ?? []); track filter.key; let i = $index) {
             <app-filter-row
+                cdkDrag
                 [filter]="filter"
                 [index]="i"
                 [selected]="selectedKeys.has(filter.key)"
