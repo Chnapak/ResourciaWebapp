@@ -3,15 +3,15 @@ import { FilterKind } from "../../../shared/models/filter-kind";
 export interface AdminFilter {
   id: string;
   key: string;
-  name: string;
+  label: string;
   description: string;
   kind: FilterKind;
-  enabled: boolean;
+  isActive: boolean;
 
   // ordering (important for drag-reorder)
-  order: number;
+  sortOrder: number;
 
   // usage / metadata
-  resourcesCount: number;
-  updatedAt: string; // or Date, same rule as User.lastActiveAt
+  resourceCount: number;
+  modifiedAt: string; // or Date, same rule as User.lastActiveAt
 }

@@ -25,22 +25,44 @@ public class AdminFiltersController : ControllerBase
         _clock = clock;
     }
 
+
+
     [HttpGet]
     public async Task<ActionResult> GetAllFilters()
     {
         var filters = await _dbContext.Filters
             .OrderBy(f => f.SortOrder)
-            .Select(f => new
+            .Select(f => new FilterInfoModel
             {
-                f.Id,
-                f.Key,
-                f.Label,
-                f.Description,
-                f.Kind,
-                f.IsMulti,
-                f.IsActive,
-                f.SortOrder
-            }).ToListAsync();
+                Id = f.Id,
+                Key = f.Key,
+                Label = f.Label,
+                Description = f.Description,
+                Kind = f.Kind,
+                IsMulti = f.IsMulti,
+                IsActive = f.IsActive,
+                SortOrder = f.SortOrder,
+
+                FacetValues = f.FacetValues
+                    .Where(v => v.IsActive)
+                    .OrderBy(v => v.SortOrder)
+                    .ToList(),
+
+                // ✅ DISTINCT RESOURCE COUNT
+                ResourceCount = f.FacetValues
+                    .Where(v => v.IsActive)
+                    .SelectMany(v => v.ResourceFacetValues)
+                    .Select(rf => rf.ResourceId)
+                    .Distinct()
+                    .Count(),
+
+                CreatedAt = f.CreatedAt,
+                CreatedBy = f.CreatedBy,
+                ModifiedAt = f.ModifiedAt,
+                ModifiedBy = f.ModifiedBy
+            })
+            .ToListAsync();
+
         return Ok(filters);
     }
 
