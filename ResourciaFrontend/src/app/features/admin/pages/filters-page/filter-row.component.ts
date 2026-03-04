@@ -6,10 +6,11 @@ import { CheckboxComponent } from '../../../../shared/ui/checkbox/checkbox.compo
 import { FormsModule } from '@angular/forms';
 import { DropdownComponent, DropdownItem } from '../../../../shared/ui/dropdown/dropdown.component';
 import { DatePipe } from '@angular/common';
+import { CdkDragHandle } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-filter-row',
-  imports: [ CheckboxComponent, FormsModule, DropdownComponent, DatePipe ],
+  imports: [ CheckboxComponent, FormsModule, DropdownComponent, DatePipe, CdkDragHandle],
   standalone: true,
   templateUrl: './filter-row.component.html',
   styleUrl: './filter-row.component.scss'
