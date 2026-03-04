@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FilterRowComponent } from './filter-row/filter-row.component';
+import { FilterRowComponent } from './filter-row.component';
 
 describe('FilterRowComponent', () => {
   let component: FilterRowComponent;

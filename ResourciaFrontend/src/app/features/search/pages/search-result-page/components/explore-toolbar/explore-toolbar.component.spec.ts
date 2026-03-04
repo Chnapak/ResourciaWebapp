@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExploreToolbarComponent } from './explore-toolbar.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('ExploreToolbarComponent', () => {
   let component: ExploreToolbarComponent;
@@ -8,7 +9,8 @@ describe('ExploreToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExploreToolbarComponent]
+      imports: [ExploreToolbarComponent],
+      providers: [ ActivatedRoute ]
     })
     .compileComponents();
 

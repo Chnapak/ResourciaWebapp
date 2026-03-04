@@ -3,6 +3,7 @@
     <app-admin-header [title]="'Filters'"></app-admin-header>
     <app-admin-table
         cdkDropList
+        cdkDropListOrientation="vertical"
         [cdkDropListData]="schema"
         (cdkDropListDropped)="drop($event)"
         [columns]="columns"
@@ -18,7 +19,17 @@
                 [index]="i"
                 [selected]="selectedKeys.has(filter.key)"
                 (toggle)="onToggleOne($event.id, $event.checked)"
-            ></app-filter-row>
+            >
+                <ng-template cdkDragPlaceholder>
+                    <div class="h-0 border-t-[3px] mx-[0px] my-[8px] border-blue-500 rounded-[9999px]"></div>
+                </ng-template>
+
+                <ng-template cdkDragPreview>
+                    <div class="drag-preview">
+                    {{ filter.key }}
+                    </div>
+                </ng-template>
+            </app-filter-row>
         }
     </app-admin-table>
     
