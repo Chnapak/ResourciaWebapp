@@ -7,6 +7,7 @@ import { FilterRowComponent } from './filter-row.component';
 import { AdminFilter } from '../../models/admin-filter.model';
 import { AdminService } from '../../../../core/services/admin.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { AdminFilterReorderModel } from '../../models/admin-filter-reorder.model';
 
 
 @Component({
@@ -70,8 +71,26 @@ export class FiltersAdminPageComponent implements OnInit {
     if (!this.schema) return;
     if (event.previousIndex === event.currentIndex) return;
 
-    moveItemInArray(this.schema, event.previousIndex, event.currentIndex);
+    const fromIndex = event.previousIndex;
+    const toIndex = event.currentIndex;
 
-    console.log('Reordered:', this.schema.map(f => f.key));
+    // this is the item being moved (from the original array before move)
+    const moved = this.schema[fromIndex];
+
+    // update UI order
+    moveItemInArray(this.schema, fromIndex, toIndex);
+
+    const above = toIndex > 0 ? this.schema[toIndex - 1] : null;
+    const below = toIndex < this.schema.length - 1 ? this.schema[toIndex + 1] : null;
+
+    const payload: AdminFilterReorderModel = {
+      movedId: moved.id,
+      aboveId: above?.id ?? null,
+      belowId: below?.id ?? null,
+    }
+
+    console.log('Reorder payload', payload);
+
+    this.AdminService.reorderFilters(payload).subscribe();
   }
 }

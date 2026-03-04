@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AdminFilter } from '../../features/admin/models/admin-filter.model';
 import { AdminUser } from '../../features/admin/models/admin-user.model';
 import { ModerationModel } from '../../shared/models/moderation-model';
+import { AdminFilterReorderModel } from '../../features/admin/models/admin-filter-reorder.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,10 @@ export class AdminService {
   unbanUser(userId: string): Observable<void> {
     const url = this.baseUrl + "/users/" + userId + "/unban"
     return this.httpClient.post<void>(url, {  })
+  }
+
+  reorderFilters(filterIds: AdminFilterReorderModel): Observable<void> {
+    const url = this.baseUrl + "/filters/reorder"
+    return this.httpClient.patch<void>(url, filterIds)
   }
 }
