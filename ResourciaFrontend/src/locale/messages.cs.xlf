@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="9071136567941728887" datatype="html">
+        <source>Find the best educational resources</source>
+        <target>Najděte nejlepší vzdělávací zdroje</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/public/pages/home-page/components/hero-banner/hero-banner.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7997530211722162813" datatype="html">
+        <source>Thousands of curated tools for students and teachers</source>
+        <target>Desítky tisíc pečlivě vybraných nástrojů pro studenty a učitele</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/public/pages/home-page/components/hero-banner/hero-banner.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
