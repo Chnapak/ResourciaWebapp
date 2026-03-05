@@ -2,21 +2,501 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="8263222204376688538" datatype="html">
+        <source>We&apos;ve sent a confirmation link to <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;font-semibold text-blue-600&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{form.getRawValue().email}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</source>
+        <target state="new">Poslali jsme potvrzovací odkaz na <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;font-semibold text-blue-600&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{form.getRawValue().email}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</target>
+      </trans-unit>
+      <trans-unit id="8282940047848889809" datatype="html">
+        <source>Paid</source>
+        <target state="new">Placené</target>
+      </trans-unit>
+      <trans-unit id="8317457230285174180" datatype="html">
+        <source>Course</source>
+        <target state="new">Kurz</target>
+      </trans-unit>
+      <trans-unit id="8321701170052036262" datatype="html">
+        <source>Computer Science</source>
+        <target state="new">Počítačové vědy</target>
+      </trans-unit>
+      <trans-unit id="8439955599488894226" datatype="html">
+        <source>Privacy Policy</source>
+        <target state="new">Privacy Policy</target>
+      </trans-unit>
+      <trans-unit id="8503844425712078687" datatype="html">
+        <source> By signing up you agree with our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/tos&quot; class=&quot;text-blue-600&quot;&gt;"/>Terms of Service<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> and <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/privacy-policy&quot; class=&quot;text-blue-600&quot;&gt;"/>Privacy Policy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="new"> Přihlašením souhlasíte s našimi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/tos&quot; class=&quot;text-blue-600&quot;&gt;"/>Terms of Service<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/privacy-policy&quot; class=&quot;text-blue-600&quot;&gt;"/>Privacy Policy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+      </trans-unit>
+      <trans-unit id="8542568275115626925" datatype="html">
+        <source>7 days</source>
+        <target state="new">7 dní</target>
+      </trans-unit>
+      <trans-unit id="8583750011528095760" datatype="html">
+        <source>Something went wrong, please try again.</source>
+        <target state="new">Něco se pokazilo, zkuste to prosím znovu.</target>
+      </trans-unit>
+      <trans-unit id="8602814243662345124" datatype="html">
+        <source>Email is required.</source>
+        <target state="new">Email je vyžadován.</target>
+      </trans-unit>
+      <trans-unit id="867108466740792122" datatype="html">
+        <source>3 days</source>
+        <target state="new">3 dny</target>
+      </trans-unit>
+      <trans-unit id="8890235691785177417" datatype="html">
+        <source>Resend availabe in <x id="PH" equiv-text="remaining"/>s</source>
+        <target state="new">Možnost poslat znovu za <x id="PH" equiv-text="remaining"/>s</target>
+      </trans-unit>
+      <trans-unit id="8898253667808677314" datatype="html">
+        <source>Hide Filters</source>
+        <target state="new">Skrýt filtry</target>
+      </trans-unit>
+      <trans-unit id="9065077585315617861" datatype="html">
+        <source> Takes ~2 minutes, optional steps 2 and 3 included. </source>
+        <target state="new"> Trvá přibližně 2 minuty, zahrnuté jsou dobrovolné kroky 2 a 3. </target>
+      </trans-unit>
       <trans-unit id="9071136567941728887" datatype="html">
         <source>Find the best educational resources</source>
         <target>Najděte nejlepší vzdělávací zdroje</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/public/pages/home-page/components/hero-banner/hero-banner.component.html</context>
-          <context context-type="linenumber">5,6</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="9212705249340904752" datatype="html">
+        <source>Explore</source>
+        <target state="new">Prozkoumat</target>
+      </trans-unit>
+      <trans-unit id="auth.email.placeholder" datatype="html">
+        <source>Write here...</source>
+        <target state="new">Pište sem...</target>
+      </trans-unit>
+      <trans-unit id="auth.url.label" datatype="html">
+        <source>https://example.com</source>
+        <target state="new">https://priklad.cz</target>
+      </trans-unit>
+      <trans-unit id="auth.username.placeholder" datatype="html">
+        <source>Write here...</source>
+        <target state="new">Pište sem...</target>
+      </trans-unit>
+      <trans-unit id="search.filter.placeholder" datatype="html">
+        <source>Type <x id="label" equiv-text="filterLabel"/>...</source>
+        <target state="new">Typ <x id="label" equiv-text="filterLabel"/>...</target>
+      </trans-unit>
+      <trans-unit id="1069523139277190436" datatype="html">
+        <source>Statistics</source>
+        <target state="new">Statistiky</target>
+      </trans-unit>
+      <trans-unit id="1159335396492148090" datatype="html">
+        <source>Click &quot;Add Filter&quot; to create your first filter</source>
+        <target state="new">Klikněte na &quot;Přidat filtr&quot; pro vytvoření prvního filtru</target>
+      </trans-unit>
+      <trans-unit id="12427097120220944" datatype="html">
+        <source> Contact Support </source>
+        <target state="new"> Kontaktovat podporu </target>
+      </trans-unit>
+      <trans-unit id="1244224947815328245" datatype="html">
+        <source>No filters yet</source>
+        <target state="new">Zatím žádné filtry</target>
+      </trans-unit>
+      <trans-unit id="140822705245800362" datatype="html">
+        <source>Username:</source>
+        <target state="new">Uživatelské jméno:</target>
+      </trans-unit>
+      <trans-unit id="1457176267014264051" datatype="html">
+        <source>Password must be between 8-32 characters long contain a capital character, a digit and a special character.</source>
+        <target state="new">Heslo musí být dlouhé 8-32 znaků a obsahovat velké písmeno, číslo a speciální znak.</target>
+      </trans-unit>
+      <trans-unit id="1464368773882542965" datatype="html">
+        <source>Not your email? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot; class=&quot;underline hover:text-gray-700&quot;&gt;"/>Start over<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="new">Nejde o váš email? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot; class=&quot;underline hover:text-gray-700&quot;&gt;"/>Zkusit znovu<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+      </trans-unit>
+      <trans-unit id="1466012768716286509" datatype="html">
+        <source>Sign Up</source>
+        <target state="new">Zaregistrovat se</target>
+      </trans-unit>
+      <trans-unit id="1548909732092314000" datatype="html">
+        <source> Duration: </source>
+        <target state="new"> Doba: </target>
+      </trans-unit>
+      <trans-unit id="1664620352147673062" datatype="html">
+        <source>Resource</source>
+        <target state="new">Zdroj</target>
+      </trans-unit>
+      <trans-unit id="1801200153332177409" datatype="html">
+        <source>Subject/Category</source>
+        <target state="new">Předmět/Kategorie</target>
+      </trans-unit>
+      <trans-unit id="186236568870281953" datatype="html">
+        <source>History</source>
+        <target state="new">Historie</target>
+      </trans-unit>
+      <trans-unit id="1875562647884043228" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ restoreDate | date:&apos;long&apos; }}"/> UTC </source>
+        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ restoreDate | date:&apos;long&apos; }}"/> UTC </target>
+      </trans-unit>
+      <trans-unit id="2029980907058777630" datatype="html">
+        <source>Terms of Service</source>
+        <target state="new">Podmínky služby</target>
+      </trans-unit>
+      <trans-unit id="208165447659191705" datatype="html">
+        <source>To keep your account secure, please confirm this is really your email address.</source>
+        <target state="new">Chcete-li zabezpečit svůj účet, potvrďte prosím, že toto je opravdu vaše e-mailová adresa.</target>
+      </trans-unit>
+      <trans-unit id="2098854094875927534" datatype="html">
+        <source>Most relevant</source>
+        <target state="new">Nejrelevantnější</target>
+      </trans-unit>
+      <trans-unit id="2188382734394232436" datatype="html">
+        <source> Reason cannot exceed 500 characters. </source>
+        <target state="new"> Důvod nesmí překročit 500 znaků. </target>
+      </trans-unit>
+      <trans-unit id="2208470357010362503" datatype="html">
+        <source> This resource hasn&apos;t been <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-blue-600&quot;&gt;"/>indexed<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> yet. </source>
+        <target state="new"> Tento zdroj zatím nebyl <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-blue-600&quot;&gt;"/>indexován<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. </target>
+      </trans-unit>
+      <trans-unit id="2303489635985691360" datatype="html">
+        <source>Clear all</source>
+        <target state="new">Vymazat vše</target>
+      </trans-unit>
+      <trans-unit id="2308448233915687695" datatype="html">
+        <source> Didn&apos;t receive the email? Check your spam folder or try again. </source>
+        <target state="new"> Neobdrželi jste e-mail? Zkontrolujte složku spam nebo to zkuste znovu. </target>
+      </trans-unit>
+      <trans-unit id="2330577642930707695" datatype="html">
+        <source> Cancel </source>
+        <target state="new"> Zrušit </target>
+      </trans-unit>
+      <trans-unit id="2375260419993138758" datatype="html">
+        <source>URL</source>
+        <target state="new">URL</target>
+      </trans-unit>
+      <trans-unit id="2392488717875840729" datatype="html">
+        <source>User</source>
+        <target state="new">Uživatel</target>
+      </trans-unit>
+      <trans-unit id="2446117790692479672" datatype="html">
+        <source>Resources</source>
+        <target state="new">Zdroje</target>
+      </trans-unit>
+      <trans-unit id="2454050363478003966" datatype="html">
+        <source>Login</source>
+        <target state="new">Přihlásit se</target>
+      </trans-unit>
+      <trans-unit id="2501489806101473286" datatype="html">
+        <source>About us</source>
+        <target state="new">O nás</target>
+      </trans-unit>
+      <trans-unit id="2561326148159407958" datatype="html">
+        <source>Passwords must match.</source>
+        <target state="new">Hesla se musí shodovat.</target>
+      </trans-unit>
+      <trans-unit id="2790219900662105495" datatype="html">
+        <source>Confirm password is required.</source>
+        <target state="new">Potvrzení hesla je vyžadováno.</target>
+      </trans-unit>
+      <trans-unit id="2813299572202729186" datatype="html">
+        <source>Manage <x id="INTERPOLATION" equiv-text="{{ title }}"/></source>
+        <target state="new">Spravovat <x id="INTERPOLATION" equiv-text="{{ title }}"/></target>
+      </trans-unit>
+      <trans-unit id="2826788648324810510" datatype="html">
+        <source>Biology</source>
+        <target state="new">Biologie</target>
+      </trans-unit>
+      <trans-unit id="2837248686284270505" datatype="html">
+        <source>Please enter a valid email.</source>
+        <target state="new">Prosím, zadejte platný e-mail.</target>
+      </trans-unit>
+      <trans-unit id="2880983087661811596" datatype="html">
+        <source>TYPE</source>
+        <target state="new">TYP</target>
+      </trans-unit>
+      <trans-unit id="2932360890997178383" datatype="html">
+        <source>Tool</source>
+        <target state="new">Nástroj</target>
+      </trans-unit>
+      <trans-unit id="3024491551621724056" datatype="html">
+        <source> Showing <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>132 results<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="new"> Zobrazování <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>132 výsledků<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+      </trans-unit>
+      <trans-unit id="3069717502638610682" datatype="html">
+        <source>matej.hladecek@gmail.com</source>
+        <target state="new">matej.hladecek@gmail.com</target>
+      </trans-unit>
+      <trans-unit id="3080099711511142058" datatype="html">
+        <source>Math</source>
+        <target state="new">Matematika</target>
+      </trans-unit>
+      <trans-unit id="3176435734033906593" datatype="html">
+        <source>Last Active</source>
+        <target state="new">Naposledy aktivní</target>
+      </trans-unit>
+      <trans-unit id="3184700926171002527" datatype="html">
+        <source>Any</source>
+        <target state="new">Jakákoliv</target>
+      </trans-unit>
+      <trans-unit id="3209200380904535911" datatype="html">
+        <source><x id="START_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;svg class=&quot;w-4 h-4&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;"/><x id="START_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M10 19l-7-7m0 0l7-7m-7 7h18&quot;/&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M10 19l-7-7m0 0l7-7m-7 7h18&quot;/&gt;"/><x id="CLOSE_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;/svg&gt;"/> Return to Library </source>
+        <target state="new"><x id="START_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;svg class=&quot;w-4 h-4&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;"/><x id="START_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M10 19l-7-7m0 0l7-7m-7 7h18&quot;/&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M10 19l-7-7m0 0l7-7m-7 7h18&quot;/&gt;"/><x id="CLOSE_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;/svg&gt;"/> Zpět do knihovny </target>
+      </trans-unit>
+      <trans-unit id="3210018355783433704" datatype="html">
+        <source>Resend Email</source>
+        <target state="new">Znovu odeslat e-mail</target>
+      </trans-unit>
+      <trans-unit id="3210795519710879765" datatype="html">
+        <source>Add Resource</source>
+        <target state="new">Přidat zdroj</target>
+      </trans-unit>
+      <trans-unit id="324236757864861151" datatype="html">
+        <source>Resources Shared</source>
+        <target state="new">Sdílené zdroje</target>
+      </trans-unit>
+      <trans-unit id="335271258289187682" datatype="html">
+        <source>Highest rated</source>
+        <target state="new">Nejvyšší hodnocení</target>
+      </trans-unit>
+      <trans-unit id="3410748411231318193" datatype="html">
+        <source>Something went wrong. Please check your connection and try again.</source>
+        <target state="new">Něco se pokazilo. Prosím, zkontrolujte své připojení a zkuste to znovu.</target>
+      </trans-unit>
+      <trans-unit id="3432612539889601109" datatype="html">
+        <source><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;nav-link hidden md:inline-block px-4 py-2 text-blue-600 font-medium rounded-full hover:bg-blue-50 cursor-pointer&quot;&gt;"/> Sign Up <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
+        <target state="new"><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;nav-link hidden md:inline-block px-4 py-2 text-blue-600 font-medium rounded-full hover:bg-blue-50 cursor-pointer&quot;&gt;"/> Zaregistrovat se <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></target>
+      </trans-unit>
+      <trans-unit id="3450194029516333840" datatype="html">
+        <source>(Optional)</source>
+        <target state="new">(dobrovolné)</target>
+      </trans-unit>
+      <trans-unit id="3493126540529865490" datatype="html">
+        <source>Submitting...</source>
+        <target state="new">Odesílání...</target>
+      </trans-unit>
+      <trans-unit id="3508259559175923358" datatype="html">
+        <source>Is this your email?</source>
+        <target state="new">Je toto váš e-mail?</target>
+      </trans-unit>
+      <trans-unit id="3514595390002343437" datatype="html">
+        <source>Confirm Your Email</source>
+        <target state="new">Potvrďte svůj e-mail</target>
+      </trans-unit>
+      <trans-unit id="3577237269587081090" datatype="html">
+        <source>Password is required.</source>
+        <target state="new">Heslo je vyžadováno.</target>
+      </trans-unit>
+      <trans-unit id="3709675686611012665" datatype="html">
+        <source> Return to Home </source>
+        <target state="new"> Vrátit se na domovskou stránku </target>
+      </trans-unit>
+      <trans-unit id="3806217667925936168" datatype="html">
+        <source>14 days</source>
+        <target state="new">14 dní</target>
+      </trans-unit>
+      <trans-unit id="3807699453257291879" datatype="html">
+        <source>Comments</source>
+        <target state="new">Komentáře</target>
+      </trans-unit>
+      <trans-unit id="3932951210180311531" datatype="html">
+        <source>Select a subject...</source>
+        <target state="new">Vyberte předmět...</target>
+      </trans-unit>
+      <trans-unit id="4002166200801232073" datatype="html">
+        <source>resources</source>
+        <target state="new">zdroje</target>
+      </trans-unit>
+      <trans-unit id="4111860649370638583" datatype="html">
+        <source>Worksheet</source>
+        <target state="new">Pracovní list</target>
+      </trans-unit>
+      <trans-unit id="4133776233476495937" datatype="html">
+        <source>Token is old or invalid. Get a new link or start over.</source>
+        <target state="new">Token je starý nebo neplatný. Získejte nový odkaz nebo začněte znovu.</target>
+      </trans-unit>
+      <trans-unit id="4163272119298020373" datatype="html">
+        <source>Filters</source>
+        <target state="new">Filtr</target>
+      </trans-unit>
+      <trans-unit id="4166166242155319722" datatype="html">
+        <source> Log In </source>
+        <target state="new"> Přihlásit se </target>
+      </trans-unit>
+      <trans-unit id="4225698434073732761" datatype="html">
+        <source>SUBJECT</source>
+        <target state="new">PŘEDMĚT</target>
+      </trans-unit>
+      <trans-unit id="4249170106165148265" datatype="html">
+        <source> Error 404 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;w-1 h-1 bg-blue-300 rounded-full&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Reference Not Found </source>
+        <target state="new"> Error 404 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;w-1 h-1 bg-blue-300 rounded-full&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Reference Not Found </target>
+      </trans-unit>
+      <trans-unit id="4280668229876603117" datatype="html">
+        <source>Reason for Suspension</source>
+        <target state="new">Důvod pozastavení</target>
+      </trans-unit>
+      <trans-unit id="4331636419103456800" datatype="html">
+        <source>Done!</source>
+        <target state="new">Hotovo!</target>
+      </trans-unit>
+      <trans-unit id="4371461888731062970" datatype="html">
+        <source>Share Your First Resource</source>
+        <target state="new">Sdílejte svůj první zdroj</target>
+      </trans-unit>
+      <trans-unit id="4374801611150015478" datatype="html">
+        <source> Reason is required. </source>
+        <target state="new"> Důvod je povinný. </target>
+      </trans-unit>
+      <trans-unit id="4385810869031627660" datatype="html">
+        <source>Please complete the security check.</source>
+        <target state="new">Prosím, dokončete bezpečnostní kontrolu.</target>
+      </trans-unit>
+      <trans-unit id="4526674489857624502" datatype="html">
+        <source>Freemium</source>
+        <target state="new">Freemium</target>
+      </trans-unit>
+      <trans-unit id="4567885301549754909" datatype="html">
+        <source>Most popular</source>
+        <target state="new">Nejoblíbenější</target>
+      </trans-unit>
+      <trans-unit id="4580988005648117665" datatype="html">
+        <source>Search</source>
+        <target state="new">Hledat</target>
+      </trans-unit>
+      <trans-unit id="4629526394850806125" datatype="html">
+        <source>Suspension Type</source>
+        <target state="new">Typ pozastavení</target>
+      </trans-unit>
+      <trans-unit id="4666200624274789136" datatype="html">
+        <source>+420 603 110 731</source>
+        <target state="new">+420 603 110 731</target>
+      </trans-unit>
+      <trans-unit id="4754562463026932290" datatype="html">
+        <source>Choose a subject to get started</source>
+        <target state="new">Vyberte předmět, abyste mohli začít</target>
+      </trans-unit>
+      <trans-unit id="4768749765465246664" datatype="html">
+        <source>Email</source>
+        <target state="new">Email</target>
+      </trans-unit>
+      <trans-unit id="4776429682428363094" datatype="html">
+        <source>1 day</source>
+        <target state="new">1 den</target>
+      </trans-unit>
+      <trans-unit id="4816216590591222133" datatype="html">
+        <source>Enabled</source>
+        <target state="new">Povoleno</target>
+      </trans-unit>
+      <trans-unit id="5016134182721426672" datatype="html">
+        <source>A curated directory of educational tools for students and teachers — filtered for quality, designed for discovery.</source>
+        <target state="new">Knihovna vzdělávacích nástrojů pro studenty a učitele — filtrovaná podle kvality, navržená pro objevování.</target>
+      </trans-unit>
+      <trans-unit id="5049405187673977453" datatype="html">
+        <source> If you believe this was an error, contact us.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br&gt;"/> We’re here to help! </source>
+        <target state="new"> Pokud si myslíte, že se jedná o chybu, kontaktujte nás.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br&gt;"/> Rádi vám pomůžeme! </target>
+      </trans-unit>
+      <trans-unit id="5246133715690926564" datatype="html">
+        <source>Confirm password:</source>
+        <target state="new">Potvrďte heslo:</target>
+      </trans-unit>
+      <trans-unit id="5423991647761194551" datatype="html">
+        <source>Newest</source>
+        <target state="new">Nejnovější</target>
+      </trans-unit>
+      <trans-unit id="5457506297824286452" datatype="html">
+        <source>Study Groups</source>
+        <target state="new">Studijní skupiny</target>
+      </trans-unit>
+      <trans-unit id="5584739308831837357" datatype="html">
+        <source>Join Us</source>
+        <target state="new">Přidejte se k nám</target>
+      </trans-unit>
+      <trans-unit id="5611592591303869712" datatype="html">
+        <source>Status</source>
+        <target state="new">Status</target>
+      </trans-unit>
+      <trans-unit id="5769292297914455214" datatype="html">
+        <source>Disabled</source>
+        <target state="new">Zakázáno</target>
+      </trans-unit>
+      <trans-unit id="5815829224810161876" datatype="html">
+        <source>PRICE</source>
+        <target state="new">CENA</target>
+      </trans-unit>
+      <trans-unit id="5851424994801012357" datatype="html">
+        <source>Suspended</source>
+        <target state="new">Pozastaveno</target>
+      </trans-unit>
+      <trans-unit id="5878066012610207427" datatype="html">
+        <source> Even the most thorough researchers hit a dead end. This page may have been moved, removed, or never catalogued in the first place. </source>
+        <target state="new"> I když jsou výzkumníci velmi důkladní, někdy se dostanou do mrtvého bodu. Tato stránka mohla být přesunuta, odstraněna nebo nikdy nebyla zařazena do katalogu. </target>
+      </trans-unit>
+      <trans-unit id="5891064527381218201" datatype="html">
+        <source>Free</source>
+        <target state="new">Zdarma</target>
+      </trans-unit>
+      <trans-unit id="6004007578668626375" datatype="html">
+        <source>Browse Resources</source>
+        <target state="new">Procházet zdroje</target>
+      </trans-unit>
+      <trans-unit id="6024273055384648719" datatype="html">
+        <source>Invalid email or password. Please try again.</source>
+        <target state="new">Neplatný email nebo heslo. Prosím, zkuste to znovu.</target>
+      </trans-unit>
+      <trans-unit id="6249484391846924804" datatype="html">
+        <source> Confirm </source>
+        <target state="new"> Potvrdit </target>
+      </trans-unit>
+      <trans-unit id="6422077907353879316" datatype="html">
+        <source>Check your email!</source>
+        <target state="new">Zkontrolujte svůj email!</target>
+      </trans-unit>
+      <trans-unit id="6514445594387498794" datatype="html">
+        <source>© 2026 Matěj Hladeček. All rights reserved.</source>
+        <target state="new">© 2026 Matěj Hladeček. All rights reserved.</target>
+      </trans-unit>
+      <trans-unit id="6549265851868599441" datatype="html">
+        <source>Video</source>
+        <target state="new">Video</target>
+      </trans-unit>
+      <trans-unit id="6631334172623029500" datatype="html">
+        <source>Email:</source>
+        <target state="new">Email:</target>
+      </trans-unit>
+      <trans-unit id="663577223642925936" datatype="html">
+        <source> Account Access Restricted </source>
+        <target state="new"> Přístup k účtu omezen </target>
+      </trans-unit>
+      <trans-unit id="6945090506337625182" datatype="html">
+        <source>Resource name</source>
+        <target state="new">Název zdroje</target>
+      </trans-unit>
+      <trans-unit id="7039900092504659742" datatype="html">
+        <source>Any type</source>
+        <target state="new">Jakýkoli typ</target>
+      </trans-unit>
+      <trans-unit id="7152095234138763013" datatype="html">
+        <source>30 days</source>
+        <target state="new">30 dní</target>
+      </trans-unit>
+      <trans-unit id="7394283812317210887" datatype="html">
+        <source> Submitting... </source>
+        <target state="new"> Odesílání... </target>
+      </trans-unit>
+      <trans-unit id="7458179918460040359" datatype="html">
+        <source>Access Restored On</source>
+        <target state="new">Přístup obnoven dne</target>
+      </trans-unit>
+      <trans-unit id="7626225995581843339" datatype="html">
+        <source>Username is already in use.</source>
+        <target state="new">Uživatelské jméno je již používáno.</target>
+      </trans-unit>
+      <trans-unit id="763970338207090986" datatype="html">
+        <source>Email is already in use.</source>
+        <target state="new">Email je již používán.</target>
+      </trans-unit>
+      <trans-unit id="7699436363216621857" datatype="html">
+        <source>Legal &amp; Contact</source>
+        <target state="new">Právní informace &amp; Kontakt</target>
+      </trans-unit>
+      <trans-unit id="7708270344948043036" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ isSuspend ? &apos;Suspend User&apos; : &apos;Ban User&apos; }}"/> </source>
+        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ isSuspend ? &apos;Pozastavit uživatele&apos; : &apos;Zabanovat uživatele&apos; }}"/> </target>
       </trans-unit>
       <trans-unit id="7997530211722162813" datatype="html">
         <source>Thousands of curated tools for students and teachers</source>
         <target>Desítky tisíc pečlivě vybraných nástrojů pro studenty a učitele</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/public/pages/home-page/components/hero-banner/hero-banner.component.html</context>
-          <context context-type="linenumber">6,7</context>
-        </context-group>
       </trans-unit>
     </body>
   </file>

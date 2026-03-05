@@ -14,16 +14,18 @@ import { AdminService } from '../../../../core/services/admin.service';
 })
 export class UsersAdminPageComponent implements OnInit {
   columns: AdminTableColumn[] = [
-    { key: 'user', label: 'User', widthClass: 'flex-1' },
-    { key: 'resources', label: 'Resources', widthClass: 'w-32' },
-    { key: 'lastActive', label: 'Last Active', widthClass: 'w-40' },
-    { key: 'status', label: 'Status', widthClass: 'w-28' },
+    { key: 'user', label: $localize`User`, widthClass: 'flex-1' },
+    { key: 'resources', label: $localize`Resources`, widthClass: 'w-32' },
+    { key: 'lastActive', label: $localize`Last Active`, widthClass: 'w-40' },
+    { key: 'status', label: $localize`Status`, widthClass: 'w-28' },
     { key: 'actions', label: '', widthClass: 'w-20', align: 'right' },
   ];
   selectedIds = new Set<string>();
 
   users: AdminUser[] | null = null;
   protected readonly AdminService = inject(AdminService);
+
+  constructor() {  }
 
   ngOnInit(): void {
     this.AdminService.getUsers().subscribe((res: any) => {

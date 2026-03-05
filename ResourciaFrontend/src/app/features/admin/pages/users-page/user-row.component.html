@@ -23,7 +23,7 @@
     </div>
     <div class="w-32">
         <span class="text-sm font-mono font-medium text-slate-700">147</span>
-        <span class="text-xs text-slate-400 ml-1">resources</span>
+        <span i18n class="text-xs text-slate-400 ml-1">resources</span>
     </div>
     <div class="w-40">
         <span class="text-xs text-slate-500">2 hours ago</span>
@@ -38,7 +38,7 @@
 
             @if (user.status == 'suspended') {
                 <span class="status-dot suspended"></span>
-                <span class="text-xs font-medium text-yellow-600">Suspended</span>
+                <span i18n class="text-xs font-medium text-yellow-600">Suspended</span>
             }
 
             @if (user.status == 'banned') {

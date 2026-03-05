@@ -66,4 +66,9 @@ export class SearchResultPageComponent implements OnInit {
       [filter.key]: { ...current, [side]: n }
     }));
   }
+
+  getPlaceholder(filterLabel: string): string {
+    // One translatable message with an interpolated variable
+    return $localize`:@@search.filter.placeholder:Type ${filterLabel}:label:...`;
+  }
 }

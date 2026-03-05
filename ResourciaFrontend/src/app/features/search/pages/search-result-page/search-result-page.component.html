@@ -1,8 +1,8 @@
 <div class="max-w-[1400px] flex mx-auto py-[32px] px-[40px] items-start gap-[32px]">
     <aside class="w-[300px] bg-white rounded-[16px] p-[24px] shadow-[0_2px_12px_rgba(0,0,0,0.1)]">
         <div class="flex justify-between items-center mb-[24px]">
-            <h2 class="text-[20px] font-[400]">Filters</h2>
-            <button class="text-gray-400 underline cursor-pointer hover:text-blue-400">Clear all</button>
+            <h2 i18n class="text-[20px] font-[400]">Filters</h2>
+            <button i18n class="text-gray-400 underline cursor-pointer hover:text-blue-400">Clear all</button>
         </div>
         @for (filter of (schema?.filters ?? []); track $index) {
             <div class="mb-[24px] pb-[24px] border-b border-gray-300">
@@ -23,7 +23,7 @@
                     @if (filter.kind == FilterKind.Facet) {
                         <div class="filter-content">
                             <select class="filter-select" onchange="addSubject(this)">
-                                    <option value="">Select a subject...</option>
+                                    <option i18n value="">Select a subject...</option>
                                     @for (v of filter.values; track v.value) {
                                         <option [value]="v.value">{{ v.label }}</option>
                                     }
@@ -62,7 +62,7 @@
                             <input
                             type="text"
                             class="filter-input"
-                            [placeholder]="'Type ' + filter.label + '…'"
+                            [placeholder]="getPlaceholder(filter.label)"
                             (input)="onTextChange(filter, $event)"
                             />
                         </div>
