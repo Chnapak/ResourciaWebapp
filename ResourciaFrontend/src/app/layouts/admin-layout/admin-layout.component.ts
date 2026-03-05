@@ -9,10 +9,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 export class AdminLayoutComponent {
   navItems = [
-    { label: 'Filters', link: 'filters' },
-    { label: 'Users', link: 'users' },
-    { label: 'Admins', link: 'admins' },
-    { label: 'Resources', link: 'resources' },
-    { label: 'Settings', link: 'settings' },
+    { label: $localize`Filters`, link: 'filters' },
+    { label: $localize`Users`, link: 'users' },
+    { label: $localize`Admins`, link: 'admins' },
+    { label: $localize`Resources`, link: 'resources' },
+    { label: $localize`Settings`, link: 'settings' },
   ];
 }

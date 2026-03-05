@@ -34,7 +34,7 @@
         [class.text-red-500]="(email?.touched && email?.invalid) || emailInUse">Email:</label>
         <input type="email" 
         placeholder="Write here..." 
-        i18n-placeholder="@@auth.email.placeholder"
+        i18n-placeholder
         name="email" 
         formControlName="email" 
         class="p-[11px_10px] w-70 text-xs border-2 rounded bg-gray-100 text-gray-400 border-blue-400 focus:outline-none"
@@ -55,10 +55,10 @@
       </div>
       <div class="flex flex-col w-fit max-w-240 relative">
         @let password = form.get('password');
-        <label for="password" class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit"
+        <label i18n for="password" class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit"
         [class.text-red-500]="password?.touched && password?.invalid"
         >Password:</label>
-        <input type="password" placeholder="$localize:'Write here...'" name="password" 
+        <input type="password" placeholder="Write here..." i18n-placeholder name="password" 
         formControlName="password"
         class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-400 focus:outline-none"
         [class.border-red-500]="password?.touched && password?.invalid">
@@ -76,7 +76,7 @@
         @let confirmPassword = form.get('confirmPassword');
         <label i18n for="confirm" class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit"
         [class.text-red-500]="confirmPassword?.touched && (confirmPassword?.invalid || form.invalid)">Confirm password:</label>
-        <input type="password" placeholder="$localize:'Write here...'" name="confirm" 
+        <input type="password" placeholder="Write here..." i18n-placeholder name="confirm" 
         formControlName="confirmPassword"
         class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-400 focus:outline-none"
         [class.border-red-500]="confirmPassword?.touched && (confirmPassword?.invalid || form.invalid)">
