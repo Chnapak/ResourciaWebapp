@@ -3,6 +3,9 @@
   <label
     [for]="label"
     class="text-xs font-bold bg-gray-100 relative top-2 ml-2 px-1 w-fit transition-colors z-10"
+    
+    [class.bg-white]="background === 'white'"
+
     [class.text-blue-400]="!showError"
     [class.text-red-500]="showError">
     {{ label }}:
@@ -12,6 +15,8 @@
     <input
       [id]="label"
       class="p-[11px_10px] w-70 text-xs border-2 rounded bg-gray-100 focus:outline-none transition-all"
+
+      [class.bg-white]="background === 'white'"
       
       [class.text-gray-400]="!value"
       [class.text-gray-700]="value"

@@ -17,6 +17,7 @@ import { UsersAdminPageComponent } from './features/admin/pages/users-page/users
 import { AdminsAdminPageComponent } from './features/admin/pages/admins-page/admins-page.component';
 import { ResourcesAdminPageComponent } from './features/admin/pages/resources-page/resources-page.component';
 import { SuspensionMessagePageComponent } from './features/auth/pages/suspension-message-page/suspension-message-page.component';
+import { ResetPasswordPageComponent } from './features/auth/pages/reset-password-page/reset-password-page.component';
 
 export const routes: Routes = [
     {
@@ -31,6 +32,7 @@ export const routes: Routes = [
             { path: 'privacy-policy', component: PrivacyPolicyPageComponent, title: 'Privacy Policy'},
             { path: 'profile/:id', component: ProfilePageComponent, title: 'Profile'},
             { path: 'tos', component: TosPageComponent, title: 'Terms of Service'},
+            { path: 'reset-password', component: ResetPasswordPageComponent, title: 'Reset Password'},
             { path: 'search', component: SearchResultPageComponent, title: 'Resources'},
             { path: 'suspended', component: SuspensionMessagePageComponent, title: 'Account Suspended'},
             { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 

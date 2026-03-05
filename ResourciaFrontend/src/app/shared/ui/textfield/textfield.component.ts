@@ -12,6 +12,7 @@ export class TextfieldComponent implements ControlValueAccessor {
   @Input() label = '';
   @Input() placeholder = '';
   @Input() type: 'text' | 'password' | 'email' = 'text';
+  @Input() background: 'white' | 'gray' = 'gray';
 
   value = '';
   disabled = false;
