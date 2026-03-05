@@ -12,22 +12,22 @@ export class ExploreMenuComponent {
   exploreMenuItems: DropdownItem[] = [
     {
       type: 'action',
-      label: 'The Problem',
+      label: $localize`The Problem`,
       link: '#problem'
     },
     {
       type: 'action',
-      label: 'What We Do',
+      label: $localize`What We Do`,
       link: '#solution'
     },
     {
       type: 'action',
-      label: 'Who It\'s For',
+      label: $localize`Who It's For`,
       link: '#audience'
     },
     {
       type: 'action',
-      label: 'Our Vision',
+      label: $localize`Our Vision`,
       link: '#vision'
     }
   ];

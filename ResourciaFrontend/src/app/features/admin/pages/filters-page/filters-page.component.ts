@@ -18,11 +18,11 @@ import { AdminFilterReorderModel } from '../../models/admin-filter-reorder.model
 })
 export class FiltersAdminPageComponent implements OnInit {
   columns: AdminTableColumn[] = [
-    { key: 'filter', label: 'Filter', widthClass: 'flex-1' },
-    { key: 'type', label: 'Type', widthClass: 'w-32' },
-    { key: 'resources', label: 'Resources', widthClass: 'w-40' },
-    { key: 'lastUpdated', label: 'Last Upadted', widthClass: 'w-28' },
-    { key: 'status', label: 'Status ', widthClass: 'w-28' },
+    { key: 'filter', label: $localize`Filter`, widthClass: 'flex-1' },
+    { key: 'type', label: $localize`Type`, widthClass: 'w-32' },
+    { key: 'resources', label: $localize`Resources`, widthClass: 'w-40' },
+    { key: 'lastUpdated', label: $localize`Last Updated`, widthClass: 'w-28' },
+    { key: 'status', label: $localize`Status`, widthClass: 'w-28' },
     { key: 'actions', label: '', widthClass: 'w-20', align: 'right' },
   ];
   filters: { id: string }[] = [];

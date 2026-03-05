@@ -21,7 +21,7 @@ export class AuthLinksComponent {
     const items: DropdownItem[] = [
       {
         type: 'action',
-        label: 'Profile',
+        label: $localize`Profile`,
         action: () => this.viewUser()
       }
     ];
@@ -29,7 +29,7 @@ export class AuthLinksComponent {
     if (this.user?.isAdmin) {
       items.push({
         type: 'action',
-        label: 'Admin',
+        label: $localize`Admin`,
         link: '/admin'
       });
     }
@@ -38,7 +38,7 @@ export class AuthLinksComponent {
       { type: 'divider' },
       {
         type: 'action',
-        label: 'Logout',
+        label: $localize`Logout`,
         action: () => this.onLogoutClick(),
         danger: true
       }

@@ -33,7 +33,7 @@ export class UserRowComponent extends TableRowBase {
   const items: DropdownItem[] = [
     {
       type: 'action',
-      label: 'View Profile',
+      label: $localize`View Profile`,
       action: () => this.viewUser()
     },
     {
@@ -45,13 +45,13 @@ export class UserRowComponent extends TableRowBase {
     items.push(
       {
         type: 'action',
-        label: 'Suspend',
+        label: $localize`Suspend`,
         action: () => this.suspendUser(),
         danger: true
       },
       {
         type: 'action',
-        label: 'Ban',
+        label: $localize`Ban`,
         action: () => this.banUser(),
         danger: true
       },
@@ -61,13 +61,13 @@ export class UserRowComponent extends TableRowBase {
     items.push(
       {
         type: 'action',
-        label: 'Unsuspend',
+        label: $localize`Unsuspend`,
         action: () => this.unsuspendUser(),
         danger: true
       },
       {
         type: 'action',
-        label: 'Ban',
+        label: $localize`Ban`,
         action: () => this.banUser(),
         danger: true
       },
@@ -77,7 +77,7 @@ export class UserRowComponent extends TableRowBase {
     items.push(
       {
         type: 'action',
-        label: 'Unban',
+        label: $localize`Unban`,
         action: () => this.unbanUser(),
         danger: true
       },

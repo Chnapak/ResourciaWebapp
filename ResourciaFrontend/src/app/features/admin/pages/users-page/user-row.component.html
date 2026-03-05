@@ -33,7 +33,7 @@
             @if (user.status == 'active') 
             {
                 <span class="status-dot active"></span>
-                <span class="text-xs font-medium text-emerald-600">Active</span>
+                <span i18n class="text-xs font-medium text-emerald-600">Active</span>
             }
 
             @if (user.status == 'suspended') {
@@ -43,7 +43,7 @@
 
             @if (user.status == 'banned') {
                 <span class="status-dot banned"></span>
-                <span class="text-xs font-medium text-red-600">Banned</span>
+                <span i18n class="text-xs font-medium text-red-600">Banned</span>
             }
         </div>
     </div>
