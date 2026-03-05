@@ -176,17 +176,17 @@ export class RegistrationPageComponent {
     this.isCooldown = true;
     let remaining = this.cooldownSeconds;
 
-    this.resendButtonText = `Resend availabe in ${remaining}s`;
+    this.resendButtonText = $localize`Resend availabe in ${remaining}s`;
 
     const interval = setInterval(() => {
       remaining--;
       if (remaining > 0) {
-        this.resendButtonText = `Resend availabe in ${remaining}s`;
+        this.resendButtonText = $localize`Resend availabe in ${remaining}s`;
       }
       else {
         clearInterval(interval)
         this.isCooldown = false;
-        this.resendButtonText = `Resend Email`;
+        this.resendButtonText = $localize`Resend Email`;
       }
     }, 1000)
   }
