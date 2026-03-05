@@ -243,7 +243,7 @@ public class AuthController : ControllerBase
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = GenerateAccessToken(user.Id, model.Email, user.UserName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
+        var accessToken = GenerateAccessToken(user.Id, model.Email, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
         Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
         {
@@ -282,7 +282,7 @@ public class AuthController : ControllerBase
 
         // Generate new tokens
         var roles = await _userManager.GetRolesAsync(user);
-        var newAccessToken = GenerateAccessToken(user.Id, user.Email!, user.UserName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
+        var newAccessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var newRefreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
 
         storedToken.RevokedAt = _clock.GetCurrentInstant();
