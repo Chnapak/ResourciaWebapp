@@ -255,6 +255,24 @@ public class AuthController : ControllerBase
         return Ok(new { Token = accessToken });
     }
 
+    [HttpPost("ForgotPassword")]
+    public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
+    {
+        var normalizedEmail = model.Email.ToUpperInvariant();
+        var user = await _userManager
+            .Users
+            .SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail);
+        if (user == null || !user.EmailConfirmed)
+        {
+            return BadRequest("Email invalid");
+        }
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var url = $"{_environmentSettings.FrontendHostUrl.TrimEnd('/')}/{_environmentSettings.FrontendResetPasswordUrl.TrimStart('/')}";
+        var escapedToken = Uri.EscapeDataString(token);
+        await _emailSenderService.AddEmail("Password Reset", $"You can reset your password by clicking <a href='{url}/?token={escapedToken}&email={user.Email}'>here</a>", user.Email, user.DisplayName);
+        return Ok();
+    }
+
     [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshToken()
     {
@@ -360,6 +378,7 @@ public class AuthController : ControllerBase
         Response.Cookies.Delete("RefreshToken");
         return NoContent();
     }
+
 
     [Authorize]
     [HttpGet("TestMeBeforeLoginAndAfter")]
