@@ -5,8 +5,16 @@
   "projects": {
     "ResourciaFrontend": {
       "i18n": {
-        "sourceLocale": "en-US",
-        "locales": {"cs-CZ": "src/locale/messages.cs.xlf"}
+        "sourceLocale": {
+          "code": "en-US",
+          "subPath": ""
+        },
+        "locales": {
+          "cs-CZ": {
+            "translation": "src/locale/messages.cs.xlf",
+            "subPath": "cs"
+          }
+        }
       },
       "projectType": "application",
       "schematics": {
@@ -21,7 +29,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "localize": ["cs-CZ"],
+            "localize": true,
             "outputPath": "dist/resourcia-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
