@@ -8,6 +8,7 @@ import { LoginModel } from '../../features/auth/models/login';
 import { Router } from '@angular/router';
 import { ResendConfirmationModel } from '../../features/auth/models/resend-confirmation';
 import { ResetPasswordModel } from '../../features/auth/models/reset-password';
+import { ForgotPasswordModel } from '../../features/auth/models/forgot-password';
 
 
 @Injectable({
@@ -99,6 +100,16 @@ export class AuthService {
           return newAccessToken;
         })
       );
+  }
+
+  forgotPassword(data: ForgotPasswordModel): Observable<any> {
+    const url = this.baseUrl + "/ForgotPassword"
+
+    return this.httpClient.post<any>(url, data).pipe(
+      tap((response) => {
+        console.log(response)
+      })
+    )
   }
 
   resetPassword(data: ResetPasswordModel): Observable<any> {

@@ -18,6 +18,7 @@ import { AdminsAdminPageComponent } from './features/admin/pages/admins-page/adm
 import { ResourcesAdminPageComponent } from './features/admin/pages/resources-page/resources-page.component';
 import { SuspensionMessagePageComponent } from './features/auth/pages/suspension-message-page/suspension-message-page.component';
 import { ResetPasswordPageComponent } from './features/auth/pages/reset-password-page/reset-password-page.component';
+import { ForgotPasswordPageComponent } from './features/auth/pages/forgot-password-page/forgot-password-page.component';
 
 export const routes: Routes = [
     {
@@ -26,6 +27,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: HomePageComponent, title: 'Home' },
             { path: 'addresource', component: AddResourcePageComponent, title: "Add Resource"},
+            { path: 'forgot-password', component: ForgotPasswordPageComponent, title: 'Forgot Password'},
             { path: 'login', component: LoginPageComponent, title: 'Login' },
             { path: 'signup', component: RegistrationPageComponent, title: 'Registration'},
             { path: 'confirm-token', component: TokenValidationPageComponent, title: 'Ověření emailu'},
