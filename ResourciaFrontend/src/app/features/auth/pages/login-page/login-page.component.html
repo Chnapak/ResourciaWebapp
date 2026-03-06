@@ -26,6 +26,16 @@
 
       <div id="turnstile-container" class="flex flex-col w-fit max-w-240 relative mt-4"></div>
 
+      <div class="w-70 text-right mt-1">
+        <a
+          i18n
+          routerLink="/forgot-password"
+          class="text-sm text-slate-600 hover:text-slate-900 cursor-pointer"
+        >
+          Forgot password?
+        </a>
+      </div>
+
       <div class="w-70 text-left mt-2">
         @if (loginFailed) {
           <div i18n class="text-xs text-red-700">Invalid email or password. Please try again.</div>

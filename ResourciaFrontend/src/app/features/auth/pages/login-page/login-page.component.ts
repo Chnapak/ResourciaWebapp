@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../../environments/environment.development';
 import { TextfieldComponent } from '../../../../shared/ui/textfield/textfield.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
@@ -11,7 +11,7 @@ declare var turnstile: any;
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ TextfieldComponent, ButtonComponent, FormsModule, ReactiveFormsModule ],
+  imports: [ TextfieldComponent, ButtonComponent, FormsModule, ReactiveFormsModule, RouterLink ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })

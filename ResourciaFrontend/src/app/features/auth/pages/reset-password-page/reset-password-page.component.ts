@@ -4,6 +4,7 @@ import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { ResetPasswordModel } from '../../models/reset-password';
 
 @Component({
   selector: 'app-reset-password-page',
@@ -48,6 +49,7 @@ export class ResetPasswordPageComponent {
 
     // token from URL: /reset-password?token=...
     const token = this.route.snapshot.queryParamMap.get('token');
+    const email = this.route.snapshot.queryParamMap.get('email');
 
     if (!token) {
       this.tokenMissing = true;
@@ -62,20 +64,24 @@ export class ResetPasswordPageComponent {
 
     this.isSubmitting = true;
 
-    const payload = {
+    const payload: ResetPasswordModel = {
       token,
       newPassword: this.form.controls.password.value,
+      email: this.route.snapshot.queryParamMap.get('email') || ''
     };
+
     console.log('Reset password payload:', payload);
 
-    // Adjust to your API method name / DTO
-    /*this.authService.resetPassword(payload).subscribe({
+    this.authService.resetPassword(payload).subscribe({
       next: async () => {
         this.isSubmitting = false;
         await this.router.navigate(['/login'], { queryParams: { reset: '1' } });
       },
-      error: (err) => this.handleError(err),
-    });*/
+      error: (err) => {
+        console.error('Reset password error:', err);
+        this.handleError(err)
+      },
+    });
   }
 
   private resetFlags() {

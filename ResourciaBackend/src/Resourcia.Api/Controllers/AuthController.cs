@@ -273,6 +273,25 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
+    [HttpPost("ResetPassword")]
+    public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+    {
+        var normalizedEmail = model.Email.ToUpperInvariant();
+        var user = await _userManager
+            .Users
+            .SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail);
+        if (user == null || !user.EmailConfirmed)
+        {
+            return BadRequest("Email invalid");
+        }
+        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            return BadRequest("Token invalid or password does not meet requirements");
+        }
+        return Ok();
+    }
+
     [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshToken()
     {
