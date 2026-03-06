@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 
 export type DropdownItem =
   | DropdownActionItem
@@ -19,15 +19,18 @@ export interface DropdownDividerItem {
 
 @Component({
   selector: 'app-dropdown',
+  host: { class: 'relative inline-block'},
   imports: [],
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.scss'
 })
 export class DropdownComponent {
   @Input() items: DropdownItem[] = [];
+  @ViewChild('dropdownPanel') dropdownPanel!: ElementRef<HTMLElement>;
 
   isOpen = false;
   isVisible = false;
+  offsetLeft = '0px';
 
   constructor(private el: ElementRef) {}
 
@@ -36,15 +39,18 @@ export class DropdownComponent {
       this.isVisible = true;
       setTimeout(() => {
         this.isOpen = true;
+        this.clampToViewport();
       });
     }
     else {
       this.isOpen = false;
       setTimeout(() => {
         this.isVisible = false;
+        this.offsetLeft = '0px';
       }, 200);
     }
   }
+
   onClick(item: DropdownItem) {
     if (item.type == 'action') {
       if (item.action) item.action();
@@ -61,6 +67,18 @@ export class DropdownComponent {
     return ""
   }
 
+  private clampToViewport(): void {
+    const panel = this.dropdownPanel?.nativeElement;
+    if (!panel) return;
+
+    const windowWidth = document.body.getBoundingClientRect().width;
+    const boxRight = panel.getBoundingClientRect().right;
+    const overflow = boxRight - windowWidth;
+
+    if (overflow > 0) {
+      this.offsetLeft = `-${overflow + 16}px`;
+    }
+  }
 
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event) {
@@ -68,6 +86,7 @@ export class DropdownComponent {
       this.isOpen = false;
       setTimeout(() => {
         this.isVisible = false;
+        this.offsetLeft = '0px';
       }, 200);
     }
   }
