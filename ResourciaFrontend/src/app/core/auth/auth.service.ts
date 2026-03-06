@@ -7,6 +7,7 @@ import { map, tap } from 'rxjs/operators';
 import { LoginModel } from '../../features/auth/models/login';
 import { Router } from '@angular/router';
 import { ResendConfirmationModel } from '../../features/auth/models/resend-confirmation';
+import { ResetPasswordModel } from '../../features/auth/models/reset-password';
 
 
 @Injectable({
@@ -100,7 +101,15 @@ export class AuthService {
       );
   }
 
+  resetPassword(data: ResetPasswordModel): Observable<any> {
+    const url = this.baseUrl + "/ResetPassword"
 
+    return this.httpClient.post<any>(url, data).pipe(
+      tap((response) => {
+        console.log(response)
+      })
+    ) 
+  }
 
   getUserInfo(): Observable<MeInfoModel> {
     const url = this.baseUrl + "/UserInfo"
