@@ -1,0 +1,50 @@
+<label
+    (click)="onSelect(); $event.preventDefault(); $event.stopPropagation()"
+    [class.opacity-55]="disabled"
+    [class.cursor-not-allowed]="disabled"
+    class="group flex items-center gap-[7px] px-1.5 py-[5px] rounded-[5px] cursor-pointer transition-colors duration-120 hover:bg-[#eff5ff]"
+    [ngClass]="{'hover:bg-transparent': disabled}">
+
+    <input
+    type="radio"
+    class="sr-only"
+    [checked]="selected"
+    [disabled]="disabled">
+
+    <!-- Radio control — circle, same 15px footprint as checkbox -->
+    <div
+    class="relative w-[15px] h-[15px] border-[1.5px] rounded-full transition-all duration-130
+            flex items-center justify-center shrink-0
+            group-hover:border-[#93b8f8]"
+    [ngClass]="{
+        'bg-white border-[#2563eb]':  selected && !disabled,
+        'bg-white border-[#c5ccd8]':  !selected && !disabled,
+        'bg-[#f0f2f5] border-[#dde1e8]': disabled && !selected,
+        'bg-white border-[#b8c7e8]':  disabled && selected,
+        'ring-3 ring-[#2563eb33]':    !disabled && selected
+    }">
+
+    <!-- Inner dot — fills when selected -->
+    @if (selected) {
+        <div
+        class="w-[7px] h-[7px] rounded-full transition-transform duration-100 scale-100"
+        [ngClass]="{
+            'bg-[#2563eb]': !disabled,
+            'bg-[#b8c7e8]': disabled
+        }">
+        </div>
+    }
+    </div>
+
+    <span
+    class="text-[13.5px] leading-none text-[#2d3748] select-none"
+    [class.text-\[#9aa3b0\]]="disabled">
+    {{ label }}
+    </span>
+
+    @if (badge) {
+    <span class="ml-auto text-[10px] font-medium tracking-wider text-[#b0b8c8] uppercase">
+        {{ badge }}
+    </span>
+    }
+</label>
