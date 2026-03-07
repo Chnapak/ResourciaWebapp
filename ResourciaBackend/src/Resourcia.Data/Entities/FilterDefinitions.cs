@@ -50,9 +50,9 @@ public class FilterDefinitions
 
     public string CreatedBy { get; set; } = null!;
 
-    public Instant ModifiedAt { get; set; }
+    public Instant? ModifiedAt { get; set; }
 
-    public string ModifiedBy { get; set; } = null!;
+    public string? ModifiedBy { get; set; }
 
     public Instant? DeletedAt { get; set; }
 

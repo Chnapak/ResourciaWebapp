@@ -59,7 +59,7 @@ public class AdminFiltersController : ControllerBase
 
                 CreatedAt = f.CreatedAt,
                 CreatedBy = f.CreatedBy,
-                ModifiedAt = f.ModifiedAt,
+                LastChangeAt = f.ModifiedAt ?? f.CreatedAt,
                 ModifiedBy = f.ModifiedBy
             })
             .ToListAsync();
