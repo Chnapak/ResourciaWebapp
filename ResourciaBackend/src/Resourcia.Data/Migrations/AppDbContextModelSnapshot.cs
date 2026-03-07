@@ -288,11 +288,10 @@ namespace Resourcia.Data.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<Instant>("ModifiedAt")
+                    b.Property<Instant?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ResourceField")

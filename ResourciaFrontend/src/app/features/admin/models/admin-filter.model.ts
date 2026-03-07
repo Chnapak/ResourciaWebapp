@@ -7,11 +7,7 @@ export interface AdminFilter {
   description: string;
   kind: FilterKind;
   isActive: boolean;
-
-  // ordering (important for drag-reorder)
   sortOrder: number;
-
-  // usage / metadata
   resourceCount: number;
-  modifiedAt: string; // or Date, same rule as User.lastActiveAt
+  lastChangeAt: string;
 }
