@@ -1,1 +1,40 @@
-<p>chip works!</p>
+<span
+  [ngClass]="classes"
+  [attr.role]="clickable ? 'button' : null"
+  [attr.tabindex]="clickable && !disabled ? 0 : null"
+  [attr.aria-pressed]="clickable && selected ? true : null"
+  (click)="onClick()"
+  (keydown)="onKeydown($event)"
+>
+  <!-- Optional leading icon -->
+    @if (icon) {
+        <span [ngClass]="iconClasses" aria-hidden="true">
+            
+            @if (isSvgIcon(icon!)) {
+                <span [innerHTML]="icon" class="flex items-center"></span>
+            } @else {
+                <span class="material-icons leading-none" style="font-size: inherit">{{ icon }}</span>
+            }
+        </span>
+    }
+
+  <!-- Label -->
+  <span class="leading-none"><ng-content></ng-content></span>
+
+  <!-- Remove button -->
+    @if (removable) {
+        <button
+            [ngClass]="removeButtonClasses"
+            type="button"
+            aria-label="Remove"
+            [disabled]="disabled"
+            (click)="onRemove($event)"
+        >
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="w-full h-full" aria-hidden="true">
+            <path d="M1.5 1.5L8.5 8.5M8.5 1.5L1.5 8.5"
+                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+        </button>
+    }
+</span>
