@@ -1,6 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Dropdown } from 'flowbite';
 import { DropdownComponent, DropdownItem } from '../../../../../../shared/ui/dropdown/dropdown.component';
+
+type LanguageCode = 'en-US' | 'cs-CZ';
+
+interface LanguageOption {
+  code: LanguageCode;
+  shortLabel: string;
+  label: string;
+  path: string;
+}
+
 
 @Component({
   selector: 'app-language-switcher',
@@ -8,24 +18,71 @@ import { DropdownComponent, DropdownItem } from '../../../../../../shared/ui/dro
   templateUrl: './language-switcher.component.html',
   styleUrl: './language-switcher.component.scss',
 })
-export class LanguageSwitcherComponent {
-  currentLang = 'EN';
-
-  languageItems: DropdownItem[] = [
+export class LanguageSwitcherComponent implements OnInit {
+  readonly languages: LanguageOption[] = [
     {
-      type: 'action',
+      code: 'en-US',
+      shortLabel: 'EN',
       label: 'English',
-      action: () => this.switchLanguage('EN', '/')
+      path: '/',
     },
     {
-      type: 'action',
+      code: 'cs-CZ',
+      shortLabel: 'CS',
       label: 'Čeština',
-      action: () => this.switchLanguage('CS', '/cs/')
-    }
+      path: '/cs',
+    },
   ];
 
-  switchLanguage(code: 'EN' | 'CS', path: string): void {
-    this.currentLang = code;
-    window.location.href = path;
+  currentLanguage: LanguageOption = this.languages[0];
+
+  get currentLang(): string {
+    return this.currentLanguage.shortLabel;
+  }
+
+  get languageItems(): DropdownItem[] {
+    return this.languages.map((lang) => ({
+      type: 'action',
+      label: lang.label,
+      action: () => this.switchLanguage(lang),
+    }));
+  }
+
+  ngOnInit(): void {
+    this.currentLanguage = this.detectCurrentLanguage();
+  }
+
+  switchLanguage(language: LanguageOption): void {
+    if (this.isCurrentPath(language.path)) {
+      this.currentLanguage = language;
+      return;
+    }
+
+    window.location.href = language.path;
+  }
+
+  private detectCurrentLanguage(): LanguageOption {
+    const currentPath = this.normalizePath(window.location.pathname);
+    const language = this.languages.find((lang) => this.matchesPath(currentPath, lang.path));
+    return (
+      language ??
+      this.languages[0]
+    );
+  }
+
+  private isCurrentPath(path: string): boolean {
+    return this.matchesPath(
+      this.normalizePath(window.location.pathname),
+      this.normalizePath(path)
+    );
+  }
+
+  private matchesPath(currentPath: string, langPath: string): boolean {
+    return currentPath === langPath || currentPath.startsWith(langPath + '/');
+  }
+
+  private normalizePath(path: string): string {
+    if (!path) return '/';
+    return path.replace(/\/+$/, '') || '/';
   }
 }

@@ -289,7 +289,7 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Token invalid or password does not meet requirements");
         }
-        return Ok();
+        return Ok();    
     }
 
     [HttpPost("RefreshToken")]
