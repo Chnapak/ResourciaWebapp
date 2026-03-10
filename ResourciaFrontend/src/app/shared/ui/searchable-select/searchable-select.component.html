@@ -1,0 +1,139 @@
+<div class="relative w-[200px]">
+
+  <!-- ── Trigger field ──────────────────────────────────────────────────── -->
+  <div
+    (click)="toggleDropdown()"
+    class="group flex items-center gap-1.5 w-full px-2 py-[6px] rounded-[6px] border
+           bg-white transition-all duration-120 cursor-pointer select-none"
+    [class.opacity-55]="disabled"
+    [class.cursor-not-allowed]="disabled"
+    [ngClass]="{
+      'border-[#2563eb] ring-[3px] ring-[#2563eb1a]': isOpen,
+      'border-[#c5ccd8] hover:border-[#93b8f8]': !isOpen && !disabled
+    }">
+
+    <!-- Search icon -->
+    <svg class="w-3.5 h-3.5 shrink-0 text-[#b0b8c8]" fill="none" viewBox="0 0 16 16">
+      <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M10.5 10.5L13.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+    <!-- Input -->
+    <div class="relative flex-1 min-w-0">
+      <input
+        type="text"
+        autocomplete="off"
+        role="combobox"
+        [attr.aria-expanded]="isOpen"
+        [attr.aria-label]="placeholder"
+        [disabled]="disabled"
+        [placeholder]="selectedOption ? '' : placeholder"
+        [(ngModel)]="query"
+        (ngModelChange)="onQueryChange()"
+        (click)="$event.stopPropagation(); openDropdown()"
+        (keydown)="onKeydown($event)"
+        class="w-full text-[13px] text-[#2d3748] placeholder-[#b0b8c8]
+               bg-transparent border-none outline-none leading-none" />
+
+      <!-- Selected label overlay (shown when closed and not typing) -->
+      @if (!isOpen && selectedOption && !query) {
+        <span class="absolute inset-0 flex items-center text-[13px] text-[#2d3748]
+                     leading-none pointer-events-none">
+          {{ selectedOption.label }}
+        </span>
+      }
+    </div>
+
+    <!-- Clear button -->
+    @if (selectedOption && !disabled) {
+      <button
+        type="button"
+        aria-label="Clear selection"
+        (click)="clearSelection($event)"
+        class="shrink-0 flex items-center justify-center w-3.5 h-3.5 rounded-full
+               text-[#b0b8c8] hover:text-[#64748b] transition-colors">
+        <svg viewBox="0 0 10 10" fill="none" class="w-2.5 h-2.5">
+          <path d="M1.5 1.5L8.5 8.5M8.5 1.5L1.5 8.5"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+    }
+
+    <!-- Chevron -->
+    <svg
+      class="w-3.5 h-3.5 shrink-0 text-[#b0b8c8] transition-transform duration-150"
+      [class.rotate-180]="isOpen"
+      fill="none" viewBox="0 0 16 16">
+      <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <!-- ── Dropdown panel ─────────────────────────────────────────────────── -->
+  @if (isOpen) {
+    <div
+      role="listbox"
+      class="absolute z-50 left-0 right-0 mt-1 bg-white border border-[#e2e8f0]
+             rounded-[7px] overflow-hidden
+             shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+
+      <div class="max-h-[220px] overflow-y-auto py-1">
+
+        <!-- Empty state -->
+        @if (filteredOptions.length === 0) {
+          <div class="px-3 py-2.5 text-[12.5px] text-[#9aa3b0] text-center">
+            No options found
+          </div>
+        }
+
+        <!-- Options — same row language as checkbox/radio items -->
+        @for (opt of filteredOptions; track opt.value; let i = $index) {
+          <div
+            role="option"
+            [attr.aria-selected]="isSelected(opt)"
+            (mouseenter)="highlightedIndex = i"
+            (click)="selectOption(opt)"
+            class="flex items-center gap-[7px] px-1.5 py-[5px] mx-1 rounded-[5px]
+                   transition-colors duration-120 select-none"
+            [ngClass]="{
+              'cursor-not-allowed opacity-55': opt.disabled,
+              'cursor-pointer': !opt.disabled,
+              'bg-[#eff5ff]': isHighlighted(i) || isSelected(opt)
+            }">
+
+            <!-- Checkmark column (same 15px gutter as checkbox/radio control) -->
+            <div class="w-[15px] h-[15px] shrink-0 flex items-center justify-center">
+              @if (isSelected(opt)) {
+                <svg class="w-3 h-3 text-[#2563eb]" fill="none" viewBox="0 0 12 12">
+                  <path d="M2 6l2.5 2.5L10 3" stroke="currentColor"
+                        stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              }
+            </div>
+
+            <!-- Label -->
+            <span
+              class="text-[13.5px] leading-none flex-1"
+              [ngClass]="{
+                'text-[#2563eb] font-medium': isSelected(opt),
+                'text-[#2d3748]': !isSelected(opt) && !opt.disabled,
+                'text-[#9aa3b0]': opt.disabled
+              }">
+              {{ opt.label }}
+            </span>
+
+            <!-- Badge -->
+            @if (opt.badge) {
+              <span class="ml-auto text-[10px] font-medium tracking-wider
+                           text-[#b0b8c8] uppercase">
+                {{ opt.badge }}
+              </span>
+            }
+          </div>
+        }
+
+      </div>
+    </div>
+  }
+
+</div>
