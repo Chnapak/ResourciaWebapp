@@ -1,1 +1,143 @@
-<p>searchable-multi-select works!</p>
+<div class="relative w-[200px]">
+
+  <!-- ── Input area (chips + search input) ──────────────────────────────── -->
+  <div
+    (click)="focusInput()"
+    class="flex flex-wrap items-center gap-1 w-full px-2 py-[5px] rounded-[6px] border
+           bg-white transition-all duration-120 cursor-text"
+    style="min-height: 32px"
+    [class.opacity-55]="disabled"
+    [class.cursor-not-allowed]="disabled"
+    [ngClass]="{
+      'border-[#2563eb] ring-[3px] ring-[#2563eb1a]': isOpen,
+      'border-[#c5ccd8] hover:border-[#93b8f8]': !isOpen && !disabled
+    }">
+
+    <!-- Selected chips -->
+    @for (val of selectedValues; track val) {
+      <span class="inline-flex items-center gap-1 pl-2 pr-1 py-[3px]
+                   bg-[#eff5ff] border border-[#d1e2fd] rounded-[4px]
+                   text-[11.5px] font-medium text-[#2d3748] leading-none">
+        {{ labelOf(val) }}
+        <button
+          type="button"
+          [attr.aria-label]="'Remove ' + labelOf(val)"
+          (click)="removeValue(val, $event)"
+          class="flex items-center justify-center w-3 h-3 rounded-sm
+                 text-[#93b8f8] hover:text-[#2563eb] transition-colors">
+          <svg viewBox="0 0 10 10" fill="none" class="w-2 h-2">
+            <path d="M1.5 1.5L8.5 8.5M8.5 1.5L1.5 8.5"
+                  stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </span>
+    }
+
+    <!-- Search icon (only when no chips and input is empty) -->
+    @if (selectedValues.length === 0 && !query) {
+      <svg class="w-3.5 h-3.5 shrink-0 text-[#b0b8c8]" fill="none" viewBox="0 0 16 16">
+        <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M10.5 10.5L13.5 13.5" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    }
+
+    <!-- Text input — never destroyed, always stable -->
+    <input
+      #searchInput
+      type="text"
+      autocomplete="off"
+      role="combobox"
+      [attr.aria-expanded]="isOpen"
+      [disabled]="disabled"
+      [placeholder]="selectedValues.length === 0 ? placeholder : ''"
+      [(ngModel)]="query"
+      (ngModelChange)="onQueryChange()"
+      (focus)="onInputFocus()"
+      (blur)="onInputBlur()"
+      (keydown)="onKeydown($event)"
+      class="flex-1 text-[13px] text-[#2d3748] placeholder-[#b0b8c8]
+             bg-transparent border-none outline-none leading-none"
+      style="min-width: 80px; padding: 1px 0" />
+  </div>
+
+  <!-- ── Dropdown panel ─────────────────────────────────────────────────── -->
+  @if (isOpen) {
+    <div
+      role="listbox"
+      aria-multiselectable="true"
+      class="absolute z-50 left-0 right-0 mt-1 bg-white border border-[#e2e8f0]
+             rounded-[7px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+
+      <div class="max-h-[220px] overflow-y-auto py-1">
+
+        <!-- Empty state -->
+        @if (filteredOptions.length === 0) {
+          <div class="px-3 py-2.5 text-[12.5px] text-[#9aa3b0] text-center">
+            No options found
+          </div>
+        }
+
+        <!-- Options — checkbox control matching existing checkbox DNA -->
+        @for (opt of filteredOptions; track opt.value; let i = $index) {
+          <div
+            role="option"
+            [attr.aria-selected]="isSelected(opt)"
+            (mouseenter)="highlightedIndex = i"
+            (mousedown)="onOptionMousedown($event, opt)"
+            class="flex items-center gap-[7px] px-1.5 py-[5px] mx-1 rounded-[5px]
+                   transition-colors duration-120 select-none"
+            [ngClass]="{
+              'cursor-not-allowed opacity-55': opt.disabled,
+              'cursor-pointer hover:bg-[#eff5ff]': !opt.disabled,
+              'bg-[#eff5ff]': isHighlighted(i)
+            }">
+
+            <!-- Checkbox control (exact same visual as CheckboxComponent) -->
+            <div
+              class="relative w-[15px] h-[15px] border-[1.5px] rounded-[3px]
+                     flex items-center justify-center shrink-0
+                     transition-all duration-130"
+              [ngClass]="{
+                'bg-[#2563eb] border-[#2563eb] ring-2 ring-[#2563eb33]': isSelected(opt) && !opt.disabled,
+                'bg-white border-[#c5ccd8]': !isSelected(opt) && !opt.disabled,
+                'bg-[#f0f2f5] border-[#dde1e8]': opt.disabled && !isSelected(opt),
+                'bg-[#b8c7e8] border-[#b8c7e8]': opt.disabled && isSelected(opt)
+              }">
+              @if (isSelected(opt)) {
+                <div
+                  class="w-[10px] h-[8px] bg-white"
+                  style="
+                    mask-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 10 8\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 4l2.5 2.5L9 1\' stroke=\'white\' stroke-width=\'1.6\' stroke-linecap=\'round\' stroke-linejoin=\'round\' fill=\'none\'/%3E%3C/svg%3E');
+                    -webkit-mask-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 10 8\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 4l2.5 2.5L9 1\' stroke=\'white\' stroke-width=\'1.6\' stroke-linecap=\'round\' stroke-linejoin=\'round\' fill=\'none\'/%3E%3C/svg%3E');
+                    mask-repeat: no-repeat;
+                    mask-position: center;">
+                </div>
+              }
+            </div>
+
+            <!-- Label -->
+            <span
+              class="text-[13.5px] leading-none flex-1"
+              [ngClass]="{
+                'text-[#2d3748]': !opt.disabled,
+                'text-[#9aa3b0]': opt.disabled
+              }">
+              {{ opt.label }}
+            </span>
+
+            <!-- Badge -->
+            @if (opt.badge) {
+              <span class="ml-auto text-[10px] font-medium tracking-wider
+                           text-[#b0b8c8] uppercase">
+                {{ opt.badge }}
+              </span>
+            }
+
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</div>
