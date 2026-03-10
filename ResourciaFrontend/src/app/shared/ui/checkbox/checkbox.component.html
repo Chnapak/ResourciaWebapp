@@ -2,7 +2,7 @@
   (click)="onToggle(); $event.preventDefault(); $event.stopPropagation()"
   [class.opacity-55]="disabled"
   [class.cursor-not-allowed]="disabled"
-  class="group flex items-center px-1.5 py-[5px] rounded-[5px] cursor-pointer transition-colors duration-120 hover:bg-[#eff5ff]"
+  class="group flex items-center px-1.5 py-[5px] rounded-[5px] gap-2 cursor-pointer transition-colors duration-120 hover:bg-[#eff5ff]"
   [ngClass]="{'hover:bg-transparent': disabled}">
   
     <input 
