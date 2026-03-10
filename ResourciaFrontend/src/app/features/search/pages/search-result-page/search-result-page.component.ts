@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { SchemaResponse } from '../../../../shared/models/search-schema';
 import { FilterKind } from '../../../../shared/models/filter-kind';
 import { SearchService } from '../../../../core/services/search.service';
@@ -9,6 +9,7 @@ import { RadioFacetComponent } from '../../components/facets/radio-facet/radio-f
 import { CheckboxFacetComponent } from '../../components/facets/checkbox-facet/checkbox-facet.component';
 import { SearchableSelectComponent, SelectOption } from '../../../../shared/ui/searchable-select/searchable-select.component';
 import { SearchableSingleFacetComponent } from '../../components/facets/searchable-single-facet/searchable-single-facet.component';
+import { ToasterService } from '../../../../shared/toaster/toaster.service';
 
 
 @Component({
@@ -24,6 +25,8 @@ export class SearchResultPageComponent implements OnInit {
   collapsed = signal<Record<string, boolean>>({});
   selected = signal<Record<string, any>>({});
 
+  private toaster = inject(ToasterService);
+
   subjectOptions: SelectOption[] = [
     { value: 'math',    label: 'Mathematics', badge: '142' },
     { value: 'science', label: 'Science',     badge: '98'  },
@@ -37,6 +40,8 @@ export class SearchResultPageComponent implements OnInit {
   constructor(private search: SearchService) {}
 
   ngOnInit(): void {
+    
+    this.toaster.show('Schema loaded successfully', 'success');
     this.search.schema().subscribe((data: SchemaResponse) => {
       console.log(data.filters)
       this.schema = data;
