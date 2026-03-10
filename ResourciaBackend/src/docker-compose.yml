@@ -15,9 +15,9 @@ services:
     image: postgres:latest
     container_name: resourcia.db
     environment:
-      - POSTGRES_USER=resourcia
-      - POSTGRES_PASSWORD=ResourciaPassword123!
-      - POSTGRES_DB=resourciadb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
