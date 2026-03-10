@@ -1,0 +1,61 @@
+<div class="fixed top-5 right-5 space-y-2 z-50">
+  @for (toast of toasts$ | async; track toast.id) {
+    <div
+      class="toast flex items-center justify-between gap-3
+             px-3.5 py-2.5 rounded-[8px] border shadow-[0_4px_16px_rgba(0,0,0,0.08)]
+             text-[13px] font-medium min-w-[260px] max-w-[340px]"
+      [ngClass]="{
+        'bg-[#f0fdf4] border-[#bbf7d0] text-[#15803d]': toast.type === 'success',
+        'bg-[#fff1f2] border-[#fecdd3] text-[#be123c]': toast.type === 'error',
+        'bg-[#eff6ff] border-[#bfdbfe] text-[#1d4ed8]': toast.type === 'info'
+      }">
+
+      <!-- Icon + message -->
+      <div class="flex items-center gap-2.5">
+
+        <!-- Success icon -->
+        @if (toast.type === 'success') {
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        }
+
+        <!-- Error icon -->
+        @if (toast.type === 'error') {
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round"/>
+          </svg>
+        }
+
+        <!-- Info icon -->
+        @if (toast.type === 'info') {
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 7.5v3.5M8 5.5h.01" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round"/>
+          </svg>
+        }
+
+        <span class="leading-snug">{{ toast.message }}</span>
+      </div>
+
+      <!-- Dismiss button -->
+      <button
+        type="button"
+        (click)="remove(toast.id)"
+        class="shrink-0 flex items-center justify-center w-4 h-4 rounded
+               opacity-50 hover:opacity-100 transition-opacity duration-120 hover:cursor-pointer"
+        aria-label="Dismiss">
+        <svg viewBox="0 0 10 10" fill="none" class="w-2.5 h-2.5">
+          <path d="M1.5 1.5L8.5 8.5M8.5 1.5L1.5 8.5"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+    </div>
+  }
+</div>
