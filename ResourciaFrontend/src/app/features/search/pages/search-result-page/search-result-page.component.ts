@@ -7,11 +7,13 @@ import { ExploreToolbarComponent } from './components/explore-toolbar/explore-to
 import { RadioComponent } from '../../../../shared/ui/radio/radio.component';
 import { RadioFacetComponent } from '../../components/facets/radio-facet/radio-facet.component';
 import { CheckboxFacetComponent } from '../../components/facets/checkbox-facet/checkbox-facet.component';
+import { SearchableSelectComponent, SelectOption } from '../../../../shared/ui/searchable-select/searchable-select.component';
+import { SearchableSingleFacetComponent } from '../../components/facets/searchable-single-facet/searchable-single-facet.component';
 
 
 @Component({
   selector: 'app-search-result-page',
-  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent, CheckboxFacetComponent ],
+  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent, CheckboxFacetComponent, SearchableSingleFacetComponent ],
   templateUrl: './search-result-page.component.html',
   styleUrl: './search-result-page.component.scss'
 })
@@ -22,12 +24,12 @@ export class SearchResultPageComponent implements OnInit {
   collapsed = signal<Record<string, boolean>>({});
   selected = signal<Record<string, any>>({});
 
-  typeOptions = [
-    { value: 'interactive', label: 'Interactive', badge: 'NEW' },
-    { value: 'video',       label: 'Video' },
-    { value: 'pdf',         label: 'PDF / Document' },
-    { value: 'quiz',        label: 'Quiz' },
+  subjectOptions: SelectOption[] = [
+    { value: 'math',    label: 'Mathematics', badge: '142' },
+    { value: 'science', label: 'Science',     badge: '98'  },
+    { value: 'history', label: 'History',     badge: '67'  },
   ];
+
 
   selectedType: unknown = null;
 
@@ -83,5 +85,10 @@ export class SearchResultPageComponent implements OnInit {
   getPlaceholder(filterLabel: string): string {
     // One translatable message with an interpolated variable
     return $localize`:@@search.filter.placeholder:Type ${filterLabel}:label:...`;
+  }
+
+  onSubjectChange(value: unknown): void {
+    console.log('Selected subject:', value);
+    this.selectedType = value;
   }
 }
