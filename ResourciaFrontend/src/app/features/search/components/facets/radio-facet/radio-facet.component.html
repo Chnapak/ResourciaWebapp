@@ -2,7 +2,6 @@
     @for (opt of options; track $index) {
         <app-radio
             [label]="opt.label"
-            [badge]="opt.badge"
             [value]="opt.value"
             [selected]="selected === opt.value"
             [disabled]="opt.disabled ?? false"

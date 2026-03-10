@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { RadioComponent } from '../../../../../shared/ui/radio/radio.component';
 
 export interface RadioFacetOption {
   value: unknown;
@@ -9,7 +10,7 @@ export interface RadioFacetOption {
 
 @Component({
   selector: 'app-radio-facet',
-  imports: [],
+  imports: [ RadioComponent ],
   templateUrl: './radio-facet.component.html',
   styleUrl: './radio-facet.component.scss',
 })
