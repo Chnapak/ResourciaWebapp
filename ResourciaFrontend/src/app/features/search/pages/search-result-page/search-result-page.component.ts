@@ -10,11 +10,12 @@ import { CheckboxFacetComponent } from '../../components/facets/checkbox-facet/c
 import { SearchableSelectComponent, SelectOption } from '../../../../shared/ui/searchable-select/searchable-select.component';
 import { SearchableSingleFacetComponent } from '../../components/facets/searchable-single-facet/searchable-single-facet.component';
 import { ToasterService } from '../../../../shared/toaster/toaster.service';
+import { SearchableMultiSelectComponent } from '../../../../shared/ui/searchable-multi-select/searchable-multi-select.component';
 
 
 @Component({
   selector: 'app-search-result-page',
-  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent, CheckboxFacetComponent, SearchableSingleFacetComponent ],
+  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent, CheckboxFacetComponent, SearchableSingleFacetComponent , SearchableMultiSelectComponent],
   templateUrl: './search-result-page.component.html',
   styleUrl: './search-result-page.component.scss'
 })
