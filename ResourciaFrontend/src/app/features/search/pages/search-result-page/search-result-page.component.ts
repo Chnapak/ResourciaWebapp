@@ -4,11 +4,13 @@ import { FilterKind } from '../../../../shared/models/filter-kind';
 import { SearchService } from '../../../../core/services/search.service';
 import { RouterLink } from '@angular/router';
 import { ExploreToolbarComponent } from './components/explore-toolbar/explore-toolbar.component';
+import { RadioComponent } from '../../../../shared/ui/radio/radio.component';
+import { RadioFacetComponent } from '../../components/facets/radio-facet/radio-facet.component';
 
 
 @Component({
   selector: 'app-search-result-page',
-  imports: [ RouterLink, ExploreToolbarComponent ],
+  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent ],
   templateUrl: './search-result-page.component.html',
   styleUrl: './search-result-page.component.scss'
 })
@@ -18,6 +20,16 @@ export class SearchResultPageComponent implements OnInit {
 
   collapsed = signal<Record<string, boolean>>({});
   selected = signal<Record<string, any>>({});
+
+  typeOptions = [
+    { value: 'interactive', label: 'Interactive', badge: 'NEW' },
+    { value: 'video',       label: 'Video' },
+    { value: 'pdf',         label: 'PDF / Document' },
+    { value: 'quiz',        label: 'Quiz' },
+  ];
+
+  selectedType: unknown = null;
+
 
   constructor(private search: SearchService) {}
 
