@@ -1,1 +1,10 @@
-<p>checkbox-facet works!</p>
+<div role="group" [attr.aria-label]="label">
+  @for (opt of options; track opt.value; let i = $index) {
+    <app-checkbox
+      [label]="opt.label"
+      [badge]="opt.badge ?? ''"
+      [disabled]="opt.disabled ?? false"
+      [formControl]="getControl(i)"
+    />
+  }
+</div>

@@ -6,11 +6,12 @@ import { RouterLink } from '@angular/router';
 import { ExploreToolbarComponent } from './components/explore-toolbar/explore-toolbar.component';
 import { RadioComponent } from '../../../../shared/ui/radio/radio.component';
 import { RadioFacetComponent } from '../../components/facets/radio-facet/radio-facet.component';
+import { CheckboxFacetComponent } from '../../components/facets/checkbox-facet/checkbox-facet.component';
 
 
 @Component({
   selector: 'app-search-result-page',
-  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent ],
+  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent, CheckboxFacetComponent ],
   templateUrl: './search-result-page.component.html',
   styleUrl: './search-result-page.component.scss'
 })
