@@ -1,0 +1,61 @@
+<div class="flex flex-col bg-white rounded-[16px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.1)] cursor-pointer transition duration-300 hover:-translate-y-[4px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
+  <div class="w-full h-[160px] mb-[8px] text-white text-[48px] font-[700] flex justify-center items-center bg-linear-to-r from-cyan-500 to-blue-500">
+    {{ resource?.logoLetter || 'B' }}
+  </div>
+
+  <div class="p-[18px] flex flex-col flex-1">
+    <div class="mb-[8px] text-gray-900 text-[18px] font-[700] leading-[1.4]">
+      {{ resource?.title }}
+    </div>
+
+    <div class="mb-[10px] flex flex-wrap gap-[7px] items-center text-[13px]">
+      <span>🌐</span>
+      <span class="text-gray-500 font-[600] hover:text-blue-500">
+        <a [href]="resource?.url" target="_blank">{{ resource?.domain }}</a>
+      </span>
+      <span class="text-gray-800">•</span>
+      <span class="px-[8px] py-[2px] bg-gray-200 text-gray-800 text-[11px] font-[600] border border-gray-400 rounded-[10px]">
+        {{ resource?.type }}
+      </span>
+    </div>
+
+    <div class="min-h-[44px] mb-[12px] text-[14px] text-gray-500 leading-[1.6] overflow-hidden">
+      {{ hasDescription ? resource.description : 'No description yet — Add a one-sentence summary' }}
+    </div>
+
+    @if (visibleTags.length > 0 || resource?.extraTagCount > 0) {
+      <div class="max-h-[64px] mb-[12px] flex flex-wrap gap-[6px] overflow-hidden">
+        @for (tag of visibleTags; track tag) {
+          <span class="px-[10px] py-[4px] border border-gray-300 bg-gray-200 text-gray-500 text-[12px] rounded-[12px] cursor-pointer transition duration-300 hover:bg-blue-200 hover:border-blue-300 hover:text-blue-500">
+            {{ tag }}
+          </span>
+        }
+
+        @if (resource?.extraTagCount > 0) {
+          <span class="px-[10px] py-[4px] border border-gray-300 bg-gray-100 text-gray-400 text-[12px] rounded-[12px]">
+            {{ resource.extraTagCount }}+
+          </span>
+        }
+      </div>
+    }
+
+    <div class="mt-auto pt-[16px] border-t border-gray-200 flex gap-[10px]">
+      <a
+        [href]="resource?.url"
+        target="_blank"
+        class="px-[18px] py-[10px] flex flex-1 gap-[6px] items-center justify-center bg-blue-400 text-white text-[14px] font-[600] rounded-[8px]"
+        (click)="open.emit(resource)"
+      >
+        <span>Open Website</span>
+        <span>→</span>
+      </a>
+
+      <button
+        class="px-[16px] py-[11px] flex items-center justify-center border border-gray-300 bg-white rounded-[8px] text-[16px]"
+        (click)="share.emit(resource)"
+      >
+        🔗
+      </button>
+    </div>
+  </div>
+</div>

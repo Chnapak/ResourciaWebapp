@@ -11,11 +11,15 @@ import { SearchableSelectComponent, SelectOption } from '../../../../shared/ui/s
 import { SearchableSingleFacetComponent } from '../../components/facets/searchable-single-facet/searchable-single-facet.component';
 import { ToasterService } from '../../../../shared/toaster/toaster.service';
 import { SearchableMultiSelectComponent } from '../../../../shared/ui/searchable-multi-select/searchable-multi-select.component';
+import { FiltersSectionComponent } from './components/filters-section/filters-section.component';
+import { FiltersSidebarComponent } from './components/filters-sidebar/filters-sidebar.component';
+import { ResourceCardComponent } from './components/resource-card/resource-card.component';
 
 
 @Component({
   selector: 'app-search-result-page',
-  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent, CheckboxFacetComponent, SearchableSingleFacetComponent , SearchableMultiSelectComponent],
+  standalone: true,
+  imports: [ RouterLink, ExploreToolbarComponent, RadioFacetComponent, CheckboxFacetComponent, SearchableSingleFacetComponent , SearchableMultiSelectComponent, FiltersSidebarComponent, ResourceCardComponent ],
   templateUrl: './search-result-page.component.html',
   styleUrl: './search-result-page.component.scss'
 })
@@ -24,18 +28,26 @@ export class SearchResultPageComponent implements OnInit {
   FilterKind = FilterKind;
 
   collapsed = signal<Record<string, boolean>>({});
-  selected = signal<Record<string, any>>({});
 
   private toaster = inject(ToasterService);
 
-  subjectOptions: SelectOption[] = [
-    { value: 'math',    label: 'Mathematics', badge: '142' },
-    { value: 'science', label: 'Science',     badge: '98'  },
-    { value: 'history', label: 'History',     badge: '67'  },
+  resources = [
+    {
+      id: 1,
+      title: 'Brilliant',
+      url: 'https://www.brilliant.org',
+      domain: 'brilliant.org',
+      type: 'Interactive',
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+      tags: ['Math', 'Logic', 'STEM'],
+      extraTagCount: 2,
+      pricingLabel: 'Free trial',
+      rating: 4.8,
+      reviews: '2.5k',
+      saves: 340,
+      logoLetter: 'B'
+    }
   ];
-
-
-  selectedType: unknown = null;
 
 
   constructor(private search: SearchService) {}
@@ -43,21 +55,17 @@ export class SearchResultPageComponent implements OnInit {
   ngOnInit(): void {
     
     this.toaster.show('Schema loaded successfully', 'success');
-    this.search.schema().subscribe((data: SchemaResponse) => {
+    /*this.search.schema().subscribe((data: SchemaResponse) => {
       console.log(data.filters)
       this.schema = data;
 
       const initial: Record<string, boolean> = {};
       for (const f of data.filters) initial[f.key] = true;
       this.collapsed.set(initial);
-    });
+    });*/
   }
 
-  sections = signal([
-    { title: 'Subject', content: 'Subject content', collapsed: true },
-    { title: 'Author', content: 'Author content', collapsed: true },
-    { title: 'Year', content: 'Year content', collapsed: true },
-  ]);
+
 
   toggleSection(key: string) {
     this.collapsed.update(m => ({ ...m, [key]: !m[key] }));
@@ -67,34 +75,31 @@ export class SearchResultPageComponent implements OnInit {
     return this.collapsed()[key] ?? true;
   }
 
-  onTextChange(filter: any, event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.selected.update(m => ({ ...m, [filter.key]: value }));
+  clearAllFilters(): void {
+    console.log('clear all filters');
   }
 
-  onBoolChange(filter: any, event: Event) {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.selected.update(m => ({ ...m, [filter.key]: checked }));
+  onFacetChange(filter: any, value: string): void {
+    console.log('facet change', filter, value);
   }
 
-  onNumberRangeChange(filter: any, side: 'min' | 'max', event: Event) {
-    const raw = (event.target as HTMLInputElement).value;
-    const n = raw === '' ? null : Number(raw);
-
-    const current = this.selected()[filter.key] ?? { min: null, max: null };
-    this.selected.update(m => ({
-      ...m,
-      [filter.key]: { ...current, [side]: n }
-    }));
+  onNumberRangeChange(filter: any, type: 'min' | 'max', value: string): void {
+    console.log('range change', filter, type, value);
   }
 
-  getPlaceholder(filterLabel: string): string {
-    // One translatable message with an interpolated variable
-    return $localize`:@@search.filter.placeholder:Type ${filterLabel}:label:...`;
+  onBoolChange(filter: any, value: boolean): void {
+    console.log('boolean change', filter, value);
   }
 
-  onSubjectChange(value: unknown): void {
-    console.log('Selected subject:', value);
-    this.selectedType = value;
+  onTextChange(filter: any, value: string): void {
+    console.log('text change', filter, value);
+  }
+
+  openResource(resource: any): void {
+    window.open(resource.url, '_blank');
+  }
+
+  shareResource(resource: any): void {
+    console.log('share resource', resource);
   }
 }
