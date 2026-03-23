@@ -1,0 +1,60 @@
+@if (totalPages > 1) {
+  <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="text-sm text-gray-500">
+      @if (totalItems !== undefined && startItem !== null && endItem !== null) {
+        <span>
+          Showing <span class="font-medium text-gray-800">{{ startItem }}</span>
+          –<span class="font-medium text-gray-800">{{ endItem }}</span>
+          of <span class="font-medium text-gray-800">{{ totalItems }}</span> results
+        </span>
+      } @else {
+        <span>
+          Page <span class="font-medium text-gray-800">{{ currentPage }}</span>
+          of <span class="font-medium text-gray-800">{{ totalPages }}</span>
+        </span>
+      }
+    </div>
+
+    <nav class="flex items-center gap-2" aria-label="Pagination Navigation">
+      <button
+        type="button"
+        (click)="onPageSelect(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="h-11 rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-gray-400 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Previous
+      </button>
+
+      <div class="flex items-center gap-2">
+        @for (page of pageNumbers; track trackByValue($index, page)) {
+          @if (page === '...') {
+            <span class="px-2 text-sm text-gray-400">...</span>
+          } @else {
+            <button
+              type="button"
+              (click)="onPageSelect(+page)"
+              [attr.aria-current]="currentPage === page ? 'page' : null"
+              [ngClass]="
+                currentPage === page
+                  ? 'border-blue-500 bg-blue-500 text-white shadow-sm'
+                  : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50'
+              "
+              class="h-11 min-w-[44px] rounded-xl border text-sm font-medium transition"
+            >
+              {{ page }}
+            </button>
+          }
+        }
+      </div>
+
+      <button
+        type="button"
+        (click)="onPageSelect(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+        class="h-11 rounded-xl border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:border-gray-400 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Next
+      </button>
+    </nav>
+  </div>
+}

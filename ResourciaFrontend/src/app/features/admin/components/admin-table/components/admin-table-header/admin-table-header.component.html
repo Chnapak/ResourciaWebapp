@@ -1,0 +1,10 @@
+<div class="px-8 py-3 bg-slate-50 border-b border-slate-200 flex items-center text-xs font-semibold text-slate-600 uppercase tracking-wide">
+    @if (selectable) {
+        <div class="w-10">
+            <input type="checkbox" class="checkbox-custom" [checked]="checked" [indeterminate]="indeterminate" (change)="toggleSelectAll($event)">
+        </div>
+    }
+    @for (col of columns; track col.key) {
+        <div [class]="col.widthClass"> {{col.label}} </div>
+    }
+</div>

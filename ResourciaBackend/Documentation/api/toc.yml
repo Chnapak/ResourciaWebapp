@@ -1,0 +1,124 @@
+### YamlMime:TableOfContent
+items:
+- uid: TwitterEdu.Api
+  name: TwitterEdu.Api
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Api.Program
+    name: Program
+    type: Class
+  - uid: TwitterEdu.Api.WeatherForecast
+    name: WeatherForecast
+    type: Class
+- uid: TwitterEdu.Api.Controllers
+  name: TwitterEdu.Api.Controllers
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Api.Controllers.AuthController
+    name: AuthController
+    type: Class
+  - uid: TwitterEdu.Api.Controllers.PostController
+    name: PostController
+    type: Class
+  - uid: TwitterEdu.Api.Controllers.WeatherForecastController
+    name: WeatherForecastController
+    type: Class
+- uid: TwitterEdu.Api.Models.Auth
+  name: TwitterEdu.Api.Models.Auth
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Api.Models.Auth.LoginModel
+    name: LoginModel
+    type: Class
+  - uid: TwitterEdu.Api.Models.Auth.RegisterModel
+    name: RegisterModel
+    type: Class
+  - uid: TwitterEdu.Api.Models.Auth.TokenModel
+    name: TokenModel
+    type: Class
+- uid: TwitterEdu.Api.Models.Posts
+  name: TwitterEdu.Api.Models.Posts
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Api.Models.Posts.CreatePostModel
+    name: CreatePostModel
+    type: Class
+  - uid: TwitterEdu.Api.Models.Posts.DetailPostModel
+    name: DetailPostModel
+    type: Class
+  - uid: TwitterEdu.Api.Models.Posts.DetailPostModelExtensions
+    name: DetailPostModelExtensions
+    type: Class
+- uid: TwitterEdu.Api.Utils
+  name: TwitterEdu.Api.Utils
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Api.Utils.ApplicationMapper
+    name: ApplicationMapper
+    type: Class
+  - uid: TwitterEdu.Api.Utils.ClaimsPrincipalExtensions
+    name: ClaimsPrincipalExtensions
+    type: Class
+  - uid: TwitterEdu.Api.Utils.IApplicationMapper
+    name: IApplicationMapper
+    type: Interface
+- uid: TwitterEdu.Data
+  name: TwitterEdu.Data
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Data.AppDbContext
+    name: AppDbContext
+    type: Class
+- uid: TwitterEdu.Data.Entities
+  name: TwitterEdu.Data.Entities
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Data.Entities.Comment
+    name: Comment
+    type: Class
+  - uid: TwitterEdu.Data.Entities.Post
+    name: Post
+    type: Class
+  - uid: TwitterEdu.Data.Entities.Post.Metadata
+    name: Post.Metadata
+    type: Class
+- uid: TwitterEdu.Data.Entities.Identity
+  name: TwitterEdu.Data.Entities.Identity
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Data.Entities.Identity.AppUser
+    name: AppUser
+    type: Class
+- uid: TwitterEdu.Data.Interfaces
+  name: TwitterEdu.Data.Interfaces
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Data.Interfaces.ITrackable
+    name: ITrackable
+    type: Interface
+  - uid: TwitterEdu.Data.Interfaces.ITrackableExtensions
+    name: ITrackableExtensions
+    type: Class
+- uid: TwitterEdu.Data.Migrations
+  name: TwitterEdu.Data.Migrations
+  type: Namespace
+  items:
+  - uid: TwitterEdu.Data.Migrations.CommentsAdded
+    name: CommentsAdded
+    type: Class
+  - uid: TwitterEdu.Data.Migrations.ITrackableAdded
+    name: ITrackableAdded
+    type: Class
+  - uid: TwitterEdu.Data.Migrations.IdentityInit
+    name: IdentityInit
+    type: Class
+  - uid: TwitterEdu.Data.Migrations.Init
+    name: Init
+    type: Class
+  - uid: TwitterEdu.Data.Migrations.ModifiedAdded
+    name: ModifiedAdded
+    type: Class
+  - uid: TwitterEdu.Data.Migrations.UserToPostAdded
+    name: UserToPostAdded
+    type: Class
+memberLayout: SamePage

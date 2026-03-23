@@ -1,0 +1,78 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Api.Models.Auth
+  commentId: N:TwitterEdu.Api.Models.Auth
+  id: TwitterEdu.Api.Models.Auth
+  children:
+  - TwitterEdu.Api.Models.Auth.LoginModel
+  - TwitterEdu.Api.Models.Auth.RegisterModel
+  - TwitterEdu.Api.Models.Auth.TokenModel
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Api.Models.Auth
+  nameWithType: TwitterEdu.Api.Models.Auth
+  fullName: TwitterEdu.Api.Models.Auth
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Api
+references:
+- uid: TwitterEdu.Api.Models.Auth.LoginModel
+  commentId: T:TwitterEdu.Api.Models.Auth.LoginModel
+  parent: TwitterEdu.Api.Models.Auth
+  href: TwitterEdu.Api.Models.Auth.LoginModel.html
+  name: LoginModel
+  nameWithType: LoginModel
+  fullName: TwitterEdu.Api.Models.Auth.LoginModel
+- uid: TwitterEdu.Api.Models.Auth.RegisterModel
+  commentId: T:TwitterEdu.Api.Models.Auth.RegisterModel
+  parent: TwitterEdu.Api.Models.Auth
+  href: TwitterEdu.Api.Models.Auth.RegisterModel.html
+  name: RegisterModel
+  nameWithType: RegisterModel
+  fullName: TwitterEdu.Api.Models.Auth.RegisterModel
+- uid: TwitterEdu.Api.Models.Auth.TokenModel
+  commentId: T:TwitterEdu.Api.Models.Auth.TokenModel
+  parent: TwitterEdu.Api.Models.Auth
+  href: TwitterEdu.Api.Models.Auth.TokenModel.html
+  name: TokenModel
+  nameWithType: TokenModel
+  fullName: TwitterEdu.Api.Models.Auth.TokenModel
+- uid: TwitterEdu.Api.Models.Auth
+  commentId: N:TwitterEdu.Api.Models.Auth
+  href: TwitterEdu.html
+  name: TwitterEdu.Api.Models.Auth
+  nameWithType: TwitterEdu.Api.Models.Auth
+  fullName: TwitterEdu.Api.Models.Auth
+  spec.csharp:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Models
+    name: Models
+    href: TwitterEdu.Api.Models.html
+  - name: .
+  - uid: TwitterEdu.Api.Models.Auth
+    name: Auth
+    href: TwitterEdu.Api.Models.Auth.html
+  spec.vb:
+  - uid: TwitterEdu
+    name: TwitterEdu
+    href: TwitterEdu.html
+  - name: .
+  - uid: TwitterEdu.Api
+    name: Api
+    href: TwitterEdu.Api.html
+  - name: .
+  - uid: TwitterEdu.Api.Models
+    name: Models
+    href: TwitterEdu.Api.Models.html
+  - name: .
+  - uid: TwitterEdu.Api.Models.Auth
+    name: Auth
+    href: TwitterEdu.Api.Models.Auth.html

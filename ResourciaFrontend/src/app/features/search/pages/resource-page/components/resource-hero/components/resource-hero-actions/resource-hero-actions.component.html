@@ -1,0 +1,22 @@
+<div class="flex gap-3 flex-wrap pb-10">
+  <ui-button
+    variant="primary"
+    size="lg"
+    [routerLink]="'/external-link'"
+    class="shadow-[0_4px_12px_rgba(37,99,235,0.4)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.5)] hover:-translate-y-0.5 transition-all duration-200"
+  >
+    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+    <span>Visit Resource</span>
+  </ui-button>
+
+  <ui-button
+    variant="outline"
+    size="lg"
+    type="button"
+    (click)="handleFavorite($event)"
+    class="backdrop-blur-sm"
+  >
+    <i class="fa-regular fa-heart"></i>
+    <span>Add to Favorites</span>
+  </ui-button>
+</div>

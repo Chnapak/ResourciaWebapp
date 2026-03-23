@@ -1,0 +1,24 @@
+<aside class="w-[300px] bg-white rounded-[16px] p-[24px] shadow-[0_2px_12px_rgba(0,0,0,0.1)]">
+    <div class="flex justify-between items-center mb-[24px]">
+        <h2 i18n class="text-[20px] font-[400]">Filters</h2>
+        <button i18n class="text-gray-400 underline cursor-pointer hover:text-blue-400"
+        (click)="clearAll.emit()">
+            Clear all
+        </button>
+    </div>
+    @for (filter of filters; track filter.key ?? $index) {
+        <app-filters-section
+            [filter]="filter"
+            [collapsed]="isCollapsed(filter.key)"
+            [facetState]="facetState[filter.key] ?? null"
+            [rangeState]="rangeState[filter.key] ?? {}"
+            [booleanState]="booleanState[filter.key] ?? false"
+            [textState]="textState[filter.key] ?? ''"
+            (toggle)="toggleSection.emit(filter.key)"
+            (facetChange)="facetChange.emit({ filter, value: $event })"
+            (rangeChange)="rangeChange.emit({ filter, type: $event.type, value: $event.value })"
+            (booleanChange)="booleanChange.emit({ filter, value: $event })"
+            (textChange)="textChange.emit({ filter, value: $event })"
+        ></app-filters-section>
+    }
+</aside>

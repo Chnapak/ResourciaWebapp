@@ -1,0 +1,49 @@
+<!-- Filters Section -->
+<div class="bg-white rounded-lg shadow-sm">
+    <app-admin-header [title]="'Filters'"></app-admin-header>
+    <app-admin-table
+        cdkDropList
+        cdkDropListOrientation="vertical"
+        [cdkDropListData]="schema"
+        (cdkDropListDropped)="drop($event)"
+        [columns]="columns"
+        [selectable]="true"
+        [checked]="allSelected"
+        [indeterminate]="someSelected"
+        (toggleAll)="onToggleAll($event)"
+    >
+        @for (filter of (schema ?? []); track filter.key; let i = $index) {
+            <app-filter-row
+                cdkDrag
+                [filter]="filter"
+                [index]="i"
+                [selected]="selectedKeys.has(filter.key)"
+                (toggle)="onToggleOne($event.id, $event.checked)"
+            >
+                <ng-template cdkDragPlaceholder>
+                    <div class="h-0 border-t-[3px] mx-[0px] my-[8px] border-blue-500 rounded-[9999px]"></div>
+                </ng-template>
+
+                <ng-template cdkDragPreview>
+                    <div class="drag-preview">
+                    {{ filter.key }}
+                    </div>
+                </ng-template>
+            </app-filter-row>
+        }
+    </app-admin-table>
+    
+
+    <!-- Filters List -->
+    <div>
+        @if (schema == []){
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="py-16 px-8 text-center">
+                    <div class="text-5xl text-gray-300 mb-4">📋</div>
+                    <div i18n class="text-lg font-medium text-gray-600 mb-2">No filters yet</div>
+                    <div i18n class="text-sm text-gray-400">Click "Add Filter" to create your first filter</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

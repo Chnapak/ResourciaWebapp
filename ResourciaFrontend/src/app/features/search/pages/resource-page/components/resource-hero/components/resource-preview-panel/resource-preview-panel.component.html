@@ -1,0 +1,41 @@
+<!-- Carousel wrapper -->
+<div class="relative w-full rounded-xl overflow-hidden border border-gray-200">
+
+  <div id="carousel" class="relative h-64 overflow-hidden bg-gray-800">
+
+    <!-- Slide 1 -->
+    <div class="item absolute inset-0 flex items-center justify-center bg-gray-800">
+        <img src="" class="rounded-xl w-full h-full object-cover" alt="Lecture notes" />
+        <span class="absolute bottom-3 left-3 text-xs text-white bg-black bg-opacity-50 px-2.5 py-1 rounded-md">Lecture notes</span>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="item absolute inset-0 flex items-center justify-center bg-gray-900" style="transform:translateX(100%)">
+        <img src="/your-photo-2.jpg" class="rounded-xl w-full h-full object-cover" alt="Video lecture" />
+        <span class="absolute bottom-3 left-3 text-xs text-white bg-black bg-opacity-50 px-2.5 py-1 rounded-md">Video lecture</span>
+    </div>
+
+
+    <!-- Prev button -->
+    <button onclick="nav(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-gray-600 bg-opacity-20 hover:bg-opacity-40 text-white border-0 cursor-pointer flex items-center justify-center text-xl transition-all">&#8249;</button>
+
+    <!-- Next button -->
+    <button onclick="nav(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-gray-600 bg-opacity-20 hover:bg-opacity-40 text-white border-0 cursor-pointer flex items-center justify-center text-xl transition-all">&#8250;</button>
+
+    <!-- Dot indicators -->
+    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      <button class="dot w-2.5 h-2.5 rounded-full bg-white border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(0)"></button>
+      <button class="dot w-2.5 h-2.5 rounded-full bg-transparent border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(1)"></button>
+      <button class="dot w-2.5 h-2.5 rounded-full bg-transparent border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(2)"></button>
+      <button class="dot w-2.5 h-2.5 rounded-full bg-transparent border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(3)"></button>
+    </div>
+  </div>
+
+  <!-- Meta bar -->
+  <div class="flex items-center gap-2 px-3.5 py-2.5 bg-white border-t border-gray-200">
+    <span class="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></span>
+    <span class="text-xs text-gray-500">ocw.mit.edu</span>
+    <span class="ml-auto text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded border border-gray-200">Course</span>
+    <button class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded border-0 cursor-pointer transition-colors">&#8599; Open</button>
+  </div>
+</div>

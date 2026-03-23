@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Api
+  commentId: N:TwitterEdu.Api
+  id: TwitterEdu.Api
+  children:
+  - TwitterEdu.Api.Program
+  - TwitterEdu.Api.WeatherForecast
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Api
+  nameWithType: TwitterEdu.Api
+  fullName: TwitterEdu.Api
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Api
+references:
+- uid: TwitterEdu.Api.Program
+  commentId: T:TwitterEdu.Api.Program
+  href: TwitterEdu.Api.Program.html
+  name: Program
+  nameWithType: Program
+  fullName: TwitterEdu.Api.Program
+- uid: TwitterEdu.Api.WeatherForecast
+  commentId: T:TwitterEdu.Api.WeatherForecast
+  href: TwitterEdu.Api.WeatherForecast.html
+  name: WeatherForecast
+  nameWithType: WeatherForecast
+  fullName: TwitterEdu.Api.WeatherForecast
