@@ -1,0 +1,65 @@
+<div class="flex w-full h-150">
+  <img class="grayscale brightness-40 h-full w-1/2 object-cover" src="./img/authbanner.jpg" alt="registration banner">
+
+  <div class="flex flex-col w-1/2 h-full items-center justify-center text-center">
+    <h1 i18n class="text-4xl md:text-5xl font-bold m-3">Log In</h1>
+
+    <form class="w-2/3 flex flex-col justify-center items-center" [formGroup]="form" (ngSubmit)="onSubmit()">
+      
+      <app-textfield 
+        label="Email"
+        i18n-label 
+        type="email" 
+        placeholder="Write here..." 
+        i18n-placeholder
+        formControlName="email">
+      </app-textfield>
+
+      <app-textfield 
+        label="Password" 
+        i18n-label
+        type="password" 
+        placeholder="Write here..." 
+        i18n-placeholder 
+        formControlName="password">
+      </app-textfield>
+
+      <div id="turnstile-container" class="flex flex-col w-fit max-w-240 relative mt-4"></div>
+
+      <div class="w-70 text-right mt-1">
+        <a
+          i18n
+          routerLink="/forgot-password"
+          class="text-sm text-slate-600 hover:text-slate-900 cursor-pointer"
+        >
+          Forgot password?
+        </a>
+      </div>
+
+      <div class="w-70 text-left mt-2">
+        @if (loginFailed) {
+          <div i18n class="text-xs text-red-700">Invalid email or password. Please try again.</div>
+        }
+
+        @if (captchaFailed) {
+          <div i18n class="text-xs text-red-700">Please complete the security check.</div>
+        }
+
+        @if (generalError) {
+          <div i18n class="text-xs text-red-700">Something went wrong. Please check your connection and try again.</div>
+        }
+      </div>
+      
+      <ui-button 
+        i18n
+        class="w-70 mt-4"
+        [fullWidth]="true"
+        type="submit"
+        variant="primary"
+        [loading]="isSubmitting"
+        [disabled]="isSubmitting">
+        Log In
+      </ui-button>
+    </form>
+  </div>
+</div>

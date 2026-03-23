@@ -1,0 +1,16 @@
+<div class="hidden md:flex items-center space-x-2 relative flex items-center justify-center">
+    <app-dropdown [items]="languageItems">
+
+        <!-- Trigger button passed via content projection -->
+        <button
+        dropdown-button
+        aria-label="Select language"
+        class="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors duration-150 border-none bg-transparent cursor-pointer"
+        >
+        <i class="fa-solid fa-globe text-[15px]"></i>
+        <span class="tracking-wide">{{ currentLang }}</span>
+        <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
+        </button>
+
+    </app-dropdown>
+</div>

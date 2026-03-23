@@ -1,0 +1,70 @@
+<div class="flex items-center px-8 py-4 border-b border-slate-100">
+
+    <!-- Checkbox (w-10) -->
+    <div class="w-10 flex items-center">
+        <app-checkbox 
+            [(ngModel)]="selected" 
+            (ngModelChange)="onCheckboxChange($event)">
+        </app-checkbox>
+    </div>
+
+    <!-- Filter (flex-1) -->
+    <div class="flex-1 flex items-center gap-3">
+        <div cdkDragHandle class="text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+            </svg>
+        </div>
+        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+        [style.background]="getFilterGradient(filter.key)">
+            # {{ index + 1 }}
+        </div>
+        <div>
+            <div class="text-sm font-semibold text-slate-900">  {{ filter.label }}   </div>
+            <div class="text-xs text-slate-500 mt-0.5">   {{ filter.description }}   </div>
+        </div>
+    </div>
+
+    <!-- Type (w-32) -->
+    <div class="w-32">
+        <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-md border border-blue-200">
+            {{ filter.kind }}
+        </span>
+    </div>
+
+    <!-- Resources (w-40) -->
+    <div class="w-40">
+        <span class="text-sm font-mono font-medium text-slate-700">   {{ filter.resourceCount }}   </span>
+        <span i18n class="text-xs text-slate-400 ml-1">resources</span>
+    </div>
+
+    <!-- Last Updated (w-28) -->
+    <div class="w-28">
+        <span i18n class="text-xs text-slate-500">   {{ filter.lastChangeAt | date: 'dd.MM.yyyy HH:mm' }}   </span>
+    </div>
+
+    <!-- Status (w-28) -->
+    <div class="w-28 flex items-center">
+        @if (filter.isActive) {
+            <span class="status-dot active"></span>
+            <span i18n class="text-xs font-medium text-emerald-600">Enabled</span>
+        } @else {
+            <span class="status-dot banned"></span>
+            <span i18n class="text-xs font-medium text-red-600">Disabled</span>
+        }
+    </div>
+
+    <!-- Actions (w-20) -->
+    <div class="w-20 flex justify-end">
+        <div class="relative">
+            <app-dropdown [items]="filterMenuItems">
+                <button dropdown-button class="p-2 hover:bg-slate-100 rounded-lg transition-all cursor-pointer">
+                    <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </button>
+            </app-dropdown>
+        </div>
+    </div>
+
+</div>

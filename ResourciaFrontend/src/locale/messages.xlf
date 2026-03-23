@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="8204176479746810612" datatype="html">
+        <source>Active</source>
+      </trans-unit>
+      <trans-unit id="8263222204376688538" datatype="html">
+        <source>We&apos;ve sent a confirmation link to <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;font-semibold text-blue-600&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{form.getRawValue().email}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</source>
+      </trans-unit>
+      <trans-unit id="8282940047848889809" datatype="html">
+        <source>Paid</source>
+      </trans-unit>
+      <trans-unit id="8317457230285174180" datatype="html">
+        <source>Course</source>
+      </trans-unit>
+      <trans-unit id="8321701170052036262" datatype="html">
+        <source>Computer Science</source>
+      </trans-unit>
+      <trans-unit id="8439955599488894226" datatype="html">
+        <source>Privacy Policy</source>
+      </trans-unit>
+      <trans-unit id="8503844425712078687" datatype="html">
+        <source> By signing up you agree with our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/tos&quot; class=&quot;text-blue-600&quot;&gt;"/>Terms of Service<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> and <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/privacy-policy&quot; class=&quot;text-blue-600&quot;&gt;"/>Privacy Policy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+      </trans-unit>
+      <trans-unit id="8513655220963070365" datatype="html">
+        <source>Resourcia is built for every stage of the learning journey. Teachers can quickly find trusted materials for their lessons, students can explore topics in ways that match their learning style, and lifelong learners can easily discover resources to fuel their curiosity. We don’t believe that age, experience, or background should filter what resources you can access. High-quality education should be open to everyone. No matter your stage or subject area, Resourcia adapts to your needs, making learning truly accessible and empowering for all.</source>
+      </trans-unit>
+      <trans-unit id="8520023152129279437" datatype="html">
+        <source>Log In</source>
+      </trans-unit>
+      <trans-unit id="8542568275115626925" datatype="html">
+        <source>7 days</source>
+      </trans-unit>
+      <trans-unit id="8583750011528095760" datatype="html">
+        <source>Something went wrong, please try again.</source>
+      </trans-unit>
+      <trans-unit id="8602814243662345124" datatype="html">
+        <source>Email is required.</source>
+      </trans-unit>
+      <trans-unit id="8650499415827640724" datatype="html">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="867108466740792122" datatype="html">
+        <source>3 days</source>
+      </trans-unit>
+      <trans-unit id="8829497237648100098" datatype="html">
+        <source>Filter</source>
+      </trans-unit>
+      <trans-unit id="8846152112880379759" datatype="html">
+        <source>Resourcia is a web app designed to make self-study simple and effective. We carefully curate, organize, and surface the best educational resources across subjects and formats, so students can discover tools that truly help them learn. Each resource can be reviewed and rated by learners, giving honest feedback on quality, clarity, and usefulness. By combining expert curation with community insights, Resourcia helps students focus on learning, not searching, while providing a trusted space to explore, compare, and track the resources that work best for them.</source>
+      </trans-unit>
+      <trans-unit id="8854094932942190741" datatype="html">
+        <source>Search...</source>
+      </trans-unit>
+      <trans-unit id="8890235691785177417" datatype="html">
+        <source>Resend availabe in <x id="PH" equiv-text="remaining"/>s</source>
+      </trans-unit>
+      <trans-unit id="8898253667808677314" datatype="html">
+        <source>Hide Filters</source>
+      </trans-unit>
+      <trans-unit id="9065077585315617861" datatype="html">
+        <source> Takes ~2 minutes, optional steps 2 and 3 included. </source>
+      </trans-unit>
+      <trans-unit id="9071136567941728887" datatype="html">
+        <source>Find the best educational resources</source>
+      </trans-unit>
+      <trans-unit id="9212705249340904752" datatype="html">
+        <source>Explore</source>
+      </trans-unit>
+      <trans-unit id="962765493084218985" datatype="html">
+        <source>Platform</source>
+      </trans-unit>
+      <trans-unit id="708953438682753113" datatype="html">
+        <source>Write here...</source>
+      </trans-unit>
+      <trans-unit id="auth.url.label" datatype="html">
+        <source>https://example.com</source>
+      </trans-unit>
+      <trans-unit id="auth.username.placeholder" datatype="html">
+        <source>Write here...</source>
+      </trans-unit>
+      <trans-unit id="search.filter.placeholder" datatype="html">
+        <source>Type <x id="label" equiv-text="filterLabel"/>...</source>
+      </trans-unit>
+      <trans-unit id="1069523139277190436" datatype="html">
+        <source>Statistics</source>
+      </trans-unit>
+      <trans-unit id="1159335396492148090" datatype="html">
+        <source>Click &quot;Add Filter&quot; to create your first filter</source>
+      </trans-unit>
+      <trans-unit id="12427097120220944" datatype="html">
+        <source> Contact Support </source>
+      </trans-unit>
+      <trans-unit id="1244224947815328245" datatype="html">
+        <source>No filters yet</source>
+      </trans-unit>
+      <trans-unit id="1273085613322319601" datatype="html">
+        <source>Built for every stage</source>
+      </trans-unit>
+      <trans-unit id="140822705245800362" datatype="html">
+        <source>Username:</source>
+      </trans-unit>
+      <trans-unit id="1431416938026210429" datatype="html">
+        <source>Password</source>
+      </trans-unit>
+      <trans-unit id="1457176267014264051" datatype="html">
+        <source>Password must be between 8-32 characters long contain a capital character, a digit and a special character.</source>
+      </trans-unit>
+      <trans-unit id="1464368773882542965" datatype="html">
+        <source>Not your email? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot; class=&quot;underline hover:text-gray-700&quot;&gt;"/>Start over<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+      </trans-unit>
+      <trans-unit id="1466012768716286509" datatype="html">
+        <source>Sign Up</source>
+      </trans-unit>
+      <trans-unit id="1548909732092314000" datatype="html">
+        <source> Duration: </source>
+      </trans-unit>
+      <trans-unit id="1631914994548716663" datatype="html">
+        <source>Our Vision</source>
+      </trans-unit>
+      <trans-unit id="1664620352147673062" datatype="html">
+        <source>Resource</source>
+      </trans-unit>
+      <trans-unit id="1801200153332177409" datatype="html">
+        <source>Subject/Category</source>
+      </trans-unit>
+      <trans-unit id="186236568870281953" datatype="html">
+        <source>History</source>
+      </trans-unit>
+      <trans-unit id="1875562647884043228" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ restoreDate | date:&apos;long&apos; }}"/> UTC </source>
+      </trans-unit>
+      <trans-unit id="1895548238835206596" datatype="html">
+        <source>We&apos;ve already done</source>
+      </trans-unit>
+      <trans-unit id="1921475036050961903" datatype="html">
+        <source>The internet has become the backbone of modern education, connecting learners to an unprecedented wealth of information and tools. From online courses and interactive simulations to research databases and collaborative platforms, it enables learning anytime, anywhere. Yet despite this potential, finding the right resources remains surprisingly difficult. Students, teachers, and lifelong learners often spend hours sifting through unreliable, outdated, or overly complex materials. The sheer volume of options can be overwhelming, and without clear guidance, quality resources are easily overlooked. Learning should&apos;t depend on luck but too often, it does.</source>
+      </trans-unit>
+      <trans-unit id="2029980907058777630" datatype="html">
+        <source>Terms of Service</source>
+      </trans-unit>
+      <trans-unit id="208165447659191705" datatype="html">
+        <source>To keep your account secure, please confirm this is really your email address.</source>
+      </trans-unit>
+      <trans-unit id="2098854094875927534" datatype="html">
+        <source>Most relevant</source>
+      </trans-unit>
+      <trans-unit id="2188382734394232436" datatype="html">
+        <source> Reason cannot exceed 500 characters. </source>
+      </trans-unit>
+      <trans-unit id="2208470357010362503" datatype="html">
+        <source> This resource hasn&apos;t been <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-blue-600&quot;&gt;"/>indexed<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> yet. </source>
+      </trans-unit>
+      <trans-unit id="2303489635985691360" datatype="html">
+        <source>Clear all</source>
+      </trans-unit>
+      <trans-unit id="2308448233915687695" datatype="html">
+        <source> Didn&apos;t receive the email? Check your spam folder or try again. </source>
+      </trans-unit>
+      <trans-unit id="2330577642930707695" datatype="html">
+        <source> Cancel </source>
+      </trans-unit>
+      <trans-unit id="2375260419993138758" datatype="html">
+        <source>URL</source>
+      </trans-unit>
+      <trans-unit id="2392488717875840729" datatype="html">
+        <source>User</source>
+      </trans-unit>
+      <trans-unit id="2446117790692479672" datatype="html">
+        <source>Resources</source>
+      </trans-unit>
+      <trans-unit id="2501489806101473286" datatype="html">
+        <source>About us</source>
+      </trans-unit>
+      <trans-unit id="2561326148159407958" datatype="html">
+        <source>Passwords must match.</source>
+      </trans-unit>
+      <trans-unit id="2790219900662105495" datatype="html">
+        <source>Confirm password is required.</source>
+      </trans-unit>
+      <trans-unit id="2813299572202729186" datatype="html">
+        <source>Manage <x id="INTERPOLATION" equiv-text="{{ title }}"/></source>
+      </trans-unit>
+      <trans-unit id="2826788648324810510" datatype="html">
+        <source>Biology</source>
+      </trans-unit>
+      <trans-unit id="2837248686284270505" datatype="html">
+        <source>Please enter a valid email.</source>
+      </trans-unit>
+      <trans-unit id="2880983087661811596" datatype="html">
+        <source>TYPE</source>
+      </trans-unit>
+      <trans-unit id="2892549239455098917" datatype="html">
+        <source>Access to great learning</source>
+      </trans-unit>
+      <trans-unit id="2932360890997178383" datatype="html">
+        <source>Tool</source>
+      </trans-unit>
+      <trans-unit id="293582012885110379" datatype="html">
+        <source>The internet is full of options</source>
+      </trans-unit>
+      <trans-unit id="2999492056553212422" datatype="html">
+        <source>Banned</source>
+      </trans-unit>
+      <trans-unit id="3024491551621724056" datatype="html">
+        <source> Showing <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>132 results<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+      </trans-unit>
+      <trans-unit id="3069717502638610682" datatype="html">
+        <source>matej.hladecek@gmail.com</source>
+      </trans-unit>
+      <trans-unit id="3080099711511142058" datatype="html">
+        <source>Math</source>
+      </trans-unit>
+      <trans-unit id="3176435734033906593" datatype="html">
+        <source>Last Active</source>
+      </trans-unit>
+      <trans-unit id="3184700926171002527" datatype="html">
+        <source>Any</source>
+      </trans-unit>
+      <trans-unit id="3209200380904535911" datatype="html">
+        <source><x id="START_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;svg class=&quot;w-4 h-4&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;"/><x id="START_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M10 19l-7-7m0 0l7-7m-7 7h18&quot;/&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M10 19l-7-7m0 0l7-7m-7 7h18&quot;/&gt;"/><x id="CLOSE_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;/svg&gt;"/> Return to Library </source>
+      </trans-unit>
+      <trans-unit id="3210018355783433704" datatype="html">
+        <source>Resend Email</source>
+      </trans-unit>
+      <trans-unit id="3210795519710879765" datatype="html">
+        <source>Add Resource</source>
+      </trans-unit>
+      <trans-unit id="324236757864861151" datatype="html">
+        <source>Resources Shared</source>
+      </trans-unit>
+      <trans-unit id="3329852400672140411" datatype="html">
+        <source>but not enough answers.</source>
+      </trans-unit>
+      <trans-unit id="335271258289187682" datatype="html">
+        <source>Highest rated</source>
+      </trans-unit>
+      <trans-unit id="3359060044402768503" datatype="html">
+        <source>should be universal.</source>
+      </trans-unit>
+      <trans-unit id="3410748411231318193" datatype="html">
+        <source>Something went wrong. Please check your connection and try again.</source>
+      </trans-unit>
+      <trans-unit id="3432612539889601109" datatype="html">
+        <source><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;nav-link hidden md:inline-block px-4 py-2 text-blue-600 font-medium rounded-full hover:bg-blue-50 cursor-pointer&quot;&gt;"/> Sign Up <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
+      </trans-unit>
+      <trans-unit id="3450194029516333840" datatype="html">
+        <source>(Optional)</source>
+      </trans-unit>
+      <trans-unit id="3493126540529865490" datatype="html">
+        <source>Submitting...</source>
+      </trans-unit>
+      <trans-unit id="3508259559175923358" datatype="html">
+        <source>Is this your email?</source>
+      </trans-unit>
+      <trans-unit id="3514595390002343437" datatype="html">
+        <source>Confirm Your Email</source>
+      </trans-unit>
+      <trans-unit id="3577237269587081090" datatype="html">
+        <source>Password is required.</source>
+      </trans-unit>
+      <trans-unit id="3698631557485186521" datatype="html">
+        <source>The Problem</source>
+      </trans-unit>
+      <trans-unit id="3709675686611012665" datatype="html">
+        <source> Return to Home </source>
+      </trans-unit>
+      <trans-unit id="3797778920049399855" datatype="html">
+        <source>Logout</source>
+      </trans-unit>
+      <trans-unit id="3806217667925936168" datatype="html">
+        <source>14 days</source>
+      </trans-unit>
+      <trans-unit id="3807104224559976092" datatype="html">
+        <source>What We Do</source>
+      </trans-unit>
+      <trans-unit id="3807699453257291879" datatype="html">
+        <source>Comments</source>
+      </trans-unit>
+      <trans-unit id="3932951210180311531" datatype="html">
+        <source>Select a subject...</source>
+      </trans-unit>
+      <trans-unit id="4002166200801232073" datatype="html">
+        <source>resources</source>
+      </trans-unit>
+      <trans-unit id="4052752014353972210" datatype="html">
+        <source><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;nav-link hidden md:inline-block px-4 py-2 text-gray-700 font-medium rounded-full hover:bg-gray-100 cursor-pointer&quot;&gt;"/> Log In <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
+      </trans-unit>
+      <trans-unit id="4089509911694721896" datatype="html">
+        <source>Last Updated</source>
+      </trans-unit>
+      <trans-unit id="4111860649370638583" datatype="html">
+        <source>Worksheet</source>
+      </trans-unit>
+      <trans-unit id="4133776233476495937" datatype="html">
+        <source>Token is old or invalid. Get a new link or start over.</source>
+      </trans-unit>
+      <trans-unit id="4163272119298020373" datatype="html">
+        <source>Filters</source>
+      </trans-unit>
+      <trans-unit id="4166166242155319722" datatype="html">
+        <source> Log In </source>
+      </trans-unit>
+      <trans-unit id="4209525355702493436" datatype="html">
+        <source>Ban</source>
+      </trans-unit>
+      <trans-unit id="4225698434073732761" datatype="html">
+        <source>SUBJECT</source>
+      </trans-unit>
+      <trans-unit id="4249170106165148265" datatype="html">
+        <source> Error 404 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;w-1 h-1 bg-blue-300 rounded-full&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Reference Not Found </source>
+      </trans-unit>
+      <trans-unit id="4280668229876603117" datatype="html">
+        <source>Reason for Suspension</source>
+      </trans-unit>
+      <trans-unit id="4331636419103456800" datatype="html">
+        <source>Done!</source>
+      </trans-unit>
+      <trans-unit id="4371461888731062970" datatype="html">
+        <source>Share Your First Resource</source>
+      </trans-unit>
+      <trans-unit id="4374801611150015478" datatype="html">
+        <source> Reason is required. </source>
+      </trans-unit>
+      <trans-unit id="4385810869031627660" datatype="html">
+        <source>Please complete the security check.</source>
+      </trans-unit>
+      <trans-unit id="4451482225013335720" datatype="html">
+        <source>Unban</source>
+      </trans-unit>
+      <trans-unit id="4506803456670769268" datatype="html">
+        <source>Admins</source>
+      </trans-unit>
+      <trans-unit id="4526674489857624502" datatype="html">
+        <source>Freemium</source>
+      </trans-unit>
+      <trans-unit id="4555457172864212828" datatype="html">
+        <source>Users</source>
+      </trans-unit>
+      <trans-unit id="4567885301549754909" datatype="html">
+        <source>Most popular</source>
+      </trans-unit>
+      <trans-unit id="4580988005648117665" datatype="html">
+        <source>Search</source>
+      </trans-unit>
+      <trans-unit id="4629526394850806125" datatype="html">
+        <source>Suspension Type</source>
+      </trans-unit>
+      <trans-unit id="4666200624274789136" datatype="html">
+        <source>+420 603 110 731</source>
+      </trans-unit>
+      <trans-unit id="4733354081523899908" datatype="html">
+        <source>of the learning journey.</source>
+      </trans-unit>
+      <trans-unit id="4754562463026932290" datatype="html">
+        <source>Choose a subject to get started</source>
+      </trans-unit>
+      <trans-unit id="4768749765465246664" datatype="html">
+        <source>Email</source>
+      </trans-unit>
+      <trans-unit id="4776429682428363094" datatype="html">
+        <source>1 day</source>
+      </trans-unit>
+      <trans-unit id="4816216590591222133" datatype="html">
+        <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="4915431133669985304" datatype="html">
+        <source>Profile</source>
+      </trans-unit>
+      <trans-unit id="4930506384627295710" datatype="html">
+        <source>Settings</source>
+      </trans-unit>
+      <trans-unit id="5016134182721426672" datatype="html">
+        <source>A curated directory of educational tools for students and teachers — filtered for quality, designed for discovery.</source>
+      </trans-unit>
+      <trans-unit id="5041354590769758251" datatype="html">
+        <source>Admin</source>
+      </trans-unit>
+      <trans-unit id="5049405187673977453" datatype="html">
+        <source> If you believe this was an error, contact us.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br&gt;"/> We’re here to help! </source>
+      </trans-unit>
+      <trans-unit id="5168078127143786156" datatype="html">
+        <source>the homework for you.</source>
+      </trans-unit>
+      <trans-unit id="5246133715690926564" datatype="html">
+        <source>Confirm password:</source>
+      </trans-unit>
+      <trans-unit id="5423991647761194551" datatype="html">
+        <source>Newest</source>
+      </trans-unit>
+      <trans-unit id="5457506297824286452" datatype="html">
+        <source>Study Groups</source>
+      </trans-unit>
+      <trans-unit id="5584739308831837357" datatype="html">
+        <source>Join Us</source>
+      </trans-unit>
+      <trans-unit id="5611592591303869712" datatype="html">
+        <source>Status</source>
+      </trans-unit>
+      <trans-unit id="5748395236355383695" datatype="html">
+        <source>Suspend</source>
+      </trans-unit>
+      <trans-unit id="5769292297914455214" datatype="html">
+        <source>Disabled</source>
+      </trans-unit>
+      <trans-unit id="5815829224810161876" datatype="html">
+        <source>PRICE</source>
+      </trans-unit>
+      <trans-unit id="5848175728990316475" datatype="html">
+        <source>Education is a fundamental human right, recognized by the United Nations, yet millions of children still lack access to quality learning opportunities. The internet has become the frontier to change that, offering a way to reach underprivileged students with the resources they need to learn, grow, and succeed. Resourcia is built on the principle of mutual help: it is open-source, powered by community contributions, and driven by learners and educators who share the resources they find valuable. Every resource gathered by users is freely available to anyone, ensuring that high-quality education remains open to all. We don’t believe that age, experience, or background should limit access. Resourcia harnesses the power of the web and the community to make learning truly inclusive, collaborative, and free.&apos;</source>
+      </trans-unit>
+      <trans-unit id="5851424994801012357" datatype="html">
+        <source>Suspended</source>
+      </trans-unit>
+      <trans-unit id="5878066012610207427" datatype="html">
+        <source> Even the most thorough researchers hit a dead end. This page may have been moved, removed, or never catalogued in the first place. </source>
+      </trans-unit>
+      <trans-unit id="5891064527381218201" datatype="html">
+        <source>Free</source>
+      </trans-unit>
+      <trans-unit id="6004007578668626375" datatype="html">
+        <source>Browse Resources</source>
+      </trans-unit>
+      <trans-unit id="6024273055384648719" datatype="html">
+        <source>Invalid email or password. Please try again.</source>
+      </trans-unit>
+      <trans-unit id="6241082162904507148" datatype="html">
+        <source>Unsuspend</source>
+      </trans-unit>
+      <trans-unit id="6249484391846924804" datatype="html">
+        <source> Confirm </source>
+      </trans-unit>
+      <trans-unit id="6422077907353879316" datatype="html">
+        <source>Check your email!</source>
+      </trans-unit>
+      <trans-unit id="6514445594387498794" datatype="html">
+        <source>© 2026 Matěj Hladeček. All rights reserved.</source>
+      </trans-unit>
+      <trans-unit id="6549265851868599441" datatype="html">
+        <source>Video</source>
+      </trans-unit>
+      <trans-unit id="6631334172623029500" datatype="html">
+        <source>Email:</source>
+      </trans-unit>
+      <trans-unit id="663577223642925936" datatype="html">
+        <source> Account Access Restricted </source>
+      </trans-unit>
+      <trans-unit id="6749926724874923101" datatype="html">
+        <source>View Profile</source>
+      </trans-unit>
+      <trans-unit id="6865009229971482891" datatype="html">
+        <source>Password:</source>
+      </trans-unit>
+      <trans-unit id="6945090506337625182" datatype="html">
+        <source>Resource name</source>
+      </trans-unit>
+      <trans-unit id="7039900092504659742" datatype="html">
+        <source>Any type</source>
+      </trans-unit>
+      <trans-unit id="7108192071004291695" datatype="html">
+        <source>Who It&apos;s For</source>
+      </trans-unit>
+      <trans-unit id="7152095234138763013" datatype="html">
+        <source>30 days</source>
+      </trans-unit>
+      <trans-unit id="7394283812317210887" datatype="html">
+        <source> Submitting... </source>
+      </trans-unit>
+      <trans-unit id="7458179918460040359" datatype="html">
+        <source>Access Restored On</source>
+      </trans-unit>
+      <trans-unit id="7626225995581843339" datatype="html">
+        <source>Username is already in use.</source>
+      </trans-unit>
+      <trans-unit id="763970338207090986" datatype="html">
+        <source>Email is already in use.</source>
+      </trans-unit>
+      <trans-unit id="7699436363216621857" datatype="html">
+        <source>Legal &amp; Contact</source>
+      </trans-unit>
+      <trans-unit id="7708270344948043036" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ isSuspend ? &apos;Suspend User&apos; : &apos;Ban User&apos; }}"/> </source>
+      </trans-unit>
+      <trans-unit id="7997530211722162813" datatype="html">
+        <source>Thousands of curated tools for students and teachers</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,192 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TableRowBase } from '../../components/table-row-base';
+import { AdminUser } from '../../models/admin-user.model';
+import { Router, RouterLink, RouterModule } from '@angular/router';
+import { DropdownComponent, DropdownItem } from '../../../../shared/ui/dropdown/dropdown.component';
+import { NgStyle } from '@angular/common';
+import { ReasonModalComponent } from '../../components/reason-modal/reason-modal.component';
+import { AdminService } from '../../../../core/services/admin.service';
+import { CheckboxComponent } from '../../../../shared/ui/checkbox/checkbox.component';
+import { FormsModule } from '@angular/forms';
+
+
+@Component({
+  selector: 'app-user-row',
+  imports: [ RouterLink, DropdownComponent, CheckboxComponent, NgStyle, ReasonModalComponent, FormsModule ],
+  standalone: true,
+  templateUrl: './user-row.component.html',
+  styleUrl: './user-row.component.scss'
+})
+export class UserRowComponent extends TableRowBase {
+  @Input({ required: true }) user!: AdminUser;
+  @Input() selected = false;
+
+  @Output() toggle = new EventEmitter<{ id: string; checked: boolean }>();
+
+  modal: { type: 'suspend' | 'ban'; user: any } | null = null;
+
+  constructor(private router: Router, private adminService: AdminService) {
+    super()
+  }
+
+  get userMenuItems(): DropdownItem[] {
+  const items: DropdownItem[] = [
+    {
+      type: 'action',
+      label: $localize`View Profile`,
+      action: () => this.viewUser()
+    },
+    {
+      type: 'divider'
+    }
+  ];
+
+  if (this.user.status === 'active') {
+    items.push(
+      {
+        type: 'action',
+        label: $localize`Suspend`,
+        action: () => this.suspendUser(),
+        danger: true
+      },
+      {
+        type: 'action',
+        label: $localize`Ban`,
+        action: () => this.banUser(),
+        danger: true
+      },
+    );
+  }
+  else if (this.user.status === 'suspended') {
+    items.push(
+      {
+        type: 'action',
+        label: $localize`Unsuspend`,
+        action: () => this.unsuspendUser(),
+        danger: true
+      },
+      {
+        type: 'action',
+        label: $localize`Ban`,
+        action: () => this.banUser(),
+        danger: true
+      },
+    );
+  }
+  else {
+    items.push(
+      {
+        type: 'action',
+        label: $localize`Unban`,
+        action: () => this.unbanUser(),
+        danger: true
+      },
+    );
+  }
+    return items;
+  }
+
+  viewUser() {
+    let username = this.user.name;
+    console.log(this.user)
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`../../profile/${username}`])
+    );
+    window.open(url, '_blank');
+  }
+
+  suspendUser() {
+    this.openModal('suspend', this.user);
+  }
+
+  unsuspendUser() {
+    this.adminService.unsuspendUser(this.user.id).subscribe(() => {
+      console.log('User unsuspended');
+      this.user.status = 'active';
+    });
+  }
+
+  banUser() {
+    this.openModal('ban', this.user);
+  }
+
+  unbanUser() {
+    this.adminService.unbanUser(this.user.id).subscribe(() => {
+      console.log('User unbanned');
+      this.user.status = 'active';
+    });
+  }
+
+  openModal(type: 'suspend' | 'ban', user: any) {
+    this.modal = { type, user };
+  }
+
+  handleConfirm(data: { reason: string; durationDays?: number }) {
+    if (!this.modal) return;
+
+    const { type, user } = this.modal;
+
+    console.log(data)
+
+    if (type === 'suspend') {
+      this.adminService.suspendUser(user.id, data).subscribe({
+        next: () => {
+          console.log('User suspended');
+          this.user.status = 'suspended';
+        },
+        error: (error) => {
+          console.error('Failed to suspend user', error);
+        }
+      }
+      );
+    }
+    else {
+      this.adminService.banUser(user.id, data).subscribe(() => {
+        console.log('User banned');
+        this.user.status = 'banned';
+      });
+    }
+
+    this.modal = null;
+
+  }
+
+  closeModal() {
+    this.modal = null;
+  }
+
+  getInitials(name: string): string {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  hashString(str: string): number {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    return Math.abs(hash);
+  }
+
+  getUserGradient(seed: string): string {
+    const hash = this.hashString(seed);
+
+    const hue1 = hash % 360;
+    const hue2 = (hue1 + 40) % 360; // small shift for gradient
+
+    return `linear-gradient(135deg, 
+      hsl(${hue1}, 70%, 55%), 
+      hsl(${hue2}, 70%, 45%)
+    )`;
+  }
+
+  onCheckboxChange(ev: Event) {
+    this.toggle.emit({ id: this.user.id, checked: this.getChecked(ev) });
+  }
+}

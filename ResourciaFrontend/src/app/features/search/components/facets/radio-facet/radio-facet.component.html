@@ -1,0 +1,11 @@
+<div role="radiogroup" [attr.aria-label]="label">
+    @for (opt of options; track $index) {
+        <app-radio
+            [label]="opt.label"
+            [value]="opt.value"
+            [selected]="selected === opt.value"
+            [disabled]="opt.disabled ?? false"
+            (select)="onSelect($event)"
+        />
+    }
+</div>

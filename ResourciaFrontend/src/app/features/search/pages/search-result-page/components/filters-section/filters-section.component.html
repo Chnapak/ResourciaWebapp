@@ -1,0 +1,94 @@
+<div class="mb-[24px] pb-[24px] border-b border-gray-300">
+  <div
+    class="flex justify-between items-center cursor-pointer select-none hover:text-blue-400"
+    (click)="toggle.emit()"
+  >
+    <label class="cursor-pointer">{{ filter.label }}</label>
+    <span class="text-[18px]">
+      @if (collapsed) {
+        +
+      } @else {
+        -
+      }
+    </span>
+  </div>
+
+  @if (!collapsed) {
+    @if (filter.kind == FilterKind.Facet) {
+      <div class="mt-4">
+        @if (filter.values.length > 10) {
+
+          @if (filter.multi) {
+            <app-searchable-multi-facet
+              [options]="filter.values"
+              [selected]="facetStateAsMulti(facetState)"
+              (selectedChange)="onFacetSelect($event)"
+            />
+          } @else {
+            <app-searchable-single-facet
+              [options]="filter.values"
+              [selected]="facetStateAsSingle(facetState)"
+              (selectedChange)="onFacetSelect($event)"
+            />
+
+          }
+
+        } @else {
+
+          @if (filter.multi) {
+            <app-checkbox-facet
+              [options]="filter.values"
+              [selected]="facetStateAsMulti(facetState)"
+              (selectedChange)="onFacetSelect($event)"
+            />
+
+          } @else {
+            <app-radio-facet
+              [options]="filter.values"
+              [selected]="facetStateAsSingle(facetState)"
+              (selectedChange)="onFacetSelect($event)"
+            />
+          }
+
+        }
+      </div>
+    }
+
+    @if (filter.kind == FilterKind.Range) {
+      <div class="mt-4 flex gap-2">
+        <input
+          type="number"
+          class="w-full rounded-[8px] border border-gray-300 px-3 py-2"
+          placeholder="Min"
+          (input)="onRangeChange('min', $event)"
+        />
+        <input
+          type="number"
+          class="w-full rounded-[8px] border border-gray-300 px-3 py-2"
+          placeholder="Max"
+          (input)="onRangeChange('max', $event)"
+        />
+      </div>
+    }
+
+    @if (filter.kind == FilterKind.Boolean) {
+      <div class="mt-4">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" (change)="onBooleanChange($event)" />
+          <span>{{ filter.label }}</span>
+        </label>
+      </div>
+    }
+
+    @if (filter.kind == FilterKind.Text) {
+      <div class="mt-4">
+        <input
+          type="text"
+          class="w-full rounded-[8px] border border-gray-300 px-3 py-2"
+          [placeholder]="getPlaceholder(filter.label)"
+          (input)="onTextChange($event)"
+        />
+      </div>
+    }
+  }
+</div>

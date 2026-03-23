@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Api.Controllers
+  commentId: N:TwitterEdu.Api.Controllers
+  id: TwitterEdu.Api.Controllers
+  children:
+  - TwitterEdu.Api.Controllers.AuthController
+  - TwitterEdu.Api.Controllers.PostController
+  - TwitterEdu.Api.Controllers.WeatherForecastController
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Api.Controllers
+  nameWithType: TwitterEdu.Api.Controllers
+  fullName: TwitterEdu.Api.Controllers
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Api
+references:
+- uid: TwitterEdu.Api.Controllers.AuthController
+  commentId: T:TwitterEdu.Api.Controllers.AuthController
+  href: TwitterEdu.Api.Controllers.AuthController.html
+  name: AuthController
+  nameWithType: AuthController
+  fullName: TwitterEdu.Api.Controllers.AuthController
+- uid: TwitterEdu.Api.Controllers.PostController
+  commentId: T:TwitterEdu.Api.Controllers.PostController
+  href: TwitterEdu.Api.Controllers.PostController.html
+  name: PostController
+  nameWithType: PostController
+  fullName: TwitterEdu.Api.Controllers.PostController
+- uid: TwitterEdu.Api.Controllers.WeatherForecastController
+  commentId: T:TwitterEdu.Api.Controllers.WeatherForecastController
+  href: TwitterEdu.Api.Controllers.WeatherForecastController.html
+  name: WeatherForecastController
+  nameWithType: WeatherForecastController
+  fullName: TwitterEdu.Api.Controllers.WeatherForecastController

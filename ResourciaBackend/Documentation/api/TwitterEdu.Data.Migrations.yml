@@ -1,0 +1,58 @@
+### YamlMime:ManagedReference
+items:
+- uid: TwitterEdu.Data.Migrations
+  commentId: N:TwitterEdu.Data.Migrations
+  id: TwitterEdu.Data.Migrations
+  children:
+  - TwitterEdu.Data.Migrations.CommentsAdded
+  - TwitterEdu.Data.Migrations.ITrackableAdded
+  - TwitterEdu.Data.Migrations.IdentityInit
+  - TwitterEdu.Data.Migrations.Init
+  - TwitterEdu.Data.Migrations.ModifiedAdded
+  - TwitterEdu.Data.Migrations.UserToPostAdded
+  langs:
+  - csharp
+  - vb
+  name: TwitterEdu.Data.Migrations
+  nameWithType: TwitterEdu.Data.Migrations
+  fullName: TwitterEdu.Data.Migrations
+  type: Namespace
+  assemblies:
+  - TwitterEdu.Data
+references:
+- uid: TwitterEdu.Data.Migrations.Init
+  commentId: T:TwitterEdu.Data.Migrations.Init
+  href: TwitterEdu.Data.Migrations.Init.html
+  name: Init
+  nameWithType: Init
+  fullName: TwitterEdu.Data.Migrations.Init
+- uid: TwitterEdu.Data.Migrations.ModifiedAdded
+  commentId: T:TwitterEdu.Data.Migrations.ModifiedAdded
+  href: TwitterEdu.Data.Migrations.ModifiedAdded.html
+  name: ModifiedAdded
+  nameWithType: ModifiedAdded
+  fullName: TwitterEdu.Data.Migrations.ModifiedAdded
+- uid: TwitterEdu.Data.Migrations.IdentityInit
+  commentId: T:TwitterEdu.Data.Migrations.IdentityInit
+  href: TwitterEdu.Data.Migrations.IdentityInit.html
+  name: IdentityInit
+  nameWithType: IdentityInit
+  fullName: TwitterEdu.Data.Migrations.IdentityInit
+- uid: TwitterEdu.Data.Migrations.ITrackableAdded
+  commentId: T:TwitterEdu.Data.Migrations.ITrackableAdded
+  href: TwitterEdu.Data.Migrations.ITrackableAdded.html
+  name: ITrackableAdded
+  nameWithType: ITrackableAdded
+  fullName: TwitterEdu.Data.Migrations.ITrackableAdded
+- uid: TwitterEdu.Data.Migrations.UserToPostAdded
+  commentId: T:TwitterEdu.Data.Migrations.UserToPostAdded
+  href: TwitterEdu.Data.Migrations.UserToPostAdded.html
+  name: UserToPostAdded
+  nameWithType: UserToPostAdded
+  fullName: TwitterEdu.Data.Migrations.UserToPostAdded
+- uid: TwitterEdu.Data.Migrations.CommentsAdded
+  commentId: T:TwitterEdu.Data.Migrations.CommentsAdded
+  href: TwitterEdu.Data.Migrations.CommentsAdded.html
+  name: CommentsAdded
+  nameWithType: CommentsAdded
+  fullName: TwitterEdu.Data.Migrations.CommentsAdded

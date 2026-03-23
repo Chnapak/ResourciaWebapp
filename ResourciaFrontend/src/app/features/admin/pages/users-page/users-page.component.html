@@ -1,0 +1,20 @@
+<div class="bg-white rounded-lg shadow-sm">
+<!-- Users Section -->
+    <app-admin-header [title]="'Users'"></app-admin-header>
+    <app-admin-table
+        [columns]="columns"
+        [selectable]="true"
+        [checked]="allSelected"
+        [indeterminate]="someSelected"
+        (toggleAll)="onToggleAll($event)"
+    >
+        @for (user of users; track $index) {
+            <app-user-row
+                [user]="user"
+                [selected]="selectedIds.has(user.id)"
+                (toggle)="onToggleOne($event.id, $event.checked)"
+            ></app-user-row>
+        }
+    </app-admin-table>
+
+</div>

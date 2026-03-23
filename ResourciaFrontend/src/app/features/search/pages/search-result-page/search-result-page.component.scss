@@ -1,0 +1,49 @@
+.card-title, .card-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.card-description--empty {
+    color: transparent;
+    font-style: italic;
+    transition: color 0.2s;
+}
+
+.resource-card:hover .card-description--empty {
+    color: oklch(0.704 0.04 256.788);
+}
+
+.resource-card:hover .card-description--empty:hover {
+    color: oklch(0.707 0.165 254.624);
+}
+
+.page-btn:hover:not(.active):not(:disabled)
+{
+    border-color: oklch(70% 0.13 264);
+    background: oklch(98% 0.05 264);
+    color: oklch(55% 0.22 264);
+}
+
+.page-btn.active {
+    background: oklch(55% 0.22 264);
+    color: white;
+    border-color: oklch(55% 0.22 264);
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-btn.dots {
+    border: none;
+    background: transparent;
+    cursor: default;
+    color: oklch(60% 0.01 264);
+}
+
+.page-btn.dots:hover {
+    background: transparent;
+    border: none;
+}

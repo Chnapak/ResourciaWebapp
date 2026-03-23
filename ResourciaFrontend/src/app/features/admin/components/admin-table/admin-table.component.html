@@ -1,0 +1,10 @@
+<app-admin-table-header
+        [columns]="columns"
+        [selectable]="selectable"
+        [checked]="checked"
+        [indeterminate]="indeterminate"
+        (toggleAll)="toggleAll.emit($event)"
+></app-admin-table-header>
+<div>
+    <ng-content></ng-content>
+</div>

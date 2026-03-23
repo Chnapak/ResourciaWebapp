@@ -1,0 +1,6 @@
+resourcia-webapp/environment.local.ts
+.env
+**/.env
+node_modules/
+**/node_modules/
+*.zip
