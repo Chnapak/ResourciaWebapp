@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../../environments/environment.development';
 import { TextfieldComponent } from '../../../../shared/ui/textfield/textfield.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
@@ -19,6 +19,7 @@ export class LoginPageComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   
   public readonly siteKey = environment.siteKey;
   
@@ -32,7 +33,7 @@ export class LoginPageComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
   });
-
+  
   ngAfterViewInit() {
     this.renderTurnstile();
   }
@@ -70,7 +71,9 @@ export class LoginPageComponent {
 
     this.authService.login(data).subscribe({
       next: async () => {
-        await this.router.navigate(['/']);
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+        this.router.navigateByUrl(returnUrl);
       },
       error: (error) => {
         this.handleError(error);

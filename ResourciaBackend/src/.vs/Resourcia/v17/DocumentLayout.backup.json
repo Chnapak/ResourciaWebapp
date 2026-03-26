@@ -98,8 +98,7 @@
               "RelativeToolTip": "Resourcia.Data\\Entities\\ReviewVotes.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:56:48.003Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:56:48.003Z"
             },
             {
               "$type": "Document",
@@ -111,8 +110,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\ReviewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:02:06.838Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:02:06.838Z"
             },
             {
               "$type": "Document",
@@ -120,8 +118,8 @@
               "Title": "ResourceController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\ResourceController.cs",
-              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs*",
-              "RelativeToolTip": "Resourcia.Api\\Controllers\\ResourceController.cs*",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
+              "RelativeToolTip": "Resourcia.Api\\Controllers\\ResourceController.cs",
               "ViewState": "AgIAADYCAAAAAAAAAAAqwE0CAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-16T13:00:29.353Z",
@@ -137,8 +135,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\ResourceSearchQueryModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:02:12.592Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:02:12.592Z"
             },
             {
               "$type": "Document",
@@ -150,8 +147,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\CreateReviewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T21:32:36.566Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T21:32:36.566Z"
             },
             {
               "$type": "Document",
@@ -163,8 +159,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Resources\\CreateResourceModel.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T21:39:14.73Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T21:39:14.73Z"
             },
             {
               "$type": "Document",
@@ -176,8 +171,7 @@
               "RelativeToolTip": "Resourcia.Data\\Entities\\Discussions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T19:50:01.938Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T19:50:01.938Z"
             },
             {
               "$type": "Document",
@@ -189,8 +183,7 @@
               "RelativeToolTip": "Resourcia.Api\\appsettings.Development.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-11-21T20:23:31.147Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-21T20:23:31.147Z"
             },
             {
               "$type": "Document",
@@ -202,8 +195,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Filters\\CreateFilterDefinitionModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:02:18.097Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:02:18.097Z"
             },
             {
               "$type": "Document",
@@ -215,8 +207,7 @@
               "RelativeToolTip": "Resourcia.Data\\Entities\\ResourceReview.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:56:48.891Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:56:48.891Z"
             },
             {
               "$type": "Document",
@@ -228,8 +219,7 @@
               "RelativeToolTip": "Resourcia.Data\\Entities\\ResourceRatings.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAzwBMAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:56:49.638Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:56:49.638Z"
             },
             {
               "$type": "Document",
@@ -241,8 +231,7 @@
               "RelativeToolTip": "Resourcia.Data\\AppDbContext.cs",
               "ViewState": "AgIAAFcAAAAAAAAAAAAswGkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T23:05:14.582Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T23:05:14.582Z"
             },
             {
               "$type": "Document",
@@ -254,8 +243,7 @@
               "RelativeToolTip": "Resourcia.Api\\Models\\Filters\\FilterInfoModel.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:02:20.484Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:02:20.484Z"
             },
             {
               "$type": "Document",
@@ -267,8 +255,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\FilterController.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:02:27.658Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:02:27.658Z"
             },
             {
               "$type": "Document",
@@ -280,8 +267,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminFiltersController.cs",
               "ViewState": "AgIAANAAAAAAAAAAAAAwwG4AAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:02:43.093Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:02:43.093Z"
             },
             {
               "$type": "Document",
@@ -293,8 +279,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminUsersController.cs",
               "ViewState": "AgIAAHIAAAAAAAAAAAAMwIAAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:01:43.589Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:01:43.589Z"
             },
             {
               "$type": "Document",
@@ -306,8 +291,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAD0BAAAAAAAAAAAWwEwBAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:01:46.222Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:01:46.222Z"
             },
             {
               "$type": "Document",
@@ -319,8 +303,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\SearchController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:01:41.19Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:01:41.19Z"
             },
             {
               "$type": "Document",
@@ -332,8 +315,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\PostController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:01:36.82Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:01:36.82Z"
             }
           ]
         }
