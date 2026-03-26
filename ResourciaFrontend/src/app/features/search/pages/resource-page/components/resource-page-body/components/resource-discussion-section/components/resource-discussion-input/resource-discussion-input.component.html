@@ -1,0 +1,28 @@
+<div class="flex gap-3 mt-4 items-center">
+
+  <!-- Avatar -->
+  <div
+    class="w-[34px] h-[34px] rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+    [style.background]="gradient"
+  >
+    {{ initials }}
+  </div>
+
+  <!-- Input -->
+  <input
+    [(ngModel)]="text"
+    type="text"
+    class="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-sm outline-none focus:border-blue-500 focus:bg-white transition-all"
+    placeholder="Ask a question or share a tip…"
+    (keydown.enter)="submit()"
+  />
+
+  <!-- Button -->
+  <button
+    (click)="submit()"
+    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg transition-all"
+  >
+    Post
+  </button>
+
+</div>

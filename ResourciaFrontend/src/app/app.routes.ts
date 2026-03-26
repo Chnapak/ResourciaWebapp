@@ -20,6 +20,7 @@ import { SuspensionMessagePageComponent } from './features/auth/pages/suspension
 import { ResetPasswordPageComponent } from './features/auth/pages/reset-password-page/reset-password-page.component';
 import { ForgotPasswordPageComponent } from './features/auth/pages/forgot-password-page/forgot-password-page.component';
 import { ResourcePageComponent } from './features/search/pages/resource-page/resource-page.component';
+import { canActivateGuard } from './core/guards/login.guard';
 
 export const routes: Routes = [
     {
@@ -36,7 +37,7 @@ export const routes: Routes = [
             { path: 'profile/:id', component: ProfilePageComponent, title: 'Profile'},
             { path: 'tos', component: TosPageComponent, title: 'Terms of Service'},
             { path: 'reset-password', component: ResetPasswordPageComponent, title: 'Reset Password'},
-            { path: 'resource/:id', component: ResourcePageComponent },
+            { path: 'resource/:id', component: ResourcePageComponent, canActivate: [canActivateGuard] },
             { path: 'search', component: SearchResultPageComponent, title: 'Resources'},
             { path: 'suspended', component: SuspensionMessagePageComponent, title: 'Account Suspended'},
             { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 
