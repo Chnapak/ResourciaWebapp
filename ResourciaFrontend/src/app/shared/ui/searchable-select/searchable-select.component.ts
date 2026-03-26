@@ -3,7 +3,11 @@ import { Component, EventEmitter, forwardRef, HostListener, Input, Output, Eleme
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export interface SelectOption {
+<<<<<<< HEAD
   value: string;
+=======
+  value: unknown;
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
   label: string;
   badge?: string;
   disabled?: boolean;
@@ -27,7 +31,11 @@ export class SearchableSelectComponent implements ControlValueAccessor {
   @Input() placeholder = 'Search...';
   @Input() disabled = false;
 
+<<<<<<< HEAD
   @Output() valueChange = new EventEmitter<string | null>();
+=======
+  @Output() valueChange = new EventEmitter<unknown>();
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 
   // States
   query = '';
@@ -38,6 +46,7 @@ export class SearchableSelectComponent implements ControlValueAccessor {
   private elRef = inject(ElementRef);
 
   // ControlValueAccessor methods
+<<<<<<< HEAD
   private onChange: (value: string | null) => void = () => {}
   private onTouched: () => void = () => {};
 
@@ -46,6 +55,16 @@ export class SearchableSelectComponent implements ControlValueAccessor {
   }
 
   registerOnChange(fn: (val: string | null) => void): void {
+=======
+  private onChange: (value: unknown) => void = () => {}
+  private onTouched: () => void = () => {};
+
+  writeValue(val: any): void {
+    this.selectedOption = this.options.find(o => o.value === val) ?? null;
+  }
+
+  registerOnChange(fn: (val: unknown) => void): void {
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     this.onChange = fn;
   }
 

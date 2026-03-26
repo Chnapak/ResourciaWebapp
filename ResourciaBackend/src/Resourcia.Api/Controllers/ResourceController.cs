@@ -186,12 +186,17 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
         return Ok(resource);
     }
 
+<<<<<<< HEAD
     [HttpGet("search")]
+=======
+    [HttpGet("/search")] 
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     public async Task<IActionResult> Search(CancellationToken ct)
     {
         var queryParams = Request.Query;
 
         var dbQuery = _dbContext.Set<Resource>()
+<<<<<<< HEAD
             .AsNoTracking()
             .AsQueryable();
 
@@ -212,12 +217,17 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
         {
             pageSize = Math.Min(parsedPageSize, 100); // optional safety limit
         }
+=======
+        .AsNoTracking()
+        .AsQueryable();
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 
         // ----- TEXT SEARCH -----
         if (queryParams.TryGetValue("q", out var qValue))
         {
             var lowerTrimmed = qValue.ToString().Trim().ToLower();
 
+<<<<<<< HEAD
             if (!string.IsNullOrWhiteSpace(lowerTrimmed))
             {
                 dbQuery = dbQuery.Where(r =>
@@ -229,6 +239,16 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
 
         // ----- DYNAMIC FACETS -----
         var reservedKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+=======
+            dbQuery = dbQuery.Where(r =>
+                 r.Title.ToLower().Contains(lowerTrimmed) ||
+                 (r.Description != null && r.Description.ToLower().Contains(lowerTrimmed))
+             );
+        }
+
+        // ----- DYNAMIC FACETS -----
+        var reservedKeys = new HashSet<string>
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
         {
             "q", "page", "pageSize"
         };
@@ -240,6 +260,7 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
                 p => p.Value.ToList()
             );
 
+<<<<<<< HEAD
         foreach (var filter in facetFilters)
         {
             var key = filter.Key;
@@ -287,5 +308,16 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             totalItems,
             totalPages
         });
+=======
+        // facetFilters now contains:
+        // { "subject": ["math"], "difficulty": ["highschool"] }
+
+        // (we'll apply filtering here later)
+
+        var results = await dbQuery.Take(20).ToListAsync(ct);
+
+        return Ok(results);
+
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     }
 }

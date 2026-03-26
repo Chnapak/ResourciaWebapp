@@ -2,5 +2,22 @@ resourcia-webapp/environment.local.ts
 .env
 **/.env
 node_modules/
+<<<<<<< HEAD
 **/node_modules/
 *.zip
+=======
+**/node_modules/
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
+
+# Visual Studio / Rider
+.vs/
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.pdb
+**/*.dll
+**/*.exe
+**/*.cache
+**/*.db
+**/*.json # optional if just config backups

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+=======
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 import { AdminFilter } from '../../models/admin-filter.model';
 import { TableRowBase } from '../../components/table-row-base';
 import { FilterKind } from '../../../../shared/models/filter-kind';
@@ -7,7 +11,10 @@ import { FormsModule } from '@angular/forms';
 import { DropdownComponent, DropdownItem } from '../../../../shared/ui/dropdown/dropdown.component';
 import { DatePipe } from '@angular/common';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
+<<<<<<< HEAD
 import { AdminService } from '../../../../core/services/admin.service';
+=======
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 
 @Component({
   selector: 'app-filter-row',
@@ -17,9 +24,12 @@ import { AdminService } from '../../../../core/services/admin.service';
   styleUrl: './filter-row.component.scss'
 })
 export class FilterRowComponent extends TableRowBase {
+<<<<<<< HEAD
   private readonly filtersService = inject(AdminService);
 
 
+=======
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
   @Input({ required: true }) filter!: AdminFilter;
   @Input() index = 0;
   @Input() selected = false;
@@ -35,6 +45,7 @@ export class FilterRowComponent extends TableRowBase {
 
   FilterKind = FilterKind;
 
+<<<<<<< HEAD
 
 
   editFilter() {
@@ -51,6 +62,14 @@ export class FilterRowComponent extends TableRowBase {
         console.error('Failed to toggle filter', err);
       }
     });
+=======
+  editFilter() {
+    console.log('Edit filter', this.filter);
+  }
+
+  toggleFilter() {
+    console.log('Toggle filter status', this.filter);
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
   }
 
   deleteFilter() {

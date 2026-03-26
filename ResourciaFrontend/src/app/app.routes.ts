@@ -19,7 +19,10 @@ import { ResourcesAdminPageComponent } from './features/admin/pages/resources-pa
 import { SuspensionMessagePageComponent } from './features/auth/pages/suspension-message-page/suspension-message-page.component';
 import { ResetPasswordPageComponent } from './features/auth/pages/reset-password-page/reset-password-page.component';
 import { ForgotPasswordPageComponent } from './features/auth/pages/forgot-password-page/forgot-password-page.component';
+<<<<<<< HEAD
 import { ResourcePageComponent } from './features/search/pages/resource-page/resource-page.component';
+=======
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 
 export const routes: Routes = [
     {
@@ -36,7 +39,10 @@ export const routes: Routes = [
             { path: 'profile/:id', component: ProfilePageComponent, title: 'Profile'},
             { path: 'tos', component: TosPageComponent, title: 'Terms of Service'},
             { path: 'reset-password', component: ResetPasswordPageComponent, title: 'Reset Password'},
+<<<<<<< HEAD
             { path: 'resource/:id', component: ResourcePageComponent },
+=======
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
             { path: 'search', component: SearchResultPageComponent, title: 'Resources'},
             { path: 'suspended', component: SuspensionMessagePageComponent, title: 'Account Suspended'},
             { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 

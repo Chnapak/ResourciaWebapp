@@ -143,7 +143,10 @@ public class Program
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             // optional: ensures DB is up to date in dev
+<<<<<<< HEAD
             
+=======
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
             await db.Database.MigrateAsync();
 
             // Seed only if missing
