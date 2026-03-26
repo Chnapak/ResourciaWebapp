@@ -631,7 +631,37 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("ResourceFacetValues");
                 });
 
-<<<<<<< HEAD
+            modelBuilder.Entity("Resourcia.Data.Entities.ResourceRatings", b =>
+                {
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<float>("AverageRating")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Count1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count2")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count3")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count4")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count5")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TotalCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ResourceId");
+
+                    b.ToTable("ResourceRatings");
+                });
+
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceReview", b =>
                 {
                     b.Property<Guid>("Id")
@@ -826,7 +856,17 @@ namespace Resourcia.Data.Migrations
                     b.Navigation("Resource");
                 });
 
-<<<<<<< HEAD
+            modelBuilder.Entity("Resourcia.Data.Entities.ResourceRatings", b =>
+                {
+                    b.HasOne("Resourcia.Data.Entities.Resource", "Resource")
+                        .WithOne()
+                        .HasForeignKey("Resourcia.Data.Entities.ResourceRatings", "ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+                });
+
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceReview", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.Resource", "Resource")

@@ -56,7 +56,7 @@ export class SearchResultPageComponent implements OnInit {
 
   resources: ResourceDetailModel[] = [];
   currentPage = 1;
-  itemsPerPage = 1;
+  itemsPerPage = 27;
   totalItems = 0;
   totalPages = 0;
 

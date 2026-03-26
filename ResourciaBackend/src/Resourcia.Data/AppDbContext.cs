@@ -34,6 +34,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<ReviewVotes> ReviewsVotes { get; set; }
     public DbSet<Discussions> Discussions { get; set; }
     public DbSet<DiscussionReplies> DiscussionReplies { get; set; }
+    public DbSet<ResourceRatings> ResourceRatings { get; set; }
 
 =======
 >>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
@@ -97,7 +98,13 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
             .WithMany(t => t.Replies)
             .HasForeignKey(r => r.DiscussionId)
             .OnDelete(DeleteBehavior.Cascade);
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
+
+        modelBuilder.Entity<ResourceRatings>()
+        .HasKey(r => r.ResourceId);
+
+        modelBuilder.Entity<ResourceRatings>()
+            .HasOne(r => r.Resource)
+            .WithOne()
+            .HasForeignKey<ResourceRatings>(r => r.ResourceId);
     }
 }

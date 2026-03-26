@@ -1,0 +1,23 @@
+<div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-card">
+    <div class="flex items-center justify-between mb-5">
+    <h2 class="font-display font-bold text-lg">About this Resource</h2>
+    <button (click)="toggleDesc()"
+            class="text-blue-600 font-semibold text-sm flex items-center gap-1 hover:underline hover:cursor-pointer">
+        @if (isExpanded) {
+            Show less ↓
+        } @else {
+            Show more ↓
+        }
+    </button>
+    </div>
+    <p 
+        class="text-gray-500 text-[0.95rem] leading-relaxed"
+        [class.line-clamp-4]="!isExpanded">
+        {{ description }}
+    </p>
+    <div class="flex flex-wrap gap-2 mt-4">
+        @for (chip of chips; track $index) {
+            <app-chip (click)="transferToSearch(chip)" [clickable]="true">{{chip.displayValue}}</app-chip>
+        }
+    </div>
+</div>
