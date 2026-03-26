@@ -5,11 +5,7 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 export interface CheckboxFacetOption {
-<<<<<<< HEAD
   value: string;
-=======
-  value: unknown;
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
   label: string;
   badge?: string;
   disabled?: boolean;
@@ -24,15 +20,9 @@ export interface CheckboxFacetOption {
 export class CheckboxFacetComponent {
   @Input() options: CheckboxFacetOption[] = [];
   @Input() label = '';
-<<<<<<< HEAD
   @Input() selected: string[] = [];
 
   @Output() selectedChange = new EventEmitter<string[]>();
-=======
-  @Input() selected: unknown[] = [];
-
-  @Output() selectedChange = new EventEmitter<unknown[]>();
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 
   formArray = new FormArray<FormControl<boolean>>([]);
   private sub!: Subscription;
