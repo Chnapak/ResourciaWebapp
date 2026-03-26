@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Input, Output, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -167,16 +166,4 @@ export class SearchableMultiSelectComponent implements ControlValueAccessor {
       this.query = '';
     }
   }
-=======
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-searchable-multi-select',
-  imports: [],
-  templateUrl: './searchable-multi-select.component.html',
-  styleUrl: './searchable-multi-select.component.scss',
-})
-export class SearchableMultiSelectComponent {
-
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 }
