@@ -1,0 +1,75 @@
+<div class="flex flex-col w-full relative">
+
+
+  <label
+    [for]="label"
+    class="text-xs font-bold bg-gray-100 relative top-2 ml-2 px-1 w-fit transition-colors z-1"
+    [class.bg-white]="background === 'white'"
+    [class.text-blue-400]="!showError"
+    [class.text-red-500]="showError">
+    {{ label }}:
+  </label>
+
+
+  <textarea
+    #textareaRef
+    [id]="label"
+    class="
+      p-[11px_10px] w-full text-xs border-2 rounded
+      bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-0
+      transition-all resize-y min-h-[90px]
+      disabled:opacity-50 disabled:cursor-not-allowed
+    "
+    [class.bg-white]="background === 'white'"
+    [class.text-gray-400]="!value"
+    [class.text-gray-700]="value"
+    [class.border-blue-400]="!showError"
+    [class.border-red-500]="showError"
+    [class.focus:ring-blue-200]="!showError"
+    [class.focus:ring-red-200]="showError"
+    [class.overflow-hidden]="autoGrow"
+    [class.resize-none]="autoGrow"
+    [attr.maxlength]="maxLength ?? null"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    (input)="updateValue($event)"
+    (blur)="onTouched()"
+  ></textarea>
+
+  <div class="flex justify-between items-start mt-1 w-full">
+
+    @if (showError) {
+      <div class="text-left text-xs text-red-700 flex-1">
+        @if (control?.errors?.['required']) {
+          <span>{{ label }} is required.</span>
+        } @else if (control?.errors?.['minlength']) {
+          <span>
+            {{ label }} must be at least
+            {{ control?.errors?.['minlength']?.requiredLength }} characters
+            (currently {{ control?.errors?.['minlength']?.actualLength }}).
+          </span>
+        } @else if (control?.errors?.['maxlength']) {
+          <span>
+            {{ label }} must be no more than
+            {{ control?.errors?.['maxlength']?.requiredLength }} characters
+            (currently {{ control?.errors?.['maxlength']?.actualLength }}).
+          </span>
+        }
+      </div>
+    } @else {
+      <span class="flex-1"></span>
+    }
+
+    @if (showCharCounter) {
+      <span
+        class="text-xs ml-2 shrink-0 transition-colors"
+        [class.text-gray-400]="!isOverLimit"
+        [class.text-red-500]="isOverLimit">
+        {{ charCount }}{{ maxLength !== null ? ' / ' + maxLength : '' }}
+      </span>
+    }
+
+  </div>
+
+</div>

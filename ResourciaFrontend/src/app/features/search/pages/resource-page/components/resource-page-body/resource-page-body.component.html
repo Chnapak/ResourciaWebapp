@@ -4,307 +4,64 @@
   <div class="flex flex-col gap-7">
  
     <!-- Description Card -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-card">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="font-display font-bold text-lg">About this Resource</h2>
-        <button onclick="toggleDesc(this)"
-                class="text-blue-600 font-semibold text-sm flex items-center gap-1 hover:underline">
-          Show more ↓
-        </button>
-      </div>
-      <p id="desc-text" class="text-gray-500 text-[0.95rem] leading-relaxed line-clamp-4">
-        This is MIT's 18.06 Linear Algebra course, taught by Professor Gilbert Strang — one of the most acclaimed mathematics educators in the world. The course covers the full spectrum of linear algebra topics essential for engineers, scientists, and mathematicians: vector spaces, linear systems, matrix factorizations (LU, QR, SVD), determinants, eigenvalues and eigenvectors, and applications to differential equations, statistics, and machine learning.
-        <br><br>
-        The course materials include 34 lecture videos (each 45–60 min), lecture notes, assignments with solutions, and exams with answer keys. Everything is freely available under MIT's Creative Commons license. The course has been accessed over 10 million times and is considered the gold standard for learning linear algebra online.
-        <br><br>
-        Whether you're a CS student preparing for machine learning, an engineer reviewing fundamentals, or a math enthusiast — this course delivers everything you need with exceptional clarity.
-      </p>
-      <div class="flex flex-wrap gap-2 mt-4">
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Free</span>
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">No Sign-up</span>
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Video Lectures</span>
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Problem Sets</span>
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Exams</span>
-        <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Lecture Notes</span>
-      </div>
-    </div>
- 
+    <app-resource-description-card
+      [description]="description"
+      [chips]="tags"
+    ></app-resource-description-card>
+
     <!-- Ratings & Reviews Card -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-card">
-      <h2 class="font-display font-bold text-lg mb-5">Ratings & Reviews</h2>
- 
-      <!-- Rating Overview -->
-      <div class="grid grid-cols-[auto_1fr] gap-8 items-center">
-        <!-- Score Block -->
-        <div class="text-center bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4">
-          <div class="font-display font-extrabold text-[3.5rem] text-gray-900 leading-none">4.8</div>
-          <div class="flex justify-center gap-1 my-2">
-            <span class="text-amber-400">★</span><span class="text-amber-400">★</span><span class="text-amber-400">★</span><span class="text-amber-400">★</span>
-            <span class="text-amber-400 opacity-40">★</span>
-          </div>
-          <div class="text-xs text-gray-400">2,341 ratings</div>
-          <div class="mt-2 inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-semibold">
-            ✦ Overwhelmingly Positive
-          </div>
-        </div>
- 
-        <!-- Distribution Bars -->
-        <div class="flex flex-col gap-2">
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-gray-400 w-4 text-right">5</span>
-            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div class="bar-fill h-full bg-amber-400 rounded-full" style="width:78%"></div>
-            </div>
-            <span class="text-xs text-gray-400 w-8">1,826</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-gray-400 w-4 text-right">4</span>
-            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div class="bar-fill h-full bg-amber-400 rounded-full" style="width:14%"></div>
-            </div>
-            <span class="text-xs text-gray-400 w-8">327</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-gray-400 w-4 text-right">3</span>
-            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div class="bar-fill h-full bg-amber-400 rounded-full" style="width:5%"></div>
-            </div>
-            <span class="text-xs text-gray-400 w-8">117</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-gray-400 w-4 text-right">2</span>
-            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div class="bar-fill h-full bg-amber-400 rounded-full" style="width:2%"></div>
-            </div>
-            <span class="text-xs text-gray-400 w-8">47</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-gray-400 w-4 text-right">1</span>
-            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div class="bar-fill h-full bg-amber-400 rounded-full" style="width:1%"></div>
-            </div>
-            <span class="text-xs text-gray-400 w-8">24</span>
-          </div>
-        </div>
-      </div>
- 
-      <!-- Rating Input -->
-      <div class="mt-6 bg-gray-50 border border-gray-200 rounded-2xl p-5">
-        <div class="font-semibold text-[0.95rem] mb-3">Rate this resource</div>
-        <div id="amber-400-input" class="flex gap-1 mb-4 cursor-pointer">
-          <span class="amber-400-btn text-[1.75rem] text-gray-300 cursor-pointer select-none" onclick="setRating(1)">★</span>
-          <span class="amber-400-btn text-[1.75rem] text-gray-300 cursor-pointer select-none" onclick="setRating(2)">★</span>
-          <span class="amber-400-btn text-[1.75rem] text-gray-300 cursor-pointer select-none" onclick="setRating(3)">★</span>
-          <span class="amber-400-btn text-[1.75rem] text-gray-300 cursor-pointer select-none" onclick="setRating(4)" >★</span>
-          <span class="amber-400-btn text-[1.75rem] text-gray-300 cursor-pointer select-none" onclick="setRating(5)">★</span>
-        </div>
-        <textarea class="w-full min-h-[80px] p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm resize-y outline-none focus:border-blue-500 transition-colors"
-                  placeholder="Share your experience with this resource (optional)…"></textarea>
-        <button onclick="submitReview()"
-                class="mt-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-lg transition-all">
-          Submit Review
-        </button>
-      </div>
- 
-      <!-- Reviews List Header -->
-      <div class="flex items-center justify-between mt-7 mb-0">
-        <span class="font-semibold text-[0.95rem]">891 Reviews</span>
-        <select class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-900 outline-none cursor-pointer">
-          <option>Most helpful</option>
-          <option>Most recent</option>
-          <option>Highest rated</option>
-          <option>Lowest rated</option>
-        </select>
-      </div>
- 
-      <!-- Review 1 -->
-      <div class="border-t border-gray-200 pt-5 mt-5">
-        <div class="flex items-amber-400t justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-cyan-400 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">AJ</div>
-            <div>
-              <div class="font-semibold text-sm">aleksandra_j</div>
-              <div class="text-xs text-gray-400">March 12, 2025</div>
-            </div>
-          </div>
-          <span class="text-xs text-gray-400">Verified learner</span>
-        </div>
-        <div class="flex gap-0.5 my-2">
-          <span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span>
-        </div>
-        <p class="text-sm text-gray-500 leading-relaxed">
-          This is the best free educational resource I have ever encountered. Professor Strang has a gift for making abstract concepts feel intuitive. I went from struggling with matrices to truly understanding the geometry behind linear transformations. The problem sets are challenging but rewarding.
-        </p>
-        <div class="flex items-center gap-3 mt-3">
-          <button onclick="toggleHelpful(this)" class="helpful-btn flex items-center gap-1.5 text-xs font-medium text-gray-400 border border-gray-200 px-3 py-1.5 rounded-full transition-all hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 active-helpful">
-            👍 Helpful (142)
-          </button>
-          <button onclick="toggleHelpful(this,true)" class="helpful-btn flex items-center gap-1.5 text-xs font-medium text-gray-400 border border-gray-200 px-3 py-1.5 rounded-full transition-all hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50">
-            👎 Not helpful
-          </button>
-        </div>
-      </div>
- 
-      <!-- Review 2 -->
-      <div class="border-t border-gray-200 pt-5 mt-2">
-        <div class="flex items-amber-400t justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">TK</div>
-            <div>
-              <div class="font-semibold text-sm">tomas_k</div>
-              <div class="text-xs text-gray-400">January 8, 2025</div>
-            </div>
-          </div>
-          <span class="text-xs text-gray-400">Verified learner</span>
-        </div>
-        <div class="flex gap-0.5 my-2">
-          <span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-gray-300 text-sm">★</span>
-        </div>
-        <p class="text-sm text-gray-500 leading-relaxed">
-          Great resource overall. The video lectures are superb — Gilbert Strang is one of a kind. I only gave 4 amber-400s because the website can be hard to navigate and some videos have low audio quality. Content-wise, it's a 5/5.
-        </p>
-        <div class="flex items-center gap-3 mt-3">
-          <button onclick="toggleHelpful(this)" class="helpful-btn flex items-center gap-1.5 text-xs font-medium text-gray-400 border border-gray-200 px-3 py-1.5 rounded-full transition-all hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50">
-            👍 Helpful (87)
-          </button>
-          <button onclick="toggleHelpful(this,true)" class="helpful-btn flex items-center gap-1.5 text-xs font-medium text-gray-400 border border-gray-200 px-3 py-1.5 rounded-full transition-all hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50">
-            👎 Not helpful
-          </button>
-        </div>
-      </div>
- 
-      <!-- Review 3 -->
-      <div class="border-t border-gray-200 pt-5 mt-2 border-b pb-5">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">PH</div>
-          <div>
-            <div class="font-semibold text-sm">priya_h</div>
-            <div class="text-xs text-gray-400">November 3, 2024</div>
-          </div>
-        </div>
-        <div class="flex gap-0.5 mb-2">
-          <span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span><span class="text-amber-400 text-sm">★</span>
-        </div>
-        <p class="text-sm text-gray-500 leading-relaxed">
-          Used this to prepare for my ML specialization. The SVD section alone is worth its weight in gold. Free, no sign-up, everything downloadable. Cannot recommend enough.
-        </p>
-        <div class="flex items-center gap-3 mt-3">
-          <button onclick="toggleHelpful(this)" class="helpful-btn flex items-center gap-1.5 text-xs font-medium text-gray-400 border border-gray-200 px-3 py-1.5 rounded-full transition-all hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50">
-            👍 Helpful (64)
-          </button>
-          <button onclick="toggleHelpful(this,true)" class="helpful-btn flex items-center gap-1.5 text-xs font-medium text-gray-400 border border-gray-200 px-3 py-1.5 rounded-full transition-all hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50">
-            👎 Not helpful
-          </button>
-        </div>
-      </div>
- 
-      <button class="w-full mt-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 hover:bg-white text-sm font-medium text-gray-500 transition-all">
-        Load more reviews (888)
-      </button>
-    </div>
- 
+    <app-resource-ratings>
+
+    </app-resource-ratings>
+
     <!-- Discussion Card -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-card">
-      <h2 class="font-display font-bold text-lg mb-5">Community Discussion</h2>
- 
-      <!-- Thread item 1 -->
-      <div class="flex gap-3 py-4 border-b border-gray-200">
-        <div class="w-[34px] h-[34px] rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">ML</div>
-        <div class="flex-1">
-          <div class="flex items-baseline gap-2 mb-1">
-            <span class="font-semibold text-sm">martin_l</span>
-            <span class="text-xs text-gray-400">2 days ago</span>
-          </div>
-          <p class="text-sm text-gray-500 leading-relaxed">Does anyone know if the lecture notes are printable? Trying to use them alongside the videos but the PDF formatting seems off on my end.</p>
-          <button class="text-xs font-semibold text-gray-400 hover:text-blue-600 transition-colors mt-2 py-1">↳ Reply</button>
-        </div>
-      </div>
- 
-      <!-- Reply -->
-      <div class="flex gap-3 py-3 pl-10 border-b border-gray-200">
-        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-cyan-400 flex items-center justify-center text-[0.65rem] font-bold text-white flex-shrink-0">AJ</div>
-        <div class="flex-1">
-          <div class="flex items-baseline gap-2 mb-1">
-            <span class="font-semibold text-sm">aleksandra_j</span>
-            <span class="text-xs text-gray-400">1 day ago</span>
-          </div>
-          <p class="text-sm text-gray-500 leading-relaxed">Yes! Use the "Print" button inside the MIT OCW viewer — the direct PDF link also works. I printed them A4 no problem.</p>
-          <button class="text-xs font-semibold text-gray-400 hover:text-blue-600 transition-colors mt-2 py-1">↳ Reply</button>
-        </div>
-      </div>
- 
-      <!-- Thread item 2 -->
-      <div class="flex gap-3 py-4">
-        <div class="w-[34px] h-[34px] rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">NV</div>
-        <div class="flex-1">
-          <div class="flex items-baseline gap-2 mb-1">
-            <span class="font-semibold text-sm">nadia_v</span>
-            <span class="text-xs text-gray-400">5 days ago</span>
-          </div>
-          <p class="text-sm text-gray-500 leading-relaxed">💡 Tip: Watch at 1.25x speed after the first time through. Professor Strang's delivery is perfect for it and you'll cover the course twice as fast on a second pass.</p>
-          <button class="text-xs font-semibold text-gray-400 hover:text-blue-600 transition-colors mt-2 py-1">↳ Reply</button>
-        </div>
-      </div>
- 
-      <!-- Input Row -->
-      <div class="flex gap-3 mt-4 items-center">
-        <div class="w-[34px] h-[34px] rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">MK</div>
-        <input type="text"
-               class="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-sm outline-none focus:border-blue-500 focus:bg-white transition-all"
-               placeholder="Ask a question or share a tip…">
-        <button
-                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg transition-all">
-          Post
-        </button>
-      </div>
-    </div>
- 
+    <app-resource-discussion-section></app-resource-discussion-section>
   </div>
 
   <!-- Info Card -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-card">
-      <div class="text-[0.7rem] font-bold tracking-widest uppercase text-gray-400 mb-4">Resource Info</div>
- 
-      <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
-        <span class="text-xs text-gray-400 font-medium">Type</span>
-        <span class="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-0.5 rounded-full">🎬 Course</span>
-      </div>
-      <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
-        <span class="text-xs text-gray-400 font-medium">Domain</span>
-        <a href="#" class="text-sm font-medium text-blue-600 hover:underline">ocw.mit.edu</a>
-      </div>
-      <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
-        <span class="text-xs text-gray-400 font-medium">Language</span>
-        <span class="text-sm font-medium">English</span>
-      </div>
-      <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
-        <span class="text-xs text-gray-400 font-medium">Difficulty</span>
-        <span class="text-sm font-semibold text-amber-600">⚡ Intermediate</span>
-      </div>
-      <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
-        <span class="text-xs text-gray-400 font-medium">Cost</span>
-        <span class="text-sm font-semibold text-green-600">Free</span>
-      </div>
-      <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
-        <span class="text-xs text-gray-400 font-medium">Added</span>
-        <span class="text-sm font-medium">Sep 14, 2023</span>
-      </div>
-      <div class="flex items-center justify-between py-2.5">
-        <span class="text-xs text-gray-400 font-medium">Updated</span>
-        <span class="text-sm font-medium">Feb 28, 2025</span>
-      </div>
- 
-      <div class="mt-4 pt-4 border-t border-gray-200">
-        <div class="text-[0.7rem] font-bold tracking-widest uppercase text-gray-400 mb-3">Added by</div>
-        <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-[0.65rem] font-bold text-white flex-shrink-0">SR</div>
-          <div>
-            <div class="text-sm font-semibold text-blue-600">stefan_r</div>
-            <div class="text-xs text-gray-400">Contributed 47 resources</div>
-          </div>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-card">
+    <div class="text-[0.7rem] font-bold tracking-widest uppercase text-gray-400 mb-4">Resource Info</div>
+
+    <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
+      <span class="text-xs text-gray-400 font-medium">Type</span>
+      <span class="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-0.5 rounded-full">🎬 Course</span>
+    </div>
+    <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
+      <span class="text-xs text-gray-400 font-medium">Domain</span>
+      <a href="#" class="text-sm font-medium text-blue-600 hover:underline">ocw.mit.edu</a>
+    </div>
+    <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
+      <span class="text-xs text-gray-400 font-medium">Language</span>
+      <span class="text-sm font-medium">English</span>
+    </div>
+    <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
+      <span class="text-xs text-gray-400 font-medium">Difficulty</span>
+      <span class="text-sm font-semibold text-amber-600">⚡ Intermediate</span>
+    </div>
+    <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
+      <span class="text-xs text-gray-400 font-medium">Cost</span>
+      <span class="text-sm font-semibold text-green-600">Free</span>
+    </div>
+    <div class="flex items-center justify-between py-2.5 border-b border-gray-200">
+      <span class="text-xs text-gray-400 font-medium">Added</span>
+      <span class="text-sm font-medium">Sep 14, 2023</span>
+    </div>
+    <div class="flex items-center justify-between py-2.5">
+      <span class="text-xs text-gray-400 font-medium">Updated</span>
+      <span class="text-sm font-medium">Feb 28, 2025</span>
+    </div>
+
+    <div class="mt-4 pt-4 border-t border-gray-200">
+      <div class="text-[0.7rem] font-bold tracking-widest uppercase text-gray-400 mb-3">Added by</div>
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-[0.65rem] font-bold text-white flex-shrink-0">SR</div>
+        <div>
+          <div class="text-sm font-semibold text-blue-600">stefan_r</div>
+          <div class="text-xs text-gray-400">Contributed 47 resources</div>
         </div>
       </div>
     </div>
+  </div>
  
     <!-- Actions Card -->
     <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-card flex flex-col gap-2">

@@ -1,0 +1,26 @@
+<div class="flex items-center justify-between mt-7 mb-0">
+    <span class="font-semibold text-[0.95rem]">{{ reviews.length }} Reviews</span>
+    <select class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-900 outline-none cursor-pointer">
+        <option>Most helpful</option>
+        <option>Most recent</option>
+    </select>
+</div>
+
+<div>
+
+    @for (review of reviews; track $index) {
+        <app-resource-review-item
+            [review]="review">
+        </app-resource-review-item>
+    }
+
+    @if (reviews.length > 0) {
+        <ui-button
+        class="w-full mt-4"
+        variant="outline"
+        (click)="loadMoreReviews()"
+        >
+            Load more reviews
+        </ui-button>
+    }
+</div>
