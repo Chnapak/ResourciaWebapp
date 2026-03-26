@@ -19,7 +19,6 @@ import { ResourcesAdminPageComponent } from './features/admin/pages/resources-pa
 import { SuspensionMessagePageComponent } from './features/auth/pages/suspension-message-page/suspension-message-page.component';
 import { ResetPasswordPageComponent } from './features/auth/pages/reset-password-page/reset-password-page.component';
 import { ForgotPasswordPageComponent } from './features/auth/pages/forgot-password-page/forgot-password-page.component';
-<<<<<<< HEAD
 import { ResourcePageComponent } from './features/search/pages/resource-page/resource-page.component';
 import { canActivateGuard } from './core/guards/login.guard';
 
