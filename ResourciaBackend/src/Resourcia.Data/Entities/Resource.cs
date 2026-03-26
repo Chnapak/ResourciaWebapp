@@ -41,7 +41,10 @@ public class Resource
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
 
     public ICollection<ResourceFacetValues> ResourceFacetValues { get; set; } = new List<ResourceFacetValues>();
+<<<<<<< HEAD
     public List<ResourceReview> ResourceReviews { get; set; } = new();
 
     public List<Discussions> Discussions { get; set;} = new();
+=======
+>>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 }
