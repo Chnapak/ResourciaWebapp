@@ -143,15 +143,14 @@ public class Program
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             // optional: ensures DB is up to date in dev
-<<<<<<< HEAD
-            
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
+
             await db.Database.MigrateAsync();
 
             // Seed only if missing
             if (!await db.Filters.AnyAsync(f => f.Key == "subject"))
             {
+                var now = SystemClock.Instance.GetCurrentInstant();
+
                 db.Filters.Add(new FilterDefinitions
                 {
                     Key = "subject",
@@ -168,7 +167,9 @@ public class Program
                         new FacetValues { Value = "science", Label = "Science", IsActive = true, SortOrder = 2 },
                         new FacetValues { Value = "english", Label = "English", IsActive = true, SortOrder = 3 },
                         new FacetValues { Value = "history", Label = "History", IsActive = true, SortOrder = 4 },
-                    }
+                    },
+                    CreatedAt = now,
+                    CreatedBy = "system"
 
                 });
 
@@ -182,7 +183,9 @@ public class Program
                     IsMulti = false,
                     IsActive = true,
                     SortOrder = 2,
-                    ResourceField = "Author"  // if you have this column; otherwise omit
+                    ResourceField = "Author",
+                    CreatedAt = now,
+                    CreatedBy = "system"
                 });
 
                 // BOOL (toggle) - no FacetValues
@@ -195,7 +198,9 @@ public class Program
                     IsMulti = false,
                     IsActive = true,
                     SortOrder = 3,
-                    ResourceField = "IsFree"
+                    ResourceField = "IsFree",
+                    CreatedAt = now,
+                    CreatedBy = "system"
                 });
 
                 // NUMBER (range input) - no FacetValues
@@ -208,7 +213,9 @@ public class Program
                     IsMulti = false,
                     IsActive = true,
                     SortOrder = -1,
-                    ResourceField = "Year"
+                    ResourceField = "Year",
+                    CreatedAt = now,
+                    CreatedBy = "system"
                 });
 
                 await db.SaveChangesAsync();

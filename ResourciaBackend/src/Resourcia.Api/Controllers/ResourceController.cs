@@ -19,14 +19,14 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateResourceModel req, CancellationToken ct)
     {
-        // Basic validation
+        // --- Basic validation ---
         if (string.IsNullOrWhiteSpace(req.Title))
             return BadRequest(new { error = "Title is required." });
 
         if (string.IsNullOrWhiteSpace(req.Url))
             return BadRequest(new { error = "Url is required." });
 
-        // Normalize facet keys + values
+        // --- Normalize facet keys + values ---
         var facetKeys = req.Facets.Keys
             .Select(k => k.Trim())
             .Where(k => k.Length > 0)
@@ -71,7 +71,7 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
         if (multiViolations.Count > 0)
             return BadRequest(new { error = "Multiple values provided for single-value facet.", keys = multiViolations });
 
-        // Create resource entity
+        // --- Create resource entity ---
         var resource = new Resource
         {
             Title = req.Title.Trim(),
@@ -82,12 +82,27 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             Author = req.Author,
             LearningStyle = req.LearningStyle ?? string.Empty,
             Tags = req.Tags ?? new List<string>(),
-            Rating = req.Rating,
             CreatedAtUtc = DateTime.UtcNow,
             UpdatedAtUtc = DateTime.UtcNow
         };
 
-        // Resolve FacetValues for all requested facet assignments
+        // --- Create linked ratings entity ---
+        var ratings = new ResourceRatings
+        {
+            AverageRating = 0,
+            TotalCount = 0,
+            Count1 = 0,
+            Count2 = 0,
+            Count3 = 0,
+            Count4 = 0,
+            Count5 = 0,
+            Resource = resource // ✅ important: link navigation property
+        };
+
+        resource.Ratings = ratings; // ← this is what makes it non-null in memory
+
+
+        // --- Resolve facets ---
         var facetRequests = req.Facets
             .Select(kvp => new
             {
@@ -104,7 +119,6 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
 
         var defIds = facetRequests.Select(x => x.Def.Id).Distinct().ToList();
 
-        // Pull all facet values for these defs once, then match in memory
         var allowedFacetValues = defIds.Count == 0
             ? new List<FacetValues>()
             : await _dbContext.Set<FacetValues>()
@@ -120,7 +134,6 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
                              fr.Values.Contains(fv.Value, StringComparer.OrdinalIgnoreCase))
                 .ToList();
 
-            // Missing slugs?
             var found = matches.Select(m => m.Value).ToHashSet(StringComparer.OrdinalIgnoreCase);
             var missing = fr.Values.Where(v => !found.Contains(v)).ToList();
             if (missing.Count > 0)
@@ -128,17 +141,18 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
 
             joins.AddRange(matches.Select(m => new ResourceFacetValues
             {
-                ResourceId = resource.Id,
-                FacetValuesId = m.Id
+                Resource = resource, // link nav property
+                FacetValues = m
             }));
         }
 
-        // Transaction: insert resource + join rows
+        // --- Transaction: insert resource + ratings + join rows ---
         await using var tx = await _dbContext.Database.BeginTransactionAsync(ct);
 
-        _dbContext.Set<Resource>().Add(resource);
+        _dbContext.Resources.Add(resource);
+        _dbContext.ResourceRatings.Add(ratings);
         if (joins.Count > 0)
-            _dbContext.Set<ResourceFacetValues>().AddRange(joins);
+            _dbContext.ResourceFacetValues.AddRange(joins);
 
         try
         {
@@ -151,7 +165,6 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             return Conflict(new { error = "Could not create resource.", detail = e.InnerException?.Message ?? e.Message });
         }
 
-        // Response: return resource + chosen facet slugs per key
         var responseFacets = facetRequests.ToDictionary(
             x => x.Key,
             x => allowedFacetValues
@@ -172,8 +185,17 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             resource.Author,
             resource.LearningStyle,
             resource.Tags,
-            resource.Rating,
-            facets = responseFacets
+            facets = responseFacets,
+            ratings = new
+            {
+                ratings.AverageRating,
+                ratings.TotalCount,
+                ratings.Count1,
+                ratings.Count2,
+                ratings.Count3,
+                ratings.Count4,
+                ratings.Count5
+            }
         });
     }
 
@@ -181,25 +203,60 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
         var resource = await _dbContext.Set<Resource>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(r => r.Id == id, ct);
+        .Where(r => r.Id == id)
+        .Select(r => new
+        {
+            r.Id,
+            r.Title,
+            r.Description,
+            r.Url,
+            r.IsFree,
+            r.Year,
+            r.Author,
+            r.LearningStyle,
+            Tags = r.Tags,
+            Rating = r.Ratings == null ? null : new
+            {
+                r.Ratings.Id,
+                r.Ratings.AverageRating,
+                r.Ratings.TotalCount,
+                r.Ratings.Count1,
+                r.Ratings.Count2,
+                r.Ratings.Count3,
+                r.Ratings.Count4,
+                r.Ratings.Count5
+            },
+            Facets = r.ResourceFacetValues
+                .Select(rfv => new
+                {
+                    Key = rfv.FacetValues.FilterDefinitions.Key,
+                    Value = rfv.FacetValues.Value
+                }).ToList(),
+            Reviews = r.ResourceReviews
+                .Select(rv => new
+                {
+                    rv.Id,
+                    rv.Rating,
+                    rv.Content,
+                    rv.CreatedAt,
+                    Upvotes = rv.Votes.Count(v => v.IsHelpful),
+                    Downvotes = rv.Votes.Count(v => !v.IsHelpful)
+                }).ToList()
+        })
+        .AsNoTracking()
+        .FirstOrDefaultAsync(ct);
 
-        if (resource is null) return NotFound();
+        if (resource == null) return NotFound();
 
         return Ok(resource);
     }
 
-<<<<<<< HEAD
     [HttpGet("search")]
-=======
-    [HttpGet("/search")] 
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     public async Task<IActionResult> Search(CancellationToken ct)
     {
         var queryParams = Request.Query;
 
         var dbQuery = _dbContext.Set<Resource>()
-<<<<<<< HEAD
             .AsNoTracking()
             .AsQueryable();
 
@@ -220,17 +277,12 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
         {
             pageSize = Math.Min(parsedPageSize, 100); // optional safety limit
         }
-=======
-        .AsNoTracking()
-        .AsQueryable();
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
 
         // ----- TEXT SEARCH -----
         if (queryParams.TryGetValue("q", out var qValue))
         {
             var lowerTrimmed = qValue.ToString().Trim().ToLower();
 
-<<<<<<< HEAD
             if (!string.IsNullOrWhiteSpace(lowerTrimmed))
             {
                 dbQuery = dbQuery.Where(r =>
@@ -242,16 +294,6 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
 
         // ----- DYNAMIC FACETS -----
         var reservedKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-=======
-            dbQuery = dbQuery.Where(r =>
-                 r.Title.ToLower().Contains(lowerTrimmed) ||
-                 (r.Description != null && r.Description.ToLower().Contains(lowerTrimmed))
-             );
-        }
-
-        // ----- DYNAMIC FACETS -----
-        var reservedKeys = new HashSet<string>
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
         {
             "q", "page", "pageSize"
         };
@@ -263,7 +305,6 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
                 p => p.Value.ToList()
             );
 
-<<<<<<< HEAD
         foreach (var filter in facetFilters)
         {
             var key = filter.Key;
@@ -311,17 +352,7 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             totalItems,
             totalPages
         });
-=======
-        // facetFilters now contains:
-        // { "subject": ["math"], "difficulty": ["highschool"] }
 
-        // (we'll apply filtering here later)
-
-        var results = await dbQuery.Take(20).ToListAsync(ct);
-
-        return Ok(results);
-
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     }
 
     [HttpGet("{id:guid}/reviews")]

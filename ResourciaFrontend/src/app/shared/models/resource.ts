@@ -1,5 +1,5 @@
 export interface ResourceModel {
-    id: string,
-    name: string,
-    url: string
+  id: string;
+  title: string;
+  url: string;
 }

@@ -28,16 +28,12 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<ResourceFacetValues> ResourceFacetValues { get; set; }
 
     public DbSet<Resource> Resources { get; set; }
-
-<<<<<<< HEAD
     public DbSet<ResourceReview> ResourceReviews { get; set; }
     public DbSet<ReviewVotes> ReviewsVotes { get; set; }
     public DbSet<Discussions> Discussions { get; set; }
     public DbSet<DiscussionReplies> DiscussionReplies { get; set; }
     public DbSet<ResourceRatings> ResourceRatings { get; set; }
 
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     public AppDbContext(DbContextOptions options) : base(options)
     {
     }
@@ -76,7 +72,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
 
         modelBuilder.Entity<ResourceFacetValues>()
         .HasIndex(x => x.FacetValuesId);
-<<<<<<< HEAD
 
         modelBuilder.Entity<ReviewVotes>()
             .HasKey(rv => new { rv.ReviewId, rv.UserId });
@@ -106,5 +101,12 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
             .HasOne(r => r.Resource)
             .WithOne()
             .HasForeignKey<ResourceRatings>(r => r.ResourceId);
+
+        modelBuilder.Entity<Resource>()
+        .HasOne(r => r.Ratings)
+        .WithOne(rr => rr.Resource)
+        .HasForeignKey<ResourceRatings>(rr => rr.ResourceId)
+        .OnDelete(DeleteBehavior.Cascade);
+
     }
 }

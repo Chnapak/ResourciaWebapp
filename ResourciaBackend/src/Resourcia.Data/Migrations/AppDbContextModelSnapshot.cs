@@ -173,7 +173,6 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("Comment");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("Resourcia.Data.Entities.DiscussionReplies", b =>
                 {
                     b.Property<Guid>("Id")
@@ -210,7 +209,7 @@ namespace Resourcia.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<Instant>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("ResourceId")
@@ -226,8 +225,6 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("Discussions");
                 });
 
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
             modelBuilder.Entity("Resourcia.Data.Entities.EmailMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -587,9 +584,6 @@ namespace Resourcia.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double?>("Rating")
-                        .HasColumnType("double precision");
-
                     b.Property<int>("SavesCount")
                         .HasColumnType("integer");
 
@@ -653,6 +647,9 @@ namespace Resourcia.Data.Migrations
 
                     b.Property<int>("Count5")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("TotalCount")
                         .HasColumnType("integer");
@@ -718,8 +715,6 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("ReviewsVotes");
                 });
 
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.Identity.AppRole", null)
@@ -790,7 +785,6 @@ namespace Resourcia.Data.Migrations
                     b.Navigation("Post");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("Resourcia.Data.Entities.DiscussionReplies", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.Discussions", "Discussions")
@@ -813,8 +807,6 @@ namespace Resourcia.Data.Migrations
                     b.Navigation("Resource");
                 });
 
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
             modelBuilder.Entity("Resourcia.Data.Entities.FacetValues", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.FilterDefinitions", "FilterDefinitions")
@@ -859,7 +851,7 @@ namespace Resourcia.Data.Migrations
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceRatings", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.Resource", "Resource")
-                        .WithOne()
+                        .WithOne("Ratings")
                         .HasForeignKey("Resourcia.Data.Entities.ResourceRatings", "ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -890,8 +882,6 @@ namespace Resourcia.Data.Migrations
                     b.Navigation("Replies");
                 });
 
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
             modelBuilder.Entity("Resourcia.Data.Entities.FacetValues", b =>
                 {
                     b.Navigation("ResourceFacetValues");
@@ -909,8 +899,9 @@ namespace Resourcia.Data.Migrations
 
             modelBuilder.Entity("Resourcia.Data.Entities.Resource", b =>
                 {
-<<<<<<< HEAD
                     b.Navigation("Discussions");
+
+                    b.Navigation("Ratings");
 
                     b.Navigation("ResourceFacetValues");
 
@@ -920,9 +911,6 @@ namespace Resourcia.Data.Migrations
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceReview", b =>
                 {
                     b.Navigation("Votes");
-=======
-                    b.Navigation("ResourceFacetValues");
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
                 });
 #pragma warning restore 612, 618
         }
