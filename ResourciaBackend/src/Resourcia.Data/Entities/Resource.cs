@@ -32,8 +32,6 @@ public class Resource
 
     public List<string> Tags { get; set; } = new();
 
-    public double? Rating { get; set; }
-
     public int SavesCount { get; set; }
 
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
@@ -41,10 +39,9 @@ public class Resource
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
 
     public ICollection<ResourceFacetValues> ResourceFacetValues { get; set; } = new List<ResourceFacetValues>();
-<<<<<<< HEAD
     public List<ResourceReview> ResourceReviews { get; set; } = new();
 
     public List<Discussions> Discussions { get; set;} = new();
-=======
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
+    public ResourceRatings? Ratings { get; set; } = null!;
+
 }

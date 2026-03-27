@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-textarea',
-  imports: [CommonModule],
   templateUrl: './textarea.component.html',
-  styleUrl: './textarea.component.scss',
+  styleUrls: ['./textarea.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -14,82 +12,77 @@ import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angul
       multi: true,
     },
   ],
-
 })
-export class TextareaComponent implements ControlValueAccessor, OnInit, OnChanges {
+export class TextareaComponent implements ControlValueAccessor, OnInit {
   @Input() label: string = 'Label';
   @Input() placeholder: string = '';
   @Input() background: 'gray-100' | 'white' = 'gray-100';
   @Input() disabled: boolean = false;
 
   @Input() control: AbstractControl | null = null;
-
   @Input() showCharCounter: boolean = false;
   @Input() maxLength: number | null = null;
   @Input() autoGrow: boolean = false;
+  @Input() showError: boolean = false;
 
-  @ViewChild('textareaRef') textareaRef!: ElementRef<HTMLTextAreaElement>;
- 
+  @ViewChild('textareaRef', { static: true }) textareaRef!: ElementRef<HTMLTextAreaElement>;
+
   value: string = '';
- 
+
   private onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
 
   ngOnInit(): void {}
- 
-  ngOnChanges(changes: SimpleChanges): void {
-    // If autoGrow is toggled on at runtime, trigger a resize pass
-    if (changes['autoGrow'] && this.autoGrow && this.textareaRef) {
-      this._autoResize();
-    }
+
+  writeValue(value: string): void {
+    this.value = value ?? '';
   }
 
-  writeValue(val: string): void {
-    this.value = val ?? '';
-  }
- 
   registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
- 
+
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
- 
+
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
-  updateValue(event: Event): void {
+  // This is called when user types
+  onInput(event: Event) {
     const target = event.target as HTMLTextAreaElement;
     this.value = target.value;
+
+    // Update ControlValueAccessor
     this.onChange(this.value);
- 
-    if (this.autoGrow) {
-      this._autoResize(target);
+
+    // If parent passed a FormControl, update it too
+    if (this.control) {
+      this.control.setValue(this.value);
+      this.control.markAsDirty();
+    }
+
+    if (this.autoGrow && this.textareaRef?.nativeElement) {
+      this._autoResize(this.textareaRef.nativeElement);
     }
   }
 
-  get showError(): boolean {
-    return !!(
-      this.control &&
-      this.control.invalid &&
-      (this.control.dirty || this.control.touched)
-    );
+  private _autoResize(el: HTMLTextAreaElement) {
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
   }
- 
+
   get charCount(): number {
     return this.value?.length ?? 0;
   }
- 
+
   get isOverLimit(): boolean {
     return this.maxLength !== null && this.charCount > this.maxLength;
   }
 
-  private _autoResize(el?: HTMLTextAreaElement): void {
-    const textarea = el ?? this.textareaRef?.nativeElement;
-    if (!textarea) return;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
+  get showErrorComputed(): boolean {
+    return this.showError || !!(this.control && this.control.invalid && (this.control.dirty || this.control.touched));
   }
 }

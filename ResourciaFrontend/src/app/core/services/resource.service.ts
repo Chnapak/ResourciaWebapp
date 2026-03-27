@@ -7,6 +7,7 @@ import { CreateResourceRequestModel } from '../../shared/models/create-resource-
 import { CreateResourceResponseModel } from '../../shared/models/create-resource-response';
 import { ResourceDetailModel } from '../../shared/models/resource-detail';
 import { SearchResponse } from '../../shared/models/search-response';
+import { ReviewRequestModel } from '../../shared/models/review-request';
 
 
 @Injectable({
@@ -44,5 +45,18 @@ export class ResourceService {
   searchResource(query: Record<string, any>): Observable<SearchResponse> {
     const params = this.buildHttpParams(query);
     return this.httpClient.get<SearchResponse>(`${this.baseUrl}/search`, { params });
+  }
+
+  submitReview(id: string, payload: ReviewRequestModel): Observable<void> {
+    const body = {
+      content: payload.text,
+      rating: payload.stars
+    };
+
+    return this.httpClient.post<void>(`${this.baseUrl}/${id}/reviews`, body);
+  }
+
+  getResource(id: string): Observable<ResourceDetailModel> {
+    return this.httpClient.get<ResourceDetailModel>(`/api/Resource/${id}`);
   }
 }

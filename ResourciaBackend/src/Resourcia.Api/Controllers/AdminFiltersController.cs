@@ -152,19 +152,13 @@ public class AdminFiltersController : ControllerBase
         return Ok(filter);
     }
 
-<<<<<<< HEAD
     [HttpPatch("{id:guid}/toggleActivity")]
     public async Task<IActionResult> ToggleFilter(Guid id)
-=======
-    [HttpPatch("{id:guid}/active")]
-    public async Task<IActionResult> SetFilter(Guid id, [FromBody] ActivationFilterModel activation)
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     {
         var filter = await _dbContext.Filters.FindAsync(id);
         if (filter == null)
             return NotFound();
 
-<<<<<<< HEAD
         filter.IsActive = !filter.IsActive;
         await _dbContext.SaveChangesAsync();
 
@@ -173,12 +167,7 @@ public class AdminFiltersController : ControllerBase
             filter.Id,
             filter.IsActive
         });
-=======
-        filter.IsActive = activation.IsActive;
-        await _dbContext.SaveChangesAsync();
 
-        return NoContent();
->>>>>>> 9c2cef82cc7c9f538a77c944e04c4cb51252b045
     }
 
     [HttpPatch("reorder")]

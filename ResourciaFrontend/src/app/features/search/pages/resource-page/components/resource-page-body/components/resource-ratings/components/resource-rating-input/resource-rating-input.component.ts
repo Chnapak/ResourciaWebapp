@@ -3,6 +3,9 @@ import { ButtonComponent } from '../../../../../../../../../../shared/ui/button/
 import { AuthService } from '../../../../../../../../../../core/auth/auth.service';
 import { TextareaComponent } from '../../../../../../../../../../shared/ui/textarea/textarea.component';
 import { FormControl } from '@angular/forms';
+import { ReviewRequestModel } from '../../../../../../../../../../shared/models/review-request';
+import { ActivatedRoute } from '@angular/router';
+import { ResourceService } from '../../../../../../../../../../core/services/resource.service';
 
 @Component({
   selector: 'app-resource-rating-input',
@@ -11,20 +14,22 @@ import { FormControl } from '@angular/forms';
   styleUrl: './resource-rating-input.component.scss',
 })
 export class ResourceRatingInputComponent implements OnInit {
-  @Output() submit = new EventEmitter<{
-    rating: number;
-    text: string;
-  }>();
 
   reviewControl = new FormControl('');
 
+  id: string | null = null;
+
   rating = 0;
   hoverRating = 0;
-  text = '';
+  text: string | null = null;
 
-  constructor(private auth: AuthService) {}
+  submitting = false;
+  error: string | null = null;
+
+  constructor(private route: ActivatedRoute, private auth: AuthService, private resource: ResourceService) {}
 
   ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id');
     const action = this.auth.runPendingAction();
 
     if (!action) return;
@@ -84,6 +89,38 @@ export class ResourceRatingInputComponent implements OnInit {
   }
   
   private doSubmit() {
-    this.submit.emit({ rating: this.rating, text: this.text })
+    this.text = this.reviewControl.value;
+
+    if (!this.text) {
+      this.text = ""
+    }
+
+    if (!this.id) {
+      this.error = 'Resource ID not found.';
+      return;
+    }
+
+    this.submitting = true;
+    this.error = null;
+
+    const request: ReviewRequestModel = {
+      stars: this.rating,
+      text: this.text
+    };
+
+    this.resource.submitReview(this.id, request).subscribe({
+      next: (res) => {
+        this.submitting = false;
+        this.rating = 0;
+        this.text = '';
+        this.reviewControl.reset('');
+        console.log('Review submitted successfully', res);
+      },
+      error: (err) => {
+        this.submitting = false;
+        this.error = 'Failed to submit review.';
+        console.error('Review submission error', err);
+      }
+    });
   }
 }

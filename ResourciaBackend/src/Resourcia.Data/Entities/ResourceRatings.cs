@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ namespace Resourcia.Data.Entities;
 
 public class ResourceRatings
 {
+    [Key]
+    public Guid Id { get; set; } = Guid.NewGuid();
     public Guid ResourceId { get; set; }
     public float AverageRating { get; set; }
     public int TotalCount { get; set; }

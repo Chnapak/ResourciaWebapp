@@ -20,6 +20,7 @@
       transition-all resize-y min-h-[90px]
       disabled:opacity-50 disabled:cursor-not-allowed
     "
+    (input)="onInput($event)"
     [class.bg-white]="background === 'white'"
     [class.text-gray-400]="!value"
     [class.text-gray-700]="value"
@@ -31,9 +32,8 @@
     [class.resize-none]="autoGrow"
     [attr.maxlength]="maxLength ?? null"
     [placeholder]="placeholder"
-    [value]="value"
     [disabled]="disabled"
-    (input)="updateValue($event)"
+    [value]="value"
     (blur)="onTouched()"
   ></textarea>
 

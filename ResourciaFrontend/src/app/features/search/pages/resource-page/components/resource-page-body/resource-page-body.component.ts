@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ResourceDescriptionCardComponent } from './components/resource-description-card/resource-description-card.component';
 import { ActiveFilterChip } from '../../../../../../shared/models/active-filter-chip';
 import { ResourceRatingsComponent } from './components/resource-ratings/resource-ratings.component';
 import { ResourceDiscussionSectionComponent } from './components/resource-discussion-section/resource-discussion-section.component';
+import { Review } from '../../../../../../shared/models/review';
+import { ReviewRequestModel } from '../../../../../../shared/models/review-request';
 
 @Component({
   selector: 'app-resource-page-body',
@@ -19,4 +21,5 @@ export class ResourcePageBodyComponent {
       displayValue: "Math"
     }
   ];
+
 }

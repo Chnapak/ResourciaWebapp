@@ -9,9 +9,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './resource-rating-overview.component.scss',
 })
 export class ResourceRatingOverviewComponent {
-  @Input() avgScore: number = 1;
-  @Input() totalRatings: number = 0;
-  @Input() distribution: RatingDistributionItem[] = [];
+  @Input() avgScore: number = 3.634;
+  @Input() totalRatings: number = 10;
+  @Input() distribution: RatingDistributionItem[] = [
+
+  ];
 
   getPercentage(count: number): number {
     if (!this.totalRatings) return 0;

@@ -1,10 +1,12 @@
-<div class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 hero-pattern pt-10 pb-0 px-8">
+<div class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 hero-pattern pt-10 pb-0 px-8 min-h-[400px]">
   <div class="max-w-6xl mx-auto">
  
     <div class="grid grid-cols-[1fr_340px] gap-10 items-start">
  
       <div>
-        <app-resource-header></app-resource-header>
+        <app-resource-header 
+          [resource]="resource">
+        </app-resource-header>
  
         <app-resource-tag-list></app-resource-tag-list>
  
