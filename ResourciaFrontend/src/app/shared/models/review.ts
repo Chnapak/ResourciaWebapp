@@ -1,10 +1,9 @@
 export interface Review {
   id: string;
   username: string;
-  date: string;
+  createdAt: string;
   rating: number;
-  text: string;
-  helpfulCount: number;
-  notHelpfulCount: number;
-  verified: boolean;
+  content: string;
+  upvotes: number;
+  downvotes: number;
 }

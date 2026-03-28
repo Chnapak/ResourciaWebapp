@@ -43,5 +43,6 @@ public class Resource
 
     public List<Discussions> Discussions { get; set;} = new();
     public ResourceRatings? Ratings { get; set; } = null!;
+    public List<ResourceImage> Images { get; set; } = new();
 
 }

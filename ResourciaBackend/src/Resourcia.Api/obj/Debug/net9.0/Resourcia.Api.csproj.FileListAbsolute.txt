@@ -435,3 +435,5 @@ C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\Resourcia.Api.pdb
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\Resourcia.Api.genruntimeconfig.cache
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\ref\Resourcia.Api.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\SixLabors.ImageSharp.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\Resourcia.Api.staticwebassets.runtime.json

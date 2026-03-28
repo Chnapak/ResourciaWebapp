@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Resourcia.Api.Models.Resources;
+using Resourcia.Api.Services;
 using Resourcia.Data;
 using Resourcia.Data.Entities;
 using System.Security.Claims;
@@ -12,9 +13,10 @@ namespace Resourcia.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ResourceController(AppDbContext dbContext) : ControllerBase
+public class ResourceController(AppDbContext dbContext, ImageService imageService) : ControllerBase
 {
     private AppDbContext _dbContext = dbContext;
+    private ImageService _imageService = imageService;
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateResourceModel req, CancellationToken ct)
@@ -215,7 +217,7 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             r.Author,
             r.LearningStyle,
             Tags = r.Tags,
-            Rating = r.Ratings == null ? null : new
+            Ratings = r.Ratings == null ? null : new
             {
                 r.Ratings.Id,
                 r.Ratings.AverageRating,
@@ -230,7 +232,8 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
                 .Select(rfv => new
                 {
                     Key = rfv.FacetValues.FilterDefinitions.Key,
-                    Value = rfv.FacetValues.Value
+                    Value = rfv.FacetValues.Value,
+                    Label = rfv.FacetValues.Label
                 }).ToList(),
             Reviews = r.ResourceReviews
                 .Select(rv => new
@@ -342,6 +345,31 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             .OrderByDescending(r => r.CreatedAtUtc) // choose any stable ordering
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
+            .Select(r => new
+            {
+                r.Id,
+                r.Title,
+                r.Description,
+                r.Url,
+                r.IsFree,
+                r.Year,
+                r.Author,
+                r.LearningStyle,
+                r.Tags,
+                r.CreatedAtUtc,
+                Ratings = r.Ratings == null ? null : new
+                {
+                    r.Ratings.AverageRating,
+                    r.Ratings.TotalCount
+                },
+                Facets = r.ResourceFacetValues
+                    .Select(rfv => new
+                    {
+                        Key = rfv.FacetValues.FilterDefinitions.Key,
+                        Value = rfv.FacetValues.Value,
+                        Label = rfv.FacetValues.Label
+                    }).ToList()
+            })
             .ToListAsync(ct);
 
         return Ok(new
@@ -370,21 +398,30 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             _ => query.OrderByDescending(r => r.CreatedAt)
         };
 
+        var totalItems = await query.CountAsync();
+
         var reviews = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .Select(r => new ReviewModel
+            .Select(r => new ReviewResponseModel
             {
                 Id = r.Id,
                 Content = r.Content,
                 Rating = r.Rating,
                 CreatedAt = r.CreatedAt,
                 Upvotes = r.Votes.Count(v => v.IsHelpful),
-                Downvotes = r.Votes.Count(v => !v.IsHelpful)
+                Downvotes = r.Votes.Count(v => !v.IsHelpful),
+                Username = r.User.DisplayName
             })
             .ToListAsync();
 
-        return Ok(reviews);
+        return Ok(new
+        {
+            items = reviews,
+            page,
+            pageSize,
+            totalItems
+        });
     }
 
     [Authorize]
@@ -434,9 +471,20 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             CreatedAt = SystemClock.Instance.GetCurrentInstant()
         };
 
-        _dbContext.ResourceReviews.Add(review);
-        await _dbContext.SaveChangesAsync();
-        await UpdateResourceRatingsAsync(id);
+        await using var tx = await _dbContext.Database.BeginTransactionAsync();
+        try
+        {
+            _dbContext.ResourceReviews.Add(review);
+            await _dbContext.SaveChangesAsync();
+            await UpdateResourceRatingsAsync(id);
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            return StatusCode(500, "Failed to save review.");
+        }
+
         return Ok(review);
     }
 
@@ -653,6 +701,110 @@ public class ResourceController(AppDbContext dbContext) : ControllerBase
             reply.CreatedAt
         });
     }
+
+    [Authorize]
+    [HttpPost("{resourceId:guid}/images")]
+    public async Task<IActionResult> UploadResourceImage(Guid resourceId, IFormFile file)
+    {
+        var resourceExists = await _dbContext.Resources
+            .AnyAsync(r => r.Id == resourceId);
+
+        if (!resourceExists) return NotFound();
+
+        if (file == null || file.Length == 0)
+            return BadRequest("No file provided");
+
+        if (file.Length > 5_000_000)
+            return BadRequest("File too large");
+
+        if (!_imageService.IsValidImage(file))
+            return BadRequest("Invalid image type");
+
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var savedFileName = await _imageService.SaveImageAsync(file);
+
+        var resourceImage = new ResourceImage
+        {
+            ResourceId = resourceId,
+            FileName = savedFileName,
+            OriginalFileName = file.FileName,
+            ContentType = file.ContentType,
+            UploadedByUserId = userId
+        };
+
+        _dbContext.ResourceImages.Add(resourceImage);
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new
+        {
+            resourceImage.Id,
+            resourceImage.FileName,
+            resourceImage.ContentType,
+            resourceImage.ResourceId
+        });
+    }
+
+    [HttpGet("{resourceId:guid}/images")]
+    public async Task<IActionResult> GetImages(Guid resourceId)
+    {
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+        var images = await _dbContext.ResourceImages
+            .Where(i => i.ResourceId == resourceId && !i.IsDeleted)
+            .Select(i => new
+            {
+                i.Id,
+                i.ContentType,
+                Url = $"{baseUrl}/uploads/{i.FileName}"
+            })
+            .ToListAsync();
+
+        return Ok(images);
+    }
+
+    [Authorize]
+    [HttpDelete("images/{imageId:guid}")]
+    public async Task<IActionResult> DeleteImage(Guid imageId)
+    {
+        var image = await _dbContext.ResourceImages.FindAsync(imageId);
+        if (image == null || image.IsDeleted)
+            return NotFound();
+
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var isAdmin = User.IsInRole("Admin");
+
+        if (!isAdmin && image.UploadedByUserId != userId)
+            return Forbid();
+
+        // delete the physical file
+        var filePath = Path.Combine("wwwroot/uploads", image.FileName);
+        if (System.IO.File.Exists(filePath))
+        {
+            try
+            {
+                System.IO.File.Delete(filePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to delete file {filePath} for Image {imageId} by User {userId}: {ex.Message}");
+            }
+        }
+
+        image.IsDeleted = true;
+        image.DeletedAtUtc = DateTime.UtcNow;
+        image.DeletedByUserId = userId;
+
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
+
 
     private async Task UpdateResourceRatingsAsync(Guid resourceId)
     {

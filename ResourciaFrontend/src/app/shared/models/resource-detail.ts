@@ -1,4 +1,6 @@
 import { ResourceModel } from "./resource";
+import { RatingsModel } from "./ratings";
+import { FacetModel } from "./facet";
 
 export interface ResourceDetailModel extends ResourceModel {
   description: string;
@@ -7,11 +9,11 @@ export interface ResourceDetailModel extends ResourceModel {
   author: string;
   learningStyle: string;
   tags: string[]; // assuming simple string array
-  rating: number;
+  facets: FacetModel[];
+  ratings?: RatingsModel;
   savesCount: number;
   createdAtUtc: string; // ISO string; can convert to Date if you want
   updatedAtUtc: string;
-  resourceFacetValues: any[]; // TODO: define proper type if known
-  resourceReviews: any[];     // TODO: define proper type if known
+  reviews: any[];     // TODO: define proper type if known
   discussions: any[];         // TODO: define proper type if known
 }

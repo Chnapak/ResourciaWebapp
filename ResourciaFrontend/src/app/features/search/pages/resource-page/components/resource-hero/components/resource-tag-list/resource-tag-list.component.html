@@ -1,10 +1,5 @@
 <div class="flex flex-wrap gap-2 mb-6">
-  <app-chip [clickable]="true">Mathematics</app-chip>
-  <app-chip [clickable]="true">Linear Algebra</app-chip>
-  <app-chip [clickable]="true">Calculus</app-chip>
-  <app-chip [clickable]="true">Engineering</app-chip>
-
-  <app-chip intent="warning">
-    ⚡ Intermediate
-  </app-chip>
+  @for (chip of subjectChips; track $index) {
+    <app-chip [clickable]="true">{{chip.label}}</app-chip>
+  }
 </div>

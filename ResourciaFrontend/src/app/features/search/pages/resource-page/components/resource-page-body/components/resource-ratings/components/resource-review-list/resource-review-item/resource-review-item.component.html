@@ -1,20 +1,20 @@
-<div class="border-t border-gray-200 pt-5 mt-5">
+<div class="border-t border-gray-200 pt-5 mt-5 mb-5">
 
   <div class="flex justify-between gap-3">
     
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-full 
+        <div class="w-8 h-8 rounded-full 
                   flex items-center justify-center text-xs font-bold text-white"
-            [style.background]="gradient">
-        {{ initials }}
-      </div>
+        >
+
+        </div>
 
       <div>
         <div class="font-semibold text-sm">
-          {{ review.username }}
+            {{ review.username }}
         </div>
         <div class="text-xs text-gray-400">
-          {{ review.date }}
+            {{review.createdAt | shortDate }}
         </div>
       </div>
     </div>
@@ -22,17 +22,19 @@
 
   <!-- rating -->
   <div class="flex gap-0.5 my-2">
-    <span *ngFor="let i of [1,2,3,4,5]"
+    @for (i of [1,2,3,4,5]; track $index) {
+      <span
           class="text-sm"
           [class.text-amber-400]="i <= review.rating"
           [class.text-gray-300]="i > review.rating">
       ★
-    </span>
+      </span>
+    }
   </div>
 
   <!-- text -->
   <p class="text-sm text-gray-500 leading-relaxed">
-    {{ review.text }}
+    {{review.content}}
   </p>
 
   <!-- actions -->
@@ -40,7 +42,7 @@
 
     <button class="flex items-center gap-1.5 text-xs font-medium text-gray-400 
                    border border-gray-200 px-3 py-1.5 rounded-full">
-      👍 Helpful ({{ review.helpfulCount }})
+      👍 Helpful ({{review.upvotes}})
     </button>
 
     <button class="flex items-center gap-1.5 text-xs font-medium text-gray-400 

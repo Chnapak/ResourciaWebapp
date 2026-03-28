@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NodaTime;
@@ -89,7 +91,13 @@ public class Program
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
         builder.Services.AddScoped<IApplicationMapper, ApplicationMapper>();
         builder.Services.AddScoped<EmailSenderService>();
+        builder.Services.AddScoped<ImageService>(sp =>
+        {
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            return new ImageService(imagePath);
+        });
         builder.Services.AddHttpClient<CaptchaService>();
+
 
         builder.Services.AddHostedService<EmailSenderBackgroundService>();
 
@@ -228,12 +236,34 @@ public class Program
 
         await IdentitySeed.SeedAsync(scope.ServiceProvider);
 
+        var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "uploads");
+        Directory.CreateDirectory(uploadsPath);
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseStaticFiles();
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(uploadsPath),
+            RequestPath = "/uploads",
+            ContentTypeProvider = new FileExtensionContentTypeProvider()
+            {
+                Mappings =
+        {
+            [".png"] = "image/png",
+            [".jpg"] = "image/jpeg",
+            [".jpeg"] = "image/jpeg",
+            [".gif"] = "image/gif"
+        }
+            }
+        });
+
 
         //app.UseHttpsRedirection();
 

@@ -20,6 +20,8 @@ export class ButtonComponent {
   @Input() routerLink: string | any[] | null = null;
   @Input() queryParams: Record<string, any> | null = null;
 
+  @Input() href: string | null = null;
+
   /** For action buttons */
   @Input() type: 'button' | 'submit' = 'button';
   @Input() disabled = false;

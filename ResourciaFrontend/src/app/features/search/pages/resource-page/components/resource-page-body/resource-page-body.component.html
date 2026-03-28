@@ -5,17 +5,18 @@
  
     <!-- Description Card -->
     <app-resource-description-card
-      [description]="description"
-      [chips]="tags"
+      [resource]="resource"
     ></app-resource-description-card>
 
     <!-- Ratings & Reviews Card -->
-    <app-resource-ratings>
-
-    </app-resource-ratings>
+    <app-resource-ratings
+      [resource]="resource"
+    ></app-resource-ratings>
 
     <!-- Discussion Card -->
-    <app-resource-discussion-section></app-resource-discussion-section>
+    <app-resource-discussion-section
+      
+    ></app-resource-discussion-section>
   </div>
 
   <!-- Info Card -->

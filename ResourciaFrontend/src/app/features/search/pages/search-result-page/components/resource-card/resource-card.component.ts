@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { ButtonComponent } from '../../../../../../shared/ui/button/button.component';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-resource-card',
   standalone: true,
-  imports: [ButtonComponent, CommonModule],
+  imports: [ButtonComponent, CommonModule, RouterLink],
   templateUrl: './resource-card.component.html',
   styleUrl: './resource-card.component.scss',
 })
@@ -13,6 +14,8 @@ export class ResourceCardComponent {
   @Input() resource: any;
   @Output() open = new EventEmitter<any>();
   @Output() share = new EventEmitter<any>();
+
+  private router = inject(Router)
 
   get hasDescription(): boolean {
     return !!this.resource?.description?.trim();
@@ -29,5 +32,9 @@ export class ResourceCardComponent {
     } catch {
       return url;
     }
+  }
+
+  goToDetail() {
+    this.router.navigate(['resource', this.resource.id]);
   }
 }

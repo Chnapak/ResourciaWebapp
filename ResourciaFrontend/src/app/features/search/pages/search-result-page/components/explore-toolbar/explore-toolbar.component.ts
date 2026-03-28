@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonComponent } from '../../../../../../shared/ui/button/button.component';
-import { ActiveFilterChip } from '../../../../../../shared/models/active-filter-chip';
+import { FacetModel } from '../../../../../../shared/models/facet';
+import { ActiveChip } from '../../../../../../shared/models/active-chip';
 
 @Component({
   selector: 'app-explore-toolbar',
@@ -11,11 +12,11 @@ import { ActiveFilterChip } from '../../../../../../shared/models/active-filter-
 export class ExploreToolbarComponent {
   @Input() numberOfResources: number | undefined = 0;
   @Input() areFiltersHidden = false;
-  @Input() chips: ActiveFilterChip[] = [];
+  @Input() chips: ActiveChip[] = [];
 
   @Output() toggleFilters = new EventEmitter<void>();
   @Output() clearAll = new EventEmitter<void>();
-  @Output() removeChip = new EventEmitter<ActiveFilterChip>();
+  @Output() removeChip = new EventEmitter<ActiveChip>();
 
   hideFilters(): void {
     this.toggleFilters.emit();
@@ -25,7 +26,7 @@ export class ExploreToolbarComponent {
     this.clearAll.emit();
   }
 
-  onRemoveChip(chip: ActiveFilterChip): void {
+  onRemoveChip(chip: FacetModel): void {
     this.removeChip.emit(chip);
   }
 }
