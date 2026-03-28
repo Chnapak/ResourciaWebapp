@@ -61,14 +61,20 @@ public class Program
         });
 
         builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
+        builder.Services.Configure<OAuthOptions>(builder.Configuration.GetSection(nameof(OAuthOptions)));
 
         var jwtSettings = builder.Configuration.GetRequiredSection(nameof(JwtSettings)).Get<JwtSettings>();
+        var oauthSettings = builder.Configuration.GetSection(nameof(OAuthOptions)).Get<OAuthOptions>();
 
         builder.Services.AddAuthentication(options =>
         {
+            options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
+        })
+        .AddCookie(IdentityConstants.ExternalScheme)
+        .AddCookie(IdentityConstants.ApplicationScheme)
+        .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -80,6 +86,18 @@ public class Program
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience
             };
+        })
+        .AddGoogle(options =>
+        {
+            options.ClientId = oauthSettings?.Google?.ClientId ?? "invalid";
+            options.ClientSecret = oauthSettings?.Google?.ClientSecret ?? "invalid";
+            options.SaveTokens = false;
+        })
+        .AddFacebook(options =>
+        {
+            options.AppId = oauthSettings?.Facebook?.AppId ?? "invalid";
+            options.AppSecret = oauthSettings?.Facebook?.AppSecret ?? "invalid";
+            options.SaveTokens = false;
         });
 
         builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpSettings"));
@@ -98,6 +116,7 @@ public class Program
         });
         builder.Services.AddHttpClient<CaptchaService>();
         builder.Services.AddScoped<ReviewService>();
+        builder.Services.AddScoped<OAuthService>();
 
 
         builder.Services.AddHostedService<EmailSenderBackgroundService>();

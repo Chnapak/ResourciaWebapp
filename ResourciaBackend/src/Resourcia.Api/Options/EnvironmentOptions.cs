@@ -7,4 +7,5 @@ public class EnvironmentOptions
     public required string FrontendResetPasswordUrl { get; set; }
     public required string SenderEmail { get; set; }
     public required string SenderName { get; set; }
+    public string CompleteProfileUrl { get; set; } = string.Empty;
 }

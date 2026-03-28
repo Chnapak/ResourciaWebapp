@@ -4,7 +4,7 @@ import { AuthService } from '../../../../../../../../../../core/auth/auth.servic
 import { TextareaComponent } from '../../../../../../../../../../shared/ui/textarea/textarea.component';
 import { FormControl } from '@angular/forms';
 import { ReviewRequestModel } from '../../../../../../../../../../shared/models/review-request';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ResourceService } from '../../../../../../../../../../core/services/resource.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class ResourceRatingInputComponent implements OnInit {
   submitting = false;
   error: string | null = null;
 
-  constructor(private route: ActivatedRoute, private auth: AuthService, private resource: ResourceService) {}
+  constructor(private route: ActivatedRoute, private auth: AuthService, private resource: ResourceService, private router: Router) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -47,15 +47,25 @@ export class ResourceRatingInputComponent implements OnInit {
   }
 
   setRating(i: number) {
-    if (!this.auth.requireAuth()) {
-      this.auth.setPendingAction({
-        type: 'setRating',
-        payload: {
-          star: i,
-          text: this.text
-        }
-      });
-      return;
+    if (!this.auth.isLoggedIn()) {
+
+    // ✅ store action BEFORE redirect
+    this.auth.setPendingAction({
+      type: 'setRating',
+      payload: {
+        star: i,
+        text: this.text
+      }
+    });
+
+    // ✅ THIS triggers the guard flow
+    this.router.navigate(['/login'], {
+      queryParams: {
+        returnUrl: this.router.url
+      }
+    });
+
+    return;
     }
 
     this.rating = i;

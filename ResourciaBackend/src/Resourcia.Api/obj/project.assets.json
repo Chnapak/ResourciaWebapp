@@ -45,7 +45,7 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.Facebook/9.0.0": {
+      "Microsoft.AspNetCore.Authentication.Facebook/9.0.14": {
         "type": "package",
         "compile": {
           "lib/net9.0/Microsoft.AspNetCore.Authentication.Facebook.dll": {
@@ -61,7 +61,7 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Microsoft.AspNetCore.Authentication.Google/9.0.0": {
+      "Microsoft.AspNetCore.Authentication.Google/9.0.14": {
         "type": "package",
         "compile": {
           "lib/net9.0/Microsoft.AspNetCore.Authentication.Google.dll": {
@@ -1585,10 +1585,10 @@
         "mailkit.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Authentication.Facebook/9.0.0": {
-      "sha512": "1JVW/pc2Ar+L0G3I76+j2hT5vaqipVB02+A/4AsSXsmZuBrQFt26U0aumC2wWhNbmA/zBV9zU0SareRY4bd/bQ==",
+    "Microsoft.AspNetCore.Authentication.Facebook/9.0.14": {
+      "sha512": "P0exj7DsFSPE3BGcA8asDMtLX9UlmngDCRTfMTVF3eJNPxKNDUvgIEuLBoXYG5PNOs7Qd2l/f4yWMxyQxUCAGg==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.facebook/9.0.0",
+      "path": "microsoft.aspnetcore.authentication.facebook/9.0.14",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1596,14 +1596,14 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net9.0/Microsoft.AspNetCore.Authentication.Facebook.dll",
         "lib/net9.0/Microsoft.AspNetCore.Authentication.Facebook.xml",
-        "microsoft.aspnetcore.authentication.facebook.9.0.0.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.facebook.9.0.14.nupkg.sha512",
         "microsoft.aspnetcore.authentication.facebook.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Authentication.Google/9.0.0": {
-      "sha512": "aO8Yeg1BaWGdWuLOZXAOxq9zYTSXObsYs75SlayR5ntPVQGyVXzvvn2NhrDdyonmz/z7Q86qZhdr42Cq1gMcNA==",
+    "Microsoft.AspNetCore.Authentication.Google/9.0.14": {
+      "sha512": "bCgaTqRlVJTmwQ7E1i0NZ0TnxIpt99O1YsoPSNwlHphp4rBnSxKSToH/CSJ3LOZyDiDef0epbu4gKY0U5vnM+g==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.google/9.0.0",
+      "path": "microsoft.aspnetcore.authentication.google/9.0.14",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1611,7 +1611,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net9.0/Microsoft.AspNetCore.Authentication.Google.dll",
         "lib/net9.0/Microsoft.AspNetCore.Authentication.Google.xml",
-        "microsoft.aspnetcore.authentication.google.9.0.0.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.google.9.0.14.nupkg.sha512",
         "microsoft.aspnetcore.authentication.google.nuspec"
       ]
     },
@@ -4494,8 +4494,8 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "MailKit >= 4.9.0",
-      "Microsoft.AspNetCore.Authentication.Facebook >= 9.0.0",
-      "Microsoft.AspNetCore.Authentication.Google >= 9.0.0",
+      "Microsoft.AspNetCore.Authentication.Facebook >= 9.0.14",
+      "Microsoft.AspNetCore.Authentication.Google >= 9.0.14",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 9.0.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.0",
       "Microsoft.AspNetCore.JsonPatch >= 10.0.2",
@@ -4571,11 +4571,11 @@
           },
           "Microsoft.AspNetCore.Authentication.Facebook": {
             "target": "Package",
-            "version": "[9.0.0, )"
+            "version": "[9.0.14, )"
           },
           "Microsoft.AspNetCore.Authentication.Google": {
             "target": "Package",
-            "version": "[9.0.0, )"
+            "version": "[9.0.14, )"
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
