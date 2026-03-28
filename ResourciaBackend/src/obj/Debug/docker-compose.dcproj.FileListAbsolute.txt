@@ -55,6 +55,8 @@ C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Npgsql.E
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.AspNetCore.Authentication.Facebook.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Resourcia.Data.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\NodaTime.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\MailKit.dll

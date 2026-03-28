@@ -36,7 +36,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         modelBuilder.Ignore<IdentityUserRole<Guid>>();
         modelBuilder.Ignore<IdentityRole<Guid>>();
-        modelBuilder.Ignore<IdentityUserLogin<Guid>>();
         modelBuilder.Ignore<IdentityUserToken<Guid>>();
         modelBuilder.Ignore<IdentityRoleClaim<Guid>>();
 

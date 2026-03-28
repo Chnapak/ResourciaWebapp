@@ -24,6 +24,7 @@ export class RegistrationPageComponent {
   private readonly router = inject(Router);
 
   public readonly siteKey = environment.siteKey;
+  private readonly baseUrl = '/api/Auth';
 
   isSubmitting = false;
   isCooldown = false;
@@ -189,6 +190,10 @@ export class RegistrationPageComponent {
         this.resendButtonText = $localize`Resend Email`;
       }
     }, 1000)
+  }
+
+  loginWithProvider(provider: string) {
+    window.location.href = `${this.baseUrl}/ExternalLogin?provider=${provider}`;
   }
 }
 
