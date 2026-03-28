@@ -23,3 +23,8 @@ node_modules/
 **/*.json # optional if just config backups
 
 docs
+
+**/bin/
+**/obj/
+secrets.txt
+appsettings.*.json
