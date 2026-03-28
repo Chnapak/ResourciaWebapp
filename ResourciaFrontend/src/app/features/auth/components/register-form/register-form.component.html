@@ -1,0 +1,148 @@
+@if (!showSuccess) {
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col items-center w-full">
+
+    <!-- Username -->
+    <div class="flex flex-col w-fit w-70 relative">
+      @let username = form.get('displayName');
+      <label i18n for="username" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
+        [class.text-red-500]="(username?.touched && username?.invalid) || usernameInUse">
+        Username:
+      </label>
+      <input type="text" placeholder="Write here..." i18n-placeholder name="username"
+        formControlName="displayName"
+        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        [class.border-red-500]="(username?.touched && username?.invalid) || usernameInUse">
+      @if (username?.touched && username?.errors?.['required']) {
+        <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Username is required.</p>
+      }
+      @if (usernameInUse) {
+        <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Username is already taken.</p>
+      }
+    </div>
+
+    <!-- Email -->
+    <div class="flex flex-col w-fit w-70 relative mt-2">
+      @let email = form.get('email');
+      <label i18n for="email" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
+        [class.text-red-500]="(email?.touched && email?.invalid) || emailInUse">
+        Email:
+      </label>
+      <input type="email" placeholder="Write here..." i18n-placeholder name="email"
+        formControlName="email"
+        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        [class.border-red-500]="(email?.touched && email?.invalid) || emailInUse">
+      @if (email?.touched && email?.invalid) {
+        @if (email?.errors?.['required']) {
+          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Email is required.</p>
+        }
+        @if (email?.errors?.['invalidEmail']) {
+          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Please enter a valid email.</p>
+        }
+      }
+      @if (emailInUse) {
+        <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">This email is already registered.</p>
+      }
+    </div>
+
+    <!-- Password -->
+    <div class="flex flex-col w-fit w-70 relative mt-2">
+      @let password = form.get('password');
+      <label i18n for="password" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
+        [class.text-red-500]="password?.touched && password?.invalid">
+        Password:
+      </label>
+      <input type="password" placeholder="Write here..." i18n-placeholder name="password"
+        formControlName="password"
+        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        [class.border-red-500]="password?.touched && password?.invalid">
+      @if (password?.touched && password?.invalid) {
+        @if (password?.errors?.['required']) {
+          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Password is required.</p>
+        }
+        @if (password?.errors?.['passwordStrength'] || password?.errors?.['minlength'] || password?.errors?.['maxlength']) {
+          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">
+            Password must be 8–32 characters with an uppercase letter, a digit, and a special character.
+          </p>
+        }
+      }
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="flex flex-col w-fit w-70 relative mt-2">
+      @let confirmPassword = form.get('confirmPassword');
+      <label i18n for="confirm" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
+        [class.text-red-500]="confirmPassword?.touched && (confirmPassword?.invalid || form.invalid)">
+        Confirm password:
+      </label>
+      <input type="password" placeholder="Write here..." i18n-placeholder name="confirm"
+        formControlName="confirmPassword"
+        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        [class.border-red-500]="confirmPassword?.touched && (confirmPassword?.invalid || form.invalid)">
+      @if (confirmPassword?.touched) {
+        @if (confirmPassword?.invalid) {
+          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Please confirm your password.</p>
+        }
+        @else if (form.errors?.['passwordMismatch']) {
+          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Passwords must match.</p>
+        }
+      }
+    </div>
+
+    <!-- Turnstile -->
+    <div [id]="turnstileContainerId" class="mt-4 w-full flex justify-center"></div>
+
+    @if (generalError) {
+      <p i18n class="w-70 text-left text-xs text-red-600 mt-2">Something went wrong, please try again.</p>
+    }
+
+    <button
+      type="submit"
+      class="w-70 mt-4 py-2.5 text-sm font-semibold text-white rounded-[8px] transition-colors
+             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      [class.bg-blue-500]="!isSubmitDisabled"
+      [class.hover:bg-blue-600]="!isSubmitDisabled"
+      [class.bg-gray-300]="isSubmitDisabled"
+      [class.cursor-not-allowed]="isSubmitDisabled"
+      [disabled]="isSubmitDisabled">
+      @if (isSubmitting) {
+        <span i18n>Creating account…</span>
+      } @else {
+        <span i18n>Create account</span>
+      }
+    </button>
+
+    <p i18n class="text-left text-xs w-70 mt-3 text-gray-500">
+      By signing up you agree with our
+      <a routerLink="/tos" class="text-blue-600 hover:underline">Terms of Service</a>
+      and
+      <a routerLink="/privacy-policy" class="text-blue-600 hover:underline">Privacy Policy</a>.
+    </p>
+  </form>
+} @else {
+  <!-- Email confirmation sent state -->
+  <div class="flex flex-col items-center text-center py-4 px-2 max-w-xs">
+    <div class="bg-blue-600 rounded-full p-5 mb-4">
+      <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+      </svg>
+    </div>
+    <h2 i18n class="text-xl font-semibold mb-1">Check your email!</h2>
+    <p i18n class="text-gray-500 text-sm mb-5">
+      We've sent a confirmation link to
+      <span class="font-semibold text-blue-600">{{ registeredEmail }}</span>.
+    </p>
+    <p i18n class="text-sm text-gray-400 mb-3">Didn't receive it? Check your spam folder or resend.</p>
+    <button
+      (click)="resendEmail()"
+      [disabled]="isCooldown"
+      class="w-full py-2.5 text-sm font-semibold text-white rounded-[8px] transition-colors
+             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      [class.bg-blue-500]="!isCooldown"
+      [class.hover:bg-blue-600]="!isCooldown"
+      [class.bg-gray-300]="isCooldown"
+      [class.cursor-not-allowed]="isCooldown">
+      {{ resendButtonText }}
+    </button>
+  </div>
+}

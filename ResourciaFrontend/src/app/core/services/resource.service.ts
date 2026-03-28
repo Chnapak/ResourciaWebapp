@@ -18,7 +18,7 @@ export class ResourceService {
   constructor(private httpClient: HttpClient) 
   { }
 
-  protected readonly baseUrl = "/api/Resource";
+  protected readonly baseUrl = "/api/resources";
 
   createResource(payload: CreateResourceRequestModel): Observable<CreateResourceResponseModel> {
     return this.httpClient.post<CreateResourceResponseModel>(this.baseUrl, payload);
@@ -57,12 +57,12 @@ export class ResourceService {
   }
 
   getResource(id: string): Observable<ResourceDetailModel> {
-    return this.httpClient.get<ResourceDetailModel>(`/api/Resource/${id}`);
+    return this.httpClient.get<ResourceDetailModel>(`/api/resources/${id}`);
   }
 
   getReviews(resourceId: string, page = 1, pageSize = 10, sortBy = 'helpful') {
     return this.httpClient.get<any>(
-      `/api/resource/${resourceId}/reviews`,
+      `/api/resources/${resourceId}/reviews`,
       {
         params: {
           page,

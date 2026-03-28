@@ -1,0 +1,63 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col items-center w-full">
+
+  <app-textfield
+    label="Email"
+    i18n-label
+    type="email"
+    placeholder="Write here..."
+    i18n-placeholder
+    formControlName="email">
+  </app-textfield>
+
+  <app-textfield
+    label="Password"
+    i18n-label
+    type="password"
+    placeholder="Write here..."
+    i18n-placeholder
+    formControlName="password">
+  </app-textfield>
+
+  <!-- Turnstile -->
+  <div [id]="turnstileContainerId" class="mt-4 w-full flex justify-center"></div>
+
+  <!-- Forgot password link -->
+  <div class="w-70 text-right mt-1">
+    <a i18n routerLink="/forgot-password" class="text-sm text-slate-500 hover:text-slate-800 cursor-pointer transition-colors">
+      Forgot password?
+    </a>
+  </div>
+
+  <!-- Error messages -->
+  <div class="w-70 text-left mt-2 space-y-1">
+    @if (loginFailed) {
+      <p i18n class="text-xs text-red-600">Invalid email or password. Please try again.</p>
+    }
+    @if (captchaFailed) {
+      <p i18n class="text-xs text-red-600">Please complete the security check.</p>
+    }
+    @if (generalError) {
+      <p i18n class="text-xs text-red-600">Something went wrong. Please try again.</p>
+    }
+    @if (emailNotConfirmed) {
+      <p i18n class="text-xs text-amber-700">
+        You haven't confirmed your email yet.
+        <button type="button" (click)="resendConfirmation()"
+          class="underline font-medium hover:text-amber-900 transition-colors">
+          Resend confirmation email ↗
+        </button>
+      </p>
+    }
+  </div>
+
+  <ui-button
+    i18n
+    class="w-70 mt-4"
+    [fullWidth]="true"
+    type="submit"
+    variant="primary"
+    [loading]="isSubmitting"
+    [disabled]="isSubmitDisabled">
+    Sign in
+  </ui-button>
+</form>
