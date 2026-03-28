@@ -21,6 +21,7 @@ import { ResetPasswordPageComponent } from './features/auth/pages/reset-password
 import { ForgotPasswordPageComponent } from './features/auth/pages/forgot-password-page/forgot-password-page.component';
 import { ResourcePageComponent } from './features/search/pages/resource-page/resource-page.component';
 import { canActivateGuard } from './core/guards/login.guard';
+import { CompleteProfileComponent } from './features/auth/pages/complete-profile/complete-profile.component';
 
 export const routes: Routes = [
     {
@@ -29,15 +30,16 @@ export const routes: Routes = [
         children: [
             { path: '', component: HomePageComponent, title: 'Home' },
             { path: 'addresource', component: AddResourcePageComponent, title: "Add Resource"},
+            { path: 'complete-profile', component:CompleteProfileComponent},
             { path: 'forgot-password', component: ForgotPasswordPageComponent, title: 'Forgot Password'},
             { path: 'login', component: LoginPageComponent, title: 'Login' },
             { path: 'signup', component: RegistrationPageComponent, title: 'Registration'},
-            { path: 'confirm-token', component: TokenValidationPageComponent, title: 'Ověření emailu'},
+            { path: 'confirm-token', component: TokenValidationPageComponent, title: 'Email verification'},
             { path: 'privacy-policy', component: PrivacyPolicyPageComponent, title: 'Privacy Policy'},
             { path: 'profile/:id', component: ProfilePageComponent, title: 'Profile'},
             { path: 'tos', component: TosPageComponent, title: 'Terms of Service'},
             { path: 'reset-password', component: ResetPasswordPageComponent, title: 'Reset Password'},
-            { path: 'resource/:id', component: ResourcePageComponent, canActivate: [canActivateGuard] },
+            { path: 'resource/:id', component: ResourcePageComponent, canActivate: [canActivateGuard], data: { public: true} },
             { path: 'search', component: SearchResultPageComponent, title: 'Resources'},
             { path: 'suspended', component: SuspensionMessagePageComponent, title: 'Account Suspended'},
             { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 
