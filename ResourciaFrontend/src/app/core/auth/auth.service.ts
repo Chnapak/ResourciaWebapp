@@ -12,6 +12,7 @@ import { ForgotPasswordModel } from '../../features/auth/models/forgot-password'
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayloadModel } from '../../shared/models/jwt-payload-model';
 import { ToasterService } from '../../shared/toaster/toaster.service';
+import { CompleteExternalLoginModel } from '../../shared/models/complete-external-login';
 
 export type AuthState = 'initialising' | 'anonymous' | 'authenticated' | 'token_expired';
 
@@ -196,7 +197,7 @@ export class AuthService {
     const isHardGated = HARD_GATED_ROUTES.some(r => this.router.url.startsWith(r));
     if (isHardGated) {
       sessionStorage.setItem('returnUrl', this.router.url);
-      this.router.navigate(['/auth'], { queryParams: { mode: 'login', returnUrl: this.router.url } });
+      this.router.navigate(['/login'], { queryParams: { mode: 'login', returnUrl: this.router.url } });
     } else {
       this.openAuthModalSubject.next(action);
     }
@@ -278,6 +279,12 @@ export class AuthService {
     return this.httpClient.get<MeInfoModel>(`${this.baseUrl}/UserInfo`).pipe(
       map(user => user)
     );
+  }
+
+  completeExternalLogin(data: CompleteExternalLoginModel): Observable<any> {
+    // This sends the additional profile data to your backend
+    // Your backend should identify the user via their existing session/token
+    return this.httpClient.post(`${this.baseUrl}/CompleteExternalLogin`, data);
   }
 
   // ── Pending actions ──────────────────────────────────────────────────────

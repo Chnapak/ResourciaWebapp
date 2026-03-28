@@ -12,14 +12,23 @@ export const canActivateGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  const isPublic = _route.data?.['public'];
+
+  // ✅ allow public routes always
+  if (isPublic) {
+    return true;
+  }
+
+  // ✅ allow if logged in
   if (authService.isLoggedIn()) {
     return true;
   }
 
-  // Persist returnUrl to sessionStorage so it survives page refreshes
-  sessionStorage.setItem('returnUrl', state.url);
-
-  return router.createUrlTree(['/auth'], {
-    queryParams: { mode: 'login', returnUrl: state.url }
+  // ❌ otherwise redirect to login
+  return router.createUrlTree(['/login'], {
+    queryParams: {
+      mode: 'login',
+      returnUrl: state.url
+    }
   });
 };

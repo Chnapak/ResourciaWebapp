@@ -35,6 +35,7 @@ public class AuthController : ControllerBase
     private readonly EnvironmentOptions _environmentSettings;
     private readonly CaptchaService _captchaService;
     private readonly EmailSenderService _emailSenderService;
+    private readonly OAuthService _oAuthService;
 
     public AuthController(
         IClock clock,
@@ -44,7 +45,8 @@ public class AuthController : ControllerBase
         EmailSenderService emailSenderService,
         CaptchaService captchaService,
         IOptions<JwtSettings> options,
-        IOptions<EnvironmentOptions> environmentSettings)
+        IOptions<EnvironmentOptions> environmentSettings,
+        OAuthService oAuthService)
     {
         _clock = clock;
         _dbContext = dbContext;
@@ -54,6 +56,7 @@ public class AuthController : ControllerBase
         _emailSenderService = emailSenderService;
         _captchaService = captchaService;
         _environmentSettings = environmentSettings.Value;
+        _oAuthService = oAuthService;
     }
 
     // We will also add verion of endpoint into post controller
@@ -404,6 +407,189 @@ public class AuthController : ControllerBase
     public ActionResult TestMeBeforeLoginAndAfter()
     {
         return Ok("Succesfully reached endpoint!");
+    }
+
+    [HttpGet("ExternalLogin")]
+    [AllowAnonymous]
+    public IActionResult ExternalLogin([FromQuery] string provider, [FromQuery] string? returnUrl = null)
+    {
+        if (provider != "Google" && provider != "Facebook")
+            return BadRequest(new { error = "Invalid provider" });
+
+        var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Auth", new { returnUrl });
+        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        return Challenge(properties, provider);
+    }
+
+    [HttpGet("ExternalLoginCallback")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ExternalLoginCallback([FromQuery] string? returnUrl = null, [FromQuery] string? remoteError = null)
+    {
+        var frontendUrl = _environmentSettings.FrontendHostUrl.TrimEnd('/');
+
+        if (remoteError != null)
+            return Redirect($"{frontendUrl}?error={Uri.EscapeDataString(remoteError)}");
+
+        var info = await _signInManager.GetExternalLoginInfoAsync();
+        if (info == null)
+            return Redirect($"{frontendUrl}?error={Uri.EscapeDataString("Error loading external login information.")}");
+
+        // 1. Try to sign in the user if they are already linked
+        var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
+        if (result.Succeeded)
+        {
+            // User already has this Google account linked.
+            var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            return await GenerateLoginRedirect(user!, returnUrl);
+        }
+
+        // 2. User is NOT linked. Check if the email already exists locally.
+        var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+        if (!string.IsNullOrEmpty(email))
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser != null)
+            {
+                // MERGE HAPPENS HERE: Link the Google account to the existing email account
+                var addLoginResult = await _userManager.AddLoginAsync(existingUser, info);
+                if (addLoginResult.Succeeded)
+                {
+                    // Successfully merged! Log them in.
+                    return await GenerateLoginRedirect(existingUser, returnUrl);
+                }
+            }
+        }
+
+        // 3. No existing account found. Fall back to your "Complete Profile" flow.
+        var (newUser, provider, providerKey, userEmail, name, needsProfile) = await _oAuthService.HandleExternalLoginAsync(info);
+
+        if (needsProfile)
+        {
+            var regClaims = new List<Claim>
+        {
+            new(JwtRegisteredClaimNames.Email, userEmail ?? string.Empty),
+            new(ClaimTypes.Name, name ?? string.Empty),
+            new("provider", provider!),
+            new("providerKey", providerKey!),
+            new(ClaimTypes.Role, "ExternalRegistration")
+        };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var tempToken = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: regClaims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds);
+
+            // These variables must be defined here to be used in the Redirect below
+            string tokenString = new JwtSecurityTokenHandler().WriteToken(tempToken);
+            string completeUrl = $"{frontendUrl}/{_environmentSettings.CompleteProfileUrl.TrimStart('/')}";
+
+            return Redirect($"{completeUrl}?registrationToken={tokenString}");
+        }
+
+        return await GenerateLoginRedirect(newUser!, returnUrl);
+    }
+
+    // Helper to keep code clean
+    private async Task<IActionResult> GenerateLoginRedirect(AppUser user, string? returnUrl)
+    {
+        var roles = await _userManager.GetRolesAsync(user);
+        var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
+        var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
+
+        Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, // Set to true for production
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
+        });
+
+        var finalUrl = returnUrl ?? _environmentSettings.FrontendHostUrl;
+        return Redirect($"{finalUrl}?token={accessToken}");
+    }
+
+    [HttpPost("CompleteExternalLogin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> CompleteExternalLogin([FromBody] CompleteExternalLoginModel model)
+    {
+        if (!ModelState.IsValid)
+            return ValidationProblem(ModelState);
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
+
+        try
+        {
+            // ... (Existing Token Validation Logic) ...
+            tokenHandler.ValidateToken(model.RegistrationToken, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key), // This fixes IDX10500
+
+                ValidateIssuer = true,
+                ValidIssuer = _jwtSettings.Issuer,
+
+                ValidateAudience = true,
+                ValidAudience = _jwtSettings.Audience,
+
+                ValidateLifetime = true,
+                // Optional: Set to zero to avoid issues with server clock desync
+                ClockSkew = TimeSpan.Zero
+            }, out SecurityToken validatedToken);
+            var jwt = (JwtSecurityToken)validatedToken;
+
+            var email = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
+            var provider = jwt.Claims.FirstOrDefault(c => c.Type == "provider")?.Value;
+            var providerKey = jwt.Claims.FirstOrDefault(c => c.Type == "providerKey")?.Value;
+
+            // 1. Create the User
+            var now = _clock.GetCurrentInstant();
+            var newUser = new AppUser
+            {
+                Id = Guid.NewGuid(),
+                DisplayName = model.DisplayName,
+                Email = email,
+                UserName = email,
+                EmailConfirmed = true // External providers are pre-verified
+            }.SetCreateBySystem(now);
+
+            var createResult = await _userManager.CreateAsync(newUser);
+            if (!createResult.Succeeded)
+                return BadRequest(new { error = "Could not create user." });
+
+            // 2. Link the External Provider
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(new ClaimsIdentity(jwt.Claims)), provider, providerKey, provider);
+            await _userManager.AddLoginAsync(newUser, info);
+
+            // 3. GENERATE AUTHENTICATION FOR FRONTEND
+            var roles = await _userManager.GetRolesAsync(newUser);
+            var accessToken = GenerateAccessToken(newUser.Id, newUser.Email!, newUser.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
+            var refreshToken = await GenerateRefreshTokenAsync(newUser.Id, _jwtSettings.RefreshTokenExpirationInDays);
+
+            // 4. Set Refresh Token Cookie
+            Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Set to true for Production (HTTPS)
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
+            });
+
+            // 5. Return the Access Token (JWT)
+            return Ok(new { Token = accessToken });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return Unauthorized(new { error = "Invalid or expired registration token." + ex});
+        }
     }
 
     private async Task<string> GenerateEmailConfirmation(AppUser newUser)
