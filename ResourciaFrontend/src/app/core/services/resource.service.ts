@@ -59,4 +59,17 @@ export class ResourceService {
   getResource(id: string): Observable<ResourceDetailModel> {
     return this.httpClient.get<ResourceDetailModel>(`/api/Resource/${id}`);
   }
+
+  getReviews(resourceId: string, page = 1, pageSize = 10, sortBy = 'helpful') {
+    return this.httpClient.get<any>(
+      `/api/resource/${resourceId}/reviews`,
+      {
+        params: {
+          page,
+          pageSize,
+          sortBy
+        }
+      }
+    );
+  }
 }

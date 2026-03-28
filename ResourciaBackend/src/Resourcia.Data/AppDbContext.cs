@@ -14,25 +14,19 @@ namespace Resourcia.Data;
 public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
 {
     public DbSet<Post> Posts { get; set; }
-
     public DbSet<Comment> Comments { get; set; }
-
     public DbSet<EmailMessage> Emails { get; set; }
-
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-
     public DbSet<FilterDefinitions> Filters { get; set; }
-
     public DbSet<FacetValues> FacetValues { get; set; }
-
     public DbSet<ResourceFacetValues> ResourceFacetValues { get; set; }
-
     public DbSet<Resource> Resources { get; set; }
     public DbSet<ResourceReview> ResourceReviews { get; set; }
     public DbSet<ReviewVotes> ReviewsVotes { get; set; }
     public DbSet<Discussions> Discussions { get; set; }
     public DbSet<DiscussionReplies> DiscussionReplies { get; set; }
     public DbSet<ResourceRatings> ResourceRatings { get; set; }
+    public DbSet<ResourceImage> ResourceImages { get; set; } = null!;
 
     public AppDbContext(DbContextOptions options) : base(options)
     {

@@ -625,6 +625,49 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("ResourceFacetValues");
                 });
 
+            modelBuilder.Entity("Resourcia.Data.Entities.ResourceImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UploadedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UploadedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("ResourceImages");
+                });
+
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceRatings", b =>
                 {
                     b.Property<Guid>("ResourceId")
@@ -687,6 +730,8 @@ namespace Resourcia.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ResourceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ResourceReviews");
                 });
@@ -848,6 +893,17 @@ namespace Resourcia.Data.Migrations
                     b.Navigation("Resource");
                 });
 
+            modelBuilder.Entity("Resourcia.Data.Entities.ResourceImage", b =>
+                {
+                    b.HasOne("Resourcia.Data.Entities.Resource", "Resource")
+                        .WithMany("Images")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+                });
+
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceRatings", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.Resource", "Resource")
@@ -867,7 +923,15 @@ namespace Resourcia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Resourcia.Data.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Resource");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.ReviewVotes", b =>
@@ -900,6 +964,8 @@ namespace Resourcia.Data.Migrations
             modelBuilder.Entity("Resourcia.Data.Entities.Resource", b =>
                 {
                     b.Navigation("Discussions");
+
+                    b.Navigation("Images");
 
                     b.Navigation("Ratings");
 

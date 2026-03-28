@@ -1,7 +1,8 @@
 import { Component, Input, input } from '@angular/core';
-import { ActiveFilterChip } from '../../../../../../../../shared/models/active-filter-chip';
 import { ChipComponent } from '../../../../../../../../shared/ui/chip/chip.component';
 import { Router } from '@angular/router';
+import { ResourceDetailModel } from '../../../../../../../../shared/models/resource-detail';
+import { FacetModel } from '../../../../../../../../shared/models/facet';
 
 @Component({
   selector: 'app-resource-description-card',
@@ -10,9 +11,7 @@ import { Router } from '@angular/router';
   styleUrl: './resource-description-card.component.scss',
 })
 export class ResourceDescriptionCardComponent {
-  @Input() description: string = '';
-  @Input() chips: ActiveFilterChip[] = [
-  ];
+  @Input() resource: ResourceDetailModel | null = null;
 
   isExpanded: boolean = false;
 
@@ -22,7 +21,7 @@ export class ResourceDescriptionCardComponent {
     this.isExpanded = !this.isExpanded;
   }
 
-  transferToSearch(chip: ActiveFilterChip) {
+  transferToSearch(chip: FacetModel) {
     this.router.navigate(['/search'], {
       queryParams: {
         [chip.key]: chip.value

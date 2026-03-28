@@ -18,7 +18,8 @@ import { ResourceService } from '../../../../core/services/resource.service';
 import { ResourceDetailModel } from '../../../../shared/models/resource-detail';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { PaginationComponent } from '../../../../shared/ui/pagination/pagination.component';
-import { ActiveFilterChip } from '../../../../shared/models/active-filter-chip';
+import { FacetModel } from '../../../../shared/models/facet';
+import { ActiveChip } from '../../../../shared/models/active-chip';
 
 
 @Component({
@@ -375,10 +376,10 @@ export class SearchResultPageComponent implements OnInit {
     return query;
   }
 
-  get activeFilterChips(): ActiveFilterChip[] {
+  get activeFilterChips(): ActiveChip[] {
     if (!this.schema) return [];
 
-    const chips: ActiveFilterChip[] = [];
+    const chips: ActiveChip[] = [];
 
     for (const filter of this.schema.filters) {
       const key = filter.key;
@@ -388,19 +389,24 @@ export class SearchResultPageComponent implements OnInit {
         case FilterKind.Facet: {
           const raw = this.queryState.facets[key];
 
+          const findLabel = (val: string) => {
+            const option = filter.values?.find((o: any) => o.value === val);
+            return option?.label ?? val;
+          };
+
           if (Array.isArray(raw)) {
             for (const value of raw) {
               chips.push({
                 key,
                 value,
-                displayValue: value
+                label: findLabel(value)
               });
             }
           } else if (typeof raw === 'string' && raw.trim()) {
             chips.push({
               key,
               value: raw,
-              displayValue: raw
+              label: findLabel(raw)
             });
           }
 
@@ -414,7 +420,7 @@ export class SearchResultPageComponent implements OnInit {
             chips.push({
               key,
               value: 'true',
-              displayValue: label
+              label: label
             });
           }
 
@@ -428,7 +434,7 @@ export class SearchResultPageComponent implements OnInit {
             chips.push({
               key,
               value: raw,
-              displayValue: `${label}: ${raw}`
+              label: `${label}: ${raw}`
             });
           }
 
@@ -443,19 +449,19 @@ export class SearchResultPageComponent implements OnInit {
             chips.push({
               key,
               value: `${range.min}-${range.max}`,
-              displayValue: `${label}: ${range.min}–${range.max}`
+              label: `${label}: ${range.min}–${range.max}`
             });
           } else if (range.min) {
             chips.push({
               key,
               value: `min-${range.min}`,
-              displayValue: `${label}: ≥ ${range.min}`
+              label: `${label}: ≥ ${range.min}`
             });
           } else if (range.max) {
             chips.push({
               key,
               value: `max-${range.max}`,
-              displayValue: `${label}: ≤ ${range.max}`
+              label: `${label}: ≤ ${range.max}`
             });
           }
 
@@ -467,7 +473,7 @@ export class SearchResultPageComponent implements OnInit {
     return chips;
   }
 
-  removeChip(chip: ActiveFilterChip): void {
+  removeChip(chip: ActiveChip): void {
     const filter = this.schema?.filters.find(f => f.key === chip.key);
     if (!filter) return;
 

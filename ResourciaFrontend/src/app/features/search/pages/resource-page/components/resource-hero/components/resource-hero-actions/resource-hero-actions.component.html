@@ -2,7 +2,7 @@
   <ui-button
     variant="primary"
     size="lg"
-    [routerLink]="'/external-link'"
+    [href]="resource?.url ?? null"
     class="shadow-[0_4px_12px_rgba(37,99,235,0.4)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.5)] hover:-translate-y-0.5 transition-all duration-200"
   >
     <i class="fa-solid fa-arrow-up-right-from-square"></i>
