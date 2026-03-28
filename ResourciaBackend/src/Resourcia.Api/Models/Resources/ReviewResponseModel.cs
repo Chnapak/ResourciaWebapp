@@ -1,4 +1,4 @@
-﻿using NodaTime;
+using NodaTime;
 
 namespace Resourcia.Api.Models.Resources;
 
@@ -11,7 +11,7 @@ public class ReviewResponseModel
     public int Rating { get; set; }
     public string? Content { get; set; }
     public Instant? CreatedAt { get; set; }
+    public Instant? UpdatedAt { get; set; }
     public int Downvotes { get; set; }
     public int Upvotes { get; set; }
-
 }

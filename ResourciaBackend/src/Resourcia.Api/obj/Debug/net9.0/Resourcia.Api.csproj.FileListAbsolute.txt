@@ -428,7 +428,6 @@ C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\Resourci.FB40D25E.Up2Date
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\Resourcia.Api.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\refint\Resourcia.Api.dll
@@ -437,3 +436,6 @@ C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\ref\Resourcia.Api.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\SixLabors.ImageSharp.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\Resourcia.Api.staticwebassets.runtime.json
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Facebook.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

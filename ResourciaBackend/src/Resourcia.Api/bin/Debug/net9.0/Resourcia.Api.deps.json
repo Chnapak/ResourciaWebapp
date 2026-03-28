@@ -9,6 +9,8 @@
       "Resourcia.Api/1.0.0": {
         "dependencies": {
           "MailKit": "4.9.0",
+          "Microsoft.AspNetCore.Authentication.Facebook": "9.0.0",
+          "Microsoft.AspNetCore.Authentication.Google": "9.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.0",
           "Microsoft.AspNetCore.JsonPatch": "10.0.2",
@@ -52,6 +54,22 @@
           "lib/net8.0/MailKit.dll": {
             "assemblyVersion": "4.9.0.0",
             "fileVersion": "4.9.0.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Facebook/9.0.0": {
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Authentication.Facebook.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52903"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Google/9.0.0": {
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52903"
           }
         }
       },
@@ -891,6 +909,20 @@
       "sha512": "sha512-wRUVzYXRWbjdUixwtSp7ivVHPhWw17h+BvwIVaouBike68B56Xk9b5+QRT39EK/QN8XF7MtOgt9caHvUaCvhIQ==",
       "path": "mailkit/4.9.0",
       "hashPath": "mailkit.4.9.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Facebook/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1JVW/pc2Ar+L0G3I76+j2hT5vaqipVB02+A/4AsSXsmZuBrQFt26U0aumC2wWhNbmA/zBV9zU0SareRY4bd/bQ==",
+      "path": "microsoft.aspnetcore.authentication.facebook/9.0.0",
+      "hashPath": "microsoft.aspnetcore.authentication.facebook.9.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Google/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aO8Yeg1BaWGdWuLOZXAOxq9zYTSXObsYs75SlayR5ntPVQGyVXzvvn2NhrDdyonmz/z7Q86qZhdr42Cq1gMcNA==",
+      "path": "microsoft.aspnetcore.authentication.google/9.0.0",
+      "hashPath": "microsoft.aspnetcore.authentication.google.9.0.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/9.0.0": {
       "type": "package",

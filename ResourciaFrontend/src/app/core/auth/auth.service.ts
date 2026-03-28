@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { RegisterModel } from '../../features/auth/models/register';
 import { MeInfoModel } from '../../shared/models/me-info';
 import { map, tap } from 'rxjs/operators';
@@ -9,33 +9,72 @@ import { Router } from '@angular/router';
 import { ResendConfirmationModel } from '../../features/auth/models/resend-confirmation';
 import { ResetPasswordModel } from '../../features/auth/models/reset-password';
 import { ForgotPasswordModel } from '../../features/auth/models/forgot-password';
+import { jwtDecode } from 'jwt-decode';
+import { JwtPayloadModel } from '../../shared/models/jwt-payload-model';
+import { ToasterService } from '../../shared/toaster/toaster.service';
 
+export type AuthState = 'initialising' | 'anonymous' | 'authenticated' | 'token_expired';
+
+export interface PendingAction {
+  type: string;
+  payload?: any;
+}
+
+/** Routes that require auth end-to-end — always hard-redirect, never modal */
+const HARD_GATED_ROUTES = ['/profile', '/admin'];
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "/api/Auth";
+  private readonly baseUrl = '/api/Auth';
   private readonly router = inject(Router);
-  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
-  public readonly isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private readonly httpClient = inject(HttpClient);
-  private pendingAction: { type: string; payload?: any } | null = null;
 
-  constructor(){
+  // ── Auth state ───────────────────────────────────────────────────────────
+  private readonly toaster = inject(ToasterService);
+
+  private readonly authStateSubject = new BehaviorSubject<AuthState>('initialising');
+  public readonly authState$ = this.authStateSubject.asObservable();
+
+  /** Backward-compatible convenience stream */
+  public readonly isLoggedIn$ = this.authState$.pipe(map(s => s === 'authenticated'));
+
+  // ── Current user (decoded from JWT after successful initAuth) ────────────
+  private readonly currentUserSubject = new BehaviorSubject<JwtPayloadModel | null>(null);
+  public readonly currentUser$ = this.currentUserSubject.asObservable();
+
+  // ── Auth modal trigger ───────────────────────────────────────────────────
+  private readonly openAuthModalSubject = new Subject<PendingAction | undefined>();
+  public readonly openAuthModal$ = this.openAuthModalSubject.asObservable();
+
+  // ── Pending action ───────────────────────────────────────────────────────
+  private pendingAction: PendingAction | null = null;
+
+  // ── Proactive refresh timer ──────────────────────────────────────────────
+  private refreshTimer: ReturnType<typeof setTimeout> | null = null;
+
+  // ────────────────────────────────────────────────────────────────────────
+  constructor() {
+    // Emit an initial conservative state from localStorage so the guard
+    // works synchronously before initAuth() resolves.
     const token = localStorage.getItem('accessToken');
-    if (token) {
-      this.isLoggedInSubject.next(true);  // User is authenticated
-    } else {
-      this.isLoggedInSubject.next(false);  // User is not authenticated
+    if (token && !this.isTokenExpired(token)) {
+      const user = this.decodeToken(token);
+      this.currentUserSubject.next(user);
+      // Still 'initialising' until server confirms — avoids false positives
     }
   }
 
+  // ── APP_INITIALIZER ──────────────────────────────────────────────────────
   initAuth(): Promise<void> {
+    this.authStateSubject.next('initialising');
     const token = this.getToken();
 
-    if (!token) {
-      this.isLoggedInSubject.next(false);
+    if (!token || this.isTokenExpired(token)) {
+      localStorage.removeItem('accessToken');
+      this.authStateSubject.next('anonymous');
+      this.currentUserSubject.next(null);
       return Promise.resolve();
     }
 
@@ -43,163 +82,241 @@ export class AuthService {
       .get<MeInfoModel>(`${this.baseUrl}/UserInfo`)
       .toPromise()
       .then(() => {
-        this.isLoggedInSubject.next(true);
+        const decoded = this.decodeToken(token);
+        this.currentUserSubject.next(decoded);
+        this.authStateSubject.next('authenticated');
+        this.scheduleProactiveRefresh(token);
       })
       .catch(() => {
-        localStorage.removeItem('accessToken');
-        this.isLoggedInSubject.next(false);
+        // Server rejected the token — try a silent refresh
+        return this.httpClient
+          .post<{ Token: string }>(`${this.baseUrl}/RefreshToken`, {})
+          .toPromise()
+          .then(response => {
+            const newToken = response!.Token;
+            localStorage.setItem('accessToken', newToken);
+            const decoded = this.decodeToken(newToken);
+            this.currentUserSubject.next(decoded);
+            this.authStateSubject.next('authenticated');
+            this.scheduleProactiveRefresh(newToken);
+          })
+          .catch(() => {
+            localStorage.removeItem('accessToken');
+            this.authStateSubject.next('anonymous');
+            this.currentUserSubject.next(null);
+          });
       });
   }
 
+  // ── Token access ─────────────────────────────────────────────────────────
   getToken(): string | null {
     return localStorage.getItem('accessToken');
   }
 
-  register(data: RegisterModel): Observable<any> {
-    console.log("Registration sent");
-    const url = this.baseUrl + "/Register"
-    return this.httpClient.post<any>(url, data).pipe(
-      tap((response) => {
-        console.log('Registration successful', response);
-      })
-    )
+  isLoggedIn(): boolean {
+    return this.authStateSubject.value === 'authenticated';
   }
 
-  resendEmail(data: ResendConfirmationModel): Observable<any> {
-    const url = this.baseUrl + "/ResendEmail"
-    return this.httpClient.post<any>(url, data).pipe(
-      tap((response) => {
-        console.log(response)
-      })
-    )
+  get currentState(): AuthState {
+    return this.authStateSubject.value;
   }
 
-  confirmToken(token: string, email: string) {
-    const url = this.baseUrl + "/ValidateToken"
-    let data = {token, email};
-    return this.httpClient.post<any>(url, data).pipe(
-      tap((response) => {
-        console.log(response)
-      })
-    )
-  }
-
+  // ── Login ────────────────────────────────────────────────────────────────
   login(data: LoginModel): Observable<any> {
-    const url = this.baseUrl + "/Login"
-    return this.httpClient.post<any>(url, data).pipe(
-      tap((response) => {
-        const token = response.token;
+    return this.httpClient.post<any>(`${this.baseUrl}/Login`, data).pipe(
+      tap(response => {
+        const token = response.token ?? response.Token;
         localStorage.setItem('accessToken', token);
-        this.isLoggedInSubject.next(true); 
-      })
-    )
-  }
-
-  logout():void {
-    const url = this.baseUrl + "/Logout"
-    this.httpClient
-      .post(url, {})
-      .subscribe(() => {
-        localStorage.removeItem('accessToken');
-        this.isLoggedInSubject.next(false);
-        this.router.navigate(['/login']);
-      });
-  }
-
-
-  refreshToken(): Observable<string> {
-    return this.httpClient
-      .post<{ Token: string }>(
-        `${this.baseUrl}/RefreshToken`, 
-        {})
-        .pipe(
-        map((response) => {
-          const newAccessToken = response.Token;
-          localStorage.setItem('accessToken', newAccessToken);
-          this.isLoggedInSubject.next(true);
-          return newAccessToken;
-        })
-      );
-  }
-
-  forgotPassword(data: ForgotPasswordModel): Observable<any> {
-    const url = this.baseUrl + "/ForgotPassword"
-
-    return this.httpClient.post<any>(url, data).pipe(
-      tap((response) => {
-        console.log(response)
-      })
-    )
-  }
-
-  resetPassword(data: ResetPasswordModel): Observable<any> {
-    const url = this.baseUrl + "/ResetPassword"
-
-    return this.httpClient.post<any>(url, data).pipe(
-      tap((response) => {
-        console.log(response)
-      })
-    ) 
-  }
-
-  getUserInfo(): Observable<MeInfoModel> {
-    const url = this.baseUrl + "/UserInfo"
-    const token = this.getToken();
-
-    return this.httpClient
-    .get<MeInfoModel>(url)
-    .pipe(
-      map((user: MeInfoModel) => {
-        return user; // same pattern as your refreshToken()
+        const decoded = this.decodeToken(token);
+        this.currentUserSubject.next(decoded);
+        this.authStateSubject.next('authenticated');
+        this.scheduleProactiveRefresh(token);
       })
     );
   }
 
-  private hasToken(): boolean {
-    const token = localStorage.getItem('accessToken');
-    if (!token) return false;
-
-    return !this.isTokenExpired(token);
+  // ── Logout ───────────────────────────────────────────────────────────────
+  logout(): void {
+    const wasOnGatedRoute = HARD_GATED_ROUTES.some(r => this.router.url.startsWith(r));
+    this.httpClient.post(`${this.baseUrl}/Logout`, {}).subscribe({
+      complete: () => this.doLogout(wasOnGatedRoute),
+      error: () => this.doLogout(wasOnGatedRoute)
+    });
   }
 
-  private isTokenExpired(token: string): boolean {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    const exp = payload.exp;
+  private doLogout(wasOnGatedRoute: boolean): void {
+    this.clearRefreshTimer();
+    localStorage.removeItem('accessToken');
+    this.currentUserSubject.next(null);
+    this.authStateSubject.next('anonymous');
+    this.toaster.show("You've been signed out.", 'info');
 
-    const now = Math.floor(Date.now() / 1000);
-
-    return exp < now;
+    if (wasOnGatedRoute) {
+      this.router.navigate(['/auth'], { queryParams: { mode: 'login' }, replaceUrl: true });
+    } else {
+      this.router.navigate(['/'], { replaceUrl: true });
+    }
   }
 
-  requireAuth(action?: { type: string; payload?: any }): boolean {
-    if (this.hasToken()) return true;
+  // ── Session expired (refresh token dead) ─────────────────────────────────
+  handleSessionExpired(): void {
+    this.clearRefreshTimer();
+    localStorage.removeItem('accessToken');
+    this.currentUserSubject.next(null);
+    this.authStateSubject.next('anonymous');
+
+    const isOnGatedRoute = HARD_GATED_ROUTES.some(r => this.router.url.startsWith(r));
+
+    this.toaster.show('Your session expired. Sign in again to continue.', 'info');
+
+    if (isOnGatedRoute) {
+      sessionStorage.setItem('returnUrl', this.router.url);
+      this.router.navigate(['/auth'], { queryParams: { mode: 'login', returnUrl: this.router.url } });
+    } else {
+      this.openAuthModalSubject.next(undefined);
+    }
+  }
+
+  // ── Auth modal ───────────────────────────────────────────────────────────
+  openAuthModal(returnAction?: PendingAction): void {
+    if (returnAction) {
+      this.setPendingAction(returnAction);
+    }
+    this.openAuthModalSubject.next(returnAction);
+  }
+
+  // ── Require auth (replaces old requireAuth) ──────────────────────────────
+  requireAuth(action?: PendingAction): boolean {
+    if (this.isLoggedIn()) return true;
 
     if (action) {
       this.setPendingAction(action);
     }
 
-    this.router.navigate(['/login'], {
-      queryParams: {
-        returnUrl: this.router.url
-      }
-    });
+    const isHardGated = HARD_GATED_ROUTES.some(r => this.router.url.startsWith(r));
+    if (isHardGated) {
+      sessionStorage.setItem('returnUrl', this.router.url);
+      this.router.navigate(['/auth'], { queryParams: { mode: 'login', returnUrl: this.router.url } });
+    } else {
+      this.openAuthModalSubject.next(action);
+    }
 
     return false;
   }
 
-  setPendingAction(action: { type: string; payload?: any }): void {
-    this.pendingAction = action;
-    console.log(this.pendingAction)
+  // ── returnUrl helpers ────────────────────────────────────────────────────
+  consumeReturnUrl(queryParamReturnUrl?: string): string {
+    const stored = sessionStorage.getItem('returnUrl');
+    sessionStorage.removeItem('returnUrl');
+    return stored ?? queryParamReturnUrl ?? '/';
   }
 
-  runPendingAction(): { type: string; payload?: any } | null {
+  // ── Token refresh ────────────────────────────────────────────────────────
+  refreshToken(): Observable<string> {
+    return this.httpClient
+      .post<{ Token: string }>(`${this.baseUrl}/RefreshToken`, {})
+      .pipe(
+        map(response => {
+          const newToken = response.Token;
+          localStorage.setItem('accessToken', newToken);
+          const decoded = this.decodeToken(newToken);
+          this.currentUserSubject.next(decoded);
+          this.authStateSubject.next('authenticated');
+          this.scheduleProactiveRefresh(newToken);
+          return newToken;
+        })
+      );
+  }
+
+  private scheduleProactiveRefresh(token: string): void {
+    this.clearRefreshTimer();
+    try {
+      const payload = jwtDecode<{ exp: number }>(token);
+      const expiresInMs = (payload.exp * 1000) - Date.now();
+      const refreshInMs = Math.max(expiresInMs - 60_000, 0); // 60 s before expiry
+
+      this.refreshTimer = setTimeout(() => {
+        this.authStateSubject.next('token_expired');
+        this.refreshToken().subscribe({
+          error: () => this.handleSessionExpired()
+        });
+      }, refreshInMs);
+    } catch {
+      // Bad token — leave it to the interceptor to catch 401s
+    }
+  }
+
+  private clearRefreshTimer(): void {
+    if (this.refreshTimer !== null) {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = null;
+    }
+  }
+
+  // ── Auth methods ──────────────────────────────────────────────────────────
+  register(data: RegisterModel): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/Register`, data);
+  }
+
+  resendEmail(data: ResendConfirmationModel): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/ResendEmail`, data);
+  }
+
+  confirmToken(token: string, email: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/ValidateToken`, { token, email });
+  }
+
+  forgotPassword(data: ForgotPasswordModel): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/ForgotPassword`, data);
+  }
+
+  resetPassword(data: ResetPasswordModel): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/ResetPassword`, data);
+  }
+
+  getUserInfo(): Observable<MeInfoModel> {
+    return this.httpClient.get<MeInfoModel>(`${this.baseUrl}/UserInfo`).pipe(
+      map(user => user)
+    );
+  }
+
+  // ── Pending actions ──────────────────────────────────────────────────────
+  setPendingAction(action: PendingAction): void {
+    this.pendingAction = action;
+  }
+
+  runPendingAction(): PendingAction | null {
     const action = this.pendingAction;
     this.pendingAction = null;
-    console.log(action)
     return action;
   }
 
-  sendReview(resourceId: string) {
-    
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp < Math.floor(Date.now() / 1000);
+    } catch {
+      return true;
+    }
   }
+
+  private decodeToken(token: string): JwtPayloadModel | null {
+    try {
+      const payload = jwtDecode<any>(token);
+      const roles: string[] =
+        payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? [];
+      return {
+        id: payload.sub,
+        email: payload.email,
+        name: payload.name,
+        exp: payload.exp,
+        isAdmin: roles.includes('Admin'),
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role': roles,
+      } satisfies JwtPayloadModel;
+    } catch {
+      return null;
+    }
+  }
+
 }

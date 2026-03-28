@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +11,13 @@ using System.Security.Claims;
 
 namespace Resourcia.Api.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
 public class ResourceController(AppDbContext dbContext, ImageService imageService) : ControllerBase
 {
     private AppDbContext _dbContext = dbContext;
     private ImageService _imageService = imageService;
 
-    [HttpPost]
+    [HttpPost("api/resources")]
     public async Task<IActionResult> Create([FromBody] CreateResourceModel req, CancellationToken ct)
     {
         // --- Basic validation ---
@@ -201,7 +200,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         });
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("api/resources/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
         var resource = await _dbContext.Set<Resource>()
@@ -254,7 +253,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         return Ok(resource);
     }
 
-    [HttpGet("search")]
+    [HttpGet("api/resources/search")]
     public async Task<IActionResult> Search(CancellationToken ct)
     {
         var queryParams = Request.Query;
@@ -383,217 +382,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
     }
 
-    [HttpGet("{id:guid}/reviews")]
 
-    public async Task<IActionResult> GetReviews(Guid id, int page = 1, int pageSize = 10, string sortBy = "helpful")
-    {
-        var query = _dbContext.ResourceReviews
-            .Where(r => r.ResourceId == id);
-
-        query = sortBy switch
-        {
-            "helpful" => query.OrderByDescending(r => r.Votes.Count(v => v.IsHelpful)),
-            "newest" => query.OrderByDescending(r => r.CreatedAt),
-            "rating" => query.OrderByDescending(r => r.Rating),
-            _ => query.OrderByDescending(r => r.CreatedAt)
-        };
-
-        var totalItems = await query.CountAsync();
-
-        var reviews = await query
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(r => new ReviewResponseModel
-            {
-                Id = r.Id,
-                Content = r.Content,
-                Rating = r.Rating,
-                CreatedAt = r.CreatedAt,
-                Upvotes = r.Votes.Count(v => v.IsHelpful),
-                Downvotes = r.Votes.Count(v => !v.IsHelpful),
-                Username = r.User.DisplayName
-            })
-            .ToListAsync();
-
-        return Ok(new
-        {
-            items = reviews,
-            page,
-            pageSize,
-            totalItems
-        });
-    }
-
-    [Authorize]
-    [HttpPost("{id:guid}/reviews")]
-    public async Task<IActionResult> PostReview(Guid id, CreateReviewModel reviewRequest)
-    {
-        if (reviewRequest.Rating < 1 || reviewRequest.Rating > 5)
-        {
-            return BadRequest("Ratings must be between 1 and 5 (inclusive).");
-        }
-
-        if (id == Guid.Empty)
-        {
-            return BadRequest("Invalid resource id.");
-        }
-
-        var resource = await _dbContext.Resources
-            .AsNoTracking()
-            .FirstOrDefaultAsync(r => r.Id == id);
-
-        if (resource == null)
-        {
-            return NotFound("Resource not found.");
-        }
-
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (userId == null)
-        {
-            return Unauthorized();
-        }
-
-        var alreadyReviewed = await _dbContext.ResourceReviews
-            .AnyAsync(r => r.ResourceId == id && r.UserId == Guid.Parse(userId));
-
-        if (alreadyReviewed)
-        {
-            return Conflict("You have already reviewed this resource.");
-        }
-        var review = new ResourceReview
-        {
-            Id = Guid.NewGuid(),
-            ResourceId = id,
-            UserId = Guid.Parse(userId),
-            Rating = reviewRequest.Rating,
-            Content = reviewRequest.Content?.Trim(),
-            CreatedAt = SystemClock.Instance.GetCurrentInstant()
-        };
-
-        await using var tx = await _dbContext.Database.BeginTransactionAsync();
-        try
-        {
-            _dbContext.ResourceReviews.Add(review);
-            await _dbContext.SaveChangesAsync();
-            await UpdateResourceRatingsAsync(id);
-            await tx.CommitAsync();
-        }
-        catch
-        {
-            await tx.RollbackAsync();
-            return StatusCode(500, "Failed to save review.");
-        }
-
-        return Ok(review);
-    }
-
-    [Authorize]
-    [HttpPost("reviews/{reviewId:guid}/vote")]
-    public async Task<IActionResult> VoteReview(Guid reviewId, bool isUpvote)
-    {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdStr == null) return Unauthorized();
-
-        if (!Guid.TryParse(userIdStr, out var userId))
-            return Unauthorized("Invalid user id.");
-
-        var review = await _dbContext.ResourceReviews
-            .Include(r => r.Votes)
-            .FirstOrDefaultAsync(r => r.Id == reviewId);
-
-        if (review == null)
-            return NotFound("Review not found.");
-
-        var existingVote = await _dbContext.ReviewsVotes.FirstOrDefaultAsync(v => v.UserId == userId && v.ReviewId == reviewId);
-        if (existingVote != null)
-        {
-            if (existingVote.IsHelpful == isUpvote)
-            {
-                _dbContext.ReviewsVotes.Remove(existingVote);
-            }
-            else
-            {
-                existingVote.IsHelpful = isUpvote;
-            }
-        }
-        else
-        {
-            var vote = new ReviewVotes
-            {
-                Id = Guid.NewGuid(),
-                ReviewId = reviewId,
-                UserId = userId,
-                IsHelpful = isUpvote,
-                
-            };
-            _dbContext.ReviewsVotes.Add(vote);
-        }
-
-        await _dbContext.SaveChangesAsync();
-
-        var upvotes = await _dbContext.ReviewsVotes
-            .CountAsync(v => v.ReviewId == reviewId && v.IsHelpful);
-
-        var downvotes = await _dbContext.ReviewsVotes
-            .CountAsync(v => v.ReviewId == reviewId && !v.IsHelpful);
-
-        return Ok(new { reviewId, upvotes, downvotes });
-    }
-
-    [Authorize]
-    [HttpDelete("{id:guid}/reviews")]
-    public async Task<IActionResult> DeleteReview(Guid id)
-    {
-        // get current user
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdStr == null) return Unauthorized();
-
-        if (!Guid.TryParse(userIdStr, out var userId))
-            return Unauthorized("Invalid user id.");
-
-        // find review by resourceId + userId
-        var review = await _dbContext.ResourceReviews
-            .FirstOrDefaultAsync(r => r.ResourceId == id && r.UserId == userId);
-
-        if (review == null)
-            return NotFound("Review not found or you are not the author.");
-
-        // remove review + optionally its votes
-        var votes = _dbContext.ReviewsVotes.Where(v => v.ReviewId == review.Id);
-        _dbContext.ReviewsVotes.RemoveRange(votes);
-        _dbContext.ResourceReviews.Remove(review);
-
-
-        await _dbContext.SaveChangesAsync();
-        await UpdateResourceRatingsAsync(id);
-        return NoContent();
-    }
-
-    [Authorize]
-    [HttpDelete("reviews/{reviewId:guid}/vote")]
-    public async Task<IActionResult> DeleteVote(Guid reviewId)
-    {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdStr == null) return Unauthorized();
-
-        if (!Guid.TryParse(userIdStr, out var userId))
-            return Unauthorized("Invalid user id.");
-
-        // find vote by reviewId + userId
-        var vote = await _dbContext.ReviewsVotes
-            .FirstOrDefaultAsync(v => v.ReviewId == reviewId && v.UserId == userId);
-
-        if (vote == null)
-            return NotFound("Vote not found.");
-
-        _dbContext.ReviewsVotes.Remove(vote);
-        await _dbContext.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    [HttpGet("{id:guid}/rating")]
+    [HttpGet("api/resources/{id:guid}/rating")]
     public async Task<IActionResult> GetRating(Guid id)
     {
         var rating = await _dbContext.ResourceRatings
@@ -605,7 +395,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         return Ok(rating);
     }
 
-    [HttpGet("{id:guid}/threads")]
+    [HttpGet("api/resources/{id:guid}/threads")]
     public async Task<IActionResult> GetThreads(Guid id)
     {
         var threads = await _dbContext.Set<Discussions>()
@@ -635,7 +425,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     }
 
     [Authorize]
-    [HttpPost("{id:guid}/threads")]
+    [HttpPost("api/resources/{id:guid}/threads")]
     public async Task<IActionResult> CreateThread(Guid id, [FromBody] string content)
     {
         if (string.IsNullOrWhiteSpace(content))
@@ -703,7 +493,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     }
 
     [Authorize]
-    [HttpPost("{resourceId:guid}/images")]
+    [HttpPost("api/resources/{resourceId:guid}/images")]
     public async Task<IActionResult> UploadResourceImage(Guid resourceId, IFormFile file)
     {
         var resourceExists = await _dbContext.Resources
@@ -747,7 +537,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         });
     }
 
-    [HttpGet("{resourceId:guid}/images")]
+    [HttpGet("api/resources/{resourceId:guid}/images")]
     public async Task<IActionResult> GetImages(Guid resourceId)
     {
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
@@ -766,7 +556,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     }
 
     [Authorize]
-    [HttpDelete("images/{imageId:guid}")]
+    [HttpDelete("api/resources/images/{imageId:guid}")]
     public async Task<IActionResult> DeleteImage(Guid imageId)
     {
         var image = await _dbContext.ResourceImages.FindAsync(imageId);
@@ -804,55 +594,5 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         return NoContent();
     }
-
-
-    private async Task UpdateResourceRatingsAsync(Guid resourceId)
-    {
-        var ratings = await _dbContext.ResourceReviews
-        .Where(r => r.ResourceId == resourceId)
-        .GroupBy(r => r.ResourceId)
-        .Select(g => new
-        {
-            Count = g.Count(),
-            Avg = g.Average(x => x.Rating),
-            Count1 = g.Count(x => x.Rating == 1),
-            Count2 = g.Count(x => x.Rating == 2),
-            Count3 = g.Count(x => x.Rating == 3),
-            Count4 = g.Count(x => x.Rating == 4),
-            Count5 = g.Count(x => x.Rating == 5),
-        })
-        .FirstOrDefaultAsync();
-
-        var entity = await _dbContext.ResourceRatings
-            .FirstOrDefaultAsync(r => r.ResourceId == resourceId);
-
-        if (ratings == null)
-        {
-            if (entity != null)
-                _dbContext.ResourceRatings.Remove(entity);
-
-            return;
-        }
-
-        if (entity == null)
-        {
-            entity = new ResourceRatings
-            {
-                ResourceId = resourceId
-            };
-            _dbContext.ResourceRatings.Add(entity);
-        }
-
-        entity.TotalCount = ratings.Count;
-        entity.AverageRating = (float)ratings.Avg;
-        entity.Count1 = ratings.Count1;
-        entity.Count2 = ratings.Count2;
-        entity.Count3 = ratings.Count3;
-        entity.Count4 = ratings.Count4;
-        entity.Count5 = ratings.Count5;
-
-        await _dbContext.SaveChangesAsync();
-    }
-
 
 }

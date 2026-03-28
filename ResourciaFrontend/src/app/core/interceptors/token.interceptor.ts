@@ -1,39 +1,86 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { catchError, switchMap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  filter,
+  Observable,
+  switchMap,
+  take,
+  throwError,
+} from 'rxjs';
 
-export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
+/** URLs that must never have the Authorization header injected */
+const SKIP_AUTH_URLS = ['/Auth/Login', '/Auth/Register'];
+
+/** URLs that must not trigger a reactive 401 refresh loop */
+const SKIP_REFRESH_URLS = ['/Auth/RefreshToken', '/Auth/Login'];
+
+// Module-level state — shared across all interceptor calls in the same DI scope
+let isRefreshing = false;
+const refreshToken$ = new BehaviorSubject<string | null>(null);
+
+export const tokenInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
-  
-  if (req.url.includes('/login')) {
+
+  // Skip auth header injection for public auth endpoints
+  if (SKIP_AUTH_URLS.some(url => req.url.includes(url))) {
     return next(req);
   }
-  
-  const token = localStorage.getItem("accessToken");
 
-  req = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-  return next(req).pipe(
-    catchError((error) => {
-      if (error.status === 401 && !req.url.includes('Auth/Refresh') && error.error?.error !== "USER_LOCKED_OUT") {
-        return authService.refreshToken().pipe(
-          switchMap((newToken: string) => {
-            const clonedRequest = req.clone({
-              setHeaders: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            });
-            console.log(clonedRequest);
-            return next(clonedRequest);
-          })
-        );
-      }
+  const token = authService.getToken();
+  const enriched = token ? addToken(req, token) : req;
+
+  return next(enriched).pipe(
+    catchError(error => {
+      const is401 = error.status === 401;
+      const isRefreshUrl = SKIP_REFRESH_URLS.some(url => req.url.includes(url));
+      const isLockedOut = error.error?.error === 'USER_LOCKED_OUT';
+
+      if (!is401 || isRefreshUrl || isLockedOut) {
         return throwError(() => error);
       }
-    )
-  )
+
+      // ── Serialise concurrent refresh calls ───────────────────────────────
+      if (isRefreshing) {
+        // Another call is already refreshing — wait for the new token
+        return refreshToken$.pipe(
+          filter(t => t !== null),
+          take(1),
+          switchMap(newToken => next(addToken(req, newToken!)))
+        );
+      }
+
+      isRefreshing = true;
+      refreshToken$.next(null);
+
+      return authService.refreshToken().pipe(
+        switchMap(newToken => {
+          isRefreshing = false;
+          refreshToken$.next(newToken);
+          return next(addToken(req, newToken));
+        }),
+        catchError(refreshError => {
+          isRefreshing = false;
+          refreshToken$.next(null);
+          // Refresh token is dead — clean up the session
+          authService.handleSessionExpired();
+          return throwError(() => refreshError);
+        })
+      );
+    })
+  );
 };
+
+function addToken(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
+  return req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+}

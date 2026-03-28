@@ -21,7 +21,7 @@ export class ToasterService {
     this.toasts.push(toast);
     this.toastSubject.next(this.toasts);
 
-    setTimeout(() => this.remove(toast.id), 3000);
+    setTimeout(() => this.remove(toast.id), 4000);
   }
 
   remove(id: number) {
