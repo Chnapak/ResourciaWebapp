@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Resourcia.Data.Entities;
 
@@ -37,6 +38,9 @@ public class Resource
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
+
+    [MaxLength(DatabaseConstants.TrackableByLength)]
+    public string? CreatedBy { get; set; }
 
     public ICollection<ResourceFacetValues> ResourceFacetValues { get; set; } = new List<ResourceFacetValues>();
     public List<ResourceReview> ResourceReviews { get; set; } = new();

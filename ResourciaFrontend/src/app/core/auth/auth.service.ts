@@ -13,6 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 import { JwtPayloadModel } from '../../shared/models/jwt-payload-model';
 import { ToasterService } from '../../shared/toaster/toaster.service';
 import { CompleteExternalLoginModel } from '../../shared/models/complete-external-login';
+import { Review } from '../../shared/models/review';
 
 export type AuthState = 'initialising' | 'anonymous' | 'authenticated' | 'token_expired';
 
@@ -288,13 +289,26 @@ export class AuthService {
   }
 
   // ── Pending actions ──────────────────────────────────────────────────────
-  setPendingAction(action: PendingAction): void {
+  setPendingAction(action: PendingAction) {
     this.pendingAction = action;
+    localStorage.setItem('pendingAction', JSON.stringify(action));
+  }
+
+  peekPendingAction(): PendingAction | null {
+    if (this.pendingAction) return this.pendingAction;
+
+    const stored = localStorage.getItem('pendingAction');
+    if (!stored) return null;
+
+    this.pendingAction = JSON.parse(stored);
+    return this.pendingAction;
   }
 
   runPendingAction(): PendingAction | null {
-    const action = this.pendingAction;
+    const action = this.peekPendingAction();
     this.pendingAction = null;
+    console.log('Running pending action:', action);
+    localStorage.removeItem('pendingAction');
     return action;
   }
 

@@ -1,0 +1,26 @@
+<div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-card">
+  <div class="text-[0.7rem] font-bold tracking-widest uppercase text-gray-400 mb-4">Resource Info</div>
+
+  @if (rows.length > 0) {
+    @for (row of rows; track row.label) {
+      <div class="flex items-center justify-between gap-4 py-2.5" [class.border-b]="!$last" [class.border-gray-200]="!$last">
+        <span class="text-xs text-gray-400 font-medium">{{ row.label }}</span>
+
+        @if (row.href) {
+          <a
+            [href]="row.href"
+            target="_blank"
+            rel="noreferrer"
+            class="text-sm font-medium text-blue-600 hover:underline text-right"
+          >
+            {{ row.value }}
+          </a>
+        } @else {
+          <span [class]="getRowValueClass(row)">{{ row.value }}</span>
+        }
+      </div>
+    }
+  } @else {
+    <p class="text-sm text-gray-500">Resource details will appear here once the data finishes loading.</p>
+  }
+</div>

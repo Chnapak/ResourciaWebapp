@@ -9,7 +9,7 @@ import { RatingUtils } from '../../../../../../../../shared/utils/sentiment.util
   styleUrl: './resource-rating-summary.component.scss',
 })
 export class ResourceRatingSummaryComponent {
-  @Input() resource: ResourceDetailModel | null = null
+  @Input() resource: ResourceDetailModel | null = null;
 
   get hasRating(): boolean {
     return !!this.resource?.ratings?.totalCount;
@@ -21,6 +21,10 @@ export class ResourceRatingSummaryComponent {
 
   get totalRatings(): number {
     return this.resource?.ratings?.totalCount ?? 0;
+  }
+
+  get reviewCount(): number {
+    return this.resource?.reviews?.length ?? this.totalRatings;
   }
 
   get rating(): RatingUtils {

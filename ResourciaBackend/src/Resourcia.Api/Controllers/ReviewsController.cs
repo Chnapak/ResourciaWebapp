@@ -29,11 +29,13 @@ public class ReviewsController : ControllerBase
 {
     private readonly ReviewService _reviews;
     private readonly AppDbContext _db;
+    private readonly CacheService _cache;
 
-    public ReviewsController(ReviewService reviews, AppDbContext db)
+    public ReviewsController(ReviewService reviews, AppDbContext db, CacheService cache)
     {
         _reviews = reviews;
         _db      = db;
+        _cache   = cache;
     }
 
     // =========================================================================
@@ -52,7 +54,8 @@ public class ReviewsController : ControllerBase
         page     = Math.Max(1, page);
         pageSize = Math.Clamp(pageSize, 1, 100);
 
-        var (items, totalItems) = await _reviews.GetReviewsAsync(id, page, pageSize, sortBy, ct);
+        var userId = User.Identity?.IsAuthenticated == true ? User.GetUserId() : (Guid?)null;
+        var (items, totalItems) = await _reviews.GetReviewsAsync(id, page, pageSize, sortBy, userId, ct);
 
         return Ok(new { items, page, pageSize, totalItems });
     }
@@ -78,6 +81,9 @@ public class ReviewsController : ControllerBase
 
         var userId = User.GetUserId();
         var (review, error, status) = await _reviews.CreateReviewAsync(id, userId, model, ct);
+
+        if (status == 201)
+            await InvalidateResourceAsync(id);
 
         return status switch
         {
@@ -112,6 +118,9 @@ public class ReviewsController : ControllerBase
         var userId = User.GetUserId();
         var (review, error, status) = await _reviews.UpdateReviewAsync(reviewId, userId, model, ct);
 
+        if (status == 200)
+            await InvalidateResourceAsync(id);
+
         return status switch
         {
             200 => Ok(review),
@@ -141,6 +150,9 @@ public class ReviewsController : ControllerBase
         var isAdmin = User.IsInRole("Admin");
 
         var (_, error, status) = await _reviews.DeleteReviewAsync(reviewId, userId, isAdmin, ct);
+
+        if (status == 204)
+            await InvalidateResourceAsync(id);
 
         return status switch
         {
@@ -277,6 +289,9 @@ public class ReviewsController : ControllerBase
 
         var (_, error, status) = await _reviews.DeleteReviewAsync(reviewId.Value, userId, isAdmin: false, ct);
 
+        if (status == 204)
+            await InvalidateResourceAsync(id);
+
         return status switch
         {
             204 => NoContent(),
@@ -286,6 +301,36 @@ public class ReviewsController : ControllerBase
             _   => StatusCode(status, new { error })
         };
     }
+
+    [HttpGet("api/resources/{resourceId:guid}/reviews/current")]
+    [Authorize]
+    public async Task<ActionResult<ReviewModel?>> GetCurrentUserReview(Guid resourceId)
+    {
+        // Get current user ID from claims
+        var userId = User.GetUserId();
+
+        // Fetch review by this user for the resource
+        var review = await _db.ResourceReviews
+            .Where(r => r.ResourceId == resourceId && r.UserId == userId)
+            .Select(r => new ReviewModel
+            {
+                Id = r.Id,
+                Username = r.User.DisplayName, // or r.User.DisplayName
+                Rating = r.Rating,
+                Content = r.Content,
+                CreatedAt = r.CreatedAt,
+                Upvotes = r.Votes.Count(v => v.IsHelpful),
+                Downvotes = r.Votes.Count(v => !v.IsHelpful)
+            })
+            .FirstOrDefaultAsync();
+
+        if (review == null) return Ok(null); // no review yet
+
+        return Ok(review);
+    }
+
+    private Task InvalidateResourceAsync(Guid resourceId) =>
+        _cache.InvalidateAsync($"resource:v4:{resourceId}");
 }
 
 /// <summary>Request body for the vote endpoints.</summary>

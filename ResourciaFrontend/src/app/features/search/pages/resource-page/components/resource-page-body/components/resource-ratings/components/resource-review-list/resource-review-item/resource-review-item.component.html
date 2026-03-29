@@ -5,8 +5,9 @@
     <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full 
                   flex items-center justify-center text-xs font-bold text-white"
+            [style.background]="gradient"
         >
-          {{ review.createdAt | date:'short'}}
+          {{initials}}
         </div>
 
       <div>
@@ -14,7 +15,7 @@
             {{ review.username }}
         </div>
         <div class="text-xs text-gray-400">
-            {{review.createdAt }}
+            {{review.createdAt | date:'short'}}
         </div>
       </div>
     </div>
@@ -40,14 +41,27 @@
   <!-- actions -->
   <div class="flex items-center gap-3 mt-3">
 
-    <button class="flex items-center gap-1.5 text-xs font-medium text-gray-400 
-                   border border-gray-200 px-3 py-1.5 rounded-full">
-      👍 Helpful ({{review.upvotes}})
+    <button (click)="vote(true)" [disabled]="voting"
+      class="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-colors
+            hover:bg-green-50 hover:border-green-300 hover:text-green-600"
+      [class.text-green-600]="review.userVote === true"
+      [class.border-green-400]="review.userVote === true"
+      [class.bg-green-50]="review.userVote === true"
+      [class.text-gray-400]="review.userVote !== true"
+      [class.border-gray-200]="review.userVote !== true">
+      👍 Helpful ({{ review.upvotes }})
     </button>
 
-    <button class="flex items-center gap-1.5 text-xs font-medium text-gray-400 
-                   border border-gray-200 px-3 py-1.5 rounded-full">
-      👎 Not helpful
+    <!-- 👎 Not helpful -->
+    <button (click)="vote(false)" [disabled]="voting"
+      class="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-colors
+            hover:bg-red-50 hover:border-red-300 hover:text-red-600"
+      [class.text-red-600]="review.userVote === false"
+      [class.border-red-400]="review.userVote === false"
+      [class.bg-red-50]="review.userVote === false"
+      [class.text-gray-400]="review.userVote !== false"
+      [class.border-gray-200]="review.userVote !== false">
+      👎 Not helpful ({{ review.downvotes }})
     </button>
 
   </div>

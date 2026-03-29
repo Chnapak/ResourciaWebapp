@@ -14,6 +14,7 @@ public class FilterInfoModel
     public bool IsMulti { get; set; }
     public bool IsActive { get; set; }
     public decimal SortOrder { get; set; }
+    public string? ResourceField { get; set; }
     public ICollection<FacetValues> FacetValues { get; set; } = new List<FacetValues>();
     public int ResourceCount { get; set; }
     public Instant CreatedAt { get; set; }

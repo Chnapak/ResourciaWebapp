@@ -86,3 +86,13 @@ C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Resourci
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Resourcia.Data.pdb
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\obj\Debug\docker-compose.dcproj.AssemblyReference.cache
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\obj\Debug\docker-c.35A3FFBA.Up2Date
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.Extensions.Options.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.Extensions.Primitives.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\StackExchange.Redis.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\Pipelines.Sockets.Unofficial.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\bin\Debug\System.IO.Hashing.dll

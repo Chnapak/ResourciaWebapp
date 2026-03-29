@@ -3,4 +3,5 @@
 ></app-resource-hero>
 <app-resource-page-body
     [resource]="resource"
+    (infoChange)="fetchResource(resourceId!)"
 ></app-resource-page-body>

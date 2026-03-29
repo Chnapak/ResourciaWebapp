@@ -7,15 +7,17 @@ using Resourcia.Api.Models.Resources;
 using Resourcia.Api.Services;
 using Resourcia.Data;
 using Resourcia.Data.Entities;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Resourcia.Api.Controllers;
 
 [ApiController]
-public class ResourceController(AppDbContext dbContext, ImageService imageService) : ControllerBase
+public class ResourceController(AppDbContext dbContext, ImageService imageService, CacheService cache) : ControllerBase
 {
     private AppDbContext _dbContext = dbContext;
     private ImageService _imageService = imageService;
+    private CacheService _cache = cache;
 
     [HttpPost("api/resources")]
     public async Task<IActionResult> Create([FromBody] CreateResourceModel req, CancellationToken ct)
@@ -83,6 +85,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
             Author = req.Author,
             LearningStyle = req.LearningStyle ?? string.Empty,
             Tags = req.Tags ?? new List<string>(),
+            CreatedBy = GetCurrentDisplayName(),
             CreatedAtUtc = DateTime.UtcNow,
             UpdatedAtUtc = DateTime.UtcNow
         };
@@ -185,6 +188,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
             resource.Year,
             resource.Author,
             resource.LearningStyle,
+            resource.CreatedBy,
             resource.Tags,
             facets = responseFacets,
             ratings = new
@@ -203,7 +207,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     [HttpGet("api/resources/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
-        var resource = await _dbContext.Set<Resource>()
+        var resource = await _cache.GetOrSetAsync($"resource:v4:{id}", () =>
+        _dbContext.Set<Resource>()
         .Where(r => r.Id == id)
         .Select(r => new
         {
@@ -215,6 +220,10 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
             r.Year,
             r.Author,
             r.LearningStyle,
+            r.SavesCount,
+            r.CreatedBy,
+            r.CreatedAtUtc,
+            r.UpdatedAtUtc,
             Tags = r.Tags,
             Ratings = r.Ratings == null ? null : new
             {
@@ -235,18 +244,22 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                     Label = rfv.FacetValues.Label
                 }).ToList(),
             Reviews = r.ResourceReviews
+                .OrderByDescending(rv => rv.CreatedAt)
                 .Select(rv => new
                 {
                     rv.Id,
+                    Username = rv.User.DisplayName,
                     rv.Rating,
                     rv.Content,
                     rv.CreatedAt,
+                    UserVote = (bool?)null,
                     Upvotes = rv.Votes.Count(v => v.IsHelpful),
                     Downvotes = rv.Votes.Count(v => !v.IsHelpful)
                 }).ToList()
         })
         .AsNoTracking()
-        .FirstOrDefaultAsync(ct);
+        .FirstOrDefaultAsync(ct),
+        TimeSpan.FromMinutes(5));
 
         if (resource == null) return NotFound();
 
@@ -256,130 +269,120 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     [HttpGet("api/resources/search")]
     public async Task<IActionResult> Search(CancellationToken ct)
     {
-        var queryParams = Request.Query;
+        var cacheKey = $"search:v2:{Request.QueryString}";
 
-        var dbQuery = _dbContext.Set<Resource>()
-            .AsNoTracking()
-            .AsQueryable();
-
-        // ----- PAGINATION -----
-        var page = 1;
-        var pageSize = 20;
-
-        if (queryParams.TryGetValue("page", out var pageValue) &&
-            int.TryParse(pageValue, out var parsedPage) &&
-            parsedPage > 0)
+        var result = await _cache.GetOrSetAsync(cacheKey, async () =>
         {
-            page = parsedPage;
-        }
+            var queryParams = Request.Query;
 
-        if (queryParams.TryGetValue("pageSize", out var pageSizeValue) &&
-            int.TryParse(pageSizeValue, out var parsedPageSize) &&
-            parsedPageSize > 0)
-        {
-            pageSize = Math.Min(parsedPageSize, 100); // optional safety limit
-        }
+            var dbQuery = _dbContext.Set<Resource>()
+                .AsNoTracking()
+                .AsQueryable();
 
-        // ----- TEXT SEARCH -----
-        if (queryParams.TryGetValue("q", out var qValue))
-        {
-            var lowerTrimmed = qValue.ToString().Trim().ToLower();
+            // ----- PAGINATION -----
+            var page = 1;
+            var pageSize = 20;
 
-            if (!string.IsNullOrWhiteSpace(lowerTrimmed))
+            if (queryParams.TryGetValue("page", out var pageValue) &&
+                int.TryParse(pageValue, out var parsedPage) &&
+                parsedPage > 0)
             {
-                dbQuery = dbQuery.Where(r =>
-                    r.Title.ToLower().Contains(lowerTrimmed) ||
-                    (r.Description != null && r.Description.ToLower().Contains(lowerTrimmed))
-                );
+                page = parsedPage;
             }
-        }
 
-        // ----- DYNAMIC FACETS -----
-        var reservedKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            if (queryParams.TryGetValue("pageSize", out var pageSizeValue) &&
+                int.TryParse(pageSizeValue, out var parsedPageSize) &&
+                parsedPageSize > 0)
+            {
+                pageSize = Math.Min(parsedPageSize, 100);
+            }
+
+            // ----- TEXT SEARCH -----
+            if (queryParams.TryGetValue("q", out var qValue))
+            {
+                var lowerTrimmed = qValue.ToString().Trim().ToLower();
+
+                if (!string.IsNullOrWhiteSpace(lowerTrimmed))
+                {
+                    dbQuery = dbQuery.Where(r =>
+                        r.Title.ToLower().Contains(lowerTrimmed) ||
+                        (r.Description != null && r.Description.ToLower().Contains(lowerTrimmed))
+                    );
+                }
+            }
+
+            // ----- DYNAMIC FACETS -----
+            var reservedKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "q", "page", "pageSize"
         };
 
-        var facetFilters = queryParams
-            .Where(p => !reservedKeys.Contains(p.Key))
-            .ToDictionary(
-                p => p.Key,
-                p => p.Value.ToList()
-            );
+            var facetFilters = queryParams
+                .Where(p => !reservedKeys.Contains(p.Key))
+                .ToDictionary(p => p.Key, p => p.Value.ToList());
 
-        foreach (var filter in facetFilters)
-        {
-            var key = filter.Key;
-            var values = filter.Value
-                .Where(v => !string.IsNullOrWhiteSpace(v))
-                .Select(v => v.Trim())
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
-            if (values.Count == 0)
-                continue;
-
-            dbQuery = dbQuery.Where(r =>
-                r.ResourceFacetValues.Any(rfv =>
-                    rfv.FacetValues.FilterDefinitions.Key == key &&
-                    values.Contains(rfv.FacetValues.Value)
-                )
-            );
-        }
-
-        // total AFTER filters, BEFORE paging
-        var totalItems = await dbQuery.CountAsync(ct);
-
-        var totalPages = totalItems == 0
-            ? 0
-            : (int)Math.Ceiling(totalItems / (double)pageSize);
-
-        // optional: clamp page if user requests too large a page
-        if (totalPages > 0 && page > totalPages)
-        {
-            page = totalPages;
-        }
-
-        var items = await dbQuery
-            .OrderByDescending(r => r.CreatedAtUtc) // choose any stable ordering
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(r => new
+            foreach (var filter in facetFilters)
             {
-                r.Id,
-                r.Title,
-                r.Description,
-                r.Url,
-                r.IsFree,
-                r.Year,
-                r.Author,
-                r.LearningStyle,
-                r.Tags,
-                r.CreatedAtUtc,
-                Ratings = r.Ratings == null ? null : new
+                var key = filter.Key;
+                var values = filter.Value
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .Select(v => v.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                if (values.Count == 0) continue;
+
+                dbQuery = dbQuery.Where(r =>
+                    r.ResourceFacetValues.Any(rfv =>
+                        rfv.FacetValues.FilterDefinitions.Key == key &&
+                        values.Contains(rfv.FacetValues.Value)
+                    )
+                );
+            }
+
+            var totalItems = await dbQuery.CountAsync(ct);
+            var totalPages = totalItems == 0 ? 0 : (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            if (totalPages > 0 && page > totalPages)
+                page = totalPages;
+
+            var items = await dbQuery
+                .OrderByDescending(r => r.CreatedAtUtc)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(r => new
                 {
-                    r.Ratings.AverageRating,
-                    r.Ratings.TotalCount
-                },
-                Facets = r.ResourceFacetValues
-                    .Select(rfv => new
+                    r.Id,
+                    r.Title,
+                    r.Description,
+                    r.Url,
+                    r.IsFree,
+                    r.Year,
+                    r.Author,
+                    r.LearningStyle,
+                    r.Tags,
+                    r.CreatedBy,
+                    r.CreatedAtUtc,
+                    Ratings = r.Ratings == null ? null : new
                     {
-                        Key = rfv.FacetValues.FilterDefinitions.Key,
-                        Value = rfv.FacetValues.Value,
-                        Label = rfv.FacetValues.Label
-                    }).ToList()
-            })
-            .ToListAsync(ct);
+                        r.Ratings.AverageRating,
+                        r.Ratings.TotalCount
+                    },
+                    Facets = r.ResourceFacetValues
+                        .Select(rfv => new
+                        {
+                            Key = rfv.FacetValues.FilterDefinitions.Key,
+                            Value = rfv.FacetValues.Value,
+                            Label = rfv.FacetValues.Label
+                        }).ToList()
+                })
+                .ToListAsync(ct);
 
-        return Ok(new
-        {
-            items,
-            page,
-            pageSize,
-            totalItems,
-            totalPages
-        });
+            return new { items, page, pageSize, totalItems, totalPages };
 
+        }, TimeSpan.FromMinutes(2));
+
+        return Ok(result);
     }
 
 
@@ -398,28 +401,32 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     [HttpGet("api/resources/{id:guid}/threads")]
     public async Task<IActionResult> GetThreads(Guid id)
     {
-        var threads = await _dbContext.Set<Discussions>()
-            .Where(t => t.ResourceId == id)
-            .OrderByDescending(t => t.CreatedAt)
-            .Select(t => new
-            {
-                t.Id,
-                t.Content,
-                t.UserId,
-                t.CreatedAt,
-
-                Replies = t.Replies
-                    .OrderBy(r => r.CreatedAt)
-                    .Select(r => new
-                    {
-                        r.Id,
-                        r.Content,
-                        r.UserId,
-                        r.CreatedAt
-                    })
-                    .ToList()
-            })
-            .ToListAsync();
+        var threads = await _cache.GetOrSetAsync(
+            $"threads:{id}",
+            () => _dbContext.Set<Discussions>()
+                .Where(t => t.ResourceId == id)
+                .OrderByDescending(t => t.CreatedAt)
+                .Select(t => new
+                {
+                    t.Id,
+                    t.Content,
+                    t.UserId,
+                    t.CreatedAt,
+                    Username = t.User.DisplayName,
+                    Replies = t.Replies
+                        .OrderBy(r => r.CreatedAt)
+                        .Select(r => new
+                        {
+                            r.Id,
+                            r.Content,
+                            r.UserId,
+                            r.CreatedAt,
+                            Username = r.User.DisplayName
+                        })
+                        .ToList()
+                })
+                .ToListAsync(),
+            TimeSpan.FromMinutes(5));
 
         return Ok(threads);
     }
@@ -450,6 +457,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         _dbContext.Add(thread);
         await _dbContext.SaveChangesAsync();
+
+        await _cache.InvalidateAsync($"threads:{id}"); // 👈 bust so next GET is fresh
 
         return Ok(thread);
     }
@@ -593,6 +602,15 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         await _dbContext.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    private string? GetCurrentDisplayName()
+    {
+        if (User.Identity?.IsAuthenticated != true)
+            return null;
+
+        return User.FindFirstValue(ClaimTypes.Name)
+            ?? User.FindFirstValue(JwtRegisteredClaimNames.Name);
     }
 
 }
