@@ -9,4 +9,5 @@ public class CreateFilterDefinitionModel
     public string? Description { get; set; }
     public FilterKind Kind { get; set; }
     public bool IsMulti { get; set; }
+    public string? ResourceField { get; set; }
 }

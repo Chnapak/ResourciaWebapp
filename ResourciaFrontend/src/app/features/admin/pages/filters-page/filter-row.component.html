@@ -21,7 +21,12 @@
         </div>
         <div>
             <div class="text-sm font-semibold text-slate-900">  {{ filter.label }}   </div>
-            <div class="text-xs text-slate-500 mt-0.5">   {{ filter.description }}   </div>
+            <div class="text-xs text-slate-500 mt-0.5">
+                {{ filter.description }}
+                @if (filter.resourceField) {
+                    <span class="text-slate-400"> · Mapped to {{ filter.resourceField }}</span>
+                }
+            </div>
         </div>
     </div>
 

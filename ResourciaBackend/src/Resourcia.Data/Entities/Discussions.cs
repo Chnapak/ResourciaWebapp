@@ -1,4 +1,5 @@
 ﻿using NodaTime;
+using Resourcia.Data.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ public class Discussions
     public Guid ResourceId { get; set; }
     public Resource Resource { get; set; }
     public Guid UserId { get; set; }
+    public AppUser User { get; set; } = null!;
     public string Content { get; set; }
     public Instant CreatedAt { get; set; }
     public List<DiscussionReplies> Replies { get; set; } = new();

@@ -1,34 +1,60 @@
 <div class="flex gap-3 py-4 border-b border-gray-200">
   <div class="w-[34px] h-[34px] rounded-full flex items-center justify-center text-xs font-bold text-white"
-  [style.background]="gradient()">
-    {{ initials() }}
+    [style.background]="gradient(thread.username)">
+    {{ initials(thread.username) }}
   </div>
 
   <div class="flex-1">
     <div class="flex items-baseline gap-2 mb-1">
       <span class="font-semibold text-sm">{{ thread.username }}</span>
-      <span class="text-xs text-gray-400">{{ thread.createdAt }}</span>
+      <span class="text-xs text-gray-400">{{ thread.createdAt | date:'short' }}</span>
     </div>
 
     <p class="text-sm text-gray-500">{{ thread.content }}</p>
 
-    <button class="text-xs font-semibold text-gray-400 hover:text-blue-600 mt-2">
+    <button class="text-xs font-semibold text-gray-400 hover:text-blue-600 mt-2"
+      (click)="toggleReply()">
       ↳ Reply
     </button>
+
+    <!-- Reply input -->
+    @if (showReplyInput) {
+      <div class="mt-2 flex gap-2 items-start">
+        <textarea
+          [(ngModel)]="replyContent"
+          rows="2"
+          placeholder="Write a reply..."
+          class="flex-1 text-sm border border-gray-300 rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </textarea>
+        <div class="flex flex-col gap-1">
+          <button
+            (click)="submitReply()"
+            [disabled]="!replyContent.trim()"
+            class="text-xs font-semibold px-3 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed">
+            Send
+          </button>
+          <button
+            (click)="toggleReply()"
+            class="text-xs font-semibold px-3 py-1.5 text-gray-400 hover:text-gray-600">
+            Cancel
+          </button>
+        </div>
+      </div>
+    }
 
     <!-- Replies -->
     <div class="pl-10 mt-3 space-y-3">
       <div class="flex gap-3">
-        @for(reply of thread.replies; track $index) {
+        @for (reply of thread.replies; track reply.id) {
           <div class="w-7 h-7 rounded-full flex items-center justify-center text-[0.65rem] font-bold text-white"
-              [style.background]="gradient(reply.username)">
+            [style.background]="gradient(reply.username)">
             {{ initials(reply.username) }}
           </div>
 
           <div>
             <div class="flex gap-2 text-xs">
               <span class="font-semibold">{{ reply.username }}</span>
-              <span class="text-gray-400">{{ reply.createdAt }}</span>
+              <span class="text-gray-400">{{ reply.createdAt | date:'short' }}</span>
             </div>
 
             <p class="text-sm text-gray-500">{{ reply.content }}</p>

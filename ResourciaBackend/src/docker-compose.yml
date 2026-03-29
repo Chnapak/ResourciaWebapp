@@ -8,8 +8,11 @@ services:
     ports:
       - "5000:5000"
       - "5001:5001"
+    environment:
+      - REDIS_URL=redis://resourcia.redis:6379
     depends_on:
       - resourcia.db
+      - resourcia.redis
 
   resourcia.db:
     image: postgres:latest
@@ -22,3 +25,11 @@ services:
       - "5432:5432"
     volumes:
       - ./.containers/resourcia-db:/var/lib/postgresql/data
+
+  resourcia.redis:
+    image: redis:7-alpine
+    container_name: resourcia.redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.containers/resourcia-redis:/data

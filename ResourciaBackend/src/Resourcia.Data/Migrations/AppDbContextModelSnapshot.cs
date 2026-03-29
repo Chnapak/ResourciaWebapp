@@ -196,6 +196,8 @@ namespace Resourcia.Data.Migrations
 
                     b.HasIndex("DiscussionId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("DiscussionReplies");
                 });
 
@@ -221,6 +223,8 @@ namespace Resourcia.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ResourceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Discussions");
                 });
@@ -574,6 +578,10 @@ namespace Resourcia.Data.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -838,7 +846,15 @@ namespace Resourcia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Resourcia.Data.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Discussions");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.Discussions", b =>
@@ -849,7 +865,15 @@ namespace Resourcia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Resourcia.Data.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Resource");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.FacetValues", b =>

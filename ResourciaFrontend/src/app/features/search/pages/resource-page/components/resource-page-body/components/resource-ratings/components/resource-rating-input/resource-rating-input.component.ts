@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ButtonComponent } from '../../../../../../../../../../shared/ui/button/button.component';
 import { AuthService } from '../../../../../../../../../../core/auth/auth.service';
 import { TextareaComponent } from '../../../../../../../../../../shared/ui/textarea/textarea.component';
@@ -6,17 +6,20 @@ import { FormControl } from '@angular/forms';
 import { ReviewRequestModel } from '../../../../../../../../../../shared/models/review-request';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResourceService } from '../../../../../../../../../../core/services/resource.service';
+import { Review } from '../../../../../../../../../../shared/models/review';
+import { DatePipe } from '@angular/common';
+import { ReviewService } from '../../../../../../../../../../core/services/review.service';
 
 @Component({
   selector: 'app-resource-rating-input',
-  imports: [ButtonComponent, TextareaComponent],
+  imports: [ButtonComponent, TextareaComponent, DatePipe],
   templateUrl: './resource-rating-input.component.html',
   styleUrl: './resource-rating-input.component.scss',
 })
 export class ResourceRatingInputComponent implements OnInit {
+  @Output() reviewChange = new EventEmitter<void>();
 
   reviewControl = new FormControl('');
-
   id: string | null = null;
 
   rating = 0;
@@ -26,46 +29,63 @@ export class ResourceRatingInputComponent implements OnInit {
   submitting = false;
   error: string | null = null;
 
-  constructor(private route: ActivatedRoute, private auth: AuthService, private resource: ResourceService, private router: Router) {}
+  currentUserReview: Review | null = null;
+  currentUser: string | null = null;
+
+  showInput: boolean = true;
+  deleting: boolean = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private auth: AuthService,
+    private review: ReviewService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
-    const action = this.auth.runPendingAction();
 
-    if (!action) return;
+    if (!this.id) return;
 
-    switch (action.type) {
-      case 'setRating':
-        this.rating = action.payload.star;
-        this.text = action.payload.text;
-        break;
-
-      case 'submitReview':
-        this.doSubmit();
-        break;
+    if (!this.auth.isLoggedIn()) {
+      return;
     }
+
+    this.fetchUserReview();
+
+    const action = this.auth.peekPendingAction();
+    if (action && action.type === 'setRating') {
+      this.auth.runPendingAction();
+      this.rating = action.payload.star;
+      this.reviewControl.setValue(action.payload.text || '');
+      console.log('Running pending action with payload:', action.payload);
+    }
+  }
+
+  private fetchUserReview() {
+    this.review.getUserReview(this.id!).subscribe({
+      next: (review: Review | null) => {
+        this.currentUserReview = review;
+        this.showInput = !review;
+      },
+      error: (err: any) => console.error('Failed to fetch user review', err)
+    });
   }
 
   setRating(i: number) {
     if (!this.auth.isLoggedIn()) {
 
-    // ✅ store action BEFORE redirect
-    this.auth.setPendingAction({
-      type: 'setRating',
-      payload: {
-        star: i,
-        text: this.text
-      }
-    });
+      this.auth.setPendingAction(
+        { type: 'setRating', payload: { 
+            star: i, 
+            text: this.reviewControl.value || ''
+          } 
+        }
+      );
 
-    // ✅ THIS triggers the guard flow
-    this.router.navigate(['/login'], {
-      queryParams: {
-        returnUrl: this.router.url
-      }
-    });
+      this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
 
-    return;
+      return;
     }
 
     this.rating = i;
@@ -84,26 +104,47 @@ export class ResourceRatingInputComponent implements OnInit {
   }
 
   submitReview() {
-    if (!this.auth.requireAuth()) {
-      this.auth.setPendingAction({
-        type: 'setRating',
-        payload: {
-          star: this.rating,
-          text: this.text
+    if (!this.auth.requireAuth()) 
+    {
+      this.auth.setPendingAction(
+        { type: 'setRating', payload: { 
+            star: this.rating, 
+            text: this.reviewControl.value || ''
+          } 
         }
-      });
+      );
+
+      this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+
       return;
     }
 
     this.doSubmit();
   }
-  
-  private doSubmit() {
-    this.text = this.reviewControl.value;
 
-    if (!this.text) {
-      this.text = ""
-    }
+  requestDeleteReview() {
+    if (!this.currentUserReview || !this.currentUserReview.id) return;
+
+    this.deleting = true;
+    this.review.deleteReview(this.id!, this.currentUserReview.id).subscribe({
+      next: () => {
+        this.showInput = true; // show input again
+        this.currentUserReview = null;
+        this.reviewControl.reset();
+        this.rating = 0;
+        this.deleting = false;
+        this.reviewChange.emit(); // Notify parent to refresh reviews
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = "Failed to delete review.";
+        this.deleting = false;
+      }
+    });
+  }
+
+  private doSubmit() {
+    this.text = this.reviewControl.value || '';
 
     if (!this.id) {
       this.error = 'Resource ID not found.';
@@ -118,19 +159,18 @@ export class ResourceRatingInputComponent implements OnInit {
       text: this.text
     };
 
-    this.resource.submitReview(this.id, request).subscribe({
-      next: (res) => {
+    this.review.submitReview(this.id, request).subscribe({
+      next: () => {                          // <-- void, no res parameter
         this.submitting = false;
-        this.rating = 0;
-        this.text = '';
-        this.reviewControl.reset('');
-        console.log('Review submitted successfully', res);
+        this.fetchUserReview();
+        this.reviewChange.emit(); // Notify parent to refresh reviews
       },
-      error: (err) => {
+      error: (err: any) => {
         this.submitting = false;
         this.error = 'Failed to submit review.';
         console.error('Review submission error', err);
       }
     });
+
   }
 }

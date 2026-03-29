@@ -8,6 +8,7 @@ export interface AdminFilter {
   kind: FilterKind;
   isActive: boolean;
   sortOrder: number;
+  resourceField: string | null;
   resourceCount: number;
   lastChangeAt: string;
 }

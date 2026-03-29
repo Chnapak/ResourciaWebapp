@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +104,7 @@ public class Program
         builder.Services.Configure<EnvironmentOptions>(builder.Configuration.GetSection("EnvironmentSettings"));
         builder.Services.Configure<CloudflareOptions>(builder.Configuration.GetSection("CloudflareSettings"));
         builder.Services.Configure<OwnerDetailsOptions>(builder.Configuration.GetSection("OwnerDetailsSettings"));
+        builder.Services.Configure<RedisOptions>(builder.Configuration.GetSection("Redis"));
 
         // Add services to the container.
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
@@ -117,6 +118,15 @@ public class Program
         builder.Services.AddHttpClient<CaptchaService>();
         builder.Services.AddScoped<ReviewService>();
         builder.Services.AddScoped<OAuthService>();
+
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            var redisOptions = builder.Configuration.GetSection("Redis").Get<RedisOptions>()!;
+            options.Configuration = redisOptions.ConnectionString;
+            options.InstanceName = "resourcia:";
+        });
+        builder.Services.AddScoped<CacheService>(); // 👈 and here
+
 
 
         builder.Services.AddHostedService<EmailSenderBackgroundService>();

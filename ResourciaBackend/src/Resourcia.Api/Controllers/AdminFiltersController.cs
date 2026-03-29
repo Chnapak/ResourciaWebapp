@@ -7,8 +7,11 @@ using NodaTime;
 using Npgsql;
 using Resourcia.Api.Models.Admin;
 using Resourcia.Api.Models.Filters;
+using Resourcia.Api.Services;
 using Resourcia.Data;
 using Resourcia.Data.Entities;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Resourcia.Api.Controllers;
 
@@ -19,11 +22,13 @@ public class AdminFiltersController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
     private readonly IClock _clock;
+    private readonly CacheService _cache;
 
-    public AdminFiltersController(AppDbContext dbContext, IClock clock)
+    public AdminFiltersController(AppDbContext dbContext, IClock clock, CacheService cache)
     {
         _dbContext = dbContext;
         _clock = clock;
+        _cache = cache;
     }
 
 
@@ -43,6 +48,7 @@ public class AdminFiltersController : ControllerBase
                 IsMulti = f.IsMulti,
                 IsActive = f.IsActive,
                 SortOrder = f.SortOrder,
+                ResourceField = f.ResourceField,
 
                 FacetValues = f.FacetValues
                     .Where(v => v.IsActive)
@@ -76,7 +82,12 @@ public class AdminFiltersController : ControllerBase
             return NotFound();
         }
         filter.IsActive = false;
+        filter.DeletedAt = _clock.GetCurrentInstant();
+        filter.DeletedBy = GetCurrentDisplayName();
+        filter.ModifiedAt = filter.DeletedAt;
+        filter.ModifiedBy = filter.DeletedBy;
         await _dbContext.SaveChangesAsync();
+        await InvalidateSearchSchemaAsync();
         return NoContent();
     }
 
@@ -99,11 +110,15 @@ public class AdminFiltersController : ControllerBase
             Description = createRequest.Description,
             Kind = createRequest.Kind,
             IsMulti = createRequest.IsMulti,
-            IsActive = false
+            ResourceField = createRequest.ResourceField,
+            IsActive = false,
+            CreatedAt = _clock.GetCurrentInstant(),
+            CreatedBy = GetCurrentDisplayName() ?? "system"
         };
 
         _dbContext.Filters.Add(filter);
         await _dbContext.SaveChangesAsync();
+        await InvalidateSearchSchemaAsync();
 
         return Ok(new { filter.Id });
     }
@@ -125,7 +140,8 @@ public class AdminFiltersController : ControllerBase
             Label = filter.Label,
             Description = filter.Description,
             Kind = filter.Kind,
-            IsMulti = filter.IsMulti
+            IsMulti = filter.IsMulti,
+            ResourceField = filter.ResourceField
         };
         // Apply the patch to the entity
         patchDoc.ApplyTo(filterDto);
@@ -139,10 +155,14 @@ public class AdminFiltersController : ControllerBase
         filter.Description = filterDto.Description;
         filter.Kind = filterDto.Kind;
         filter.IsMulti = filterDto.IsMulti;
+        filter.ResourceField = filterDto.ResourceField;
+        filter.ModifiedAt = _clock.GetCurrentInstant();
+        filter.ModifiedBy = GetCurrentDisplayName();
 
         try
         {
             await _dbContext.SaveChangesAsync();
+            await InvalidateSearchSchemaAsync();
         }
         catch (DbUpdateException ex) when (ex.InnerException is PostgresException pg && pg.SqlState == "23505")
         {
@@ -160,7 +180,10 @@ public class AdminFiltersController : ControllerBase
             return NotFound();
 
         filter.IsActive = !filter.IsActive;
+        filter.ModifiedAt = _clock.GetCurrentInstant();
+        filter.ModifiedBy = GetCurrentDisplayName();
         await _dbContext.SaveChangesAsync();
+        await InvalidateSearchSchemaAsync();
 
         return Ok(new
         {
@@ -231,7 +254,10 @@ public class AdminFiltersController : ControllerBase
             moved.SortOrder = above.SortOrder + step;
         }
 
+        moved.ModifiedAt = _clock.GetCurrentInstant();
+        moved.ModifiedBy = GetCurrentDisplayName();
         await _dbContext.SaveChangesAsync();
+        await InvalidateSearchSchemaAsync();
         return Ok(new { moved.Id, moved.SortOrder });
     }
 
@@ -245,5 +271,17 @@ public class AdminFiltersController : ControllerBase
             filters[i].SortOrder = (i + 1) * step;
 
         await _dbContext.SaveChangesAsync();
+    }
+
+    private Task InvalidateSearchSchemaAsync() =>
+        _cache.InvalidateAsync("search:schema");
+
+    private string? GetCurrentDisplayName()
+    {
+        if (User.Identity?.IsAuthenticated != true)
+            return null;
+
+        return User.FindFirstValue(ClaimTypes.Name)
+            ?? User.FindFirstValue(JwtRegisteredClaimNames.Name);
     }
 }
