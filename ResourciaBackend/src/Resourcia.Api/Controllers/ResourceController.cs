@@ -9,6 +9,7 @@ using Resourcia.Data;
 using Resourcia.Data.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Globalization;
 
 namespace Resourcia.Api.Controllers;
 
@@ -269,7 +270,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     [HttpGet("api/resources/search")]
     public async Task<IActionResult> Search(CancellationToken ct)
     {
-        var cacheKey = $"search:v2:{Request.QueryString}";
+        var cacheKey = $"search:v4:{Request.QueryString}";
 
         var result = await _cache.GetOrSetAsync(cacheKey, async () =>
         {
@@ -311,33 +312,65 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                 }
             }
 
-            // ----- DYNAMIC FACETS -----
-            var reservedKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "q", "page", "pageSize"
-        };
+            // ----- SCHEMA-DRIVEN FILTERS -----
+            var activeFilters = await _dbContext.Filters
+                .AsNoTracking()
+                .Where(filter => filter.IsActive)
+                .Select(filter => new SearchableFilterDefinition(filter.Key, filter.Kind, filter.ResourceField))
+                .ToListAsync(ct);
 
-            var facetFilters = queryParams
-                .Where(p => !reservedKeys.Contains(p.Key))
-                .ToDictionary(p => p.Key, p => p.Value.ToList());
-
-            foreach (var filter in facetFilters)
+            foreach (var filter in activeFilters)
             {
-                var key = filter.Key;
-                var values = filter.Value
-                    .Where(v => !string.IsNullOrWhiteSpace(v))
-                    .Select(v => v.Trim())
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
-                    .ToList();
+                switch (filter.Kind)
+                {
+                    case FilterKind.Facet:
+                    {
+                        if (!queryParams.TryGetValue(filter.Key, out var rawFacetValues))
+                        {
+                            continue;
+                        }
 
-                if (values.Count == 0) continue;
+                        var facetValues = ParseQueryValues(rawFacetValues);
+                        if (facetValues.Count == 0)
+                        {
+                            continue;
+                        }
 
-                dbQuery = dbQuery.Where(r =>
-                    r.ResourceFacetValues.Any(rfv =>
-                        rfv.FacetValues.FilterDefinitions.Key == key &&
-                        values.Contains(rfv.FacetValues.Value)
-                    )
-                );
+                        dbQuery = dbQuery.Where(resource =>
+                            resource.ResourceFacetValues.Any(resourceFacetValue =>
+                                resourceFacetValue.FacetValues.FilterDefinitions.Key == filter.Key &&
+                                facetValues.Contains(resourceFacetValue.FacetValues.Value))
+                        );
+                        break;
+                    }
+                    case FilterKind.Range:
+                    {
+                        var minValue = queryParams[$"{filter.Key}Min"].ToString();
+                        var maxValue = queryParams[$"{filter.Key}Max"].ToString();
+                        dbQuery = ApplyRangeFilter(dbQuery, filter.ResourceField, minValue, maxValue);
+                        break;
+                    }
+                    case FilterKind.Boolean:
+                    {
+                        if (!queryParams.TryGetValue(filter.Key, out var rawBooleanValue))
+                        {
+                            continue;
+                        }
+
+                        dbQuery = ApplyBooleanFilter(dbQuery, filter.ResourceField, rawBooleanValue.ToString());
+                        break;
+                    }
+                    case FilterKind.Text:
+                    {
+                        if (!queryParams.TryGetValue(filter.Key, out var rawTextValue))
+                        {
+                            continue;
+                        }
+
+                        dbQuery = ApplyTextFilter(dbQuery, filter.ResourceField, rawTextValue.ToString());
+                        break;
+                    }
+                }
             }
 
             var totalItems = await dbQuery.CountAsync(ct);
@@ -718,5 +751,131 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         return User.FindFirstValue(ClaimTypes.Name)
             ?? User.FindFirstValue(JwtRegisteredClaimNames.Name);
     }
+
+    private static List<string> ParseQueryValues(IEnumerable<string> rawValues)
+    {
+        return rawValues
+            .SelectMany(value => value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    private static IQueryable<Resource> ApplyRangeFilter(
+        IQueryable<Resource> query,
+        string? resourceField,
+        string? minValue,
+        string? maxValue)
+    {
+        if (string.IsNullOrWhiteSpace(resourceField))
+        {
+            return query;
+        }
+
+        switch (resourceField.Trim().ToLowerInvariant())
+        {
+            case "year":
+            {
+                if (int.TryParse(minValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var minYear))
+                {
+                    query = query.Where(resource => resource.Year.HasValue && resource.Year.Value >= minYear);
+                }
+
+                if (int.TryParse(maxValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var maxYear))
+                {
+                    query = query.Where(resource => resource.Year.HasValue && resource.Year.Value <= maxYear);
+                }
+
+                return query;
+            }
+            case "rating":
+            {
+                if (float.TryParse(minValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var minRating))
+                {
+                    query = query.Where(resource =>
+                        resource.Ratings != null &&
+                        resource.Ratings.TotalCount > 0 &&
+                        resource.Ratings.AverageRating >= minRating);
+                }
+
+                if (float.TryParse(maxValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var maxRating))
+                {
+                    query = query.Where(resource =>
+                        resource.Ratings != null &&
+                        resource.Ratings.TotalCount > 0 &&
+                        resource.Ratings.AverageRating <= maxRating);
+                }
+
+                return query;
+            }
+            case "savescount":
+            {
+                if (int.TryParse(minValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var minSaves))
+                {
+                    query = query.Where(resource => resource.SavesCount >= minSaves);
+                }
+
+                if (int.TryParse(maxValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var maxSaves))
+                {
+                    query = query.Where(resource => resource.SavesCount <= maxSaves);
+                }
+
+                return query;
+            }
+            default:
+                return query;
+        }
+    }
+
+    private static IQueryable<Resource> ApplyBooleanFilter(
+        IQueryable<Resource> query,
+        string? resourceField,
+        string? rawValue)
+    {
+        if (string.IsNullOrWhiteSpace(resourceField) || !bool.TryParse(rawValue, out var booleanValue))
+        {
+            return query;
+        }
+
+        return resourceField.Trim().ToLowerInvariant() switch
+        {
+            "isfree" => query.Where(resource => resource.IsFree == booleanValue),
+            _ => query
+        };
+    }
+
+    private static IQueryable<Resource> ApplyTextFilter(
+        IQueryable<Resource> query,
+        string? resourceField,
+        string? rawValue)
+    {
+        if (string.IsNullOrWhiteSpace(resourceField))
+        {
+            return query;
+        }
+
+        var textValue = rawValue?.Trim().ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(textValue))
+        {
+            return query;
+        }
+
+        return resourceField.Trim().ToLowerInvariant() switch
+        {
+            "author" => query.Where(resource => resource.Author != null && resource.Author.ToLower().Contains(textValue)),
+            "createdby" => query.Where(resource => resource.CreatedBy != null && resource.CreatedBy.ToLower().Contains(textValue)),
+            "description" => query.Where(resource => resource.Description != null && resource.Description.ToLower().Contains(textValue)),
+            "learningstyle" => query.Where(resource => resource.LearningStyle.ToLower().Contains(textValue)),
+            "title" => query.Where(resource => resource.Title.ToLower().Contains(textValue)),
+            "url" => query.Where(resource => resource.Url.ToLower().Contains(textValue)),
+            "tags" => query.Where(resource => resource.Tags.Any(tag => tag.ToLower().Contains(textValue))),
+            _ => query
+        };
+    }
+
+    private sealed record SearchableFilterDefinition(
+        string Key,
+        FilterKind Kind,
+        string? ResourceField);
 
 }

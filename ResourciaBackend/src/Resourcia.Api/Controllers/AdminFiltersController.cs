@@ -273,8 +273,11 @@ public class AdminFiltersController : ControllerBase
         await _dbContext.SaveChangesAsync();
     }
 
-    private Task InvalidateSearchSchemaAsync() =>
-        _cache.InvalidateAsync("search:schema");
+    private async Task InvalidateSearchSchemaAsync()
+    {
+        await _cache.InvalidateAsync("search:schema");
+        await _cache.InvalidateAsync("search:schema:v2");
+    }
 
     private string? GetCurrentDisplayName()
     {

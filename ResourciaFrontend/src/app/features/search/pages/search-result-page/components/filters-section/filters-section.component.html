@@ -18,7 +18,7 @@
       <div class="mt-4">
         @if (filter.values.length > 10) {
 
-          @if (filter.multi) {
+          @if (filter.isMulti) {
             <app-searchable-multi-facet
               [options]="filter.values"
               [selected]="facetStateAsMulti(facetState)"
@@ -35,7 +35,7 @@
 
         } @else {
 
-          @if (filter.multi) {
+          @if (filter.isMulti) {
             <app-checkbox-facet
               [options]="filter.values"
               [selected]="facetStateAsMulti(facetState)"
@@ -60,12 +60,14 @@
           type="number"
           class="w-full rounded-[8px] border border-gray-300 px-3 py-2"
           placeholder="Min"
+          [value]="rangeState.min ?? ''"
           (input)="onRangeChange('min', $event)"
         />
         <input
           type="number"
           class="w-full rounded-[8px] border border-gray-300 px-3 py-2"
           placeholder="Max"
+          [value]="rangeState.max ?? ''"
           (input)="onRangeChange('max', $event)"
         />
       </div>
@@ -74,7 +76,7 @@
     @if (filter.kind == FilterKind.Boolean) {
       <div class="mt-4">
         <label class="flex items-center gap-2">
-          <input type="checkbox" (change)="onBooleanChange($event)" />
+          <input type="checkbox" [checked]="booleanState" (change)="onBooleanChange($event)" />
           <span>{{ filter.label }}</span>
         </label>
       </div>
@@ -86,6 +88,7 @@
           type="text"
           class="w-full rounded-[8px] border border-gray-300 px-3 py-2"
           [placeholder]="getPlaceholder(filter.label)"
+          [value]="textState"
           (input)="onTextChange($event)"
         />
       </div>
