@@ -85,8 +85,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     }
 
     return [
-      { key: 'resources', label: 'Resources', count: this.profile.sharedResources.length },
-      { key: 'reviews', label: 'Reviews', count: this.profile.recentReviews.length },
+      { key: 'resources', label: 'Resources', count: this.profile.stats.resourcesShared },
+      { key: 'reviews', label: 'Reviews', count: this.profile.stats.reviewsWritten },
+      { key: 'saved', label: 'Saved', count: this.profile.stats.resourcesSaved },
       { key: 'activity', label: 'Activity', count: null },
     ];
   }

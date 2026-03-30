@@ -1,6 +1,6 @@
 export type UserRole = 'contributor' | 'educator' | 'student' | 'admin' | 'moderator';
 export type ActivityType = 'shared_resource' | 'wrote_review' | 'saved_resource' | 'joined';
-export type Tab = 'resources' | 'reviews' | 'activity';
+export type Tab = 'resources' | 'saved' | 'reviews' | 'activity';
 
 export interface ProfileTab {
   key: Tab;
@@ -61,6 +61,7 @@ export interface ProfileViewModel {
   interests: string[];
   stats: ProfileStats;
   sharedResources: ProfileResource[];
+  savedResources: ProfileResource[];
   recentReviews: ProfileReview[];
   recentActivity: ProfileActivity[];
 }

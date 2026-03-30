@@ -30,6 +30,8 @@ public class ProfileResponseModel
 
     public List<ProfileResourceModel> SharedResources { get; set; } = [];
 
+    public List<ProfileResourceModel> SavedResources { get; set; } = [];
+
     public List<ProfileReviewModel> RecentReviews { get; set; } = [];
 
     public List<ProfileActivityModel> RecentActivity { get; set; } = [];

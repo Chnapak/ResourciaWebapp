@@ -30,6 +30,7 @@ describe('ProfilePageComponent', () => {
       resourcesSaved: 2,
     },
     sharedResources: [],
+    savedResources: [],
     recentReviews: [],
     recentActivity: [],
   };

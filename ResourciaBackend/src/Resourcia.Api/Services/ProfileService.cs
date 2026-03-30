@@ -169,8 +169,9 @@ public class ProfileService
     {
         var roles = await _userManager.GetRolesAsync(user);
         var sharedResources = await GetSharedResourcesAsync(user, ct);
+        var savedResources = await GetSavedResourcesAsync(user.Id, ct);
         var recentReviews = await GetRecentReviewsAsync(user.Id, ct);
-        var recentActivity = BuildRecentActivity(user, sharedResources, recentReviews);
+        var recentActivity = BuildRecentActivity(user, sharedResources, savedResources, recentReviews);
 
         var helpfulVotes = await (
             from vote in _db.ReviewsVotes.AsNoTracking()
@@ -180,6 +181,7 @@ public class ProfileService
             .CountAsync(ct);
 
         var latestResourceAt = sharedResources.Select(resource => (DateTime?)resource.AddedAt).FirstOrDefault();
+        var latestSavedResourceAt = savedResources.Select(resource => (DateTime?)resource.AddedAt).FirstOrDefault();
         var latestReviewAt = recentReviews.Select(review => (DateTime?)review.PostedAt).FirstOrDefault();
         var latestDiscussionAt = await _db.Discussions
             .AsNoTracking()
@@ -193,6 +195,7 @@ public class ProfileService
         {
             joinedAt,
             latestResourceAt,
+            latestSavedResourceAt,
             latestReviewAt,
             latestDiscussionAt?.ToDateTimeUtc()
         }
@@ -205,10 +208,9 @@ public class ProfileService
             .AsNoTracking()
             .CountAsync(resource => resource.CreatedBy == user.DisplayName, ct);
 
-        var resourcesSaved = await _db.Resources
+        var resourcesSaved = await _db.SavedResources
             .AsNoTracking()
-            .Where(resource => resource.CreatedBy == user.DisplayName)
-            .SumAsync(resource => (int?)resource.SavesCount, ct) ?? 0;
+            .CountAsync(savedResource => savedResource.UserId == user.Id, ct);
 
         var reviewsWritten = await _db.ResourceReviews
             .AsNoTracking()
@@ -242,6 +244,7 @@ public class ProfileService
                 ResourcesSaved = resourcesSaved
             },
             SharedResources = sharedResources,
+            SavedResources = savedResources,
             RecentReviews = recentReviews,
             RecentActivity = recentActivity
         };
@@ -357,6 +360,7 @@ public class ProfileService
     private static List<ProfileActivityModel> BuildRecentActivity(
         AppUser user,
         List<ProfileResourceModel> sharedResources,
+        List<ProfileResourceModel> savedResources,
         List<ProfileReviewModel> recentReviews)
     {
         return sharedResources
@@ -369,6 +373,15 @@ public class ProfileService
                 TargetId = resource.Id,
                 Timestamp = resource.AddedAt
             })
+            .Concat(savedResources.Select(resource => new ProfileActivityModel
+            {
+                Id = $"saved:{resource.Id}:{resource.AddedAt:O}",
+                Type = "saved_resource",
+                Description = "Saved a resource",
+                Target = resource.Title,
+                TargetId = resource.Id,
+                Timestamp = resource.AddedAt
+            }))
             .Concat(recentReviews.Select(review => new ProfileActivityModel
             {
                 Id = $"review:{review.Id}",
@@ -387,6 +400,41 @@ public class ProfileService
             })
             .OrderByDescending(item => item.Timestamp)
             .Take(8)
+            .ToList();
+    }
+
+    private async Task<List<ProfileResourceModel>> GetSavedResourcesAsync(Guid userId, CancellationToken ct)
+    {
+        var resources = await _db.SavedResources
+            .AsNoTracking()
+            .Where(savedResource => savedResource.UserId == userId)
+            .OrderByDescending(savedResource => savedResource.CreatedAtUtc)
+            .Take(6)
+            .Select(savedResource => new
+            {
+                savedResource.Resource.Id,
+                savedResource.Resource.Title,
+                savedResource.Resource.Url,
+                savedResource.Resource.LearningStyle,
+                AverageRating = savedResource.Resource.Ratings == null ? 0 : savedResource.Resource.Ratings.AverageRating,
+                RatingCount = savedResource.Resource.Ratings == null ? 0 : savedResource.Resource.Ratings.TotalCount,
+                savedResource.Resource.SavesCount,
+                savedResource.CreatedAtUtc
+            })
+            .ToListAsync(ct);
+
+        return resources
+            .Select(resource => new ProfileResourceModel
+            {
+                Id = resource.Id.ToString(),
+                Title = resource.Title,
+                Domain = GetDomain(resource.Url),
+                Type = GetResourceType(resource.LearningStyle),
+                Rating = Math.Round(resource.AverageRating, 1),
+                RatingCount = resource.RatingCount,
+                Saves = resource.SavesCount,
+                AddedAt = resource.CreatedAtUtc
+            })
             .ToList();
     }
 
