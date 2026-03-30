@@ -789,6 +789,24 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("ReviewsVotes");
                 });
 
+            modelBuilder.Entity("Resourcia.Data.Entities.SavedResource", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("UserId", "ResourceId");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("SavedResources");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.Identity.AppRole", null)
@@ -986,6 +1004,25 @@ namespace Resourcia.Data.Migrations
                         .HasForeignKey("ResourceReviewId");
                 });
 
+            modelBuilder.Entity("Resourcia.Data.Entities.SavedResource", b =>
+                {
+                    b.HasOne("Resourcia.Data.Entities.Resource", "Resource")
+                        .WithMany("SavedResources")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Resourcia.Data.Entities.Identity.AppUser", "User")
+                        .WithMany("SavedResources")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Resourcia.Data.Entities.Discussions", b =>
                 {
                     b.Navigation("Replies");
@@ -1004,6 +1041,8 @@ namespace Resourcia.Data.Migrations
             modelBuilder.Entity("Resourcia.Data.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Posts");
+
+                    b.Navigation("SavedResources");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.Resource", b =>
@@ -1017,6 +1056,8 @@ namespace Resourcia.Data.Migrations
                     b.Navigation("ResourceFacetValues");
 
                     b.Navigation("ResourceReviews");
+
+                    b.Navigation("SavedResources");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceReview", b =>

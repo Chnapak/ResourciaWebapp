@@ -38,6 +38,7 @@ public class AppUser : IdentityUser<Guid>, ITrackable
     public string? InterestsJson { get; set; }
 
     public ICollection<Post> Posts { get; set; } = [];
+    public ICollection<SavedResource> SavedResources { get; set; } = [];
     public Instant CreatedAt { get; set; }
     public string CreatedBy { get; set; } = null!;
     public Instant ModifiedAt { get; set; }

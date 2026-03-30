@@ -13,6 +13,7 @@ export interface ResourceDetailModel extends ResourceModel {
   facets: FacetModel[];
   ratings?: RatingsModel;
   savesCount: number;
+  isSavedByCurrentUser?: boolean;
   createdBy?: string | null;
   createdAtUtc: string; // ISO string; can convert to Date if you want
   updatedAtUtc: string;

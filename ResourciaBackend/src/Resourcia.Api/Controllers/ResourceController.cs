@@ -504,6 +504,110 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     }
 
     [Authorize]
+    [HttpGet("api/resources/{id:guid}/save-state")]
+    public async Task<IActionResult> GetSaveState(Guid id)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var resource = await _dbContext.Resources
+            .AsNoTracking()
+            .Where(r => r.Id == id)
+            .Select(r => new { r.Id, r.SavesCount })
+            .FirstOrDefaultAsync();
+
+        if (resource == null)
+            return NotFound("Resource not found.");
+
+        var isSaved = await _dbContext.SavedResources
+            .AsNoTracking()
+            .AnyAsync(savedResource => savedResource.UserId == userId && savedResource.ResourceId == id);
+
+        return Ok(new
+        {
+            IsSaved = isSaved,
+            resource.SavesCount
+        });
+    }
+
+    [Authorize]
+    [HttpPost("api/resources/{id:guid}/save")]
+    public async Task<IActionResult> Save(Guid id)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var resource = await _dbContext.Resources.FirstOrDefaultAsync(r => r.Id == id);
+        if (resource == null)
+            return NotFound("Resource not found.");
+
+        var existingSave = await _dbContext.SavedResources.FindAsync(userId, id);
+        if (existingSave != null)
+        {
+            return Ok(new
+            {
+                IsSaved = true,
+                resource.SavesCount
+            });
+        }
+
+        _dbContext.SavedResources.Add(new SavedResource
+        {
+            UserId = userId,
+            ResourceId = id,
+            CreatedAtUtc = DateTime.UtcNow
+        });
+
+        resource.SavesCount += 1;
+        await _dbContext.SaveChangesAsync();
+
+        await _cache.InvalidateAsync($"resource:v4:{id}");
+
+        return Ok(new
+        {
+            IsSaved = true,
+            resource.SavesCount
+        });
+    }
+
+    [Authorize]
+    [HttpDelete("api/resources/{id:guid}/save")]
+    public async Task<IActionResult> Unsave(Guid id)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var resource = await _dbContext.Resources.FirstOrDefaultAsync(r => r.Id == id);
+        if (resource == null)
+            return NotFound("Resource not found.");
+
+        var existingSave = await _dbContext.SavedResources.FindAsync(userId, id);
+        if (existingSave == null)
+        {
+            return Ok(new
+            {
+                IsSaved = false,
+                resource.SavesCount
+            });
+        }
+
+        _dbContext.SavedResources.Remove(existingSave);
+        resource.SavesCount = Math.Max(resource.SavesCount - 1, 0);
+        await _dbContext.SaveChangesAsync();
+
+        await _cache.InvalidateAsync($"resource:v4:{id}");
+
+        return Ok(new
+        {
+            IsSaved = false,
+            resource.SavesCount
+        });
+    }
+
+    [Authorize]
     [HttpPost("api/resources/{resourceId:guid}/images")]
     public async Task<IActionResult> UploadResourceImage(Guid resourceId, IFormFile file)
     {

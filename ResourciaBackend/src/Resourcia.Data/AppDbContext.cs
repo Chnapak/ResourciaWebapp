@@ -26,6 +26,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<Discussions> Discussions { get; set; }
     public DbSet<DiscussionReplies> DiscussionReplies { get; set; }
     public DbSet<ResourceRatings> ResourceRatings { get; set; }
+    public DbSet<SavedResource> SavedResources { get; set; }
     public DbSet<ResourceImage> ResourceImages { get; set; } = null!;
 
     public AppDbContext(DbContextOptions options) : base(options)
@@ -86,6 +87,24 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
             .WithMany(t => t.Replies)
             .HasForeignKey(r => r.DiscussionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SavedResource>()
+            .HasKey(savedResource => new { savedResource.UserId, savedResource.ResourceId });
+
+        modelBuilder.Entity<SavedResource>()
+            .HasOne(savedResource => savedResource.User)
+            .WithMany(user => user.SavedResources)
+            .HasForeignKey(savedResource => savedResource.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SavedResource>()
+            .HasOne(savedResource => savedResource.Resource)
+            .WithMany(resource => resource.SavedResources)
+            .HasForeignKey(savedResource => savedResource.ResourceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SavedResource>()
+            .HasIndex(savedResource => savedResource.ResourceId);
 
         modelBuilder.Entity<ResourceRatings>()
         .HasKey(r => r.ResourceId);

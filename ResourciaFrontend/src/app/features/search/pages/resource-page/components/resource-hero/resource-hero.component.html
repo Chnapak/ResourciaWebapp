@@ -18,6 +18,8 @@
  
         <app-resource-hero-actions
           [resource]="resource"
+          [favoritePending]="favoritePending"
+          (favoriteToggle)="favoriteToggle.emit()"
         ></app-resource-hero-actions>        
       </div>
  

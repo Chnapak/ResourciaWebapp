@@ -17,5 +17,7 @@ import { ResourceActionCardComponent } from './components/resource-action-card/r
 })
 export class ResourcePageBodyComponent {
   @Input() resource: ResourceDetailModel | null = null
+  @Input() favoritePending = false;
   @Output() infoChange = new EventEmitter<void>();
+  @Output() favoriteToggle = new EventEmitter<void>();
 }
