@@ -22,6 +22,7 @@ import { ForgotPasswordPageComponent } from './features/auth/pages/forgot-passwo
 import { ResourcePageComponent } from './features/search/pages/resource-page/resource-page.component';
 import { canActivateGuard } from './core/guards/login.guard';
 import { CompleteProfileComponent } from './features/auth/pages/complete-profile/complete-profile.component';
+import { EditProfilePageComponent } from './features/profile/pages/edit-profile-page/edit-profile-page.component';
 
 export const routes: Routes = [
     {
@@ -36,7 +37,8 @@ export const routes: Routes = [
             { path: 'signup', component: RegistrationPageComponent, title: 'Registration'},
             { path: 'confirm-token', component: TokenValidationPageComponent, title: 'Email verification'},
             { path: 'privacy-policy', component: PrivacyPolicyPageComponent, title: 'Privacy Policy'},
-            { path: 'profile/:id', component: ProfilePageComponent, title: 'Profile'},
+            { path: 'profile/edit', component: EditProfilePageComponent, title: 'Edit Profile', canActivate: [canActivateGuard] },
+            { path: 'profile/:username', component: ProfilePageComponent, title: 'Profile'},
             { path: 'tos', component: TosPageComponent, title: 'Terms of Service'},
             { path: 'reset-password', component: ResetPasswordPageComponent, title: 'Reset Password'},
             { path: 'resource/:id', component: ResourcePageComponent, canActivate: [canActivateGuard], data: { public: true} },

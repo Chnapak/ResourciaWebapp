@@ -116,6 +116,7 @@ public class Program
             return new ImageService(imagePath);
         });
         builder.Services.AddHttpClient<CaptchaService>();
+        builder.Services.AddScoped<ProfileService>();
         builder.Services.AddScoped<ReviewService>();
         builder.Services.AddScoped<OAuthService>();
 
