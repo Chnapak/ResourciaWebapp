@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using NodaTime;
 using Resourcia.Data.Entities;
 using Resourcia.Data.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,22 @@ public enum UserStatus
 }
 public class AppUser : IdentityUser<Guid>, ITrackable
 {
+    [MaxLength(100)]
     public string DisplayName { get; set; } = null!;
+
+    [MaxLength(64)]
+    public string Handle { get; set; } = null!;
+
+    [MaxLength(500)]
+    public string? Bio { get; set; }
+
+    [MaxLength(120)]
+    public string? Location { get; set; }
+
+    [MaxLength(255)]
+    public string? Website { get; set; }
+
+    public string? InterestsJson { get; set; }
 
     public ICollection<Post> Posts { get; set; } = [];
     public Instant CreatedAt { get; set; }

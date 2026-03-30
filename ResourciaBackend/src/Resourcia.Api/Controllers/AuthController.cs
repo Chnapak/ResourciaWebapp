@@ -89,6 +89,13 @@ public class AuthController : ControllerBase
             ModelState.AddModelError<RegisterModel>(x => x.DisplayName, "USERNAME_ALREADY_IN_USE");
         }
 
+        var requestedHandle = ProfileHandleUtility.BuildHandle(model.DisplayName);
+        var existingHandleUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Handle == requestedHandle);
+        if (existingHandleUser != null)
+        {
+            ModelState.AddModelError<RegisterModel>(x => x.DisplayName, "USERNAME_ALREADY_IN_USE");
+        }
+
         if (!ModelState.IsValid)
         {
             return ValidationProblem(ModelState);
@@ -101,6 +108,7 @@ public class AuthController : ControllerBase
         {
             Id = Guid.NewGuid(),
             DisplayName = model.DisplayName,
+            Handle = requestedHandle,
             Email = model.Email,
             UserName = model.Email,
         }.SetCreateBySystem(now);
@@ -548,6 +556,23 @@ public class AuthController : ControllerBase
             var email = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
             var provider = jwt.Claims.FirstOrDefault(c => c.Type == "provider")?.Value;
             var providerKey = jwt.Claims.FirstOrDefault(c => c.Type == "providerKey")?.Value;
+            var requestedHandle = ProfileHandleUtility.BuildHandle(model.DisplayName);
+
+            var existingDisplayName = await _userManager.Users
+                .AnyAsync(user => user.DisplayName == model.DisplayName);
+            if (existingDisplayName)
+            {
+                ModelState.AddModelError(nameof(model.DisplayName), "USERNAME_ALREADY_IN_USE");
+                return ValidationProblem(ModelState);
+            }
+
+            var existingHandle = await _userManager.Users
+                .AnyAsync(user => user.Handle == requestedHandle);
+            if (existingHandle)
+            {
+                ModelState.AddModelError(nameof(model.DisplayName), "USERNAME_ALREADY_IN_USE");
+                return ValidationProblem(ModelState);
+            }
 
             // 1. Create the User
             var now = _clock.GetCurrentInstant();
@@ -555,6 +580,7 @@ public class AuthController : ControllerBase
             {
                 Id = Guid.NewGuid(),
                 DisplayName = model.DisplayName,
+                Handle = requestedHandle,
                 Email = email,
                 UserName = email,
                 EmailConfirmed = true // External providers are pre-verified

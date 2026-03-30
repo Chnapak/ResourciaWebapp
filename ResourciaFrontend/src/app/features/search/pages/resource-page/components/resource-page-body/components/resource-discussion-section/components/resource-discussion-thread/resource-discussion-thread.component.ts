@@ -5,13 +5,13 @@ import { getInitials, getUserGradient } from '../../../../../../../../../../shar
 import { FormsModule } from '@angular/forms';
 import { DiscussionReply } from '../../../../../../../../../../shared/models/discussion-reply';
 import { AuthService } from '../../../../../../../../../../core/auth/auth.service';
-import { RouteConfigLoadEnd, Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DiscussionService } from '../../../../../../../../../../core/services/discussion.service';
 
 @Component({
   selector: 'app-resource-discussion-thread',
   standalone: true,
-  imports: [ CommonModule, DatePipe, FormsModule ],
+  imports: [ CommonModule, DatePipe, FormsModule, RouterLink ],
   templateUrl: './resource-discussion-thread.component.html',
   styleUrl: './resource-discussion-thread.component.scss',
 })
@@ -85,5 +85,9 @@ export class ResourceDiscussionThreadComponent implements OnInit {
 
   gradient(username?: string) {
     return getUserGradient(username ?? this.thread.username);
+  }
+
+  profileLink(username: string): string[] {
+    return ['/profile', username];
   }
 }

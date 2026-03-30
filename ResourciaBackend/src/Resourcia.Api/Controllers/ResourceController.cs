@@ -492,6 +492,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         _dbContext.Add(reply);
         await _dbContext.SaveChangesAsync();
 
+        await _cache.InvalidateAsync($"threads:{thread.ResourceId}");
+
         return Ok(new
         {
             reply.Id,

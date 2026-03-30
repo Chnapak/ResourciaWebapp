@@ -12,6 +12,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
+import { AuthService } from '../../../../core/auth/auth.service';
 import { EditProfileForm } from '../../models/edit-profile.model';
 import { EditProfileService } from '../../services/edit-profile.service';
 
@@ -27,6 +28,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly editProfileService = inject(EditProfileService);
+  private readonly authService = inject(AuthService);
 
   readonly isDirty = signal(false);
   readonly preview = signal<Partial<EditProfileForm>>({});
@@ -58,7 +60,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (profile) => {
-          this.originalProfileIdentifier = profile.displayName;
+          this.originalProfileIdentifier = profile.username;
           this.interests.set(profile.interests);
           this.initialiseForm(profile);
           this.preview.set({ ...profile });
@@ -126,18 +128,29 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     this.editProfileService.save(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: (savedProfile) => {
+          this.originalProfileIdentifier = savedProfile.username;
+          this.interests.set(savedProfile.interests);
+          this.form.patchValue({
+            displayName: savedProfile.displayName,
+            username: savedProfile.username,
+            bio: savedProfile.bio,
+            location: savedProfile.location,
+            website: savedProfile.website,
+          }, { emitEvent: false });
+          this.preview.set({ ...savedProfile });
           this.isDirty.set(false);
+          this.authService.updateCurrentUserName(savedProfile.displayName);
+          this.router.navigate(['/profile', savedProfile.username]);
         },
         error: () => {
-          this.editProfileService.saveStatus.set('error');
-          this.editProfileService.saveMessage.set('Could not save your local draft.');
+          // The service already exposes the API error state for the action bar.
         }
       });
   }
 
   onCancel(): void {
-    this.router.navigate(['/profile', this.originalProfileIdentifier || this.form?.get('displayName')?.value || 'me']);
+    this.router.navigate(['/profile', this.originalProfileIdentifier || this.form?.get('username')?.value || 'me']);
   }
 
   fieldHasError(controlName: string, errorKey: string): boolean {
@@ -153,7 +166,12 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
       ],
       username: [
         profile.username,
-        [Validators.required, Validators.minLength(3), Validators.maxLength(30)],
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(64),
+          Validators.pattern(/^[a-zA-Z0-9._-]+$/),
+        ],
       ],
       bio: [profile.bio, [Validators.maxLength(200)]],
       location: [profile.location, [Validators.maxLength(80)]],
@@ -166,14 +184,8 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((value) => {
-        const nextUsername = this.buildHandle((value.displayName as string | null) ?? '');
-        if (this.form.get('username')?.value !== nextUsername) {
-          this.form.get('username')?.setValue(nextUsername, { emitEvent: false });
-        }
-
         this.preview.set({
           ...value,
-          username: nextUsername,
           interests: this.interests(),
         });
 
@@ -184,13 +196,6 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.form.get('displayName')
-      ?.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((displayName) => {
-        const nextUsername = this.buildHandle((displayName as string | null) ?? '');
-        this.form.get('username')?.setValue(nextUsername, { emitEvent: false });
-      });
   }
 
   private buildPayload(): EditProfileForm {
@@ -220,9 +225,5 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     if (!this.isLoading()) {
       this.isDirty.set(true);
     }
-  }
-
-  private buildHandle(displayName: string): string {
-    return displayName.trim().toLowerCase().replace(/\s+/g, '');
   }
 }
