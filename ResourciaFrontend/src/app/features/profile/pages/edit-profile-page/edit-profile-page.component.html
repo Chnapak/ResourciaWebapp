@@ -1,6 +1,6 @@
 <!-- ============================================================
      Edit Profile Page — Resourcia
-     Live-loaded from the profile endpoint with local draft saving.
+     Live-loaded from and saved through the profile endpoint.
      ============================================================ -->
 
 @if (isLoading()) {
@@ -24,7 +24,7 @@
     <nav class="ep-hero__breadcrumb" aria-label="Breadcrumb">
       <a routerLink="/">Home</a>
       <span class="sep">›</span>
-      <a [routerLink]="['/profile', originalProfileIdentifier || form.get('displayName')?.value]">Profile</a>
+      <a [routerLink]="['/profile', originalProfileIdentifier || form.get('username')?.value]">Profile</a>
       <span class="sep">›</span>
       <span class="current">Edit Profile</span>
     </nav>
@@ -56,7 +56,7 @@
     <div class="ep-card">
       <div class="ep-card__header">
         <h2>Public Identity</h2>
-        <p>These fields define the public shape of your profile.</p>
+        <p>These fields save directly to your public profile.</p>
       </div>
       <hr class="ep-card__divider" />
       <div class="ep-card__body">
@@ -64,7 +64,7 @@
         <div class="ep-field">
           <label class="ep-field__label" for="displayName">
             Display Name
-            <span class="ep-field__badge ep-field__badge--current">Loaded</span>
+            <span class="ep-field__badge ep-field__badge--current">Live</span>
           </label>
           <input
             id="displayName"
@@ -90,24 +90,32 @@
         <div class="ep-field">
           <label class="ep-field__label" for="username">
             Public Handle
-            <span class="ep-field__badge ep-field__badge--derived">Derived</span>
+            <span class="ep-field__badge ep-field__badge--current">Live</span>
           </label>
           <div class="ep-input-prefix">
             <span class="ep-input-prefix__at">@</span>
             <input
               id="username"
-              class="ep-input ep-input--readonly"
+              class="ep-input"
               type="text"
               formControlName="username"
               placeholder="username"
               autocomplete="username"
-              readonly
             />
           </div>
           <div class="ep-field__meta">
             <span class="ep-field__helper">
-              The current backend still resolves profiles by display name. This handle is a derived preview of a cleaner public URL.
+              Your public profile route uses this handle: /profile/<strong>{{ form.get('username')?.value || 'username' }}</strong>
             </span>
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('username', 'required')">
+            Username is required.
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('username', 'minlength')">
+            Must be at least 3 characters.
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('username', 'pattern')">
+            Only letters, numbers, dots, underscores, and hyphens are allowed.
           </div>
         </div>
 
@@ -118,7 +126,7 @@
     <div class="ep-card ep-card--spaced">
       <div class="ep-card__header">
         <h2>About You</h2>
-        <p>Shape the copy and metadata that will eventually power a richer public profile.</p>
+        <p>Shape the copy and metadata shown across your public profile.</p>
       </div>
       <hr class="ep-card__divider" />
       <div class="ep-card__body">
@@ -126,7 +134,7 @@
         <div class="ep-field">
           <label class="ep-field__label" for="bio">
             Bio
-            <span class="ep-field__badge ep-field__badge--draft">Draft</span>
+            <span class="ep-field__badge ep-field__badge--current">Live</span>
           </label>
           <textarea
             id="bio"
@@ -136,7 +144,7 @@
             rows="3"
           ></textarea>
           <div class="ep-field__meta">
-            <span class="ep-field__helper">Shown below your name once profile editing is fully backed by the API.</span>
+            <span class="ep-field__helper">Shown below your name on your public profile.</span>
             <span
               class="ep-field__count"
               [class.ep-field__count--warn]="bioCharCount > 160"
@@ -151,7 +159,7 @@
         <div class="ep-field">
           <label class="ep-field__label" for="location">
             Location
-            <span class="ep-field__badge ep-field__badge--draft">Draft</span>
+            <span class="ep-field__badge ep-field__badge--current">Live</span>
           </label>
           <input
             id="location"
@@ -169,7 +177,7 @@
         <div class="ep-field">
           <label class="ep-field__label" for="website">
             Website
-            <span class="ep-field__badge ep-field__badge--draft">Draft</span>
+            <span class="ep-field__badge ep-field__badge--current">Live</span>
           </label>
           <input
             id="website"
@@ -194,7 +202,7 @@
     <div class="ep-card ep-card--spaced">
       <div class="ep-card__header">
         <h2>Interests &amp; Topics</h2>
-        <p>These tags are saved as local draft data until the backend supports them. Max 10.</p>
+        <p>These tags are saved to your profile and shown in the sidebar. Max 10.</p>
       </div>
       <hr class="ep-card__divider" />
       <div class="ep-card__body">
@@ -202,7 +210,7 @@
         <div class="ep-field">
           <label class="ep-field__label">
             Add an interest
-            <span class="ep-field__badge ep-field__badge--draft">Draft</span>
+            <span class="ep-field__badge ep-field__badge--current">Live</span>
           </label>
           <div class="ep-interests__input-row">
             <input
@@ -222,7 +230,7 @@
             >+ Add</button>
           </div>
           <div class="ep-field__helper ep-field__helper--top">
-            Press Enter or comma to add. These help shape the future public profile sidebar.
+            Press Enter or comma to add. These help others understand your focus areas.
           </div>
 
           <div class="ep-interests__tags">
@@ -246,8 +254,8 @@
         <div class="ep-future-notice">
           <span class="ep-future-notice__icon">🔜</span>
           <p class="ep-future-notice__text">
-            <strong>This page is wired to load your live profile</strong>, and saves currently store a local draft.
-            A backend update endpoint is still needed before edits can change the public profile.
+            <strong>Profile edits are now saved through the backend.</strong>
+            The remaining gap is avatar upload, which still needs its own media endpoint.
           </p>
         </div>
 
@@ -262,7 +270,7 @@
     <div class="ep-card">
       <div class="ep-card__header">
         <h2>Profile Preview</h2>
-        <p>How your public profile could appear after backend save support is added.</p>
+        <p>How your public profile will look after saving.</p>
       </div>
       <hr class="ep-card__divider" />
 
@@ -299,16 +307,12 @@
         <div class="ep-status-legend__title">Editor Status</div>
         <div class="ep-status-legend">
           <div class="ep-status-legend__row">
-            <span class="ep-field__badge ep-field__badge--current">Loaded</span>
-            Current profile data from `/api/Profile/me`
+            <span class="ep-field__badge ep-field__badge--current">Live</span>
+            Display name, handle, bio, location, website, and interests save through `/api/Profile/me`
           </div>
           <div class="ep-status-legend__row">
-            <span class="ep-field__badge ep-field__badge--derived">Derived</span>
-            Handle is generated from the display name for preview purposes
-          </div>
-          <div class="ep-status-legend__row">
-            <span class="ep-field__badge ep-field__badge--draft">Draft</span>
-            Changes are stored locally until a profile update API exists
+            <span class="ep-field__badge ep-field__badge--derived">Soon</span>
+            Avatar upload still needs a dedicated backend upload flow
           </div>
         </div>
       </div>
@@ -331,8 +335,8 @@
     <span *ngIf="saveStatus() === 'idle'">
       {{ isDirty() ? 'Unsaved changes' : 'Loaded from your live profile' }}
     </span>
-    <span *ngIf="isSaving()">Saving local draft...</span>
-    <span *ngIf="isSaved()">{{ saveMessage() || 'Draft saved locally.' }}</span>
+    <span *ngIf="isSaving()">Saving profile...</span>
+    <span *ngIf="isSaved()">{{ saveMessage() || 'Profile saved.' }}</span>
     <span *ngIf="isError()">{{ saveMessage() || 'Save failed. Try again.' }}</span>
   </div>
 
@@ -354,7 +358,7 @@
       [attr.aria-busy]="isSaving()"
     >
       <span class="ep-btn__spinner" *ngIf="isSaving()"></span>
-      <span>{{ isSaving() ? 'Saving...' : 'Save Draft' }}</span>
+      <span>{{ isSaving() ? 'Saving...' : 'Save Profile' }}</span>
     </button>
   </div>
 </div>

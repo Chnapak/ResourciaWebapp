@@ -1,9 +1,7 @@
 /**
- * EditProfileForm represents the profile fields currently editable in the UI.
- *
- * The current backend only exposes profile data through GET /api/Profile/{identifier}.
- * Saving richer profile fields is not wired yet, so this form is currently used
- * for live preview and local draft persistence.
+ * EditProfileForm represents the editable profile fields backed by the
+ * profile API. Avatar upload is intentionally separate because it still
+ * needs its own backend media flow.
  */
 export interface EditProfileForm {
   displayName: string;

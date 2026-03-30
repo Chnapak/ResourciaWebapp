@@ -3,10 +3,11 @@ import { Review } from '../../../../../../../../../../../shared/models/review';
 import { getInitials, getUserGradient } from '../../../../../../../../../../../shared/utils/user.utils';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReviewService } from '../../../../../../../../../../../core/services/review.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-resource-review-item',
-  imports: [DatePipe, CommonModule],
+  imports: [DatePipe, CommonModule, RouterLink],
   templateUrl: './resource-review-item.component.html',
   styleUrl: './resource-review-item.component.scss',
 })
@@ -24,6 +25,10 @@ export class ResourceReviewItemComponent {
 
   get gradient(): string {
     return this.review ? getUserGradient(this.review.username) : '';
+  }
+
+  get profileLink(): string[] {
+    return ['/profile', this.review.username];
   }
   
   vote(isHelpful: boolean) {

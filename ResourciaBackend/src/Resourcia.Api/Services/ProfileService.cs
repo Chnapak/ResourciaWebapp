@@ -1,9 +1,12 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Resourcia.Api.Models.Profile;
+using Resourcia.Api.Utils;
 using Resourcia.Data;
 using Resourcia.Data.Entities.Identity;
+using Resourcia.Data.Interfaces;
 
 namespace Resourcia.Api.Services;
 
@@ -11,11 +14,15 @@ public class ProfileService
 {
     private readonly AppDbContext _db;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IClock _clock;
+    private readonly CacheService _cache;
 
-    public ProfileService(AppDbContext db, UserManager<AppUser> userManager)
+    public ProfileService(AppDbContext db, UserManager<AppUser> userManager, IClock clock, CacheService cache)
     {
         _db = db;
         _userManager = userManager;
+        _clock = clock;
+        _cache = cache;
     }
 
     public async Task<(ProfileResponseModel? Profile, string? Error, int StatusCode)> GetProfileAsync(
@@ -34,6 +41,132 @@ public class ProfileService
             return (null, "Profile not found.", 404);
         }
 
+        var profile = await BuildProfileAsync(user, ct);
+        return (profile, null, 200);
+    }
+
+    public async Task<(ProfileResponseModel? Profile, string? Error, int StatusCode)> UpdateProfileAsync(
+        Guid userId,
+        UpdateProfileModel model,
+        CancellationToken ct = default)
+    {
+        var displayName = model.DisplayName.Trim();
+        var handle = ProfileHandleUtility.BuildHandle(model.Handle);
+
+        if (string.IsNullOrWhiteSpace(displayName))
+        {
+            return (null, "Display name is required.", 400);
+        }
+
+        if (string.IsNullOrWhiteSpace(handle))
+        {
+            return (null, "A valid handle is required.", 400);
+        }
+
+        var cleanedInterests = CleanInterests(model.Interests);
+        if (cleanedInterests.Count > 10)
+        {
+            return (null, "You can save up to 10 interests.", 400);
+        }
+
+        var user = await _userManager.Users
+            .FirstOrDefaultAsync(currentUser => currentUser.Id == userId, ct);
+
+        if (user == null)
+        {
+            return (null, "Profile not found.", 404);
+        }
+
+        var normalizedDisplayName = displayName.ToUpperInvariant();
+        var normalizedHandle = handle.ToUpperInvariant();
+
+        var displayNameTaken = await _userManager.Users
+            .AsNoTracking()
+            .AnyAsync(currentUser => currentUser.Id != userId && currentUser.DisplayName.ToUpper() == normalizedDisplayName, ct);
+
+        if (displayNameTaken)
+        {
+            return (null, "Display name is already in use.", 400);
+        }
+
+        var handleTaken = await _userManager.Users
+            .AsNoTracking()
+            .AnyAsync(currentUser => currentUser.Id != userId && currentUser.Handle != null && currentUser.Handle.ToUpper() == normalizedHandle, ct);
+
+        if (handleTaken)
+        {
+            return (null, "Handle is already in use.", 400);
+        }
+
+        var previousDisplayName = user.DisplayName;
+        var displayNameChanged = !string.Equals(previousDisplayName, displayName, StringComparison.Ordinal);
+        var impactedResourceIds = new HashSet<Guid>();
+
+        user.DisplayName = displayName;
+        user.Handle = handle;
+        user.Bio = NullIfWhiteSpace(model.Bio);
+        user.Location = NullIfWhiteSpace(model.Location);
+        user.Website = NormalizeWebsite(model.Website);
+        user.InterestsJson = cleanedInterests.Count == 0 ? null : JsonSerializer.Serialize(cleanedInterests);
+        user.SetModifyBy(displayName, _clock.GetCurrentInstant());
+
+        if (displayNameChanged)
+        {
+            impactedResourceIds.UnionWith(await _db.Resources
+                .AsNoTracking()
+                .Where(resource => resource.CreatedBy == previousDisplayName)
+                .Select(resource => resource.Id)
+                .ToListAsync(ct));
+
+            impactedResourceIds.UnionWith(await _db.ResourceReviews
+                .AsNoTracking()
+                .Where(review => review.UserId == userId)
+                .Select(review => review.ResourceId)
+                .Distinct()
+                .ToListAsync(ct));
+
+            impactedResourceIds.UnionWith(await _db.Discussions
+                .AsNoTracking()
+                .Where(discussion => discussion.UserId == userId)
+                .Select(discussion => discussion.ResourceId)
+                .Distinct()
+                .ToListAsync(ct));
+
+            impactedResourceIds.UnionWith(await (
+                from reply in _db.DiscussionReplies.AsNoTracking()
+                join discussion in _db.Discussions.AsNoTracking() on reply.DiscussionId equals discussion.Id
+                where reply.UserId == userId
+                select discussion.ResourceId)
+                .Distinct()
+                .ToListAsync(ct));
+
+            var ownedResources = await _db.Resources
+                .Where(resource => resource.CreatedBy == previousDisplayName)
+                .ToListAsync(ct);
+
+            foreach (var resource in ownedResources)
+            {
+                resource.CreatedBy = displayName;
+            }
+        }
+
+        await _db.SaveChangesAsync(ct);
+
+        if (displayNameChanged)
+        {
+            foreach (var resourceId in impactedResourceIds)
+            {
+                await _cache.InvalidateAsync($"resource:v4:{resourceId}");
+                await _cache.InvalidateAsync($"threads:{resourceId}");
+            }
+        }
+
+        var profile = await BuildProfileAsync(user, ct);
+        return (profile, null, 200);
+    }
+
+    private async Task<ProfileResponseModel> BuildProfileAsync(AppUser user, CancellationToken ct)
+    {
         var roles = await _userManager.GetRolesAsync(user);
         var sharedResources = await GetSharedResourcesAsync(user, ct);
         var recentReviews = await GetRecentReviewsAsync(user.Id, ct);
@@ -46,13 +179,13 @@ public class ProfileService
             select vote)
             .CountAsync(ct);
 
-        var latestResourceAt = sharedResources.Select(r => (DateTime?)r.AddedAt).FirstOrDefault();
-        var latestReviewAt = recentReviews.Select(r => (DateTime?)r.PostedAt).FirstOrDefault();
+        var latestResourceAt = sharedResources.Select(resource => (DateTime?)resource.AddedAt).FirstOrDefault();
+        var latestReviewAt = recentReviews.Select(review => (DateTime?)review.PostedAt).FirstOrDefault();
         var latestDiscussionAt = await _db.Discussions
             .AsNoTracking()
-            .Where(d => d.UserId == user.Id)
-            .OrderByDescending(d => d.CreatedAt)
-            .Select(d => (Instant?)d.CreatedAt)
+            .Where(discussion => discussion.UserId == user.Id)
+            .OrderByDescending(discussion => discussion.CreatedAt)
+            .Select(discussion => (Instant?)discussion.CreatedAt)
             .FirstOrDefaultAsync(ct);
 
         var joinedAt = user.CreatedAt.ToDateTimeUtc();
@@ -70,51 +203,36 @@ public class ProfileService
 
         var resourcesShared = await _db.Resources
             .AsNoTracking()
-            .CountAsync(r => r.CreatedBy == user.DisplayName, ct);
+            .CountAsync(resource => resource.CreatedBy == user.DisplayName, ct);
 
         var resourcesSaved = await _db.Resources
             .AsNoTracking()
-            .Where(r => r.CreatedBy == user.DisplayName)
-            .SumAsync(r => (int?)r.SavesCount, ct) ?? 0;
+            .Where(resource => resource.CreatedBy == user.DisplayName)
+            .SumAsync(resource => (int?)resource.SavesCount, ct) ?? 0;
 
         var reviewsWritten = await _db.ResourceReviews
             .AsNoTracking()
-            .CountAsync(r => r.UserId == user.Id, ct);
+            .CountAsync(review => review.UserId == user.Id, ct);
 
-        var interests = sharedResources
-            .Select(r => r.Type)
-            .Where(type => !string.IsNullOrWhiteSpace(type) && !string.Equals(type, "Resource", StringComparison.OrdinalIgnoreCase))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Take(5)
-            .ToList();
-
+        var interests = GetStoredInterests(user);
         if (interests.Count == 0)
         {
-            var resourceTags = await _db.Resources
-                .AsNoTracking()
-                .Where(r => r.CreatedBy == user.DisplayName)
-                .Take(20)
-                .ToListAsync(ct);
-
-            interests = resourceTags
-                .SelectMany(resource => resource.Tags ?? [])
-                .Where(tag => !string.IsNullOrWhiteSpace(tag))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .Take(5)
-                .ToList();
+            interests = await BuildFallbackInterestsAsync(user, sharedResources, ct);
         }
 
-        var profile = new ProfileResponseModel
+        return new ProfileResponseModel
         {
             Id = user.Id.ToString(),
             Name = user.DisplayName,
-            Handle = BuildHandle(user.DisplayName),
-            Bio = BuildBio(user.DisplayName, resourcesShared, reviewsWritten),
+            Handle = string.IsNullOrWhiteSpace(user.Handle) ? ProfileHandleUtility.BuildHandle(user.DisplayName) : user.Handle,
+            Bio = string.IsNullOrWhiteSpace(user.Bio) ? BuildBio(user.DisplayName, resourcesShared, reviewsWritten) : user.Bio,
             AvatarInitials = BuildAvatarInitials(user.DisplayName),
             Role = MapRole(roles),
             IsVerified = user.EmailConfirmed,
             JoinedAt = joinedAt,
             LastActive = lastActive,
+            Location = user.Location,
+            Website = user.Website,
             Interests = interests,
             Stats = new ProfileStatsModel
             {
@@ -127,8 +245,6 @@ public class ProfileService
             RecentReviews = recentReviews,
             RecentActivity = recentActivity
         };
-
-        return (profile, null, 200);
     }
 
     private async Task<AppUser?> ResolveUserAsync(string identifier, Guid? currentUserId, CancellationToken ct)
@@ -152,29 +268,39 @@ public class ProfileService
                 .FirstOrDefaultAsync(user => user.Id == userId, ct);
         }
 
-        var normalizedDisplayName = identifier.ToUpperInvariant();
+        var normalizedIdentifier = identifier.ToUpperInvariant();
+
+        var handleMatch = await _userManager.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(user => user.Handle != null && user.Handle.ToUpper() == normalizedIdentifier, ct);
+
+        if (handleMatch != null)
+        {
+            return handleMatch;
+        }
+
         return await _userManager.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(user => user.DisplayName.ToUpper() == normalizedDisplayName, ct);
+            .FirstOrDefaultAsync(user => user.DisplayName.ToUpper() == normalizedIdentifier, ct);
     }
 
     private async Task<List<ProfileResourceModel>> GetSharedResourcesAsync(AppUser user, CancellationToken ct)
     {
         var resources = await _db.Resources
             .AsNoTracking()
-            .Where(r => r.CreatedBy == user.DisplayName)
-            .OrderByDescending(r => r.CreatedAtUtc)
+            .Where(resource => resource.CreatedBy == user.DisplayName)
+            .OrderByDescending(resource => resource.CreatedAtUtc)
             .Take(6)
-            .Select(r => new
+            .Select(resource => new
             {
-                r.Id,
-                r.Title,
-                r.Url,
-                r.LearningStyle,
-                AverageRating = r.Ratings == null ? 0 : r.Ratings.AverageRating,
-                RatingCount = r.Ratings == null ? 0 : r.Ratings.TotalCount,
-                r.SavesCount,
-                r.CreatedAtUtc
+                resource.Id,
+                resource.Title,
+                resource.Url,
+                resource.LearningStyle,
+                AverageRating = resource.Ratings == null ? 0 : resource.Ratings.AverageRating,
+                RatingCount = resource.Ratings == null ? 0 : resource.Ratings.TotalCount,
+                resource.SavesCount,
+                resource.CreatedAtUtc
             })
             .ToListAsync(ct);
 
@@ -233,7 +359,7 @@ public class ProfileService
         List<ProfileResourceModel> sharedResources,
         List<ProfileReviewModel> recentReviews)
     {
-        var activity = sharedResources
+        return sharedResources
             .Select(resource => new ProfileActivityModel
             {
                 Id = $"resource:{resource.Id}",
@@ -262,16 +388,83 @@ public class ProfileService
             .OrderByDescending(item => item.Timestamp)
             .Take(8)
             .ToList();
-
-        return activity;
     }
 
-    private static string BuildHandle(string displayName)
+    private static List<string> GetStoredInterests(AppUser user)
     {
-        return displayName
-            .Trim()
-            .ToLowerInvariant()
-            .Replace(" ", string.Empty);
+        if (string.IsNullOrWhiteSpace(user.InterestsJson))
+        {
+            return [];
+        }
+
+        try
+        {
+            return CleanInterests(JsonSerializer.Deserialize<List<string>>(user.InterestsJson) ?? []);
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    private async Task<List<string>> BuildFallbackInterestsAsync(
+        AppUser user,
+        List<ProfileResourceModel> sharedResources,
+        CancellationToken ct)
+    {
+        var interests = sharedResources
+            .Select(resource => resource.Type)
+            .Where(type => !string.IsNullOrWhiteSpace(type) && !string.Equals(type, "Resource", StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(5)
+            .ToList();
+
+        if (interests.Count > 0)
+        {
+            return interests;
+        }
+
+        var resourceTags = await _db.Resources
+            .AsNoTracking()
+            .Where(resource => resource.CreatedBy == user.DisplayName)
+            .Take(20)
+            .ToListAsync(ct);
+
+        return resourceTags
+            .SelectMany(resource => resource.Tags ?? [])
+            .Where(tag => !string.IsNullOrWhiteSpace(tag))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(5)
+            .ToList();
+    }
+
+    private static List<string> CleanInterests(IEnumerable<string>? interests)
+    {
+        return (interests ?? [])
+            .Select(interest => interest.Trim())
+            .Where(interest => !string.IsNullOrWhiteSpace(interest))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(10)
+            .ToList();
+    }
+
+    private static string? NormalizeWebsite(string? website)
+    {
+        var trimmed = NullIfWhiteSpace(website);
+        if (trimmed == null)
+        {
+            return null;
+        }
+
+        return trimmed
+            .Replace("https://", string.Empty, StringComparison.OrdinalIgnoreCase)
+            .Replace("http://", string.Empty, StringComparison.OrdinalIgnoreCase)
+            .TrimEnd('/');
+    }
+
+    private static string? NullIfWhiteSpace(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
 
     private static string BuildBio(string displayName, int resourcesShared, int reviewsWritten)

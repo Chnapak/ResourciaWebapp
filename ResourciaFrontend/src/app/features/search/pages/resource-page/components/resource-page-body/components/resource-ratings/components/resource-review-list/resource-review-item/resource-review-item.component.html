@@ -3,6 +3,10 @@
   <div class="flex justify-between gap-3">
     
     <div class="flex items-center gap-3">
+      <a
+        [routerLink]="profileLink"
+        class="flex items-center gap-3 rounded-md transition-colors hover:text-blue-600"
+      >
         <div class="w-8 h-8 rounded-full 
                   flex items-center justify-center text-xs font-bold text-white"
             [style.background]="gradient"
@@ -10,14 +14,15 @@
           {{initials}}
         </div>
 
-      <div>
-        <div class="font-semibold text-sm">
-            {{ review.username }}
+        <div>
+          <div class="font-semibold text-sm hover:underline">
+              {{ review.username }}
+          </div>
+          <div class="text-xs text-gray-400">
+              {{review.createdAt | date:'short'}}
+          </div>
         </div>
-        <div class="text-xs text-gray-400">
-            {{review.createdAt | date:'short'}}
-        </div>
-      </div>
+      </a>
     </div>
   </div>
 

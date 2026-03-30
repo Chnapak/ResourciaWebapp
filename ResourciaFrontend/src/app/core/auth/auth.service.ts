@@ -123,6 +123,18 @@ export class AuthService {
     return this.authStateSubject.value;
   }
 
+  updateCurrentUserName(name: string): void {
+    const currentUser = this.currentUserSubject.value;
+    if (!currentUser) {
+      return;
+    }
+
+    this.currentUserSubject.next({
+      ...currentUser,
+      name,
+    });
+  }
+
   // ── Login ────────────────────────────────────────────────────────────────
   login(data: LoginModel): Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}/Login`, data).pipe(

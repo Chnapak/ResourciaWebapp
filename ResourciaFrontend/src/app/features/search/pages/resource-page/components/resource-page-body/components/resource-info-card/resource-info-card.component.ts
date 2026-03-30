@@ -3,6 +3,7 @@ import { SearchService } from '../../../../../../../../core/services/search.serv
 import { FilterKind } from '../../../../../../../../shared/models/filter-kind';
 import { ResourceDetailModel } from '../../../../../../../../shared/models/resource-detail';
 import { Filter as SearchSchemaFilter } from '../../../../../../../../shared/models/search-schema';
+import { RouterLink } from '@angular/router';
 
 type ResourceInfoTone = 'default' | 'blue' | 'green' | 'amber' | 'muted';
 
@@ -10,6 +11,7 @@ interface ResourceInfoRow {
   label: string;
   value: string;
   href?: string;
+  routerLink?: string[];
   tone?: ResourceInfoTone;
   pill?: boolean;
 }
@@ -23,7 +25,7 @@ interface ResourceInfoDisplayValue {
 
 @Component({
   selector: 'app-resource-info-card',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './resource-info-card.component.html',
   styleUrl: './resource-info-card.component.scss',
 })
@@ -119,7 +121,9 @@ export class ResourceInfoCardComponent implements OnInit {
     const updated = this.formatDate(this.resource?.updatedAtUtc);
 
     return [
-      this.createRow('Added By', createdBy, 'Resourcia', 'blue'),
+      createdBy
+        ? { label: 'Added By', value: createdBy, tone: 'blue', routerLink: ['/profile', createdBy] }
+        : this.createRow('Added By', null, 'Resourcia', 'blue'),
       this.createRow('Saves', savesCount, '0 saves'),
       this.createRow('Added', added, 'Unknown'),
       this.createRow('Updated', updated, 'Unknown'),
