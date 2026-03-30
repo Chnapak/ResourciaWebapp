@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Resourcia.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2dad396339ca33e4f33f2d69a4ebf2e3c6d1013f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5899f59420bf7c692821a03dd9c6e1a81933f1d8")]
 [assembly: System.Reflection.AssemblyProductAttribute("Resourcia.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Resourcia.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

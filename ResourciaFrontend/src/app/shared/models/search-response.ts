@@ -1,7 +1,7 @@
-import { ResourceDetailModel } from "./resource-detail";
+import { SearchResultResourceModel } from "./search-result-resource";
 
 export interface SearchResponse {
-    items: ResourceDetailModel[],
+    items: SearchResultResourceModel[],
     page: number,
     pageSize: number,
     totalItems: number,
