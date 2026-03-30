@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { CreateResourceRequestModel } from '../../shared/models/create-resource-request';
 import { CreateResourceResponseModel } from '../../shared/models/create-resource-response';
 import { ResourceDetailModel } from '../../shared/models/resource-detail';
+import { ResourceSaveStateModel } from '../../shared/models/resource-save-state';
 import { SearchResponse } from '../../shared/models/search-response';
 import { ReviewRequestModel } from '../../shared/models/review-request';
 import { Review } from '../../shared/models/review';
@@ -50,5 +51,17 @@ export class ResourceService {
 
   getResource(id: string): Observable<ResourceDetailModel> {
     return this.httpClient.get<ResourceDetailModel>(`/api/resources/${id}`);
+  }
+
+  getSaveState(id: string): Observable<ResourceSaveStateModel> {
+    return this.httpClient.get<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save-state`);
+  }
+
+  saveResource(id: string): Observable<ResourceSaveStateModel> {
+    return this.httpClient.post<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save`, {});
+  }
+
+  unsaveResource(id: string): Observable<ResourceSaveStateModel> {
+    return this.httpClient.delete<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save`);
   }
 }

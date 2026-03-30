@@ -1,7 +1,11 @@
 <app-resource-hero
     [resource]="resource"
+    [favoritePending]="favoritePending"
+    (favoriteToggle)="toggleFavorite()"
 ></app-resource-hero>
 <app-resource-page-body
     [resource]="resource"
+    [favoritePending]="favoritePending"
+    (favoriteToggle)="toggleFavorite()"
     (infoChange)="fetchResource(resourceId!)"
 ></app-resource-page-body>
