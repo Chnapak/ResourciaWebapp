@@ -132,6 +132,7 @@
           <button
             class="px-4 py-2 text-sm font-semibold text-white rounded-lg
                    border border-white/30 bg-white/10 hover:bg-white/20 transition-colors"
+            [routerLink]="['/profile/edit']"
           >Edit profile</button>
         } @else {
           <button
@@ -175,7 +176,7 @@
       <p class="text-2xl font-extrabold text-blue-700 leading-none mb-1">
         {{ profile.stats.resourcesSaved }}
       </p>
-      <p class="text-xs text-gray-500 font-medium">Resources saved</p>
+      <p class="text-xs text-gray-500 font-medium">Resource saves</p>
     </div>
 
   </div>
@@ -236,7 +237,7 @@
                       <span class="text-xs text-gray-400">{{ res.domain }}</span>
                     </div>
                     <a
-                      [routerLink]="['/resources', res.id]"
+                      [routerLink]="['/resource', res.id]"
                       class="text-base font-bold text-gray-900 hover:text-blue-700
                              transition-colors leading-snug line-clamp-1"
                     >{{ res.title }}</a>
@@ -285,7 +286,7 @@
               >
                 <div class="flex items-start justify-between gap-4 mb-2">
                   <a
-                    [routerLink]="['/resources', review.resourceId]"
+                    [routerLink]="['/resource', review.resourceId]"
                     class="text-base font-bold text-gray-900 hover:text-blue-700 transition-colors"
                   >{{ review.resourceTitle }}</a>
 
@@ -354,7 +355,7 @@
                     {{ item.description }}
                     @if (item.target) {
                       <a
-                        [routerLink]="['/resources', item.targetId]"
+                        [routerLink]="['/resource', item.targetId]"
                         class="font-semibold text-blue-600 hover:text-blue-800 transition-colors ml-1"
                       >{{ item.target }}</a>
                     }

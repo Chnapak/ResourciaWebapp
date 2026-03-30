@@ -1,0 +1,42 @@
+// profile-page.component.scss
+//
+// Keep this file as thin as possible — Tailwind handles 95% of styling.
+// This file only covers things that Tailwind can't express cleanly:
+//   1. The skeleton shimmer keyframe (global animation)
+//   2. The line-clamp utility if your Tailwind version doesn't include it
+//   3. Any host-level layout resets
+
+:host {
+  display: block;
+}
+
+// ── Skeleton shimmer ─────────────────────────────────────────────
+// Used via Tailwind's `animate-pulse` on the loading skeleton.
+// If you need a more polished left-to-right sweep instead of pulse,
+// uncomment this block and replace `animate-pulse` with `animate-shimmer`
+// in the template:
+//
+// @keyframes shimmer {
+//   0%   { background-position: 200% center; }
+//   100% { background-position: -200% center; }
+// }
+//
+// .animate-shimmer {
+//   animation: shimmer 1.6s ease-in-out infinite;
+//   background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+//   background-size: 200% auto;
+// }
+
+// ── Timeline rule ────────────────────────────────────────────────
+// The activity feed's vertical rule is positioned via inline Tailwind.
+// No extra styles needed.
+
+// ── line-clamp shim (Tailwind v3.3+ includes this natively) ──────
+// Only add if your project uses an older version:
+//
+// .line-clamp-1 {
+//   overflow: hidden;
+//   display: -webkit-box;
+//   -webkit-box-orient: vertical;
+//   -webkit-line-clamp: 1;
+// }

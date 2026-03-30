@@ -1,0 +1,367 @@
+<!-- ============================================================
+     Edit Profile Page — Resourcia
+     Companion to the public profile page. Same visual language.
+     ============================================================ -->
+
+<!-- ── Hero ──────────────────────────────────────────────── -->
+<section class="ep-hero">
+  <div class="ep-hero__inner">
+
+    <!-- Breadcrumb -->
+    <nav class="ep-hero__breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/">Home</a>
+      <span class="sep">›</span>
+      <a [routerLink]="['/profile', form.get('username')?.value]">Profile</a>
+      <span class="sep">›</span>
+      <span class="current">Edit Profile</span>
+    </nav>
+
+    <!-- Identity line -->
+    <div class="ep-hero__identity">
+
+      <!-- Avatar with future-upload hint -->
+      <div class="ep-avatar-shell" title="Avatar upload coming soon">
+        <div class="ep-avatar">{{ avatarInitial }}</div>
+        <div class="ep-avatar__badge" title="Edit">✎</div>
+        <span class="ep-avatar__future-note">Photo upload coming soon</span>
+      </div>
+
+      <div class="ep-hero__title">
+        <h1>Edit Your Profile</h1>
+        <p>Customize how you appear to the Resourcia community.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Two-column layout ──────────────────────────────────── -->
+<div class="ep-layout" [formGroup]="form">
+
+  <!-- ── Left: Form ─────────────────────────────────────── -->
+  <div class="ep-form-col">
+
+    <!-- ╔══ Identity card ══════════════════════════════════╗ -->
+    <div class="ep-card">
+      <div class="ep-card__header">
+        <h2>Public Identity</h2>
+        <p>These fields appear at the top of your public profile.</p>
+      </div>
+      <hr class="ep-card__divider" />
+      <div class="ep-card__body">
+
+        <!-- Display Name -->
+        <div class="ep-field">
+          <label class="ep-field__label" for="displayName">
+            Display Name
+            <span class="ep-field__badge ep-field__badge--live">Live</span>
+          </label>
+          <input
+            id="displayName"
+            class="ep-input"
+            type="text"
+            formControlName="displayName"
+            placeholder="Your full name or alias"
+            autocomplete="name"
+          />
+          <div class="ep-field__meta">
+            <span class="ep-field__helper">
+              Shown as the main heading on your public profile.
+            </span>
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('displayName', 'required')">
+            Display name is required.
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('displayName', 'minlength')">
+            Must be at least 2 characters.
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="ep-field">
+          <label class="ep-field__label" for="username">
+            Username
+            <span class="ep-field__badge ep-field__badge--live">Live</span>
+          </label>
+          <div class="ep-input-prefix">
+            <span class="ep-input-prefix__at">@</span>
+            <input
+              id="username"
+              class="ep-input"
+              type="text"
+              formControlName="username"
+              placeholder="username"
+              autocomplete="username"
+            />
+          </div>
+          <div class="ep-field__meta">
+            <span class="ep-field__helper">
+              Appears in your profile URL: /profile/<strong>{{ form.get('username')?.value || 'username' }}</strong>
+            </span>
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('username', 'required')">
+            Username is required.
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('username', 'minlength')">
+            Must be at least 3 characters.
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('username', 'pattern')">
+            Only letters, numbers, underscores, hyphens, and dots.
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /Identity card -->
+
+    <!-- ╔══ About card ══════════════════════════════════════╗ -->
+    <div class="ep-card" style="margin-top: 1.25rem;">
+      <div class="ep-card__header">
+        <h2>About You</h2>
+        <p>Help others understand who you are and what you teach.</p>
+      </div>
+      <hr class="ep-card__divider" />
+      <div class="ep-card__body">
+
+        <!-- Bio -->
+        <div class="ep-field">
+          <label class="ep-field__label" for="bio">
+            Bio
+            <span class="ep-field__badge ep-field__badge--future">Coming soon</span>
+          </label>
+          <textarea
+            id="bio"
+            class="ep-textarea"
+            formControlName="bio"
+            placeholder="Educator, researcher, lifelong learner…"
+            rows="3"
+          ></textarea>
+          <div class="ep-field__meta">
+            <span class="ep-field__helper">Appears below your name on your public profile.</span>
+            <span
+              class="ep-field__count"
+              [class.ep-field__count--warn]="bioCharCount > 160"
+              [class.ep-field__count--over]="bioCharCount > 200"
+            >{{ bioCharCount }}/200</span>
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('bio', 'maxlength')">
+            Bio must be 200 characters or fewer.
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="ep-field">
+          <label class="ep-field__label" for="location">
+            Location
+            <span class="ep-field__badge ep-field__badge--future">Coming soon</span>
+          </label>
+          <input
+            id="location"
+            class="ep-input"
+            type="text"
+            formControlName="location"
+            placeholder="Prague, Czech Republic"
+            autocomplete="country-name"
+          />
+          <div class="ep-field__helper" style="margin-top:.35rem">
+            City, country, or region — however specific you'd like.
+          </div>
+        </div>
+
+        <!-- Website -->
+        <div class="ep-field">
+          <label class="ep-field__label" for="website">
+            Website
+            <span class="ep-field__badge ep-field__badge--future">Coming soon</span>
+          </label>
+          <input
+            id="website"
+            class="ep-input"
+            type="url"
+            formControlName="website"
+            placeholder="https://yoursite.com"
+            autocomplete="url"
+          />
+          <div class="ep-field__helper" style="margin-top:.35rem">
+            Your personal site, portfolio, or institutional page.
+          </div>
+          <div class="ep-field__error" *ngIf="fieldHasError('website', 'pattern')">
+            Please enter a valid URL.
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /About card -->
+
+    <!-- ╔══ Interests card ══════════════════════════════════╗ -->
+    <div class="ep-card" style="margin-top: 1.25rem;">
+      <div class="ep-card__header">
+        <h2>Interests &amp; Topics</h2>
+        <p>Tags shown in the sidebar of your profile. Max 10.</p>
+      </div>
+      <hr class="ep-card__divider" />
+      <div class="ep-card__body">
+
+        <div class="ep-field">
+          <label class="ep-field__label">
+            Add an interest
+            <span class="ep-field__badge ep-field__badge--future">Coming soon</span>
+          </label>
+          <div class="ep-interests__input-row">
+            <input
+              class="ep-input"
+              type="text"
+              [value]="interestInput()"
+              (input)="interestInput.set($any($event.target).value)"
+              (keydown)="onInterestKeydown($event)"
+              placeholder="e.g. Mathematics, History…"
+              [disabled]="interests().length >= 10"
+            />
+            <button
+              type="button"
+              class="ep-interests__add-btn"
+              (click)="addInterest()"
+              [disabled]="!interestInput().trim() || interests().length >= 10"
+            >+ Add</button>
+          </div>
+          <div class="ep-field__helper" style="margin-top:.35rem">
+            Press Enter or comma to add. These help others find your profile.
+          </div>
+
+          <div class="ep-interests__tags">
+            <ng-container *ngIf="interests().length; else noInterests">
+              <span class="ep-tag" *ngFor="let tag of interests()">
+                {{ tag }}
+                <button
+                  type="button"
+                  class="ep-tag__remove"
+                  (click)="removeInterest(tag)"
+                  [attr.aria-label]="'Remove ' + tag"
+                >×</button>
+              </span>
+            </ng-container>
+            <ng-template #noInterests>
+              <span class="ep-interests__empty">No interests added yet.</span>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Future notice -->
+        <div class="ep-future-notice">
+          <span class="ep-future-notice__icon">🔜</span>
+          <p class="ep-future-notice__text">
+            <strong>Bio, location, website and interests</strong> will be persisted once
+            backend support is added. Your input is ready to wire up — the form structure,
+            models, and service seam are all in place.
+          </p>
+        </div>
+
+      </div>
+    </div><!-- /Interests card -->
+
+  </div><!-- /form col -->
+
+  <!-- ── Right: Preview ─────────────────────────────────── -->
+  <aside class="ep-preview-card">
+
+    <!-- ╔══ Live preview ══════════════════════════════════╗ -->
+    <div class="ep-card">
+      <div class="ep-card__header">
+        <h2>Profile Preview</h2>
+        <p>How your public profile will appear.</p>
+      </div>
+      <hr class="ep-card__divider" />
+
+      <!-- Mini profile hero -->
+      <div class="ep-preview__hero">
+        <div class="ep-preview__avatar">{{ avatarInitial }}</div>
+        <p class="ep-preview__name">
+          {{ preview().displayName || 'Your Name' }}
+        </p>
+        <p class="ep-preview__handle">
+          &#64;{{ preview().username || 'username' }}
+        </p>
+        <p class="ep-preview__bio" *ngIf="preview().bio">
+          "{{ preview().bio }}"
+        </p>
+        <div class="ep-preview__meta">
+          <span *ngIf="preview().location">📍 {{ preview().location }}</span>
+          <span *ngIf="preview().website">🔗 {{ preview().website }}</span>
+        </div>
+      </div>
+
+      <!-- Interests preview -->
+      <div class="ep-preview__body">
+        <div class="ep-preview__label">Interests</div>
+        <div class="ep-preview__tags" *ngIf="interests().length; else noPreviewTags">
+          <span class="ep-tag" *ngFor="let tag of interests()">{{ tag }}</span>
+        </div>
+        <ng-template #noPreviewTags>
+          <span class="ep-preview__empty">No interests added yet.</span>
+        </ng-template>
+      </div>
+    </div><!-- /preview card -->
+
+    <!-- ╔══ Field status legend ════════════════════════════╗ -->
+    <div class="ep-card" style="margin-top: 1rem;">
+      <div class="ep-card__body" style="padding-top: 1.25rem;">
+        <div style="font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#8b95a8; margin-bottom:.75rem;">
+          Backend Status
+        </div>
+        <div style="display:flex; flex-direction:column; gap:.55rem;">
+          <div style="display:flex; align-items:center; gap:.5rem; font-size:.8rem; color:#374151;">
+            <span class="ep-field__badge ep-field__badge--live" style="font-size:.65rem;">Live</span>
+            Display Name, Username
+          </div>
+          <div style="display:flex; align-items:center; gap:.5rem; font-size:.8rem; color:#374151;">
+            <span class="ep-field__badge ep-field__badge--future" style="font-size:.65rem;">Coming soon</span>
+            Bio, Location, Website, Interests
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside><!-- /preview col -->
+
+</div><!-- /layout -->
+
+<!-- ── Sticky action bar (always visible) ─────────────────── -->
+<div class="ep-action-bar" role="region" aria-label="Save actions">
+
+  <!-- Status indicator -->
+  <div
+    class="ep-action-bar__status"
+    [class.ep-action-bar__status--saving]="isSaving()"
+    [class.ep-action-bar__status--saved]="isSaved()"
+    [class.ep-action-bar__status--error]="isError()"
+    [class.ep-action-bar__status--idle]="saveStatus() === 'idle'"
+  >
+    <span class="ep-status-dot"></span>
+    <span *ngIf="saveStatus() === 'idle'">No unsaved changes</span>
+    <span *ngIf="isSaving()">Saving…</span>
+    <span *ngIf="isSaved()">✓ Profile saved</span>
+    <span *ngIf="isError()">{{ saveError() || 'Save failed. Try again.' }}</span>
+  </div>
+
+  <div class="ep-action-bar__actions">
+    <button
+      type="button"
+      class="ep-btn ep-btn--ghost"
+      (click)="onCancel()"
+      [disabled]="isSaving()"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="ep-btn ep-btn--primary"
+      [class.ep-btn--saving]="isSaving()"
+      (click)="onSave()"
+      [disabled]="form.invalid || isSaving()"
+      [attr.aria-busy]="isSaving()"
+    >
+      <span class="ep-btn__spinner" *ngIf="isSaving()"></span>
+      <span>{{ isSaving() ? 'Saving…' : 'Save Profile' }}</span>
+    </button>
+  </div>
+
+</div>
