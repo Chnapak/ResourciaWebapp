@@ -98,7 +98,7 @@ export class SearchResultPageComponent implements OnInit {
     console.log('clear all filters');
     console.log('query', this.buildQuery());
 
-    this.updateUrl();
+    this.updateUrl(1);
 
     this.toaster.show('All filters cleared', 'success');
   }
@@ -117,7 +117,7 @@ export class SearchResultPageComponent implements OnInit {
       this.queryState.facets[filter.key] = value;
     }
 
-    this.updateUrl();
+    this.updateUrl(1);
 
     console.log('facet change', filter, value);
     console.log('query', this.buildQuery());
@@ -139,12 +139,20 @@ export class SearchResultPageComponent implements OnInit {
       delete this.queryState.ranges[filter.key];
     }
 
+    this.updateUrl(1);
+
     console.log('range change', filter, type, value);
     console.log('query', this.buildQuery());
   }
 
   onBoolChange(filter: any, value: boolean): void {
-    this.queryState.booleans[filter.key] = value;
+    if (value) {
+      this.queryState.booleans[filter.key] = true;
+    } else {
+      delete this.queryState.booleans[filter.key];
+    }
+
+    this.updateUrl(1);
 
     console.log('boolean change', filter, value);
     console.log('query', this.buildQuery());
@@ -158,6 +166,8 @@ export class SearchResultPageComponent implements OnInit {
     } else {
       this.queryState.texts[filter.key] = trimmedValue;
     }
+
+    this.updateUrl(1);
 
     console.log('text change', filter, value);
     console.log('query', this.buildQuery());
