@@ -2,6 +2,8 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { getInitials, getUserGradient } from '../../../../../../../../../../shared/utils/user.utils';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../../../../../../../../core/auth/auth.service';
+import { Router } from '@angular/router';
+import { DiscussionService } from '../../../../../../../../../../core/services/discussion.service';
 
 @Component({
   selector: 'app-resource-discussion-input',
@@ -11,31 +13,22 @@ import { AuthService } from '../../../../../../../../../../core/auth/auth.servic
   styleUrl: './resource-discussion-input.component.scss',
 })
 export class ResourceDiscussionInputComponent {
-  @Input() username: string = '';
-  @Output() submitMessage = new EventEmitter<string>();
+  @Input() resourceId!: string;
 
   text: string = '';
 
-  private auth = inject(AuthService)
-  
-  ngOnInit() {
-    const action = this.auth.runPendingAction();
+  private auth = inject(AuthService);
+  private discussionService = inject(DiscussionService);
+  private router = inject(Router);
 
+  ngOnInit() {
+    const action = this.auth.peekPendingAction();
     if (!action) return;
 
-    switch (action.type) {
-      case 'setDiscussion':
-        this.text = action.payload.text;
-        break;
+    if (action.type === 'setDiscussion') {
+      this.auth.runPendingAction();
+      this.text = action.payload.text;
     }
-  }
-
-  get initials(): string {
-    return this.username ? getInitials(this.username) : '';
-  }
-
-  get gradient(): string {
-    return this.username ? getUserGradient(this.username) : '#ccc';
   }
 
   submit() {
@@ -43,15 +36,21 @@ export class ResourceDiscussionInputComponent {
 
     if (!this.auth.requireAuth()) {
       this.auth.setPendingAction({
-        type: 'setRating',
-        payload: {
-          text: this.text
-        }
+        type: 'setDiscussion',      // was incorrectly 'setRating'
+        payload: { text: this.text }
       });
+
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url }  // was missing entirely
+      });
+
       return;
     }
 
-    this.submitMessage.emit(this.text);
-    this.text = '';
+    this.discussionService.createThread(this.resourceId, this.text).subscribe({
+      next: (res) => {
+        this.text = '';
+      }
+    });
   }
 }

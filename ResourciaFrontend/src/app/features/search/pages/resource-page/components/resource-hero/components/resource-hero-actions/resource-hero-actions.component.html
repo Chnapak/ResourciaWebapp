@@ -13,10 +13,22 @@
     variant="outline"
     size="lg"
     type="button"
-    (click)="handleFavorite($event)"
+    (click)="handleShare()"
     class="backdrop-blur-sm"
   >
-    <i class="fa-regular fa-heart"></i>
-    <span>Add to Favorites</span>
+    <i class="fa-solid fa-share-nodes"></i>
+    <span>Share Resource</span>
+  </ui-button>
+
+  <ui-button
+    variant="outline"
+    size="lg"
+    type="button"
+    [disabled]="favoritePending"
+    (click)="handleFavorite()"
+    class="backdrop-blur-sm"
+  >
+    <i [class]="favoriteIconClass"></i>
+    <span>{{ favoriteLabel }}</span>
   </ui-button>
 </div>

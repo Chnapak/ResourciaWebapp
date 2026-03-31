@@ -5,7 +5,9 @@
         [resource]="resource"
     ></app-resource-rating-overview>
 
-    <app-resource-rating-input></app-resource-rating-input>
+    <app-resource-rating-input
+        (reviewChange)="reviewChange.emit()"
+    ></app-resource-rating-input>
 
     <app-resource-review-list
         [resource]="resource"

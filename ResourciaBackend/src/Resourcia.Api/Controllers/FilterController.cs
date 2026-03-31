@@ -20,6 +20,7 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
     public async Task<ActionResult<List<FilterInfoModel>>> GetAllFilters()
     {
         var filters = await _dbContext.Filters
+            .Where(f => f.DeletedAt == null)
             .Select(f => new FilterInfoModel
             {
                 Key = f.Key,
@@ -29,7 +30,17 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
                 IsMulti = f.IsMulti,
                 IsActive = f.IsActive,
                 SortOrder = f.SortOrder,
-                FacetValues = f.FacetValues.Where(v => v.IsActive).OrderBy(v => v.SortOrder).ToList()
+                FacetValues = f.FacetValues
+                    .Where(v => v.IsActive)
+                    .OrderBy(v => v.SortOrder)
+                    .Select(v => new FilterFacetValueInfoModel
+                    {
+                        Id = v.Id,
+                        Value = v.Value,
+                        Label = v.Label,
+                        SortOrder = v.SortOrder
+                    })
+                    .ToList()
             })
             .ToListAsync();
         Console.WriteLine(filters);
@@ -42,7 +53,7 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
     {
         var filter = await _dbContext.Filters
             .Include(f => f.FacetValues)
-            .FirstOrDefaultAsync(f => f.Key == filterName);
+            .FirstOrDefaultAsync(f => f.Key == filterName && f.DeletedAt == null);
 
         if (filter == null)
             return NotFound($"Filter '{filterName}' not found.");

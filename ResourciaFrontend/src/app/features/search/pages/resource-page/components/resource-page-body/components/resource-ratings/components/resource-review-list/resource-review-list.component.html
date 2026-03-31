@@ -1,5 +1,5 @@
 <div class="flex items-center justify-between mt-7 mb-0">
-    <span class="font-semibold text-[0.95rem]">{{ reviews.length }} Reviews</span>
+    <span class="font-semibold text-[0.95rem]">{{ totalItems }} Reviews</span>
     <select class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-900 outline-none cursor-pointer">
         <option>Most helpful</option>
         <option>Most recent</option>
@@ -7,13 +7,14 @@
 </div>
 <div>
 
-    @for (review of reviews; track $index) {
+    @for (review of reviews; track review.id) {
         <app-resource-review-item
-            [review]="review">
-        </app-resource-review-item>
+            [review]="review"
+            [resourceId]="resourceId"
+        ></app-resource-review-item>
     }
 
-    @if (reviews.length > 0) {
+    @if (reviews.length > 0 && reviews.length < totalItems) {
         <ui-button
         class="w-full mt-10"
         variant="outline"

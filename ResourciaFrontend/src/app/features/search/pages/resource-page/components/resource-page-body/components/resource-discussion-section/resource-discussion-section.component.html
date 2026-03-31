@@ -1,11 +1,13 @@
 <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-card">
     <h2 class="font-display font-bold text-lg mb-5">Community Discussion</h2>
 
-    @for (thread of threads; track $index) {
+    @for (thread of threads; track thread.id) {
         <app-resource-discussion-thread
             [thread]="thread">
         </app-resource-discussion-thread>
     } 
 
-    <app-resource-discussion-input></app-resource-discussion-input>
+    <app-resource-discussion-input
+        [resourceId]="resourceId"
+    ></app-resource-discussion-input>
 </div>

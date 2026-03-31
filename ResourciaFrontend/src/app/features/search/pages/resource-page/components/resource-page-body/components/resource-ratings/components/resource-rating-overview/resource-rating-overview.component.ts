@@ -25,6 +25,10 @@ export class ResourceRatingOverviewComponent {
     return this.resource?.ratings?.totalCount ?? 0;
   }
 
+  get reviewCount(): number {
+    return this.resource?.reviews?.length ?? this.totalRatings;
+  }
+
   get rating(): RatingUtils {
     return new RatingUtils(this.resource?.ratings);
   }

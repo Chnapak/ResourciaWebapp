@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NodaTime;
+using Resourcia.Data.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,7 @@ public class DiscussionReplies
     public Guid DiscussionId { get; set; }
     public Discussions Discussions { get; set; }
     public Guid UserId { get; set; }
+    public AppUser User { get; set; } = null!;
     public string Content { get; set; }
     public Instant CreatedAt { get; set; }
 }

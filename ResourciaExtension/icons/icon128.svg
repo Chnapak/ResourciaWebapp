@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="resourciaIconGradient" x1="16" y1="12" x2="112" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D1F6B"/>
+      <stop offset="0.55" stop-color="#1A3AAD"/>
+      <stop offset="1" stop-color="#2952D9"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="30" fill="url(#resourciaIconGradient)"/>
+  <path d="M64 20L30 39v18.5c0 28.2 22.3 52.7 34 56.4 11.7-3.7 34-28.2 34-56.4V39L64 20Z" fill="rgba(255,255,255,0.24)"/>
+  <path d="M48 62h12v22h8V62h12L64 46 48 62Z" fill="white"/>
+</svg>

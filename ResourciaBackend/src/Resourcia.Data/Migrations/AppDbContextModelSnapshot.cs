@@ -196,6 +196,8 @@ namespace Resourcia.Data.Migrations
 
                     b.HasIndex("DiscussionId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("DiscussionReplies");
                 });
 
@@ -221,6 +223,8 @@ namespace Resourcia.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ResourceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Discussions");
                 });
@@ -398,6 +402,10 @@ namespace Resourcia.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Bio")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -417,7 +425,8 @@ namespace Resourcia.Data.Migrations
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -425,6 +434,18 @@ namespace Resourcia.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Handle")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("InterestsJson")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Location")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -474,6 +495,10 @@ namespace Resourcia.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("Id");
 
@@ -574,6 +599,17 @@ namespace Resourcia.Data.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -610,19 +646,40 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("Resources");
                 });
 
-            modelBuilder.Entity("Resourcia.Data.Entities.ResourceFacetValues", b =>
+            modelBuilder.Entity("Resourcia.Data.Entities.ResourceFilterValues", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool?>("BooleanValue")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("FacetValuesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("FilterDefinitionsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double?>("NumberValue")
+                        .HasColumnType("double precision");
+
                     b.Property<Guid>("ResourceId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("FacetValuesId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("StringValue")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
 
-                    b.HasKey("ResourceId", "FacetValuesId");
+                    b.HasKey("Id");
 
                     b.HasIndex("FacetValuesId");
 
-                    b.ToTable("ResourceFacetValues");
+                    b.HasIndex("FilterDefinitionsId");
+
+                    b.HasIndex("ResourceId", "FilterDefinitionsId");
+
+                    b.ToTable("ResourceFilterValues");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceImage", b =>
@@ -760,6 +817,24 @@ namespace Resourcia.Data.Migrations
                     b.ToTable("ReviewsVotes");
                 });
 
+            modelBuilder.Entity("Resourcia.Data.Entities.SavedResource", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("UserId", "ResourceId");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("SavedResources");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.Identity.AppRole", null)
@@ -838,7 +913,15 @@ namespace Resourcia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Resourcia.Data.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Discussions");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.Discussions", b =>
@@ -849,7 +932,15 @@ namespace Resourcia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Resourcia.Data.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Resource");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.FacetValues", b =>
@@ -874,21 +965,28 @@ namespace Resourcia.Data.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Resourcia.Data.Entities.ResourceFacetValues", b =>
+            modelBuilder.Entity("Resourcia.Data.Entities.ResourceFilterValues", b =>
                 {
                     b.HasOne("Resourcia.Data.Entities.FacetValues", "FacetValues")
-                        .WithMany("ResourceFacetValues")
+                        .WithMany("ResourceFilterValues")
                         .HasForeignKey("FacetValuesId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Resourcia.Data.Entities.FilterDefinitions", "FilterDefinitions")
+                        .WithMany("ResourceFilterValues")
+                        .HasForeignKey("FilterDefinitionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Resourcia.Data.Entities.Resource", "Resource")
-                        .WithMany("ResourceFacetValues")
+                        .WithMany("ResourceFilterValues")
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FacetValues");
+
+                    b.Navigation("FilterDefinitions");
 
                     b.Navigation("Resource");
                 });
@@ -941,6 +1039,25 @@ namespace Resourcia.Data.Migrations
                         .HasForeignKey("ResourceReviewId");
                 });
 
+            modelBuilder.Entity("Resourcia.Data.Entities.SavedResource", b =>
+                {
+                    b.HasOne("Resourcia.Data.Entities.Resource", "Resource")
+                        .WithMany("SavedResources")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Resourcia.Data.Entities.Identity.AppUser", "User")
+                        .WithMany("SavedResources")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Resourcia.Data.Entities.Discussions", b =>
                 {
                     b.Navigation("Replies");
@@ -948,17 +1065,21 @@ namespace Resourcia.Data.Migrations
 
             modelBuilder.Entity("Resourcia.Data.Entities.FacetValues", b =>
                 {
-                    b.Navigation("ResourceFacetValues");
+                    b.Navigation("ResourceFilterValues");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.FilterDefinitions", b =>
                 {
                     b.Navigation("FacetValues");
+
+                    b.Navigation("ResourceFilterValues");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Posts");
+
+                    b.Navigation("SavedResources");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.Resource", b =>
@@ -969,9 +1090,11 @@ namespace Resourcia.Data.Migrations
 
                     b.Navigation("Ratings");
 
-                    b.Navigation("ResourceFacetValues");
+                    b.Navigation("ResourceFilterValues");
 
                     b.Navigation("ResourceReviews");
+
+                    b.Navigation("SavedResources");
                 });
 
             modelBuilder.Entity("Resourcia.Data.Entities.ResourceReview", b =>

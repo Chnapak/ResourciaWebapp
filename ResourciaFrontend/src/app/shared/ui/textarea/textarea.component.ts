@@ -36,6 +36,17 @@ export class TextareaComponent implements ControlValueAccessor, OnInit {
 
   writeValue(value: string): void {
     this.value = value ?? '';
+
+    if (this.textareaRef?.nativeElement) {
+      this.textareaRef.nativeElement.value = this.value;
+      if (this.autoGrow) {
+        this._autoResize(this.textareaRef.nativeElement);
+      }
+    }
+
+    if (this.control) {
+      this.control.setValue(this.value, { emitEvent: false });
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {

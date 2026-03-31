@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resourcia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- ── Header ───────────────────────────────────────────── -->
+  <header class="rp-header">
+    <div class="rp-header__brand">
+      <div class="rp-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z" fill="rgba(255,255,255,0.25)"/>
+          <path d="M8 11h3v6h2v-6h3l-4-4-4 4z" fill="white"/>
+        </svg>
+      </div>
+      <span class="rp-header__name">Resourcia</span>
+    </div>
+    <div class="rp-header__actions">
+      <button class="rp-icon-btn" id="openApp" title="Open Resourcia">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Context bar ──────────────────────────────────────── -->
+  <div class="rp-context" id="contextBar">
+    <div class="rp-context__label">Searching for</div>
+    <div class="rp-context__query" id="currentQuery">—</div>
+  </div>
+
+  <!-- ── Main body ────────────────────────────────────────── -->
+  <main class="rp-body">
+
+    <!-- Loading state -->
+    <div class="rp-state rp-state--loading" id="stateLoading">
+      <div class="rp-skeleton rp-skeleton--card"></div>
+      <div class="rp-skeleton rp-skeleton--line" style="width:70%"></div>
+      <div class="rp-skeleton rp-skeleton--line" style="width:50%"></div>
+    </div>
+
+    <!-- Empty / no results state -->
+    <div class="rp-state rp-state--empty hidden" id="stateEmpty">
+      <div class="rp-empty__icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <p class="rp-empty__title">No resources yet</p>
+      <p class="rp-empty__sub">We don't have resources for this search yet. Be the first to add one!</p>
+      <button class="rp-btn rp-btn--primary rp-btn--sm" id="addResourceBtn">+ Add a Resource</button>
+    </div>
+
+    <!-- Result state -->
+    <div class="rp-state hidden" id="stateResult">
+
+      <!-- Featured resource card -->
+      <div class="rp-resource-card" id="featuredCard">
+        <div class="rp-resource-card__top">
+          <div class="rp-resource-card__meta">
+            <span class="rp-chip rp-chip--type" id="resType">Course</span>
+            <span class="rp-chip rp-chip--free" id="resCost">Free</span>
+          </div>
+          <div class="rp-resource-card__score" id="resScore">
+            <span class="rp-score__num">4.8</span>
+            <span class="rp-score__stars">★★★★★</span>
+          </div>
+        </div>
+        <h3 class="rp-resource-card__title" id="resTitle">Introduction to Machine Learning</h3>
+        <p class="rp-resource-card__domain" id="resDomain">coursera.org</p>
+        <p class="rp-resource-card__desc" id="resDesc">Comprehensive ML course covering supervised, unsupervised learning, and neural networks.</p>
+
+        <div class="rp-resource-card__difficulty">
+          <span class="rp-difficulty-label">Difficulty</span>
+          <span class="rp-difficulty-bar">
+            <span class="rp-difficulty-bar__fill" id="diffBar" style="width: 60%"></span>
+          </span>
+          <span class="rp-difficulty-text" id="diffText">Intermediate</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="rp-actions">
+        <button class="rp-btn rp-btn--primary" id="viewInApp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          View in Resourcia
+        </button>
+        <button class="rp-btn rp-btn--ghost" id="saveResource">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+          Save
+        </button>
+      </div>
+
+      <!-- More results hint -->
+      <button class="rp-more-link" id="viewSimilar">
+        View <span id="moreCount">12</span> more resources →
+      </button>
+
+    </div>
+
+  </main>
+
+  <!-- ── Recently saved section ──────────────────────────── -->
+  <section class="rp-recent" id="recentSection">
+    <div class="rp-recent__header">
+      <span class="rp-recent__title">Recently saved</span>
+      <a href="#" class="rp-recent__all" id="viewAllSaved">View all</a>
+    </div>
+    <div class="rp-recent__list" id="recentList">
+      <div class="rp-recent-item">
+        <div class="rp-recent-item__dot" style="background: #3b82f6"></div>
+        <div class="rp-recent-item__info">
+          <span class="rp-recent-item__name">Khan Academy – Calculus</span>
+          <span class="rp-recent-item__domain">khanacademy.org</span>
+        </div>
+        <span class="rp-recent-item__type">Course</span>
+      </div>
+      <div class="rp-recent-item">
+        <div class="rp-recent-item__dot" style="background: #059669"></div>
+        <div class="rp-recent-item__info">
+          <span class="rp-recent-item__name">MDN Web Docs – CSS Grid</span>
+          <span class="rp-recent-item__domain">developer.mozilla.org</span>
+        </div>
+        <span class="rp-recent-item__type">Reference</span>
+      </div>
+      <div class="rp-recent-item">
+        <div class="rp-recent-item__dot" style="background: #f59e0b"></div>
+        <div class="rp-recent-item__info">
+          <span class="rp-recent-item__name">3Blue1Brown – Linear Algebra</span>
+          <span class="rp-recent-item__domain">youtube.com</span>
+        </div>
+        <span class="rp-recent-item__type">Video</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────────── -->
+  <footer class="rp-footer">
+    <span>Not logged in</span>
+    <a href="#" id="signInLink">Sign in →</a>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

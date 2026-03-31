@@ -15,11 +15,11 @@ import { FiltersSectionComponent } from './components/filters-section/filters-se
 import { FiltersSidebarComponent } from './components/filters-sidebar/filters-sidebar.component';
 import { ResourceCardComponent } from './components/resource-card/resource-card.component';
 import { ResourceService } from '../../../../core/services/resource.service';
-import { ResourceDetailModel } from '../../../../shared/models/resource-detail';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { PaginationComponent } from '../../../../shared/ui/pagination/pagination.component';
 import { FacetModel } from '../../../../shared/models/facet';
 import { ActiveChip } from '../../../../shared/models/active-chip';
+import { SearchResultResourceModel } from '../../../../shared/models/search-result-resource';
 
 
 @Component({
@@ -39,7 +39,7 @@ export class SearchResultPageComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  resources: ResourceDetailModel[] = [];
+  resources: SearchResultResourceModel[] = [];
   currentPage = 1;
   itemsPerPage = 27;
   totalItems = 0;
@@ -98,7 +98,7 @@ export class SearchResultPageComponent implements OnInit {
     console.log('clear all filters');
     console.log('query', this.buildQuery());
 
-    this.updateUrl();
+    this.updateUrl(1);
 
     this.toaster.show('All filters cleared', 'success');
   }
@@ -117,7 +117,7 @@ export class SearchResultPageComponent implements OnInit {
       this.queryState.facets[filter.key] = value;
     }
 
-    this.updateUrl();
+    this.updateUrl(1);
 
     console.log('facet change', filter, value);
     console.log('query', this.buildQuery());
@@ -139,12 +139,20 @@ export class SearchResultPageComponent implements OnInit {
       delete this.queryState.ranges[filter.key];
     }
 
+    this.updateUrl(1);
+
     console.log('range change', filter, type, value);
     console.log('query', this.buildQuery());
   }
 
   onBoolChange(filter: any, value: boolean): void {
-    this.queryState.booleans[filter.key] = value;
+    if (value) {
+      this.queryState.booleans[filter.key] = true;
+    } else {
+      delete this.queryState.booleans[filter.key];
+    }
+
+    this.updateUrl(1);
 
     console.log('boolean change', filter, value);
     console.log('query', this.buildQuery());
@@ -158,6 +166,8 @@ export class SearchResultPageComponent implements OnInit {
     } else {
       this.queryState.texts[filter.key] = trimmedValue;
     }
+
+    this.updateUrl(1);
 
     console.log('text change', filter, value);
     console.log('query', this.buildQuery());
@@ -329,12 +339,24 @@ export class SearchResultPageComponent implements OnInit {
     this.loadResources();
   }
 
-  openResource(resource: any): void {
+  openResource(resource: SearchResultResourceModel): void {
     window.open(resource.url, '_blank');
   }
 
-  shareResource(resource: any): void {
-    console.log('share resource', resource);
+  async shareResource(resource: SearchResultResourceModel): Promise<void> {
+    const shareUrl = this.getShareUrl(resource);
+    if (!shareUrl) {
+      this.toaster.show('Resource link is not available yet.', 'error');
+      return;
+    }
+
+    const copied = await this.copyToClipboard(shareUrl);
+    if (copied) {
+      this.toaster.show('Resource link copied to clipboard.', 'success');
+      return;
+    }
+
+    this.toaster.show('Could not copy the resource link.', 'error');
   }
 
   hideFilters(): void {
@@ -374,6 +396,51 @@ export class SearchResultPageComponent implements OnInit {
     }
 
     return query;
+  }
+
+  private getShareUrl(resource: SearchResultResourceModel): string | null {
+    if (!resource.id) {
+      return null;
+    }
+
+    const relativePath = `/resource/${resource.id}`;
+    const origin = globalThis.location?.origin;
+
+    return origin ? `${origin}${relativePath}` : relativePath;
+  }
+
+  private async copyToClipboard(value: string): Promise<boolean> {
+    try {
+      if (globalThis.navigator?.clipboard?.writeText) {
+        await globalThis.navigator.clipboard.writeText(value);
+        return true;
+      }
+    } catch {
+      // Fall back to the manual copy path below.
+    }
+
+    if (typeof document === 'undefined') {
+      return false;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly', 'true');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    try {
+      return document.execCommand('copy');
+    } catch {
+      return false;
+    } finally {
+      document.body.removeChild(textarea);
+    }
   }
 
   get activeFilterChips(): ActiveChip[] {

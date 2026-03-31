@@ -5,13 +5,19 @@ import { ResourceDiscussionSectionComponent } from './components/resource-discus
 import { Review } from '../../../../../../shared/models/review';
 import { ReviewRequestModel } from '../../../../../../shared/models/review-request';
 import { ResourceDetailModel } from '../../../../../../shared/models/resource-detail';
+import { ResourceInfoCardComponent } from './components/resource-info-card/resource-info-card.component';
+import { ResourceActionCardComponent } from './components/resource-action-card/resource-action-card.component';
 
 @Component({
   selector: 'app-resource-page-body',
-  imports: [ResourceDescriptionCardComponent, ResourceRatingsComponent, ResourceDiscussionSectionComponent],
+  standalone: true,
+  imports: [ResourceDescriptionCardComponent, ResourceRatingsComponent, ResourceDiscussionSectionComponent, ResourceInfoCardComponent, ResourceActionCardComponent],
   templateUrl: './resource-page-body.component.html',
   styleUrl: './resource-page-body.component.scss',
 })
 export class ResourcePageBodyComponent {
   @Input() resource: ResourceDetailModel | null = null
+  @Input() favoritePending = false;
+  @Output() infoChange = new EventEmitter<void>();
+  @Output() favoriteToggle = new EventEmitter<void>();
 }

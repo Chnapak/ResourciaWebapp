@@ -55,8 +55,7 @@ export class CompleteProfileComponent {
 
     this.authService.completeExternalLogin(payload).subscribe({
       next: (res: { token: string }) => {
-        // Handle successful login (e.g., store access token)
-        localStorage.setItem('accessToken', res.token);
+        this.authService.establishAuthenticatedSession(res.token);
         this.router.navigate(['/']); 
       },
       error: (err) => {

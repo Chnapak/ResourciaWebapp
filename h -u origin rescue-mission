@@ -1,0 +1,20 @@
+[33m6e62d46[m[33m ([m[1;36mHEAD -> [m[1;32mrescue-mission[m[33m, [m[1;32mrescue-work[m[33m)[m fix: http -> https
+[33m7d18fda[m feat: lazy loading
+[33mea1f553[m feat: frontend in docker compose
+[33m0307ef6[m fix: verification process fixed
+[33m3e6097a[m feat: soft delete of resources, filters and users
+[33m792674b[m feat: adding new filters
+[33m4bb6285[m feat: chrome extension I've been working on
+[33m878638f[m feat: better search engine
+[33m49e602d[m fix: resource card
+[33m5899f59[m feat: saving resources
+[33m2dad396[m fix: links to profiles in resources
+[33m00ed1f6[m feat: profile edit page component
+[33md1bea75[m feat: profile page component facelift
+[33m10b1ea4[m feat: resource page info + add resource page functional
+[33mf9ffe9d[m feat: ... --- ...
+[33m48a772f[m feat: oauth, review endpoints, refactor
+[33m43a5f8c[m feat: pictures and such
+[33mf6608d9[m feat: connected to backend
+[33mff69649[m fix: merge conflicts???
+[33m6b3600d[m fix: routing
