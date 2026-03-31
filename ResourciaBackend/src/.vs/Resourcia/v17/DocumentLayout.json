@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\services\\reviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\services\\reviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\controllers\\resourcecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\controllers\\resourcecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\services\\reviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|solutionrelative:resourcia.api\\services\\reviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AB7D1F15-F93C-F0C7-DA44-E02C003CA82E}|Resourcia.Api\\Resourcia.Api.csproj|c:\\users\\matej\\source\\repos\\resourciaapi\\resourciabackend\\src\\resourcia.api\\services\\oauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -222,20 +222,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "Resourcia.Api\\appsettings.Development.json",
-              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\appsettings.Development.json",
-              "RelativeToolTip": "Resourcia.Api\\appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-28T17:10:37.897Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 11,
@@ -250,7 +238,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AdminFiltersController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminFiltersController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\AdminFiltersController.cs",
@@ -258,8 +246,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminFiltersController.cs",
               "ViewState": "AgIAAGMAAAAAAAAAAAAUwG8AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:02:43.093Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:02:43.093Z"
             },
             {
               "$type": "Document",
@@ -275,7 +262,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ResourceController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\ResourceController.cs",
@@ -287,20 +274,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Program.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Program.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Program.cs",
               "RelativeToolTip": "Resourcia.Api\\Program.cs",
-              "ViewState": "AgIAAKcAAAAAAAAAAAAmwLgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACUBAAAAAAAAAAAUwDEBAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T22:11:41.446Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-26T22:11:41.446Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ReviewsController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ReviewsController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\ReviewsController.cs",
@@ -312,15 +298,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "ReviewService.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Services\\ReviewService.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Services\\ReviewService.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Services\\ReviewService.cs",
               "RelativeToolTip": "Resourcia.Api\\Services\\ReviewService.cs",
-              "ViewState": "AgIAACgBAAAAAAAAAAAswEsBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMBAAAAAAAAAAAuwC8AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-29T11:22:40.61Z"
+              "WhenOpened": "2026-03-29T11:22:40.61Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "Resourcia.Api\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\appsettings.Development.json",
+              "RelativeToolTip": "Resourcia.Api\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-28T17:10:37.897Z"
             },
             {
               "$type": "Document",
@@ -512,8 +511,7 @@
               "RelativeToolTip": "Resourcia.Api\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAKcBAAAAAAAAAAAQwLUBAABiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-23T22:01:46.222Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-23T22:01:46.222Z"
             },
             {
               "$type": "Document",
