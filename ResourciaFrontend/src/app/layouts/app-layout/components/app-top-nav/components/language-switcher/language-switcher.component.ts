@@ -58,7 +58,7 @@ export class LanguageSwitcherComponent implements OnInit {
       return;
     }
 
-    window.location.href = language.path;
+    window.location.href = this.toAbsoluteUrl(language.path);
   }
 
   private detectCurrentLanguage(): LanguageOption {
@@ -84,5 +84,10 @@ export class LanguageSwitcherComponent implements OnInit {
   private normalizePath(path: string): string {
     if (!path) return '/';
     return path.replace(/\/+$/, '') || '/';
+  }
+
+  private toAbsoluteUrl(path: string): string {
+    const origin = window.location.origin;
+    return origin ? `${origin}${path}` : path;
   }
 }

@@ -1,7 +1,6 @@
 services:
   resourcia.api:
     image: ${DOCKER_REGISTRY-}resourciaapi
-    container_name: resourcia.api
     build:
       context: .
       dockerfile: Resourcia.Api/Dockerfile
@@ -14,9 +13,20 @@ services:
       - resourcia.db
       - resourcia.redis
 
+  resourcia.frontend:
+    image: ${DOCKER_REGISTRY-}resourciafrontend
+    build:
+      context: ../../ResourciaFrontend
+      dockerfile: Dockerfile
+      args:
+        BUILD_CONFIGURATION: development
+    ports:
+      - "4200:80"
+    depends_on:
+      - resourcia.api
+
   resourcia.db:
     image: postgres:latest
-    container_name: resourcia.db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -28,8 +38,11 @@ services:
 
   resourcia.redis:
     image: redis:7-alpine
-    container_name: resourcia.redis
     ports:
       - "6379:6379"
     volumes:
       - ./.containers/resourcia-redis:/data
+
+networks:
+  default:
+    name: resourcia.local
