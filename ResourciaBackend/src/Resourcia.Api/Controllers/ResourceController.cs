@@ -418,6 +418,89 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         return Ok(result);
     }
 
+    [HttpGet("api/resources/lookup")]
+    public async Task<IActionResult> Lookup([FromQuery] string[] domains, CancellationToken ct)
+    {
+        var requestedDomains = domains
+            .SelectMany(domain => domain.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            .Where(domain => !string.IsNullOrWhiteSpace(domain))
+            .Select(domain => NormalizeDomain(domain))
+            .Where(domain => !string.IsNullOrWhiteSpace(domain))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (requestedDomains.Count == 0)
+        {
+            return Ok(new ResourceLookupResponseModel());
+        }
+
+        var resources = await _dbContext.Resources
+            .AsNoTracking()
+            .Select(resource => new
+            {
+                resource.Id,
+                resource.Title,
+                resource.Description,
+                resource.Url,
+                resource.IsFree,
+                resource.LearningStyle,
+                resource.SavesCount,
+                resource.CreatedAtUtc,
+                Ratings = resource.Ratings == null ? null : new ResourceLookupRatingsModel
+                {
+                    AverageRating = resource.Ratings.AverageRating,
+                    TotalCount = resource.Ratings.TotalCount
+                },
+                Facets = resource.ResourceFacetValues
+                    .Select(resourceFacetValue => new ResourceLookupFacetModel
+                    {
+                        Key = resourceFacetValue.FacetValues.FilterDefinitions.Key,
+                        Value = resourceFacetValue.FacetValues.Value,
+                        Label = resourceFacetValue.FacetValues.Label
+                    })
+                    .ToList()
+            })
+            .ToListAsync(ct);
+
+        var items = resources
+            .Select(resource => new
+            {
+                Domain = NormalizeDomain(resource.Url),
+                Resource = resource
+            })
+            .Where(item => item.Domain != null && requestedDomains.Contains(item.Domain, StringComparer.OrdinalIgnoreCase))
+            .GroupBy(item => item.Domain!, StringComparer.OrdinalIgnoreCase)
+            .Select(group =>
+            {
+                var bestMatch = group
+                    .OrderByDescending(item => item.Resource.Ratings?.TotalCount ?? 0)
+                    .ThenByDescending(item => item.Resource.Ratings?.AverageRating ?? 0)
+                    .ThenByDescending(item => item.Resource.SavesCount)
+                    .ThenByDescending(item => item.Resource.CreatedAtUtc)
+                    .First();
+
+                return new ResourceLookupItemModel
+                {
+                    Domain = group.Key,
+                    ResourceCount = group.Count(),
+                    Id = bestMatch.Resource.Id,
+                    Title = bestMatch.Resource.Title,
+                    Description = bestMatch.Resource.Description,
+                    Url = bestMatch.Resource.Url,
+                    IsFree = bestMatch.Resource.IsFree,
+                    LearningStyle = bestMatch.Resource.LearningStyle,
+                    Ratings = bestMatch.Resource.Ratings,
+                    Facets = bestMatch.Resource.Facets
+                };
+            })
+            .ToList();
+
+        return Ok(new ResourceLookupResponseModel
+        {
+            Items = items
+        });
+    }
+
 
     [HttpGet("api/resources/{id:guid}/rating")]
     public async Task<IActionResult> GetRating(Guid id)
@@ -750,6 +833,29 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         return User.FindFirstValue(ClaimTypes.Name)
             ?? User.FindFirstValue(JwtRegisteredClaimNames.Name);
+    }
+
+    private static string? NormalizeDomain(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        var normalizedValue = value.Trim();
+        if (!normalizedValue.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+            !normalizedValue.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            normalizedValue = $"https://{normalizedValue}";
+        }
+
+        if (!Uri.TryCreate(normalizedValue, UriKind.Absolute, out var uri))
+        {
+            return null;
+        }
+
+        var host = uri.Host.Trim().ToLowerInvariant();
+        return host.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ? host[4..] : host;
     }
 
     private static List<string> ParseQueryValues(IEnumerable<string> rawValues)

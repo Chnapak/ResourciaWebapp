@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resourcia</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="rp-topbar">
+    <div class="rp-topbar__brand">
+      <div class="rp-brand-mark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z" fill="rgba(255,255,255,0.18)"/>
+          <path d="M8 11h3v6h2v-6h3l-4-4-4 4z" fill="white"/>
+        </svg>
+      </div>
+      <span class="rp-topbar__name">Resourcia</span>
+    </div>
+
+    <nav class="rp-tabs" aria-label="Popup sections">
+      <button class="rp-tab rp-tab--active" id="tabMatch" data-tab-target="match" type="button">Match</button>
+      <button class="rp-tab" id="tabSaved" data-tab-target="saved" type="button">Saved</button>
+    </nav>
+
+    <button class="rp-open-btn" id="openApp" title="Open Resourcia" type="button" aria-label="Open Resourcia">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+        <polyline points="15 3 21 3 21 9"/>
+        <line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+    </button>
+  </header>
+
+  <main class="rp-shell">
+    <section class="rp-panel" id="panelMatch">
+      <div class="rp-detection-banner" id="contextBar">
+        <div class="rp-detection-banner__left">
+          <span class="rp-detection-banner__dot"></span>
+          <div>
+            <p class="rp-detection-banner__title" id="contextTitle">Scanning this search</p>
+            <p class="rp-detection-banner__query" id="currentQuery">-</p>
+          </div>
+        </div>
+        <span class="rp-detection-banner__badge" id="resourceCountBadge">0 resources found</span>
+      </div>
+
+      <div class="rp-state rp-state--loading" id="stateLoading">
+        <div class="rp-skeleton rp-skeleton--banner"></div>
+        <div class="rp-skeleton rp-skeleton--card"></div>
+        <div class="rp-skeleton rp-skeleton--line" style="width: 72%"></div>
+        <div class="rp-skeleton rp-skeleton--line" style="width: 44%"></div>
+      </div>
+
+      <div class="rp-state rp-state--empty hidden" id="stateEmpty">
+        <div class="rp-empty__icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+          </svg>
+        </div>
+        <p class="rp-empty__title">No Resourcia match yet</p>
+        <p class="rp-empty__copy">We could not find a resource for this query. Add one and make the next search smarter.</p>
+        <div class="rp-empty__actions">
+          <button class="rp-button rp-button--primary" id="addResourceBtn" type="button">Add a resource</button>
+          <button class="rp-button rp-button--ghost" id="viewSimilar" type="button">Explore Resourcia</button>
+        </div>
+      </div>
+
+      <div class="rp-state hidden" id="stateResult">
+        <article class="rp-resource-card" id="featuredCard">
+          <div class="rp-resource-card__head">
+            <div class="rp-resource-card__identity">
+              <div class="rp-resource-icon" id="resIcon" aria-hidden="true"></div>
+              <div class="rp-resource-card__identity-copy">
+                <h2 class="rp-resource-card__title" id="resTitle">Resource title</h2>
+                <p class="rp-resource-card__domain" id="resDomain">example.com</p>
+                <div class="rp-resource-card__rating-line">
+                  <span class="rp-resource-card__stars" id="resStars">-</span>
+                  <span class="rp-resource-card__reviews" id="resReviews">No reviews yet</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="rp-bookmark-btn" id="saveResource" type="button" aria-label="Save resource">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="rp-tag-row">
+            <span class="rp-tag rp-tag--type" id="resType">Reference</span>
+            <span class="rp-tag rp-tag--cost" id="resCost">Free</span>
+            <span class="rp-tag rp-tag--level" id="resDifficultyTag">All levels</span>
+          </div>
+
+          <p class="rp-resource-card__desc" id="resDesc">Resource description.</p>
+
+          <div class="rp-resource-card__footer">
+            <button class="rp-button rp-button--primary rp-button--wide" id="viewInApp" type="button">View full listing</button>
+          </div>
+        </article>
+
+        <button class="rp-inline-link" id="viewSimilarMatches" type="button">
+          <span class="rp-inline-link__label">Also on this page</span>
+          <span class="rp-inline-link__action">See all matches <span id="moreCount">0</span> -></span>
+        </button>
+
+        <section class="rp-saved-section">
+          <div class="rp-section-heading">
+            <span>Recently saved</span>
+            <button class="rp-section-link" id="viewAllSavedPreview" type="button">View all</button>
+          </div>
+          <div class="rp-saved-list" id="savedPreviewList"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="rp-panel rp-panel--saved hidden" id="panelSaved">
+      <div class="rp-panel-heading">
+        <div>
+          <p class="rp-panel-heading__eyebrow">Saved collection</p>
+          <h2 class="rp-panel-heading__title">Keep your best finds close</h2>
+        </div>
+        <button class="rp-section-link" id="viewAllSaved" type="button">Open app</button>
+      </div>
+
+      <div class="rp-saved-list rp-saved-list--full" id="savedList"></div>
+    </section>
+  </main>
+
+  <footer class="rp-footer">
+    <div class="rp-footer__status">
+      <span class="rp-footer__status-dot"></span>
+      <span>Not signed in</span>
+    </div>
+    <button class="rp-footer__link" id="signInLink" type="button">Sign in -></button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
