@@ -4,11 +4,26 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5000
       - ASPNETCORE_HTTPS_PORTS=5001
+      - EnvironmentSettings__FrontendHostUrl=https://localhost:4200
+      - TLS_CERT_PFX=/https/Resourcia.Api.pfx
+      - TLS_CERT_SECRETS_FILE=/run/usersecrets/86254fc7-04d5-4411-b571-2479ffd744f7/secrets.json
+      - TLS_CERT_PASSWORD_KEY=Kestrel:Certificates:Development:Password
     ports:
       - "5000:5000"
       - "5001:5001"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/run/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/https:ro
+
+  resourcia.frontend:
+    environment:
+      - TLS_CERT_PFX=/https/Resourcia.Api.pfx
+      - TLS_CERT_SECRETS_FILE=/run/usersecrets/86254fc7-04d5-4411-b571-2479ffd744f7/secrets.json
+      - TLS_CERT_PASSWORD_KEY=Kestrel:Certificates:Development:Password
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/run/usersecrets:ro
