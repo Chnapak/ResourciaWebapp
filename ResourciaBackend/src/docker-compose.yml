@@ -10,6 +10,19 @@ services:
       - "5001:5001"
     depends_on:
       - resourcia.db
+      - resourcia.redis
+
+  resourcia.frontend:
+    image: ${DOCKER_REGISTRY-}resourciafrontend
+    build:
+      context: ../../ResourciaFrontend
+      dockerfile: Dockerfile
+      args:
+        BUILD_CONFIGURATION: development
+    ports:
+      - "4200:443"
+    depends_on:
+      - resourcia.api
 
   resourcia.db:
     image: postgres:latest
