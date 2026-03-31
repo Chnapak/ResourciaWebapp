@@ -20,14 +20,6 @@ export class AppComponent {
     initFlowbite();
 
     this.route.queryParams.subscribe(params => {
-<<<<<<< HEAD
-    const accessToken = params['token'];
-    if (accessToken) {
-      // 1. Save the actual login JWT
-      localStorage.setItem('accessToken', accessToken);
-
-      // 2. Remove the token from the URL bar for cleanliness and security
-=======
       const accessToken = params['token'];
       const currentPath = this.router.url.split('?')[0].toLowerCase();
 
@@ -37,16 +29,11 @@ export class AppComponent {
 
       localStorage.setItem('accessToken', accessToken);
 
->>>>>>> rescue-mission
       this.router.navigate([], {
         queryParams: { token: null },
         queryParamsHandling: 'merge',
         replaceUrl: true
       });
-<<<<<<< HEAD
-    }
-  });
-=======
     });
   }
 
@@ -56,6 +43,5 @@ export class AppComponent {
     }
 
     return token.split('.').length === 3;
->>>>>>> rescue-mission
   }
 }
