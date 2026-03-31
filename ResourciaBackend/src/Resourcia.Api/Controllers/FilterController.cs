@@ -29,7 +29,17 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
                 IsMulti = f.IsMulti,
                 IsActive = f.IsActive,
                 SortOrder = f.SortOrder,
-                FacetValues = f.FacetValues.Where(v => v.IsActive).OrderBy(v => v.SortOrder).ToList()
+                FacetValues = f.FacetValues
+                    .Where(v => v.IsActive)
+                    .OrderBy(v => v.SortOrder)
+                    .Select(v => new FilterFacetValueInfoModel
+                    {
+                        Id = v.Id,
+                        Value = v.Value,
+                        Label = v.Label,
+                        SortOrder = v.SortOrder
+                    })
+                    .ToList()
             })
             .ToListAsync();
         Console.WriteLine(filters);

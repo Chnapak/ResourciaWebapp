@@ -42,7 +42,7 @@ public class Resource
     [MaxLength(DatabaseConstants.TrackableByLength)]
     public string? CreatedBy { get; set; }
 
-    public ICollection<ResourceFacetValues> ResourceFacetValues { get; set; } = new List<ResourceFacetValues>();
+    public ICollection<ResourceFilterValues> ResourceFilterValues { get; set; } = new List<ResourceFilterValues>();
     public List<ResourceReview> ResourceReviews { get; set; } = new();
 
     public List<Discussions> Discussions { get; set;} = new();

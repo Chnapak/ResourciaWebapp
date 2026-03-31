@@ -45,6 +45,7 @@ public class FilterDefinitions
     public string? ResourceField { get; set; }
 
     public ICollection<FacetValues> FacetValues { get; set; } = new List<FacetValues>();
+    public ICollection<ResourceFilterValues> ResourceFilterValues { get; set; } = new List<ResourceFilterValues>();
 
     public Instant CreatedAt { get; set; }
 

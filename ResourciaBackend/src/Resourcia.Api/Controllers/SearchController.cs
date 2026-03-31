@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Resourcia.Api.Models.Filters;
 using Resourcia.Api.Services;
+using Resourcia.Api.Utils;
 using Resourcia.Data;
 
 namespace Resourcia.Api.Controllers;
@@ -17,7 +18,7 @@ public class SearchController(AppDbContext db, CacheService cache) : ControllerB
     public async Task<IActionResult> Schema()
     {
         var response = await _cache.GetOrSetAsync(
-            "search:schema:v2",
+            "search:schema:v5",
             async () =>
             {
                 var filters = await _db.Filters
@@ -32,7 +33,7 @@ public class SearchController(AppDbContext db, CacheService cache) : ControllerB
                         IsMulti = filter.IsMulti,
                         ResourceField = filter.ResourceField,
                         Values = filter.FacetValues
-                            .Where(value => value.IsActive && value.ResourceFacetValues.Any())
+                            .Where(value => value.IsActive)
                             .OrderBy(value => value.SortOrder)
                             .Select(value => new SearchSchemaFilterValueModel
                             {
@@ -47,6 +48,8 @@ public class SearchController(AppDbContext db, CacheService cache) : ControllerB
 
                 foreach (var filter in filters)
                 {
+                    filter.ResourceField = FilterResourceFieldResolver.Resolve(filter.ResourceField, filter.Key, filter.Label);
+
                     if (await HasDataAsync(filter))
                     {
                         populatedFilters.Add(filter);
@@ -82,12 +85,16 @@ public class SearchController(AppDbContext db, CacheService cache) : ControllerB
     {
         if (string.Equals(filter.Kind, "facet", StringComparison.OrdinalIgnoreCase))
         {
-            return filter.Values.Count > 0;
+            return await _db.ResourceFilterValues
+                .AsNoTracking()
+                .AnyAsync(resourceFilterValue => resourceFilterValue.FilterDefinitions.Key == filter.Key);
         }
 
         if (string.IsNullOrWhiteSpace(filter.ResourceField))
         {
-            return false;
+            return await _db.ResourceFilterValues
+                .AsNoTracking()
+                .AnyAsync(resourceFilterValue => resourceFilterValue.FilterDefinitions.Key == filter.Key);
         }
 
         return filter.ResourceField.Trim().ToLowerInvariant() switch

@@ -6,9 +6,12 @@ public class CreateResourceModel
     public string? Description { get; init; }
     public required string Url { get; init; }
 
-    // Facets by filter key -> list of facet "Value" slugs (FacetValues.Value)
-    // Example: { "topic": ["csharp","efcore"], "level": ["beginner"] }
+    // Legacy alias for selectable filter values.
     public Dictionary<string, List<string>> Facets { get; init; } = new();
+
+    // Generic filter values keyed by filter key. This supports selectable values,
+    // raw text values, booleans, and numeric values for filters without a direct resource field.
+    public Dictionary<string, List<string>> FilterValues { get; init; } = new();
 
     // Optional direct fields on Resource (if you want to allow setting them at create time)
     public bool? IsFree { get; init; }

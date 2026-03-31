@@ -330,7 +330,7 @@ public class ReviewsController : ControllerBase
     }
 
     private Task InvalidateResourceAsync(Guid resourceId) =>
-        _cache.InvalidateAsync($"resource:v4:{resourceId}");
+        _cache.InvalidateAsync($"resource:v5:{resourceId}");
 }
 
 /// <summary>Request body for the vote endpoints.</summary>

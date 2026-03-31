@@ -3,8 +3,12 @@ export interface CreateResourceRequestModel {
   description?: string | null;
   url: string;
 
-  // facet key -> list of facet slugs (FacetValues.Value)
+  // Legacy selectable values payload.
   facets?: Record<string, string[]>;
+
+  // Generic filter values keyed by filter key. This supports selectable values,
+  // raw text values, booleans, and numeric values for filters without a mapped field.
+  filterValues?: Record<string, string[]>;
 
   // optional direct fields (match your API DTO)
   isFree?: boolean | null;

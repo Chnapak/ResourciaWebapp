@@ -19,7 +19,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<FilterDefinitions> Filters { get; set; }
     public DbSet<FacetValues> FacetValues { get; set; }
-    public DbSet<ResourceFacetValues> ResourceFacetValues { get; set; }
+    public DbSet<ResourceFilterValues> ResourceFilterValues { get; set; }
     public DbSet<Resource> Resources { get; set; }
     public DbSet<ResourceReview> ResourceReviews { get; set; }
     public DbSet<ReviewVotes> ReviewsVotes { get; set; }
@@ -49,23 +49,23 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
         .Property(x => x.SortOrder)
         .HasPrecision(18, 9);
 
-        modelBuilder.Entity<ResourceFacetValues>()
-        .HasKey(x => new { x.ResourceId, x.FacetValuesId });
-
-        modelBuilder.Entity<ResourceFacetValues>()
+        modelBuilder.Entity<ResourceFilterValues>()
         .HasOne(x => x.Resource)
-        .WithMany(r => r.ResourceFacetValues)
+        .WithMany(r => r.ResourceFilterValues)
         .HasForeignKey(x => x.ResourceId)
         .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<ResourceFacetValues>()
-        .HasOne(x => x.FacetValues)
-        .WithMany(fv => fv.ResourceFacetValues)
-        .HasForeignKey(x => x.FacetValuesId)
+        modelBuilder.Entity<ResourceFilterValues>()
+        .HasOne(x => x.FilterDefinitions)
+        .WithMany(filter => filter.ResourceFilterValues)
+        .HasForeignKey(x => x.FilterDefinitionsId)
         .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<ResourceFacetValues>()
-        .HasIndex(x => x.FacetValuesId);
+        modelBuilder.Entity<ResourceFilterValues>()
+        .HasOne(x => x.FacetValues)
+        .WithMany(facetValue => facetValue.ResourceFilterValues)
+        .HasForeignKey(x => x.FacetValuesId)
+        .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<ReviewVotes>()
             .HasKey(rv => new { rv.ReviewId, rv.UserId });

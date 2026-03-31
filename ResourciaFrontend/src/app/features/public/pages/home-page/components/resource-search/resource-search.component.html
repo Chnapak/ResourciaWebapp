@@ -1,33 +1,55 @@
-<div class="flex items-center bg-white w-full max-w-[800px] rounded-[12px] p-[16px] gap-[12px]">
-    <div class="flex-1">
-    <label i18n for="subject" class="text-blue-500 text-[16px] font-[600] mb-[8px]">SUBJECT</label>
-    <select id="subject" class="text-black w-full border-solid border-2 border-blue-700 rounded-[8px] pl-[12px] pr-[32px] py-[8px] cursor-pointer focus:outline-none focus:border-blue-500">
-        <option i18n value="">Choose a subject to get started</option>
-        <option i18n value="math">Math</option>
-        <option i18n value="cs">Computer Science</option>
-        <option i18n value="biology">Biology</option>
-        <option i18n value="history">History</option>
-    </select>
+<div class="flex w-full max-w-[960px] flex-col gap-[12px] rounded-[16px] bg-white/95 p-[16px] shadow-[0_24px_60px_rgba(15,23,42,0.18)] backdrop-blur md:flex-row md:items-end">
+  @if (isSchemaLoading) {
+    <div class="grid flex-1 grid-cols-1 gap-[12px] md:grid-cols-3">
+      @for (_ of [1, 2, 3]; track $index) {
+        <div class="flex flex-col gap-[8px]">
+          <div class="h-[14px] w-[88px] animate-pulse rounded-full bg-slate-200"></div>
+          <div class="h-[44px] animate-pulse rounded-[10px] bg-slate-100"></div>
+        </div>
+      }
     </div>
-    <div class="flex-1">
-    <label i18n for="type" class="text-gray-500 text-[16px] font-[600] mb-[8px]">TYPE</label>
-    <select id="type" class="text-black w-full border-solid border-2 border-black rounded-[8px] pl-[12px] pr-[32px] py-[8px] cursor-pointer focus:outline-none focus:border-blue-500">
-        <option i18n value="">Any type</option>
-        <option i18n value="tool">Tool</option>
-        <option i18n value="course">Course</option>
-        <option i18n value="video">Video</option>
-        <option i18n value="worksheet">Worksheet</option>
-    </select>
+
+    <button class="rounded-[10px] bg-blue-600 px-[28px] py-[11px] font-[600] text-white opacity-70" disabled type="button">
+      Loading...
+    </button>
+  } @else {
+    <div class="grid flex-1 grid-cols-1 gap-[12px] md:grid-cols-3">
+      @for (filter of filters; track filter.key) {
+        <div class="flex min-w-0 flex-col gap-[8px]">
+          <label [for]="filter.key" class="text-[13px] font-[700] uppercase tracking-[0.08em] text-slate-500">
+            {{ filter.label }}
+          </label>
+
+          @if (filter.controlType === 'text') {
+            <input
+              [id]="filter.key"
+              [(ngModel)]="formValues[filter.key]"
+              [placeholder]="filter.placeholder ?? ''"
+              class="w-full rounded-[10px] border border-slate-200 px-[14px] py-[11px] text-[15px] text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              type="text" />
+          } @else {
+            <select
+              [id]="filter.key"
+              [(ngModel)]="formValues[filter.key]"
+              class="w-full cursor-pointer rounded-[10px] border border-slate-200 bg-white px-[14px] py-[11px] text-[15px] text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+              <option value="">{{ filter.emptyOptionLabel }}</option>
+
+              @for (option of filter.options; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          }
+        </div>
+      }
     </div>
-    <div class="flex-1">
-    <label i18n for="price" class="text-gray-500 text-[16px] font-[600] mb-[8px]">PRICE</label>
-    <select id="price" class="text-black w-full border-solid border-2 border-black rounded-[8px] pl-[12px] pr-[32px] py-[8px] cursor-pointer focus:outline-none focus:border-blue-600">
-        <option i18n value="">Any</option>
-        <option i18n value="free">Free</option>
-        <option i18n value="paid">Paid</option>
-        <option i18n value="freemium">Freemium</option>
-    </select>
+
+    <div class="flex items-end">
+      <button
+        (click)="onSearch()"
+        class="min-w-[132px] rounded-[10px] bg-blue-600 px-[28px] py-[11px] font-[600] text-white transition hover:bg-blue-500"
+        type="button">
+        Search
+      </button>
     </div>
-    <div class="w-1 bg-gray-300 h-full rounded-xl"></div>
-    <button i18n (click)="onSearch()" class="bg-blue-600 font-[600] px-[32px] py-[8px] rounded-[8px] cursor-pointer search-btn hover:bg-blue-500" id="searchBtn">Search</button>
+  }
 </div>
