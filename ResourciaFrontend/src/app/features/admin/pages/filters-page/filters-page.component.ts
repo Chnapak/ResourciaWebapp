@@ -82,6 +82,11 @@ export class FiltersAdminPageComponent implements OnInit {
     this.selectedKeys.delete(filterId);
   }
 
+  onDeleteFilter(filterId: string): void {
+    this.schema = this.schema.filter((filter) => filter.id !== filterId);
+    this.selectedKeys.delete(filterId);
+  }
+
   openCreatePanel(): void {
     this.isCreatePanelOpen = true;
     this.resetCreateDraft();

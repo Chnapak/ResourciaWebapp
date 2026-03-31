@@ -36,6 +36,9 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
   readonly interests = signal<string[]>([]);
   readonly isLoading = signal(true);
   readonly loadError = signal<string | null>(null);
+  readonly isDeleteConfirmOpen = signal(false);
+  readonly isDeletingAccount = signal(false);
+  readonly deleteAccountError = signal<string | null>(null);
   readonly saveStatus = this.editProfileService.saveStatus;
   readonly saveMessage = this.editProfileService.saveMessage;
 
@@ -151,6 +154,37 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
 
   onCancel(): void {
     this.router.navigate(['/profile', this.originalProfileIdentifier || this.form?.get('username')?.value || 'me']);
+  }
+
+  openDeleteAccountConfirm(): void {
+    this.deleteAccountError.set(null);
+    this.isDeleteConfirmOpen.set(true);
+  }
+
+  cancelDeleteAccount(): void {
+    this.deleteAccountError.set(null);
+    this.isDeleteConfirmOpen.set(false);
+  }
+
+  confirmDeleteAccount(): void {
+    if (this.isDeletingAccount()) {
+      return;
+    }
+
+    this.isDeletingAccount.set(true);
+    this.deleteAccountError.set(null);
+
+    this.editProfileService.deleteAccount()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.authService.handleAccountDeleted();
+        },
+        error: (error) => {
+          this.isDeletingAccount.set(false);
+          this.deleteAccountError.set(error?.error?.error ?? 'Could not delete your account. Please try again.');
+        }
+      });
   }
 
   fieldHasError(controlName: string, errorKey: string): boolean {

@@ -8,7 +8,7 @@
         [indeterminate]="someSelected"
         (toggleAll)="onToggleAll($event)"
     >
-        @for (user of users; track $index) {
+        @for (user of users; track user.id) {
             <app-user-row
                 [user]="user"
                 [selected]="selectedIds.has(user.id)"

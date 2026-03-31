@@ -39,8 +39,13 @@ public class Resource
 
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
 
+    public DateTime? DeletedAtUtc { get; set; }
+
     [MaxLength(DatabaseConstants.TrackableByLength)]
     public string? CreatedBy { get; set; }
+
+    [MaxLength(DatabaseConstants.TrackableByLength)]
+    public string? DeletedBy { get; set; }
 
     public ICollection<ResourceFilterValues> ResourceFilterValues { get; set; } = new List<ResourceFilterValues>();
     public List<ResourceReview> ResourceReviews { get; set; } = new();

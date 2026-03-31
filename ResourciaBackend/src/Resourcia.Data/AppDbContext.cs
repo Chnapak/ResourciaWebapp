@@ -45,6 +45,9 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
         modelBuilder.Entity<AppUser>()
         .HasQueryFilter(u => u.DeletedAt == null);
 
+        modelBuilder.Entity<Resource>()
+        .HasQueryFilter(resource => resource.DeletedAtUtc == null);
+
         modelBuilder.Entity<FilterDefinitions>()
         .Property(x => x.SortOrder)
         .HasPrecision(18, 9);

@@ -47,4 +47,25 @@ public class ProfileController : ControllerBase
             _ => StatusCode(status, new { error })
         };
     }
+
+    [Authorize]
+    [HttpDelete("me")]
+    public async Task<IActionResult> DeleteProfile(CancellationToken ct)
+    {
+        var currentUserId = User.GetUserId();
+        var (error, status) = await _profileService.DeleteProfileAsync(currentUserId, ct);
+
+        if (status == 204)
+        {
+            Response.Cookies.Delete("RefreshToken");
+            return NoContent();
+        }
+
+        return status switch
+        {
+            400 => BadRequest(new { error }),
+            404 => NotFound(new { error }),
+            _ => StatusCode(status, new { error })
+        };
+    }
 }

@@ -38,6 +38,7 @@ public class AdminFiltersController : ControllerBase
     public async Task<ActionResult> GetAllFilters()
     {
         var filters = await _dbContext.Filters
+            .Where(f => f.DeletedAt == null)
             .OrderBy(f => f.SortOrder)
             .Select(f => new FilterInfoModel
             {
@@ -65,6 +66,7 @@ public class AdminFiltersController : ControllerBase
 
                 // ✅ DISTINCT RESOURCE COUNT
                 ResourceCount = f.ResourceFilterValues
+                    .Where(resourceFilterValue => resourceFilterValue.Resource.DeletedAtUtc == null)
                     .Select(resourceFilterValue => resourceFilterValue.ResourceId)
                     .Distinct()
                     .Count(),
@@ -87,7 +89,7 @@ public class AdminFiltersController : ControllerBase
 
         var filter = await _dbContext.Filters
             .Include(f => f.FacetValues)
-            .SingleOrDefaultAsync(f => f.Id == id);
+            .SingleOrDefaultAsync(f => f.Id == id && f.DeletedAt == null);
 
         if (filter == null)
             return NotFound($"Filter with id '{id}' not found.");
@@ -134,7 +136,7 @@ public class AdminFiltersController : ControllerBase
 
         var updatedFilter = await _dbContext.Filters
             .AsNoTracking()
-            .Where(f => f.Id == id)
+            .Where(f => f.Id == id && f.DeletedAt == null)
             .Select(f => new FilterInfoModel
             {
                 Id = f.Id,
@@ -158,6 +160,7 @@ public class AdminFiltersController : ControllerBase
                     })
                     .ToList(),
                 ResourceCount = f.ResourceFilterValues
+                    .Where(resourceFilterValue => resourceFilterValue.Resource.DeletedAtUtc == null)
                     .Select(resourceFilterValue => resourceFilterValue.ResourceId)
                     .Distinct()
                     .Count(),
@@ -174,7 +177,8 @@ public class AdminFiltersController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteFilter(Guid id)
     {
-        var filter = await _dbContext.Filters.FindAsync(id);
+        var filter = await _dbContext.Filters
+            .SingleOrDefaultAsync(currentFilter => currentFilter.Id == id && currentFilter.DeletedAt == null);
         if (filter == null)
         {
             return NotFound();
@@ -312,7 +316,8 @@ public class AdminFiltersController : ControllerBase
         if (patchDoc == null)
             return BadRequest("No patch document provided.");
 
-        var filter = await _dbContext.Filters.FindAsync(id);
+        var filter = await _dbContext.Filters
+            .SingleOrDefaultAsync(currentFilter => currentFilter.Id == id && currentFilter.DeletedAt == null);
         if (filter == null)
             return NotFound($"Filter with id '{id}' not found.");
 
@@ -359,7 +364,7 @@ public class AdminFiltersController : ControllerBase
     {
         var filter = await _dbContext.Filters
             .Include(currentFilter => currentFilter.FacetValues)
-            .SingleOrDefaultAsync(currentFilter => currentFilter.Id == id);
+            .SingleOrDefaultAsync(currentFilter => currentFilter.Id == id && currentFilter.DeletedAt == null);
 
         if (filter == null)
             return NotFound();
@@ -405,7 +410,7 @@ public class AdminFiltersController : ControllerBase
         if (model.aboveId is not null && model.belowId is not null && model.aboveId == model.belowId)
             return BadRequest("aboveId and belowId cannot be the same.");
 
-        var moved = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.movedId);
+        var moved = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.movedId && f.DeletedAt == null);
         if (moved is null) return NotFound($"Filter '{model.movedId}' not found.");
 
         FilterDefinitions? above = null;
@@ -413,13 +418,13 @@ public class AdminFiltersController : ControllerBase
 
         if (model.aboveId is not null)
         {
-            above = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.aboveId.Value);
+            above = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.aboveId.Value && f.DeletedAt == null);
             if (above is null) return NotFound($"Filter aboveId '{model.aboveId}' not found.");
         }
 
         if (model.belowId is not null)
         {
-            below = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.belowId.Value);
+            below = await _dbContext.Filters.SingleOrDefaultAsync(f => f.Id == model.belowId.Value && f.DeletedAt == null);
             if (below is null) return NotFound($"Filter belowId '{model.belowId}' not found.");
         }
 
@@ -441,8 +446,8 @@ public class AdminFiltersController : ControllerBase
             {
                 await ReindexAllFilters(step);
                 // Reload neighbor keys after reindex
-                above = await _dbContext.Filters.SingleAsync(f => f.Id == model.aboveId!.Value);
-                below = await _dbContext.Filters.SingleAsync(f => f.Id == model.belowId!.Value);
+                above = await _dbContext.Filters.SingleAsync(f => f.Id == model.aboveId!.Value && f.DeletedAt == null);
+                below = await _dbContext.Filters.SingleAsync(f => f.Id == model.belowId!.Value && f.DeletedAt == null);
             }
 
             moved.SortOrder = (above.SortOrder + below.SortOrder) / 2m;
@@ -468,8 +473,9 @@ public class AdminFiltersController : ControllerBase
     private async Task ReindexAllFilters(decimal step)
     {
         var filters = await _dbContext.Filters
-        .OrderBy(f => f.SortOrder)
-        .ToListAsync();
+            .Where(f => f.DeletedAt == null)
+            .OrderBy(f => f.SortOrder)
+            .ToListAsync();
 
         for (var i = 0; i < filters.Count; i++)
             filters[i].SortOrder = (i + 1) * step;

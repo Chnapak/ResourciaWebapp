@@ -32,6 +32,7 @@ export class FilterRowComponent extends TableRowBase {
   @Input() selected = false;
 
   @Output() toggle = new EventEmitter<{ id: string; checked: boolean }>();
+  @Output() deleted = new EventEmitter<string>();
 
   isEditing = false;
   isSaving = false;
@@ -134,7 +135,21 @@ export class FilterRowComponent extends TableRowBase {
   }
 
   deleteFilter(): void {
-    console.log('Delete filter', this.filter);
+    const confirmed = window.confirm(`Delete "${this.filter.label}"? Disabled filters can still be restored in the database, but this will remove it from the admin list.`);
+    if (!confirmed) {
+      return;
+    }
+
+    this.filtersService.deleteFilter(this.filter.id).subscribe({
+      next: () => {
+        this.deleted.emit(this.filter.id);
+        this.toaster.show('Filter deleted.', 'success');
+      },
+      error: (err) => {
+        console.error('Failed to delete filter', err);
+        this.toaster.show('Failed to delete filter.', 'error');
+      }
+    });
   }
 
   hashString(str: string): number {
