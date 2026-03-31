@@ -1,75 +1,173 @@
-<div class="flex items-center px-8 py-4 border-b border-slate-100">
+<div class="border-b border-slate-100">
+    <div class="flex items-center px-8 py-4">
 
-    <!-- Checkbox (w-10) -->
-    <div class="w-10 flex items-center">
-        <app-checkbox 
-            [(ngModel)]="selected" 
-            (ngModelChange)="onCheckboxChange($event)">
-        </app-checkbox>
-    </div>
+        <!-- Checkbox (w-10) -->
+        <div class="w-10 flex items-center">
+            <app-checkbox
+                [(ngModel)]="selected"
+                (ngModelChange)="onCheckboxChange($event)">
+            </app-checkbox>
+        </div>
 
-    <!-- Filter (flex-1) -->
-    <div class="flex-1 flex items-center gap-3">
-        <div cdkDragHandle class="text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-            </svg>
+        <!-- Filter (flex-1) -->
+        <div class="flex-1 flex items-center gap-3">
+            <div cdkDragHandle class="text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                </svg>
+            </div>
+            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+                [style.background]="getFilterGradient(filter.key)">
+                # {{ index + 1 }}
+            </div>
+            <div>
+                <div class="text-sm font-semibold text-slate-900">{{ filter.label }}</div>
+                <div class="text-xs text-slate-500 mt-0.5">
+                    {{ filter.description }}
+                    @if (filter.resourceField) {
+                        <span class="text-slate-400"> · Mapped to {{ filter.resourceField }}</span>
+                    }
+                </div>
+            </div>
         </div>
-        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-white font-semibold text-sm"
-        [style.background]="getFilterGradient(filter.key)">
-            # {{ index + 1 }}
+
+        <!-- Type (w-32) -->
+        <div class="w-32">
+            <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-md border border-blue-200">
+                {{ filter.kind }}
+            </span>
         </div>
-        <div>
-            <div class="text-sm font-semibold text-slate-900">  {{ filter.label }}   </div>
-            <div class="text-xs text-slate-500 mt-0.5">
-                {{ filter.description }}
-                @if (filter.resourceField) {
-                    <span class="text-slate-400"> · Mapped to {{ filter.resourceField }}</span>
-                }
+
+        <!-- Resources (w-40) -->
+        <div class="w-40">
+            <span class="text-sm font-mono font-medium text-slate-700">{{ filter.resourceCount }}</span>
+            <span i18n class="text-xs text-slate-400 ml-1">resources</span>
+        </div>
+
+        <!-- Last Updated (w-28) -->
+        <div class="w-28">
+            <span i18n class="text-xs text-slate-500">{{ filter.lastChangeAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+
+        <!-- Status (w-28) -->
+        <div class="w-28 flex items-center">
+            @if (filter.isActive) {
+                <span class="status-dot active"></span>
+                <span i18n class="text-xs font-medium text-emerald-600">Enabled</span>
+            } @else {
+                <span class="status-dot banned"></span>
+                <span i18n class="text-xs font-medium text-red-600">Disabled</span>
+            }
+        </div>
+
+        <!-- Actions (w-20) -->
+        <div class="w-20 flex justify-end">
+            <div class="relative">
+                <app-dropdown [items]="filterMenuItems">
+                    <button dropdown-button class="p-2 hover:bg-slate-100 rounded-lg transition-all cursor-pointer">
+                        <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                        </svg>
+                    </button>
+                </app-dropdown>
             </div>
         </div>
     </div>
 
-    <!-- Type (w-32) -->
-    <div class="w-32">
-        <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-md border border-blue-200">
-            {{ filter.kind }}
-        </span>
-    </div>
+    @if (isEditing) {
+        <div class="mx-8 mb-5 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-5">
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                <div class="space-y-4">
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+                            Name
+                        </label>
+                        <input
+                            [(ngModel)]="editLabel"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            type="text" />
+                    </div>
 
-    <!-- Resources (w-40) -->
-    <div class="w-40">
-        <span class="text-sm font-mono font-medium text-slate-700">   {{ filter.resourceCount }}   </span>
-        <span i18n class="text-xs text-slate-400 ml-1">resources</span>
-    </div>
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+                            Description
+                        </label>
+                        <textarea
+                            [(ngModel)]="editDescription"
+                            class="min-h-[120px] w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        ></textarea>
+                    </div>
 
-    <!-- Last Updated (w-28) -->
-    <div class="w-28">
-        <span i18n class="text-xs text-slate-500">   {{ filter.lastChangeAt | date: 'dd.MM.yyyy HH:mm' }}   </span>
-    </div>
+                    <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs text-slate-500">
+                        <div class="font-semibold text-slate-700">Filter key</div>
+                        <div class="mt-1 font-mono">{{ filter.key }}</div>
+                    </div>
+                </div>
 
-    <!-- Status (w-28) -->
-    <div class="w-28 flex items-center">
-        @if (filter.isActive) {
-            <span class="status-dot active"></span>
-            <span i18n class="text-xs font-medium text-emerald-600">Enabled</span>
-        } @else {
-            <span class="status-dot banned"></span>
-            <span i18n class="text-xs font-medium text-red-600">Disabled</span>
-        }
-    </div>
+                <div class="space-y-4">
+                    @if (filter.kind === FilterKind.Facet) {
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Possible facet values</div>
+                                <div class="mt-1 text-xs text-slate-400">
+                                    Edit the options users can choose for this filter.
+                                </div>
+                            </div>
 
-    <!-- Actions (w-20) -->
-    <div class="w-20 flex justify-end">
-        <div class="relative">
-            <app-dropdown [items]="filterMenuItems">
-                <button dropdown-button class="p-2 hover:bg-slate-100 rounded-lg transition-all cursor-pointer">
-                    <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
+                            <button
+                                (click)="addFacetValue()"
+                                class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-600"
+                                type="button">
+                                Add value
+                            </button>
+                        </div>
+
+                        <div class="space-y-2">
+                            @for (facetValue of editFacetValues; track facetValue.id ?? $index; let facetIndex = $index) {
+                                <div class="flex items-center gap-2">
+                                    <input
+                                        [(ngModel)]="facetValue.label"
+                                        class="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                        type="text" />
+                                    <button
+                                        (click)="removeFacetValue(facetIndex)"
+                                        class="rounded-lg border border-transparent px-3 py-2 text-xs font-semibold text-red-600 transition hover:border-red-100 hover:bg-red-50"
+                                        type="button">
+                                        Remove
+                                    </button>
+                                </div>
+                            }
+
+                            @if (editFacetValues.length === 0) {
+                                <div class="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-5 text-sm text-slate-400">
+                                    No values yet. Add one to make this filter selectable.
+                                </div>
+                            }
+                        </div>
+                    } @else {
+                        <div class="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-5 text-sm text-slate-400">
+                            {{ filter.label }} stores raw {{ filter.kind | lowercase }} values directly on resources, so it does not need predefined options.
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="mt-5 flex items-center justify-end gap-3">
+                <button
+                    (click)="cancelEdit()"
+                    class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100"
+                    type="button">
+                    Cancel
                 </button>
-            </app-dropdown>
-        </div>
-    </div>
 
+                <button
+                    (click)="saveEdit()"
+                    [disabled]="isSaving"
+                    class="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+                    type="button">
+                    {{ isSaving ? 'Saving...' : 'Save changes' }}
+                </button>
+            </div>
+        </div>
+    }
 </div>

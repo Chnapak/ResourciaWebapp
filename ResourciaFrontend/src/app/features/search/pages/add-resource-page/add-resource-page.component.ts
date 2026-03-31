@@ -3,7 +3,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule, UntypedFormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ResourceService } from '../../../../core/services/resource.service';
-import { SearchService } from '../../../../core/services/search.service';
 import { CreateResourceRequestModel } from '../../../../shared/models/create-resource-request';
 import { FilterKind } from '../../../../shared/models/filter-kind';
 import { Filter as SearchSchemaFilter } from '../../../../shared/models/search-schema';
@@ -21,7 +20,6 @@ export class AddResourcePageComponent implements OnInit {
 
   private readonly fb = inject(UntypedFormBuilder);
   private readonly resourceService = inject(ResourceService);
-  private readonly searchService = inject(SearchService);
   private readonly router = inject(Router);
 
   private readonly featuredFilterKeys = new Set([
@@ -96,6 +94,14 @@ export class AddResourcePageComponent implements OnInit {
     return (filter.values?.length ?? 0) > 0;
   }
 
+  usesSelectableValues(filter: SearchSchemaFilter): boolean {
+    return filter.kind === FilterKind.Facet && this.hasFacetOptions(filter);
+  }
+
+  usesStoredFilterValues(filter: SearchSchemaFilter): boolean {
+    return filter.kind === FilterKind.Facet || this.getDirectFieldKey(filter.resourceField) === null;
+  }
+
   isFacetValueSelected(filter: SearchSchemaFilter, value: string): boolean {
     const selectedValues = this.getFilterControl(filter)?.value;
     return Array.isArray(selectedValues) && selectedValues.includes(value);
@@ -138,7 +144,7 @@ export class AddResourcePageComponent implements OnInit {
   private loadSchema(): void {
     this.filtersLoading = true;
 
-    this.searchService.schema().subscribe({
+    this.resourceService.getResourceSchema().subscribe({
       next: (schema) => {
         this.schemaFilters = (schema.filters ?? []).filter((filter) => this.isSupportedFilter(filter));
         this.syncSchemaControls();
@@ -165,7 +171,7 @@ export class AddResourcePageComponent implements OnInit {
         return;
       }
 
-      if (filter.kind === FilterKind.Facet && filter.isMulti) {
+      if (this.usesSelectableValues(filter) && filter.isMulti) {
         this.resourceForm.addControl(controlName, this.fb.control([]));
         return;
       }
@@ -179,7 +185,7 @@ export class AddResourcePageComponent implements OnInit {
       title: this.resourceForm.get('title')?.value.trim(),
       url: this.normalizeUrl(this.resourceForm.get('url')?.value),
       description: this.toNullableString(this.resourceForm.get('description')?.value),
-      facets: this.buildFacetPayload(),
+      filterValues: this.buildFilterValuePayload(),
     };
 
     return {
@@ -188,24 +194,31 @@ export class AddResourcePageComponent implements OnInit {
     };
   }
 
-  private buildFacetPayload(): Record<string, string[]> {
-    return this.schemaFilters.reduce<Record<string, string[]>>((facets, filter) => {
-      if (filter.kind !== FilterKind.Facet) {
-        return facets;
+  private buildFilterValuePayload(): Record<string, string[]> {
+    return this.schemaFilters.reduce<Record<string, string[]>>((filterValues, filter) => {
+      if (!this.usesStoredFilterValues(filter)) {
+        return filterValues;
       }
 
       const rawValue = this.getFilterControl(filter)?.value;
-      const values = Array.isArray(rawValue)
-        ? rawValue.filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
-        : this.toNullableString(rawValue)
-          ? [rawValue.trim()]
-          : [];
+      let values: string[] = [];
 
-      if (values.length > 0) {
-        facets[filter.key] = values;
+      if (filter.kind === FilterKind.Facet) {
+        values = Array.isArray(rawValue)
+          ? rawValue.filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+          : this.toNullableString(rawValue)
+            ? [rawValue.trim()]
+            : [];
+      } else {
+        const singleValue = this.toNullableString(rawValue);
+        values = singleValue ? [singleValue] : [];
       }
 
-      return facets;
+      if (values.length > 0) {
+        filterValues[filter.key] = values;
+      }
+
+      return filterValues;
     }, {});
   }
 
@@ -214,6 +227,10 @@ export class AddResourcePageComponent implements OnInit {
 
     this.schemaFilters.forEach((filter) => {
       if (filter.kind === FilterKind.Facet) {
+        return;
+      }
+
+      if (this.usesStoredFilterValues(filter)) {
         return;
       }
 
@@ -269,7 +286,9 @@ export class AddResourcePageComponent implements OnInit {
   }
 
   private isSupportedFilter(filter: SearchSchemaFilter): boolean {
-    return filter.kind === FilterKind.Facet || this.getDirectFieldKey(filter.resourceField) !== null;
+    return filter.kind === FilterKind.Facet
+      || this.getDirectFieldKey(filter.resourceField) !== null
+      || !filter.resourceField;
   }
 
   private isFeaturedFilter(filter: SearchSchemaFilter): boolean {

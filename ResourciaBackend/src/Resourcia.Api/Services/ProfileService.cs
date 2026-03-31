@@ -156,7 +156,7 @@ public class ProfileService
         {
             foreach (var resourceId in impactedResourceIds)
             {
-                await _cache.InvalidateAsync($"resource:v4:{resourceId}");
+                await _cache.InvalidateAsync($"resource:v5:{resourceId}");
                 await _cache.InvalidateAsync($"threads:{resourceId}");
             }
         }

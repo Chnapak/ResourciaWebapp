@@ -85,7 +85,7 @@
                       {{ filter.label }}
                     </label>
 
-                    @if (filter.kind === FilterKind.Facet && filter.isMulti) {
+                    @if (usesSelectableValues(filter) && filter.isMulti) {
                       <div class="rounded-lg border border-gray-300 p-4">
                         @if (hasFacetOptions(filter)) {
                           <div class="flex flex-wrap gap-2">
@@ -105,7 +105,7 @@
                           <p class="text-sm text-gray-500">No options configured yet.</p>
                         }
                       </div>
-                    } @else if (filter.kind === FilterKind.Facet) {
+                    } @else if (usesSelectableValues(filter)) {
                       <div class="relative">
                         <select
                           [formControlName]="getFilterControlName(filter)"
@@ -156,7 +156,7 @@
                           {{ filter.label }}
                         </label>
 
-                        @if (filter.kind === FilterKind.Facet && filter.isMulti) {
+                        @if (usesSelectableValues(filter) && filter.isMulti) {
                           <div class="rounded-lg border border-gray-300 p-4 min-h-[58px]">
                             @if (hasFacetOptions(filter)) {
                               <div class="flex flex-wrap gap-2">
@@ -176,7 +176,7 @@
                               <p class="text-sm text-gray-500">No options configured yet.</p>
                             }
                           </div>
-                        } @else if (filter.kind === FilterKind.Facet) {
+                        } @else if (usesSelectableValues(filter)) {
                           <div class="relative">
                             <select
                               [formControlName]="getFilterControlName(filter)"

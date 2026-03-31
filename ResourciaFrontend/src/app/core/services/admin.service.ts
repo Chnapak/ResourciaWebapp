@@ -6,6 +6,8 @@ import { AdminUser } from '../../features/admin/models/admin-user.model';
 import { ModerationModel } from '../../shared/models/moderation-model';
 import { AdminFilterReorderModel } from '../../features/admin/models/admin-filter-reorder.model';
 import { FilterActivityModel } from '../../shared/models/filter-activity-model';
+import { AdminFilterUpdateModel } from '../../features/admin/models/admin-filter-update.model';
+import { AdminFilterCreateModel } from '../../features/admin/models/admin-filter-create.model';
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +56,15 @@ export class AdminService {
   toggleActiveFilters(filterId: string): Observable<FilterActivityModel> {
     const url = this.baseUrl + "/filters/" + filterId + "/toggleActivity"
     return this.httpClient.patch<FilterActivityModel>(url, { })
+  }
+
+  createFilter(request: AdminFilterCreateModel): Observable<AdminFilter> {
+    const url = this.baseUrl + "/filters";
+    return this.httpClient.post<AdminFilter>(url, request);
+  }
+
+  updateFilter(filterId: string, request: AdminFilterUpdateModel): Observable<AdminFilter> {
+    const url = this.baseUrl + "/filters/" + filterId;
+    return this.httpClient.put<AdminFilter>(url, request);
   }
 }

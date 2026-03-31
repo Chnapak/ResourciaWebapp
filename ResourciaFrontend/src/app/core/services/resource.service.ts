@@ -10,6 +10,7 @@ import { ResourceSaveStateModel } from '../../shared/models/resource-save-state'
 import { SearchResponse } from '../../shared/models/search-response';
 import { ReviewRequestModel } from '../../shared/models/review-request';
 import { Review } from '../../shared/models/review';
+import { SchemaResponse } from '../../shared/models/search-schema';
 
 
 @Injectable({
@@ -24,6 +25,10 @@ export class ResourceService {
 
   createResource(payload: CreateResourceRequestModel): Observable<CreateResourceResponseModel> {
     return this.httpClient.post<CreateResourceResponseModel>(this.baseUrl, payload);
+  }
+
+  getResourceSchema(): Observable<SchemaResponse> {
+    return this.httpClient.get<SchemaResponse>(`${this.baseUrl}/schema`);
   }
 
   private buildHttpParams(query: Record<string, any>): HttpParams {
