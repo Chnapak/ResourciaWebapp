@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Resourcia.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+792674b1a49b62163e9b5ee82df81122be2f462c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e6097a5e8fc883009ef02821ad707bf6bc04ffd")]
 [assembly: System.Reflection.AssemblyProductAttribute("Resourcia.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Resourcia.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

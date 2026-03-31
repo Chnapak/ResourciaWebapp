@@ -303,7 +303,7 @@
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\FilterController.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\FilterController.cs",
               "RelativeToolTip": "Resourcia.Api\\Controllers\\FilterController.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAQwDIAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAQwDMAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-23T22:02:27.658Z",
               "EditorCaption": ""
@@ -316,7 +316,7 @@
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\ResourceController.cs",
               "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\ResourceController.cs",
               "RelativeToolTip": "Resourcia.Api\\Controllers\\ResourceController.cs",
-              "ViewState": "AgIAAJMCAAAAAAAAAAAwwMYCAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJcCAAAAAAAAAAAwwMoCAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-16T13:00:29.353Z",
               "EditorCaption": ""
@@ -339,9 +339,9 @@
               "Title": "AdminFiltersController.cs",
               "DocumentMoniker": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminFiltersController.cs",
               "RelativeDocumentMoniker": "Resourcia.Api\\Controllers\\AdminFiltersController.cs",
-              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminFiltersController.cs*",
-              "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminFiltersController.cs*",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAIwIMAAAAIAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\matej\\source\\repos\\ResourciaApi\\ResourciaBackend\\src\\Resourcia.Api\\Controllers\\AdminFiltersController.cs",
+              "RelativeToolTip": "Resourcia.Api\\Controllers\\AdminFiltersController.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAIwIUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-23T22:02:43.093Z",
               "EditorCaption": ""

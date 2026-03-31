@@ -175,7 +175,7 @@ public class AuthController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost("ValidateToken")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ValidateToken(
         [FromBody] TokenModel userTokenModel
@@ -199,7 +199,19 @@ public class AuthController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        return NoContent();
+        var roles = await _userManager.GetRolesAsync(user);
+        var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
+        var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
+
+        Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false, // For HTTPS
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
+        });
+
+        return Ok(new { Token = accessToken });
     }
 
     [HttpPost("Login")]

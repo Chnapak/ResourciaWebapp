@@ -1,11 +1,11 @@
-import { Component, inject, signal, OnInit, resource } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { SubjectService } from '../../../../core/services/subject.service';
-import { SubjectSimple } from '../../../../shared/models/subject-simple';
 import { ResourceService } from '../../../../core/services/resource.service';
 import { CreateResourceRequestModel } from '../../../../shared/models/create-resource-request';
+import { FilterKind } from '../../../../shared/models/filter-kind';
+import { Filter as SearchSchemaFilter } from '../../../../shared/models/search-schema';
 
 
 @Component({
@@ -16,122 +16,199 @@ import { CreateResourceRequestModel } from '../../../../shared/models/create-res
   styleUrl: './token-validation-page.component.scss'
 })
 export class TokenValidationPageComponent implements OnInit {
-  protected readonly fb = inject(FormBuilder);  
+  private readonly featuredFilterKeys = [
+    'subject',
+    'type',
+    'resourcetype',
+    'resource-type',
+    'format',
+  ];
+
+  protected readonly fb = inject(FormBuilder);
   protected readonly authService = inject(AuthService);
   protected readonly resourceService = inject(ResourceService);
-  protected readonly subjectService = inject(SubjectService);
   protected readonly router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  loading = false;
+  verifying = false;
+  submittingResource = false;
+  filtersLoading = true;
   error: string | null = null;
-  successVerifying = false;
-  tokenErorr = false;
-
-  step: number = 1;
+  step = 1;
+  createdResourceId: string | null = null;
 
   protected email?: string | null;
   protected token?: string | null;
+  protected primaryFilter: SearchSchemaFilter | null = null;
 
-  protected subjects?: SubjectSimple[] | null;
-
-  public resourceForm = this.fb.group({
+  readonly resourceForm = this.fb.nonNullable.group({
     resourceTitle: ['', [Validators.required]],
-    resourceUrl: ['', [Validators.required, this.urlCheck()]],
-    resourceSubject: ['', [Validators.required]],
+    resourceUrl: ['', [Validators.required, this.resourceUrlValidator()]],
+    resourcePrimaryFilter: [''],
   });
 
-  private urlCheck() {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
-      if (!value) return null;
-
-      try {
-        new URL(value);
-        return { isUrlFormat: true};
-      } catch (_) {
-        return null;
-      }
-    }
+  get titleControl(): AbstractControl | null {
+    return this.resourceForm.get('resourceTitle');
   }
 
-  ngOnInit(){
+  get urlControl(): AbstractControl | null {
+    return this.resourceForm.get('resourceUrl');
+  }
+
+  get hasPrimaryFilterOptions(): boolean {
+    return (this.primaryFilter?.values?.length ?? 0) > 0;
+  }
+
+  ngOnInit(): void {
     const queryParams = this.route.snapshot.queryParams;
-    this.token = queryParams['token'] ? decodeURIComponent(queryParams['token']) : null;
-    this.email = queryParams['email'] || null;
-    
-    console.log(this.step)
+    this.token = typeof queryParams['token'] === 'string'
+      ? decodeURIComponent(queryParams['token'])
+      : null;
+    this.email = typeof queryParams['email'] === 'string'
+      ? queryParams['email']
+      : null;
 
-    this.subjectService.getSubjects().subscribe(data => {
-      console.log(data)
-      this.subjects = data;
-    });
+    if (!this.token || !this.email) {
+      this.error = 'This confirmation link is incomplete. Request a new email and try again.';
+    }
+
+    this.loadPrimaryFilter();
   }
 
-  next() {
-    console.log(this.step)
-    
-    if (this.step == 1) {
-      this.confirmEmail();
+  confirmEmail(): void {
+    if (!this.token || !this.email || this.verifying) {
+      return;
     }
-    else if (this.step == 2) {
-      this.postResource()
-    }
-    else {
-      this.router.navigate(['/']); 
-    }
-  }
 
-  checkStep(n: number) {
-    let answer = this.step >= n
-    console.log(answer)
-    return this.step >= n
-  }
-
-  confirmEmail(){
-    let t = this.token ? this.token : "";
-    let e = this.email ? this.email : "";
-
-    this.loading = true;
+    this.verifying = true;
     this.error = null;
 
-    this.authService.confirmToken(t, e).subscribe({next: () => {
-        this.loading = false;
-        this.successVerifying = true;
+    this.authService.confirmToken(this.token, this.email).subscribe({
+      next: () => {
+        this.verifying = false;
         this.step = 2;
       },
       error: () => {
-        this.loading = false;
+        this.verifying = false;
         this.error = "Token is old or invalid. Get a new link or start over.";
       }
     });
   }
 
-  postResource() {
-    this.loading = true;
+  addResource(): void {
+    if (this.resourceForm.invalid) {
+      this.resourceForm.markAllAsTouched();
+      return;
+    }
+
+    this.submittingResource = true;
     this.error = null;
 
-    const formData = this.resourceForm.value;
-    const model: CreateResourceRequestModel = {
-      title: formData.resourceTitle!,
-      url: formData.resourceUrl!,
-      facets: {
-        subject: [formData.resourceSubject!]
-      }
-    };
-
-    this.resourceService.createResource(model).subscribe({
+    this.resourceService.createResource(this.buildPayload()).subscribe({
       next: (response) => {
-        console.log('Resource created:', response);
-        this.loading = false;
-        this.step = 3; // Progress to next step
+        this.submittingResource = false;
+        this.createdResourceId = response.id;
+        this.step = 3;
       },
       error: (err) => {
-        this.loading = false;
-        this.error = "Something went wrong while creating the resource.";
-        console.error('postResource error:', err);
+        this.submittingResource = false;
+        this.error = err?.error?.error ?? 'Something went wrong while creating the resource.';
       }
     });
   }
 
+  skipResource(): void {
+    if (this.submittingResource) {
+      return;
+    }
+
+    this.error = null;
+    this.step = 3;
+  }
+
+  goHome(): void {
+    this.router.navigate(['/']);
+  }
+
+  viewCreatedResource(): void {
+    if (!this.createdResourceId) {
+      this.router.navigate(['/search']);
+      return;
+    }
+
+    this.router.navigate(['/resource', this.createdResourceId]);
+  }
+
+  private loadPrimaryFilter(): void {
+    this.filtersLoading = true;
+
+    this.resourceService.getResourceSchema().subscribe({
+      next: (schema) => {
+        const availableFilters = (schema.filters ?? []).filter((filter) =>
+          filter.kind === FilterKind.Facet && (filter.values?.length ?? 0) > 0);
+
+        this.primaryFilter = this.featuredFilterKeys
+          .map((key) => availableFilters.find((filter) => filter.key.toLowerCase() === key))
+          .find((filter): filter is SearchSchemaFilter => filter !== undefined)
+          ?? availableFilters[0]
+          ?? null;
+
+        this.filtersLoading = false;
+      },
+      error: () => {
+        this.primaryFilter = null;
+        this.filtersLoading = false;
+      },
+    });
+  }
+
+  private buildPayload(): CreateResourceRequestModel {
+    const payload: CreateResourceRequestModel = {
+      title: this.resourceForm.controls.resourceTitle.value.trim(),
+      url: this.normalizeUrl(this.resourceForm.controls.resourceUrl.value),
+    };
+
+    const selectedPrimaryFilter = this.toNullableString(this.resourceForm.controls.resourcePrimaryFilter.value);
+    if (this.primaryFilter && selectedPrimaryFilter) {
+      payload.filterValues = {
+        [this.primaryFilter.key]: [selectedPrimaryFilter]
+      };
+    }
+
+    return payload;
+  }
+
+  private resourceUrlValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = this.toNullableString(control.value);
+      if (!value) {
+        return null;
+      }
+
+      try {
+        new URL(this.normalizeUrl(value));
+        return null;
+      } catch {
+        return { invalidUrl: true };
+      }
+    };
+  }
+
+  private normalizeUrl(value: string): string {
+    const trimmed = value.trim();
+    if (/^https?:\/\//i.test(trimmed)) {
+      return trimmed;
+    }
+
+    return `https://${trimmed}`;
+  }
+
+  private toNullableString(value: unknown): string | null {
+    if (typeof value !== 'string') {
+      return null;
+    }
+
+    const trimmed = value.trim();
+    return trimmed || null;
+  }
 }
