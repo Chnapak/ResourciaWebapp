@@ -100,7 +100,9 @@ public class ProfileService
 
         var previousDisplayName = user.DisplayName;
         var displayNameChanged = !string.Equals(previousDisplayName, displayName, StringComparison.Ordinal);
-        var impactedResourceIds = new HashSet<Guid>();
+        var impactedResourceIds = displayNameChanged
+            ? await GetImpactedResourceIdsAsync(userId, previousDisplayName, ct)
+            : [];
 
         user.DisplayName = displayName;
         user.Handle = handle;
@@ -112,34 +114,6 @@ public class ProfileService
 
         if (displayNameChanged)
         {
-            impactedResourceIds.UnionWith(await _db.Resources
-                .AsNoTracking()
-                .Where(resource => resource.CreatedBy == previousDisplayName)
-                .Select(resource => resource.Id)
-                .ToListAsync(ct));
-
-            impactedResourceIds.UnionWith(await _db.ResourceReviews
-                .AsNoTracking()
-                .Where(review => review.UserId == userId)
-                .Select(review => review.ResourceId)
-                .Distinct()
-                .ToListAsync(ct));
-
-            impactedResourceIds.UnionWith(await _db.Discussions
-                .AsNoTracking()
-                .Where(discussion => discussion.UserId == userId)
-                .Select(discussion => discussion.ResourceId)
-                .Distinct()
-                .ToListAsync(ct));
-
-            impactedResourceIds.UnionWith(await (
-                from reply in _db.DiscussionReplies.AsNoTracking()
-                join discussion in _db.Discussions.AsNoTracking() on reply.DiscussionId equals discussion.Id
-                where reply.UserId == userId
-                select discussion.ResourceId)
-                .Distinct()
-                .ToListAsync(ct));
-
             var ownedResources = await _db.Resources
                 .Where(resource => resource.CreatedBy == previousDisplayName)
                 .ToListAsync(ct);
@@ -163,6 +137,58 @@ public class ProfileService
 
         var profile = await BuildProfileAsync(user, ct);
         return (profile, null, 200);
+    }
+
+    public async Task<(string? Error, int StatusCode)> DeleteProfileAsync(
+        Guid userId,
+        CancellationToken ct = default)
+    {
+        var user = await _userManager.Users
+            .FirstOrDefaultAsync(currentUser => currentUser.Id == userId, ct);
+
+        if (user == null)
+        {
+            return ("Profile not found.", 404);
+        }
+
+        if (user.DeletedAt != null)
+        {
+            return ("Profile is already deleted.", 404);
+        }
+
+        var now = _clock.GetCurrentInstant();
+        var impactedResourceIds = await GetImpactedResourceIdsAsync(userId, user.DisplayName, ct);
+
+        var ownedResources = await _db.Resources
+            .Where(resource => resource.CreatedBy == user.DisplayName)
+            .ToListAsync(ct);
+
+        foreach (var resource in ownedResources)
+        {
+            resource.CreatedBy = null;
+        }
+
+        user.SetDeleteBy(user.DisplayName, now);
+
+        var refreshTokens = await _db.RefreshTokens
+            .Where(refreshToken => refreshToken.UserId == userId && refreshToken.RevokedAt == null)
+            .ToListAsync(ct);
+
+        foreach (var refreshToken in refreshTokens)
+        {
+            refreshToken.RevokedAt = now;
+        }
+
+        await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+        await _db.SaveChangesAsync(ct);
+
+        foreach (var resourceId in impactedResourceIds)
+        {
+            await _cache.InvalidateAsync($"resource:v5:{resourceId}");
+            await _cache.InvalidateAsync($"threads:{resourceId}");
+        }
+
+        return (null, 204);
     }
 
     private async Task<ProfileResponseModel> BuildProfileAsync(AppUser user, CancellationToken ct)
@@ -436,6 +462,42 @@ public class ProfileService
                 AddedAt = resource.CreatedAtUtc
             })
             .ToList();
+    }
+
+    private async Task<HashSet<Guid>> GetImpactedResourceIdsAsync(Guid userId, string displayName, CancellationToken ct)
+    {
+        var impactedResourceIds = new HashSet<Guid>();
+
+        impactedResourceIds.UnionWith(await _db.Resources
+            .AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(resource => resource.CreatedBy == displayName)
+            .Select(resource => resource.Id)
+            .ToListAsync(ct));
+
+        impactedResourceIds.UnionWith(await _db.ResourceReviews
+            .AsNoTracking()
+            .Where(review => review.UserId == userId)
+            .Select(review => review.ResourceId)
+            .Distinct()
+            .ToListAsync(ct));
+
+        impactedResourceIds.UnionWith(await _db.Discussions
+            .AsNoTracking()
+            .Where(discussion => discussion.UserId == userId)
+            .Select(discussion => discussion.ResourceId)
+            .Distinct()
+            .ToListAsync(ct));
+
+        impactedResourceIds.UnionWith(await (
+            from reply in _db.DiscussionReplies.AsNoTracking()
+            join discussion in _db.Discussions.AsNoTracking() on reply.DiscussionId equals discussion.Id
+            where reply.UserId == userId
+            select discussion.ResourceId)
+            .Distinct()
+            .ToListAsync(ct));
+
+        return impactedResourceIds;
     }
 
     private static List<string> GetStoredInterests(AppUser user)

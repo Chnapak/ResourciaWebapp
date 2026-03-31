@@ -204,6 +204,7 @@
                 [index]="i"
                 [selected]="selectedKeys.has(filter.id)"
                 (toggle)="onToggleOne($event.id, $event.checked)"
+                (deleted)="onDeleteFilter($event)"
             >
                 <ng-template cdkDragPlaceholder>
                     <div class="mx-[0px] my-[8px] h-0 rounded-[9999px] border-t-[3px] border-blue-500"></div>

@@ -246,6 +246,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         }
 
         await InvalidateSearchSchemaAsync();
+        await InvalidateSearchResultsAsync();
 
         var responseFilterValues = filterRequests.ToDictionary(
             filterRequest => filterRequest.Key,
@@ -298,7 +299,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
             {
                 var filters = await _dbContext.Filters
                     .AsNoTracking()
-                    .Where(filter => filter.IsActive)
+                    .Where(filter => filter.IsActive && filter.DeletedAt == null)
                     .OrderBy(filter => filter.SortOrder)
                     .Select(filter => new SearchSchemaFilterModel
                     {
@@ -443,7 +444,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     [HttpGet("api/resources/search")]
     public async Task<IActionResult> Search(CancellationToken ct)
     {
-        var cacheKey = $"search:v5:{Request.QueryString}";
+        var searchVersion = await _cache.GetNamespaceVersionAsync("search-results");
+        var cacheKey = $"search:v5:{searchVersion}:{Request.QueryString}";
 
         var result = await _cache.GetOrSetAsync(cacheKey, async () =>
         {
@@ -488,7 +490,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
             // ----- SCHEMA-DRIVEN FILTERS -----
             var activeFilters = await _dbContext.Filters
                 .AsNoTracking()
-                .Where(filter => filter.IsActive)
+                .Where(filter => filter.IsActive && filter.DeletedAt == null)
                 .Select(filter => new SearchableFilterDefinition(filter.Key, filter.Kind, filter.ResourceField))
                 .ToListAsync(ct);
 
@@ -1143,6 +1145,11 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         await _cache.InvalidateAsync("search:schema:v3");
         await _cache.InvalidateAsync("search:schema:v4");
         await _cache.InvalidateAsync("search:schema:v5");
+    }
+
+    private async Task InvalidateSearchResultsAsync()
+    {
+        await _cache.InvalidateNamespaceAsync("search-results");
     }
 
     private static SerializedResourceFilterValue? SerializeStoredFilterValue(

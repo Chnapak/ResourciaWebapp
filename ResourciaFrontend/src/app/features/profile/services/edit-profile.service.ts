@@ -48,6 +48,10 @@ export class EditProfileService {
       );
   }
 
+  deleteAccount(): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}/me`);
+  }
+
   resetStatus(): void {
     this.saveStatus.set('idle');
     this.saveMessage.set(null);

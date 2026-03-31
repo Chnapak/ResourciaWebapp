@@ -14,7 +14,6 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { canActivateAdminGuard } from './core/guards/admin.guard';
 import { FiltersAdminPageComponent } from './features/admin/pages/filters-page/filters-page.component';
 import { UsersAdminPageComponent } from './features/admin/pages/users-page/users-page.component';
-import { AdminsAdminPageComponent } from './features/admin/pages/admins-page/admins-page.component';
 import { ResourcesAdminPageComponent } from './features/admin/pages/resources-page/resources-page.component';
 import { SuspensionMessagePageComponent } from './features/auth/pages/suspension-message-page/suspension-message-page.component';
 import { ResetPasswordPageComponent } from './features/auth/pages/reset-password-page/reset-password-page.component';
@@ -46,10 +45,11 @@ export const routes: Routes = [
             { path: 'suspended', component: SuspensionMessagePageComponent, title: 'Account Suspended'},
             { path: 'admin', component: AdminLayoutComponent, title: 'Admin Hub', canMatch: [canActivateAdminGuard], 
             children: [
+                { path: '', pathMatch: 'full', redirectTo: 'filters' },
                 { path: 'filters', component: FiltersAdminPageComponent},
                 { path: 'users', component: UsersAdminPageComponent},
-                { path: 'admins', component: AdminsAdminPageComponent},
-                { path: 'resources', component: ResourcesAdminPageComponent}
+                { path: 'resources', component: ResourcesAdminPageComponent},
+                { path: '**', redirectTo: 'filters' }
             ]},
             {
                 path: '**',

@@ -448,3 +448,4 @@ C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\StackExchange.Redis.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\bin\Debug\net9.0\System.IO.Hashing.dll
+C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

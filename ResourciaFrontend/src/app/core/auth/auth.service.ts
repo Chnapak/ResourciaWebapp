@@ -172,6 +172,17 @@ export class AuthService {
     }
   }
 
+  handleAccountDeleted(): void {
+    this.clearRefreshTimer();
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('pendingAction');
+    sessionStorage.removeItem('returnUrl');
+    this.currentUserSubject.next(null);
+    this.authStateSubject.next('anonymous');
+    this.toaster.show('Your account has been deleted.', 'info');
+    this.router.navigate(['/'], { replaceUrl: true });
+  }
+
   // ── Session expired (refresh token dead) ─────────────────────────────────
   handleSessionExpired(): void {
     this.clearRefreshTimer();

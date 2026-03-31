@@ -262,6 +262,60 @@
       </div>
     </div>
 
+    <div class="ep-card ep-card--spaced ep-card--danger">
+      <div class="ep-card__header">
+        <h2>Danger Zone</h2>
+        <p>Deleting your account signs you out and hides your profile from the platform.</p>
+      </div>
+      <hr class="ep-card__divider" />
+      <div class="ep-card__body">
+        <div class="ep-danger-zone">
+          <div>
+            <div class="ep-danger-zone__title">Delete account</div>
+            <div class="ep-danger-zone__copy">
+              Your account will be soft deleted. Your public profile becomes unavailable and you will need admin help to restore it later.
+            </div>
+          </div>
+
+          @if (!isDeleteConfirmOpen()) {
+            <button
+              type="button"
+              class="ep-btn ep-btn--danger"
+              (click)="openDeleteAccountConfirm()"
+              [disabled]="isSaving() || isDeletingAccount()">
+              Delete account
+            </button>
+          } @else {
+            <div class="ep-danger-confirm">
+              <div class="ep-danger-confirm__text">
+                This action cannot be undone from the UI. Are you sure?
+              </div>
+              <div class="ep-danger-confirm__actions">
+                <button
+                  type="button"
+                  class="ep-btn ep-btn--ghost"
+                  (click)="cancelDeleteAccount()"
+                  [disabled]="isDeletingAccount()">
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="ep-btn ep-btn--danger"
+                  (click)="confirmDeleteAccount()"
+                  [disabled]="isDeletingAccount()">
+                  {{ isDeletingAccount() ? 'Deleting...' : 'Yes, delete it' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        @if (deleteAccountError()) {
+          <div class="ep-danger-zone__error">{{ deleteAccountError() }}</div>
+        }
+      </div>
+    </div>
+
   </div>
 
   <!-- ── Right: Preview ─────────────────────────────────── -->
@@ -345,7 +399,7 @@
       type="button"
       class="ep-btn ep-btn--ghost"
       (click)="onCancel()"
-      [disabled]="isSaving()"
+      [disabled]="isSaving() || isDeletingAccount()"
     >
       Back to profile
     </button>
@@ -354,7 +408,7 @@
       class="ep-btn ep-btn--primary"
       [class.ep-btn--saving]="isSaving()"
       (click)="onSave()"
-      [disabled]="form.invalid || isSaving()"
+      [disabled]="form.invalid || isSaving() || isDeletingAccount()"
       [attr.aria-busy]="isSaving()"
     >
       <span class="ep-btn__spinner" *ngIf="isSaving()"></span>

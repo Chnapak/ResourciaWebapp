@@ -22,47 +22,52 @@ export class UsersAdminPageComponent implements OnInit {
   ];
   selectedIds = new Set<string>();
 
-  users: AdminUser[] | null = null;
+  users: AdminUser[] = [];
   protected readonly AdminService = inject(AdminService);
 
-  constructor() {  }
-
   ngOnInit(): void {
-    this.AdminService.getUsers().subscribe((res: any) => {
-      this.users = res.items; 
-      console.log(res.items)
-    })
+    this.loadUsers();
   }
 
   get allSelected(): boolean {
-    if (this.users == null) {
-      return false;
-    }
-    return this.users.length > 0 && this.selectedIds.size === this.users!.length;
+    return this.users.length > 0 && this.selectedIds.size === this.users.length;
   }
 
   get someSelected(): boolean {
-    if (this.users == null) {
-      return false;
-    }
     return this.selectedIds.size > 0 && !this.allSelected;
   }
 
   onToggleAll(checked: boolean): void {
     if (checked) {
-      // select everything currently visible
-      this.users?.forEach(user => this.selectedIds.add(user.id));
-    } else {
-      // clear selection
-      this.selectedIds.clear();
+      this.users.forEach(user => this.selectedIds.add(user.id));
+      return;
     }
+
+    this.selectedIds.clear();
   }
 
   onToggleOne(userId: string, checked: boolean): void {
     if (checked) {
       this.selectedIds.add(userId);
-    } else {
-      this.selectedIds.delete(userId);
+      return;
     }
+
+    this.selectedIds.delete(userId);
+  }
+
+  private loadUsers(): void {
+    this.AdminService.getUsers().subscribe({
+      next: ({ items }) => {
+        this.users = items;
+
+        const validIds = new Set(items.map(user => user.id));
+        this.selectedIds = new Set([...this.selectedIds].filter(id => validIds.has(id)));
+      },
+      error: (err) => {
+        console.error('Failed to load users', err);
+        this.users = [];
+        this.selectedIds.clear();
+      }
+    });
   }
 }

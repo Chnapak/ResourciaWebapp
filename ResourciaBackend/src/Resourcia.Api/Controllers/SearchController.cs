@@ -23,7 +23,7 @@ public class SearchController(AppDbContext db, CacheService cache) : ControllerB
             {
                 var filters = await _db.Filters
                     .AsNoTracking()
-                    .Where(filter => filter.IsActive)
+                    .Where(filter => filter.IsActive && filter.DeletedAt == null)
                     .OrderBy(filter => filter.SortOrder)
                     .Select(filter => new SearchSchemaFilterModel
                     {
@@ -87,14 +87,18 @@ public class SearchController(AppDbContext db, CacheService cache) : ControllerB
         {
             return await _db.ResourceFilterValues
                 .AsNoTracking()
-                .AnyAsync(resourceFilterValue => resourceFilterValue.FilterDefinitions.Key == filter.Key);
+                .AnyAsync(resourceFilterValue =>
+                    resourceFilterValue.FilterDefinitions.Key == filter.Key &&
+                    resourceFilterValue.Resource.DeletedAtUtc == null);
         }
 
         if (string.IsNullOrWhiteSpace(filter.ResourceField))
         {
             return await _db.ResourceFilterValues
                 .AsNoTracking()
-                .AnyAsync(resourceFilterValue => resourceFilterValue.FilterDefinitions.Key == filter.Key);
+                .AnyAsync(resourceFilterValue =>
+                    resourceFilterValue.FilterDefinitions.Key == filter.Key &&
+                    resourceFilterValue.Resource.DeletedAtUtc == null);
         }
 
         return filter.ResourceField.Trim().ToLowerInvariant() switch
