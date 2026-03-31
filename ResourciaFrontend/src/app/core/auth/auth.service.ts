@@ -140,11 +140,7 @@ export class AuthService {
     return this.httpClient.post<any>(`${this.baseUrl}/Login`, data).pipe(
       tap(response => {
         const token = response.token ?? response.Token;
-        localStorage.setItem('accessToken', token);
-        const decoded = this.decodeToken(token);
-        this.currentUserSubject.next(decoded);
-        this.authStateSubject.next('authenticated');
-        this.scheduleProactiveRefresh(token);
+        this.establishAuthenticatedSession(token);
       })
     );
   }
@@ -243,11 +239,7 @@ export class AuthService {
       .pipe(
         map(response => {
           const newToken = response.Token;
-          localStorage.setItem('accessToken', newToken);
-          const decoded = this.decodeToken(newToken);
-          this.currentUserSubject.next(decoded);
-          this.authStateSubject.next('authenticated');
-          this.scheduleProactiveRefresh(newToken);
+          this.establishAuthenticatedSession(newToken);
           return newToken;
         })
       );
@@ -288,7 +280,14 @@ export class AuthService {
   }
 
   confirmToken(token: string, email: string): Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/ValidateToken`, { token, email });
+    return this.httpClient.post<any>(`${this.baseUrl}/ValidateToken`, { token, email }).pipe(
+      tap(response => {
+        const confirmedToken = response?.token ?? response?.Token;
+        if (confirmedToken) {
+          this.establishAuthenticatedSession(confirmedToken);
+        }
+      })
+    );
   }
 
   forgotPassword(data: ForgotPasswordModel): Observable<any> {
@@ -343,6 +342,14 @@ export class AuthService {
     } catch {
       return true;
     }
+  }
+
+  public establishAuthenticatedSession(token: string): void {
+    localStorage.setItem('accessToken', token);
+    const decoded = this.decodeToken(token);
+    this.currentUserSubject.next(decoded);
+    this.authStateSubject.next('authenticated');
+    this.scheduleProactiveRefresh(token);
   }
 
   private decodeToken(token: string): JwtPayloadModel | null {
