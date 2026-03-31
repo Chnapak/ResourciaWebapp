@@ -28,4 +28,5 @@ RUN dotnet publish "./Resourcia.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Resourcia.Api.dll"]
+COPY --chmod=755 Resourcia.Api/docker-entrypoint.sh /app/docker-entrypoint.sh
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
