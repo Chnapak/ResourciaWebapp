@@ -14,4 +14,5 @@ public class ReviewResponseModel
     public Instant? UpdatedAt { get; set; }
     public int Downvotes { get; set; }
     public int Upvotes { get; set; }
+    public bool? UserVote { get; set; } // true = upvoted, false = downvoted, null = no vote
 }

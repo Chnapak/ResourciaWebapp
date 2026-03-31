@@ -19,13 +19,14 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<FilterDefinitions> Filters { get; set; }
     public DbSet<FacetValues> FacetValues { get; set; }
-    public DbSet<ResourceFacetValues> ResourceFacetValues { get; set; }
+    public DbSet<ResourceFilterValues> ResourceFilterValues { get; set; }
     public DbSet<Resource> Resources { get; set; }
     public DbSet<ResourceReview> ResourceReviews { get; set; }
     public DbSet<ReviewVotes> ReviewsVotes { get; set; }
     public DbSet<Discussions> Discussions { get; set; }
     public DbSet<DiscussionReplies> DiscussionReplies { get; set; }
     public DbSet<ResourceRatings> ResourceRatings { get; set; }
+    public DbSet<SavedResource> SavedResources { get; set; }
     public DbSet<ResourceImage> ResourceImages { get; set; } = null!;
 
     public AppDbContext(DbContextOptions options) : base(options)
@@ -44,27 +45,30 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
         modelBuilder.Entity<AppUser>()
         .HasQueryFilter(u => u.DeletedAt == null);
 
+        modelBuilder.Entity<Resource>()
+        .HasQueryFilter(resource => resource.DeletedAtUtc == null);
+
         modelBuilder.Entity<FilterDefinitions>()
         .Property(x => x.SortOrder)
         .HasPrecision(18, 9);
 
-        modelBuilder.Entity<ResourceFacetValues>()
-        .HasKey(x => new { x.ResourceId, x.FacetValuesId });
-
-        modelBuilder.Entity<ResourceFacetValues>()
+        modelBuilder.Entity<ResourceFilterValues>()
         .HasOne(x => x.Resource)
-        .WithMany(r => r.ResourceFacetValues)
+        .WithMany(r => r.ResourceFilterValues)
         .HasForeignKey(x => x.ResourceId)
         .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<ResourceFacetValues>()
-        .HasOne(x => x.FacetValues)
-        .WithMany(fv => fv.ResourceFacetValues)
-        .HasForeignKey(x => x.FacetValuesId)
+        modelBuilder.Entity<ResourceFilterValues>()
+        .HasOne(x => x.FilterDefinitions)
+        .WithMany(filter => filter.ResourceFilterValues)
+        .HasForeignKey(x => x.FilterDefinitionsId)
         .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<ResourceFacetValues>()
-        .HasIndex(x => x.FacetValuesId);
+        modelBuilder.Entity<ResourceFilterValues>()
+        .HasOne(x => x.FacetValues)
+        .WithMany(facetValue => facetValue.ResourceFilterValues)
+        .HasForeignKey(x => x.FacetValuesId)
+        .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<ReviewVotes>()
             .HasKey(rv => new { rv.ReviewId, rv.UserId });
@@ -86,6 +90,24 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
             .WithMany(t => t.Replies)
             .HasForeignKey(r => r.DiscussionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SavedResource>()
+            .HasKey(savedResource => new { savedResource.UserId, savedResource.ResourceId });
+
+        modelBuilder.Entity<SavedResource>()
+            .HasOne(savedResource => savedResource.User)
+            .WithMany(user => user.SavedResources)
+            .HasForeignKey(savedResource => savedResource.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SavedResource>()
+            .HasOne(savedResource => savedResource.Resource)
+            .WithMany(resource => resource.SavedResources)
+            .HasForeignKey(savedResource => savedResource.ResourceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SavedResource>()
+            .HasIndex(savedResource => savedResource.ResourceId);
 
         modelBuilder.Entity<ResourceRatings>()
         .HasKey(r => r.ResourceId);

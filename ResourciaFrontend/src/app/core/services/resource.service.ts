@@ -6,8 +6,11 @@ import { Router } from '@angular/router';
 import { CreateResourceRequestModel } from '../../shared/models/create-resource-request';
 import { CreateResourceResponseModel } from '../../shared/models/create-resource-response';
 import { ResourceDetailModel } from '../../shared/models/resource-detail';
+import { ResourceSaveStateModel } from '../../shared/models/resource-save-state';
 import { SearchResponse } from '../../shared/models/search-response';
 import { ReviewRequestModel } from '../../shared/models/review-request';
+import { Review } from '../../shared/models/review';
+import { SchemaResponse } from '../../shared/models/search-schema';
 
 
 @Injectable({
@@ -22,6 +25,10 @@ export class ResourceService {
 
   createResource(payload: CreateResourceRequestModel): Observable<CreateResourceResponseModel> {
     return this.httpClient.post<CreateResourceResponseModel>(this.baseUrl, payload);
+  }
+
+  getResourceSchema(): Observable<SchemaResponse> {
+    return this.httpClient.get<SchemaResponse>(`${this.baseUrl}/schema`);
   }
 
   private buildHttpParams(query: Record<string, any>): HttpParams {
@@ -47,29 +54,19 @@ export class ResourceService {
     return this.httpClient.get<SearchResponse>(`${this.baseUrl}/search`, { params });
   }
 
-  submitReview(id: string, payload: ReviewRequestModel): Observable<void> {
-    const body = {
-      content: payload.text,
-      rating: payload.stars
-    };
-
-    return this.httpClient.post<void>(`${this.baseUrl}/${id}/reviews`, body);
-  }
-
   getResource(id: string): Observable<ResourceDetailModel> {
     return this.httpClient.get<ResourceDetailModel>(`/api/resources/${id}`);
   }
 
-  getReviews(resourceId: string, page = 1, pageSize = 10, sortBy = 'helpful') {
-    return this.httpClient.get<any>(
-      `/api/resources/${resourceId}/reviews`,
-      {
-        params: {
-          page,
-          pageSize,
-          sortBy
-        }
-      }
-    );
+  getSaveState(id: string): Observable<ResourceSaveStateModel> {
+    return this.httpClient.get<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save-state`);
+  }
+
+  saveResource(id: string): Observable<ResourceSaveStateModel> {
+    return this.httpClient.post<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save`, {});
+  }
+
+  unsaveResource(id: string): Observable<ResourceSaveStateModel> {
+    return this.httpClient.delete<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save`);
   }
 }

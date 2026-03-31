@@ -31,5 +31,5 @@ public class FacetValues
     public bool IsActive { get; set; } = true;
     public int SortOrder { get; set; } = 0;
 
-    public ICollection<ResourceFacetValues> ResourceFacetValues { get; set; } = new List<ResourceFacetValues>();
+    public ICollection<ResourceFilterValues> ResourceFilterValues { get; set; } = new List<ResourceFilterValues>();
 }

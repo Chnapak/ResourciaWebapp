@@ -13,4 +13,5 @@ import { ResourceDetailModel } from '../../../../../../../../shared/models/resou
 })
 export class ResourceRatingsComponent {
   @Input() resource: ResourceDetailModel | null = null;
+  @Output() reviewChange = new EventEmitter<void>();
 }

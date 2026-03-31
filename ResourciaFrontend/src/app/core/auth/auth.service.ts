@@ -13,6 +13,10 @@ import { jwtDecode } from 'jwt-decode';
 import { JwtPayloadModel } from '../../shared/models/jwt-payload-model';
 import { ToasterService } from '../../shared/toaster/toaster.service';
 import { CompleteExternalLoginModel } from '../../shared/models/complete-external-login';
+<<<<<<< HEAD
+=======
+import { Review } from '../../shared/models/review';
+>>>>>>> rescue-mission
 
 export type AuthState = 'initialising' | 'anonymous' | 'authenticated' | 'token_expired';
 
@@ -122,16 +126,24 @@ export class AuthService {
     return this.authStateSubject.value;
   }
 
+  updateCurrentUserName(name: string): void {
+    const currentUser = this.currentUserSubject.value;
+    if (!currentUser) {
+      return;
+    }
+
+    this.currentUserSubject.next({
+      ...currentUser,
+      name,
+    });
+  }
+
   // ── Login ────────────────────────────────────────────────────────────────
   login(data: LoginModel): Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}/Login`, data).pipe(
       tap(response => {
         const token = response.token ?? response.Token;
-        localStorage.setItem('accessToken', token);
-        const decoded = this.decodeToken(token);
-        this.currentUserSubject.next(decoded);
-        this.authStateSubject.next('authenticated');
-        this.scheduleProactiveRefresh(token);
+        this.establishAuthenticatedSession(token);
       })
     );
   }
@@ -157,6 +169,17 @@ export class AuthService {
     } else {
       this.router.navigate(['/'], { replaceUrl: true });
     }
+  }
+
+  handleAccountDeleted(): void {
+    this.clearRefreshTimer();
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('pendingAction');
+    sessionStorage.removeItem('returnUrl');
+    this.currentUserSubject.next(null);
+    this.authStateSubject.next('anonymous');
+    this.toaster.show('Your account has been deleted.', 'info');
+    this.router.navigate(['/'], { replaceUrl: true });
   }
 
   // ── Session expired (refresh token dead) ─────────────────────────────────
@@ -219,11 +242,7 @@ export class AuthService {
       .pipe(
         map(response => {
           const newToken = response.Token;
-          localStorage.setItem('accessToken', newToken);
-          const decoded = this.decodeToken(newToken);
-          this.currentUserSubject.next(decoded);
-          this.authStateSubject.next('authenticated');
-          this.scheduleProactiveRefresh(newToken);
+          this.establishAuthenticatedSession(newToken);
           return newToken;
         })
       );
@@ -264,7 +283,14 @@ export class AuthService {
   }
 
   confirmToken(token: string, email: string): Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/ValidateToken`, { token, email });
+    return this.httpClient.post<any>(`${this.baseUrl}/ValidateToken`, { token, email }).pipe(
+      tap(response => {
+        const confirmedToken = response?.token ?? response?.Token;
+        if (confirmedToken) {
+          this.establishAuthenticatedSession(confirmedToken);
+        }
+      })
+    );
   }
 
   forgotPassword(data: ForgotPasswordModel): Observable<any> {
@@ -288,13 +314,26 @@ export class AuthService {
   }
 
   // ── Pending actions ──────────────────────────────────────────────────────
-  setPendingAction(action: PendingAction): void {
+  setPendingAction(action: PendingAction) {
     this.pendingAction = action;
+    localStorage.setItem('pendingAction', JSON.stringify(action));
+  }
+
+  peekPendingAction(): PendingAction | null {
+    if (this.pendingAction) return this.pendingAction;
+
+    const stored = localStorage.getItem('pendingAction');
+    if (!stored) return null;
+
+    this.pendingAction = JSON.parse(stored);
+    return this.pendingAction;
   }
 
   runPendingAction(): PendingAction | null {
-    const action = this.pendingAction;
+    const action = this.peekPendingAction();
     this.pendingAction = null;
+    console.log('Running pending action:', action);
+    localStorage.removeItem('pendingAction');
     return action;
   }
 
@@ -306,6 +345,14 @@ export class AuthService {
     } catch {
       return true;
     }
+  }
+
+  public establishAuthenticatedSession(token: string): void {
+    localStorage.setItem('accessToken', token);
+    const decoded = this.decodeToken(token);
+    this.currentUserSubject.next(decoded);
+    this.authStateSubject.next('authenticated');
+    this.scheduleProactiveRefresh(token);
   }
 
   private decodeToken(token: string): JwtPayloadModel | null {

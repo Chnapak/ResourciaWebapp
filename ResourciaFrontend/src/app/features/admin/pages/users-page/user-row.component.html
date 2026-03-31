@@ -1,4 +1,8 @@
-<div class="user-row flex items-center px-8 py-4 border-b border-slate-100" data-status="active" data-plan="pro" data-name="alice johnson">
+<div
+    class="user-row flex items-center px-8 py-4 border-b border-slate-100"
+    [attr.data-status]="user.status"
+    [attr.data-role]="user.role"
+    [attr.data-name]="user.name.toLowerCase()">
     <div class="w-10 flex items-center">
         <app-checkbox 
             [(ngModel)]="selected" 
@@ -6,27 +10,31 @@
             [disabled]="user.status === 'banned'">
         </app-checkbox>
     </div>
-    <div class="flex-1 flex items-center gap-4 cursor-pointer" onclick="openUserPanel('Alice Johnson', 'alice@example.com', 'Pro', 'Active', 147, 'Jan 15, 2024')">
-        <a routerLink="../../profile/{{user.name}}" target="_blank">
-            <div class="w-10 h-10 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring"
+    <a
+        [routerLink]="['/profile', profileIdentifier]"
+        target="_blank"
+        class="flex-1 flex items-center gap-4 cursor-pointer text-current no-underline hover:no-underline">
+        <div
+            class="w-10 h-10 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring"
             [style.background]="getUserGradient(user.email)">
-                {{ getInitials(user.name) }}
-            </div>
-        </a>
+            {{ getInitials(user.name) }}
+        </div>
         <div class="flex-1">
             <div class="flex items-center gap-2">
                 <span class="text-sm font-semibold text-slate-900">{{user.name}}</span>
-                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-md border border-emerald-200">Pro</span>
+                <span class="px-2 py-0.5 text-xs font-medium rounded-md" [class]="roleBadgeClass">
+                    {{ user.roleLabel }}
+                </span>
             </div>
             <div class="text-xs text-slate-500 mt-0.5">{{user.email}}</div>
         </div>
-    </div>
+    </a>
     <div class="w-32">
-        <span class="text-sm font-mono font-medium text-slate-700">147</span>
+        <span class="text-sm font-mono font-medium text-slate-700">{{ user.resourcesCount }}</span>
         <span i18n class="text-xs text-slate-400 ml-1">resources</span>
     </div>
     <div class="w-40">
-        <span class="text-xs text-slate-500">2 hours ago</span>
+        <span class="text-xs text-slate-500">{{ formatRelative(user.lastActiveAt) }}</span>
     </div>
     <div class="w-28">
         <div class="flex items-center">

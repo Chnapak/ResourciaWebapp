@@ -1,60 +1,120 @@
-﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Resourcia.Api.Models.Filters;
+using Resourcia.Api.Services;
+using Resourcia.Api.Utils;
 using Resourcia.Data;
 
 namespace Resourcia.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SearchController : ControllerBase
+public class SearchController(AppDbContext db, CacheService cache) : ControllerBase
 {
-    private readonly AppDbContext _db;
-    public SearchController(AppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly AppDbContext _db = db;
+    private readonly CacheService _cache = cache;
 
     [HttpGet("Schema")]
     public async Task<IActionResult> Schema()
     {
-        var filters = await _db.Filters
-            .AsNoTracking()
-            .Where(f => f.IsActive)
-            .OrderBy(f => f.SortOrder)
-            .Select(f => new
+        var response = await _cache.GetOrSetAsync(
+            "search:schema:v5",
+            async () =>
             {
-                f.Key,
-                f.Label,
-                f.Kind,
-                f.IsMulti,
-                f.ResourceField,
-                Values = f.FacetValues
-                    .Where(v => v.IsActive)
-                    .OrderBy(v => v.SortOrder)
-                    .Select(v => new
+                var filters = await _db.Filters
+                    .AsNoTracking()
+                    .Where(filter => filter.IsActive && filter.DeletedAt == null)
+                    .OrderBy(filter => filter.SortOrder)
+                    .Select(filter => new SearchSchemaFilterModel
                     {
-                        v.Value,
-                        v.Label
+                        Key = filter.Key,
+                        Label = filter.Label,
+                        Kind = filter.Kind.ToString().ToLowerInvariant(),
+                        IsMulti = filter.IsMulti,
+                        ResourceField = filter.ResourceField,
+                        Values = filter.FacetValues
+                            .Where(value => value.IsActive)
+                            .OrderBy(value => value.SortOrder)
+                            .Select(value => new SearchSchemaFilterValueModel
+                            {
+                                Value = value.Value,
+                                Label = value.Label
+                            })
+                            .ToList()
                     })
-            }).ToListAsync();
+                    .ToListAsync();
 
-        return Ok(new {filters });
+                var populatedFilters = new List<SearchSchemaFilterModel>();
+
+                foreach (var filter in filters)
+                {
+                    filter.ResourceField = FilterResourceFieldResolver.Resolve(filter.ResourceField, filter.Key, filter.Label);
+
+                    if (await HasDataAsync(filter))
+                    {
+                        populatedFilters.Add(filter);
+                    }
+                }
+
+                return new SearchSchemaResponseModel
+                {
+                    Filters = populatedFilters
+                };
+            },
+            TimeSpan.FromHours(1));
+
+        return Ok(response);
     }
 
     [HttpGet("SchemaDebug")]
     public async Task<IActionResult> SchemaDebug()
     {
         var total = await _db.Filters.CountAsync();
-        var active = await _db.Filters.CountAsync(f => f.IsActive);
-
-        var sample = await _db.Filters.AsNoTracking()
-            .OrderBy(f => f.SortOrder)
-            .Select(f => new { f.Key, f.IsActive })
+        var active = await _db.Filters.CountAsync(filter => filter.IsActive);
+        var sample = await _db.Filters
+            .AsNoTracking()
+            .OrderBy(filter => filter.SortOrder)
+            .Select(filter => new { filter.Key, filter.IsActive })
             .Take(20)
             .ToListAsync();
 
         return Ok(new { total, active, sample });
     }
 
+    private async Task<bool> HasDataAsync(SearchSchemaFilterModel filter)
+    {
+        if (string.Equals(filter.Kind, "facet", StringComparison.OrdinalIgnoreCase))
+        {
+            return await _db.ResourceFilterValues
+                .AsNoTracking()
+                .AnyAsync(resourceFilterValue =>
+                    resourceFilterValue.FilterDefinitions.Key == filter.Key &&
+                    resourceFilterValue.Resource.DeletedAtUtc == null);
+        }
+
+        if (string.IsNullOrWhiteSpace(filter.ResourceField))
+        {
+            return await _db.ResourceFilterValues
+                .AsNoTracking()
+                .AnyAsync(resourceFilterValue =>
+                    resourceFilterValue.FilterDefinitions.Key == filter.Key &&
+                    resourceFilterValue.Resource.DeletedAtUtc == null);
+        }
+
+        return filter.ResourceField.Trim().ToLowerInvariant() switch
+        {
+            "author" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.Author != null && resource.Author != string.Empty),
+            "createdby" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.CreatedBy != null && resource.CreatedBy != string.Empty),
+            "description" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.Description != null && resource.Description != string.Empty),
+            "isfree" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.IsFree),
+            "learningstyle" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.LearningStyle != string.Empty),
+            "rating" => await _db.ResourceRatings.AsNoTracking().AnyAsync(rating => rating.TotalCount > 0),
+            "savescount" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.SavesCount > 0),
+            "tags" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.Tags.Count > 0),
+            "title" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.Title != string.Empty),
+            "url" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.Url != string.Empty),
+            "year" => await _db.Resources.AsNoTracking().AnyAsync(resource => resource.Year.HasValue),
+            _ => false
+        };
+    }
 }

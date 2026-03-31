@@ -29,6 +29,7 @@ public class ReviewService
         int page,
         int pageSize,
         string sortBy,
+        Guid? userId = null,
         CancellationToken ct = default)
     {
         var query = _db.ResourceReviews
@@ -57,8 +58,13 @@ public class ReviewService
                 Content    = r.Content,
                 CreatedAt  = r.CreatedAt,
                 UpdatedAt  = r.UpdatedAt,
-                Upvotes    = r.Votes.Count(v => v.IsHelpful),
-                Downvotes  = r.Votes.Count(v => !v.IsHelpful),
+                Upvotes = _db.ReviewsVotes.Count(v => v.ReviewId == r.Id && v.IsHelpful),
+                Downvotes = _db.ReviewsVotes.Count(v => v.ReviewId == r.Id && !v.IsHelpful),
+                UserVote = userId == null ? null
+              : _db.ReviewsVotes
+                  .Where(v => v.ReviewId == r.Id && v.UserId == userId)
+                  .Select(v => (bool?)v.IsHelpful)
+                  .FirstOrDefault()
             })
             .ToListAsync(ct);
 
