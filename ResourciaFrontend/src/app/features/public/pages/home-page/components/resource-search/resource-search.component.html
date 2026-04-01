@@ -1,5 +1,7 @@
+<!-- Hero search card with schema-driven filters. -->
 <div class="flex w-full max-w-[960px] flex-col gap-[12px] rounded-[16px] bg-white/95 p-[16px] shadow-[0_24px_60px_rgba(15,23,42,0.18)] backdrop-blur md:flex-row md:items-end">
   @if (isSchemaLoading) {
+    <!-- Loading skeletons for filter fields. -->
     <div class="grid flex-1 grid-cols-1 gap-[12px] md:grid-cols-3">
       @for (_ of [1, 2, 3]; track $index) {
         <div class="flex flex-col gap-[8px]">
@@ -9,10 +11,12 @@
       }
     </div>
 
+    <!-- Disabled CTA while schema is loading. -->
     <button class="rounded-[10px] bg-blue-600 px-[28px] py-[11px] font-[600] text-white opacity-70" disabled type="button">
       Loading...
     </button>
   } @else {
+    <!-- Filter inputs driven by schema. -->
     <div class="grid flex-1 grid-cols-1 gap-[12px] md:grid-cols-3">
       @for (filter of filters; track filter.key) {
         <div class="flex min-w-0 flex-col gap-[8px]">
@@ -21,6 +25,7 @@
           </label>
 
           @if (filter.controlType === 'text') {
+            <!-- Text input filters (freeform). -->
             <input
               [id]="filter.key"
               [(ngModel)]="formValues[filter.key]"
@@ -28,6 +33,7 @@
               class="w-full rounded-[10px] border border-slate-200 px-[14px] py-[11px] text-[15px] text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               type="text" />
           } @else {
+            <!-- Select-based filters (facet/boolean). -->
             <select
               [id]="filter.key"
               [(ngModel)]="formValues[filter.key]"
@@ -43,6 +49,7 @@
       }
     </div>
 
+    <!-- Primary CTA to run the search. -->
     <div class="flex items-end">
       <button
         (click)="onSearch()"

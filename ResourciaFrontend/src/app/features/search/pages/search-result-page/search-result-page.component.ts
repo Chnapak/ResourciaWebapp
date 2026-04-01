@@ -22,6 +22,9 @@ import { ActiveChip } from '../../../../shared/models/active-chip';
 import { SearchResultResourceModel } from '../../../../shared/models/search-result-resource';
 
 
+/**
+ * Search results page with filters, pagination, and resource cards.
+ */
 @Component({
   selector: 'app-search-result-page',
   standalone: true,
@@ -30,21 +33,33 @@ import { SearchResultResourceModel } from '../../../../shared/models/search-resu
   styleUrl: './search-result-page.component.scss'
 })
 export class SearchResultPageComponent implements OnInit {
+  /** Active search schema (filters + metadata). */
   schema: SchemaResponse | null = null;
+  /** Expose enum to template. */
   FilterKind = FilterKind;
 
+  /** Signal tracking collapsed filter groups. */
   collapsed = signal<Record<string, boolean>>({});
 
+  /** Toast notifications. */
   private toaster = inject(ToasterService);
+  /** Router for query param updates. */
   private router = inject(Router);
+  /** Route for current search page. */
   private route = inject(ActivatedRoute);
 
+  /** Current resource results. */
   resources: SearchResultResourceModel[] = [];
+  /** Current page index (1-based). */
   currentPage = 1;
+  /** Page size for API search. */
   itemsPerPage = 27;
+  /** Total number of items available. */
   totalItems = 0;
+  /** Total page count. */
   totalPages = 0;
 
+  /** Local representation of all filter inputs. */
   queryState: {
     facets: Record<string, string | string[]>;
     ranges: Record<string, { min?: string; max?: string }>;
@@ -57,10 +72,12 @@ export class SearchResultPageComponent implements OnInit {
     texts: {}
   };
 
+  /** Toggles the filter sidebar visibility. */
   areFiltersHidden: boolean = false;
 
   constructor(private search: SearchService, private resource: ResourceService) {}
 
+  /** Load schema and hydrate filter state from URL. */
   ngOnInit(): void {
     
     this.search.schema().subscribe((data: SchemaResponse) => {
@@ -79,14 +96,17 @@ export class SearchResultPageComponent implements OnInit {
 
 
 
+  /** Toggle a filter section open/closed. */
   toggleSection(key: string) {
     this.collapsed.update(m => ({ ...m, [key]: !m[key] }));
   }
 
+  /** Check whether a filter section is collapsed. */
   isCollapsed(key: string) {
     return this.collapsed()[key] ?? true;
   }
 
+  /** Clear all filters and reset the URL state. */
   clearAllFilters(): void {
     this.queryState = {
       facets: {},
@@ -103,6 +123,7 @@ export class SearchResultPageComponent implements OnInit {
     this.toaster.show('All filters cleared', 'success');
   }
 
+  /** Handle a facet (select) value change. */
   onFacetChange(filter: any, value: string | string[] | null): void {    
     if (!this.queryState.facets) {
       this.queryState.facets = {};
@@ -123,6 +144,7 @@ export class SearchResultPageComponent implements OnInit {
     console.log('query', this.buildQuery());
   }
 
+  /** Handle changes to a numeric range filter. */
   onNumberRangeChange(filter: any, type: 'min' | 'max', value: string): void {
     if (!this.queryState.ranges[filter.key]) {
       this.queryState.ranges[filter.key] = {};
@@ -145,6 +167,7 @@ export class SearchResultPageComponent implements OnInit {
     console.log('query', this.buildQuery());
   }
 
+  /** Handle changes to a boolean filter. */
   onBoolChange(filter: any, value: boolean): void {
     if (value) {
       this.queryState.booleans[filter.key] = true;
@@ -158,6 +181,7 @@ export class SearchResultPageComponent implements OnInit {
     console.log('query', this.buildQuery());
   }
 
+  /** Handle changes to a free-text filter. */
   onTextChange(filter: any, value: string): void {
     const trimmedValue = value.trim();
 
@@ -174,6 +198,7 @@ export class SearchResultPageComponent implements OnInit {
   }
 
 
+  /** Build a query payload from the current filter state. */
   buildQuery() {
     const query: Record<string, any> = {};
 
@@ -204,6 +229,7 @@ export class SearchResultPageComponent implements OnInit {
     return query;
   }
 
+  /** Initialize queryState from the current URL query params. */
   private hydrateStateFromQueryParams(schema: SchemaResponse, params: import('@angular/router').ParamMap): void {
 
     this.currentPage = Math.max(1, Number(params.get('p') ?? 1) || 1);
@@ -280,6 +306,7 @@ export class SearchResultPageComponent implements OnInit {
     }
   }
 
+  /** Load resources for the current query and pagination. */
   private loadResources(): void {
     const query = this.buildQuery();
 
@@ -302,6 +329,7 @@ export class SearchResultPageComponent implements OnInit {
     });
   }
 
+  /** Update the URL query parameters and reload resources. */
   updateUrl(page?: number): void {
     const query: Record<string, any> = {};
 
@@ -339,10 +367,12 @@ export class SearchResultPageComponent implements OnInit {
     this.loadResources();
   }
 
+  /** Open a resource in a new browser tab. */
   openResource(resource: SearchResultResourceModel): void {
     window.open(resource.url, '_blank');
   }
 
+  /** Share resource URL by copying it to the clipboard. */
   async shareResource(resource: SearchResultResourceModel): Promise<void> {
     const shareUrl = this.getShareUrl(resource);
     if (!shareUrl) {
@@ -359,10 +389,12 @@ export class SearchResultPageComponent implements OnInit {
     this.toaster.show('Could not copy the resource link.', 'error');
   }
 
+  /** Toggle the filter sidebar visibility. */
   hideFilters(): void {
     this.areFiltersHidden = this.areFiltersHidden ? false : true
   }
 
+  /** Jump to a new page via URL query params. */
   onPageChange(page: number): void {
     if (page < 1 || page > this.totalPages || page === this.currentPage) return;
 
@@ -373,6 +405,7 @@ export class SearchResultPageComponent implements OnInit {
     });
   }
 
+  /** Serialize the current filter state for query params. */
   private serializeFiltersToQuery(): Record<string, any> {
     const query: Record<string, any> = {};
 
@@ -398,6 +431,7 @@ export class SearchResultPageComponent implements OnInit {
     return query;
   }
 
+  /** Build the absolute share URL for a resource (if possible). */
   private getShareUrl(resource: SearchResultResourceModel): string | null {
     if (!resource.id) {
       return null;
@@ -409,6 +443,7 @@ export class SearchResultPageComponent implements OnInit {
     return origin ? `${origin}${relativePath}` : relativePath;
   }
 
+  /** Attempt to copy a value to the clipboard with a fallback path. */
   private async copyToClipboard(value: string): Promise<boolean> {
     try {
       if (globalThis.navigator?.clipboard?.writeText) {
@@ -443,6 +478,7 @@ export class SearchResultPageComponent implements OnInit {
     }
   }
 
+  /** Build chips representing the active filter selections. */
   get activeFilterChips(): ActiveChip[] {
     if (!this.schema) return [];
 
@@ -540,6 +576,7 @@ export class SearchResultPageComponent implements OnInit {
     return chips;
   }
 
+  /** Remove a specific filter chip and refresh results. */
   removeChip(chip: ActiveChip): void {
     const filter = this.schema?.filters.find(f => f.key === chip.key);
     if (!filter) return;

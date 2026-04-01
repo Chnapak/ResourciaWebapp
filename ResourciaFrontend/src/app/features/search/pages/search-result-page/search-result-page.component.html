@@ -1,4 +1,6 @@
+<!-- Search results layout with sidebar + main content. -->
 <div class="max-w-[1400px] flex mx-auto py-[32px] px-[40px] items-start gap-[32px]">
+    <!-- Filters sidebar -->
     <app-filters-sidebar
         [class.hidden]="areFiltersHidden"
         [filters]="schema?.filters ?? []"
@@ -15,7 +17,9 @@
         (clearAll)="clearAllFilters()"
     ></app-filters-sidebar>
     
+    <!-- Main results area -->
     <main class="flex-1">
+        <!-- Toolbar with chips and filter toggles. -->
         <app-explore-toolbar
             [areFiltersHidden]="areFiltersHidden"
             [numberOfResources]="totalItems"
@@ -24,8 +28,10 @@
             (clearAll)="clearAllFilters()"
             (removeChip)="removeChip($event)"
         ></app-explore-toolbar>
+        <!-- Results grid or empty state. -->
         <div class="mb-[40px] grid grid-cols-3 gap-[20px]">
             @if (resources?.length === 0) {
+                <!-- Empty state when no results are returned. -->
                 <div class="col-span-3 flex flex-col items-center justify-center py-[64px] px-[40px] text-center
                 bg-white border border-gray-200 rounded-[12px] shadow-sm
                 animate-[fadeUp_0.4s_cubic-bezier(0.22,1,0.36,1)_both]">
@@ -73,7 +79,7 @@
                     }
                 
                     <hr class="w-full border-gray-100 mb-[24px]">
-                
+
                     <!-- Actions -->
                     <div class="flex flex-wrap items-center justify-center gap-[10px]">
 
@@ -94,9 +100,10 @@
                         </ui-button>
 
                     </div>
-                
+
                 </div>
             } @else {
+                <!-- Resource cards -->
                 @for (resource of resources; track resource.id) {
                     <app-resource-card
                         [resource]="resource"
@@ -107,6 +114,7 @@
             }
         </div>
 
+        <!-- Pagination controls -->
         <app-pagination
             [currentPage]="currentPage"
             [totalPages]="totalPages"

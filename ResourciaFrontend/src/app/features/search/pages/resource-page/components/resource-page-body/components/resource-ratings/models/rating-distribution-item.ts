@@ -1,4 +1,9 @@
+/**
+ * Histogram entry for rating distribution charts.
+ */
 export interface RatingDistributionItem {
-    stars: number;     // 1–5
-    count: number;     // number of ratings
+    /** Star value (1-5). */
+    stars: number;
+    /** Number of ratings at this star value. */
+    count: number;
 }

@@ -1,3 +1,6 @@
+/**
+ * Service for loading and saving the current user's profile.
+ */
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -8,19 +11,28 @@ import { EditProfileForm, SaveStatus } from '../models/edit-profile.model';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Encapsulates profile API calls and save-state signaling.
+ */
 export class EditProfileService {
+  /** HTTP client for profile requests. */
   private readonly httpClient = inject(HttpClient);
+  /** Base API path for profile endpoints. */
   private readonly baseUrl = '/api/Profile';
 
+  /** Reactive save status for UI feedback. */
   readonly saveStatus = signal<SaveStatus>('idle');
+  /** Optional save message for UI feedback. */
   readonly saveMessage = signal<string | null>(null);
 
+  /** Loads the current user's profile and maps it to the edit form shape. */
   load(): Observable<EditProfileForm> {
     return this.httpClient
       .get<ProfileViewModel>(`${this.baseUrl}/me`)
       .pipe(map((profile) => this.mapProfileToForm(profile)));
   }
 
+  /** Persists the edit form and updates save status signals. */
   save(form: EditProfileForm): Observable<EditProfileForm> {
     this.saveStatus.set('saving');
     this.saveMessage.set(null);
@@ -48,15 +60,18 @@ export class EditProfileService {
       );
   }
 
+  /** Deletes the current user's account. */
   deleteAccount(): Observable<void> {
     return this.httpClient.delete<void>(`${this.baseUrl}/me`);
   }
 
+  /** Resets save status and message to defaults. */
   resetStatus(): void {
     this.saveStatus.set('idle');
     this.saveMessage.set(null);
   }
 
+  /** Maps the API profile response into the edit form model. */
   private mapProfileToForm(profile: ProfileViewModel): EditProfileForm {
     return {
       displayName: profile.name ?? '',

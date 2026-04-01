@@ -1,3 +1,6 @@
+/**
+ * Page that completes an external-auth profile (display name).
+ */
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
@@ -12,21 +15,34 @@ import { delay } from 'rxjs';
   templateUrl: './complete-profile.component.html',
   styleUrl: './complete-profile.component.scss',
 })
+/**
+ * Collects a display name and exchanges the registration token for a session.
+ */
 export class CompleteProfileComponent {
+  /** Form builder for the display name form. */
   private readonly fb = inject(FormBuilder);
+  /** Auth service used to complete external login. */
   private readonly authService = inject(AuthService);
+  /** Route used to read the registration token. */
   private readonly route = inject(ActivatedRoute);
+  /** Router used for post-completion navigation. */
   private readonly router = inject(Router);
 
+  /** Registration token provided by the external auth flow. */
   private registrationToken: string | null = null;
+  /** Whether the submit call is in progress. */
   public isSubmitting = false;
+  /** True when the chosen username already exists. */
   public usernameInUse = false;
+  /** True when a non-specific error occurs. */
   public generalError = false;
 
+  /** Reactive form for the display name. */
   protected form = this.fb.nonNullable.group({
     displayName: ['', [Validators.required, Validators.minLength(3)]],
   });
 
+  /** Reads the registration token from the query string. */
   ngOnInit(): void {
     // Capture the token from the URL: ?registrationToken=...
     this.registrationToken = this.route.snapshot.queryParamMap.get('registrationToken');
@@ -37,6 +53,7 @@ export class CompleteProfileComponent {
     }
   }
 
+  /** Validates input and completes the external login flow. */
   onSubmit(): void {
     if (this.form.invalid || !this.registrationToken) {
       this.form.markAllAsTouched();

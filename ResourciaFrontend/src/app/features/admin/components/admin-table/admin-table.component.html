@@ -1,3 +1,4 @@
+<!-- Admin table header and content slot -->
 <app-admin-table-header
         [columns]="columns"
         [selectable]="selectable"
@@ -6,5 +7,6 @@
         (toggleAll)="toggleAll.emit($event)"
 ></app-admin-table-header>
 <div>
+    <!-- Table body content projected from the parent -->
     <ng-content></ng-content>
 </div>

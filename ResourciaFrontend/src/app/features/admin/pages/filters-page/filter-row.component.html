@@ -1,3 +1,4 @@
+<!-- Admin filter row with inline edit panel -->
 <div class="border-b border-slate-100">
     <div class="flex items-center px-8 py-4">
 
@@ -9,13 +10,15 @@
             </app-checkbox>
         </div>
 
-        <!-- Filter (flex-1) -->
+        <!-- Filter summary (drag handle, index badge, labels) -->
         <div class="flex-1 flex items-center gap-3">
+            <!-- Drag handle for reordering -->
             <div cdkDragHandle class="text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
                 </svg>
             </div>
+            <!-- Seeded gradient badge with the row index -->
             <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-white font-semibold text-sm"
                 [style.background]="getFilterGradient(filter.key)">
                 # {{ index + 1 }}
@@ -64,6 +67,7 @@
         <div class="w-20 flex justify-end">
             <div class="relative">
                 <app-dropdown [items]="filterMenuItems">
+                    <!-- Kebab menu for filter actions -->
                     <button dropdown-button class="p-2 hover:bg-slate-100 rounded-lg transition-all cursor-pointer">
                         <svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
@@ -75,9 +79,11 @@
     </div>
 
     @if (isEditing) {
+        <!-- Inline edit panel for filter details -->
         <div class="mx-8 mb-5 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-5">
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
                 <div class="space-y-4">
+                    <!-- Basic label/description editing -->
                     <div>
                         <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
                             Name
@@ -98,6 +104,7 @@
                         ></textarea>
                     </div>
 
+                    <!-- Read-only key for reference -->
                     <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs text-slate-500">
                         <div class="font-semibold text-slate-700">Filter key</div>
                         <div class="mt-1 font-mono">{{ filter.key }}</div>
@@ -106,6 +113,7 @@
 
                 <div class="space-y-4">
                     @if (filter.kind === FilterKind.Facet) {
+                        <!-- Facet values editor -->
                         <div class="flex items-center justify-between">
                             <div>
                                 <div class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Possible facet values</div>
@@ -123,6 +131,7 @@
                         </div>
 
                         <div class="space-y-2">
+                            <!-- Editable facet values list -->
                             @for (facetValue of editFacetValues; track facetValue.id ?? $index; let facetIndex = $index) {
                                 <div class="flex items-center gap-2">
                                     <input
@@ -139,12 +148,14 @@
                             }
 
                             @if (editFacetValues.length === 0) {
+                                <!-- Empty state when there are no values -->
                                 <div class="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-5 text-sm text-slate-400">
                                     No values yet. Add one to make this filter selectable.
                                 </div>
                             }
                         </div>
                     } @else {
+                        <!-- Non-facet filters do not need predefined values -->
                         <div class="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-5 text-sm text-slate-400">
                             {{ filter.label }} stores raw {{ filter.kind | lowercase }} values directly on resources, so it does not need predefined options.
                         </div>
@@ -152,6 +163,7 @@
                 </div>
             </div>
 
+            <!-- Action buttons for the edit form -->
             <div class="mt-5 flex items-center justify-end gap-3">
                 <button
                     (click)="cancelEdit()"

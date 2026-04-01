@@ -1,4 +1,4 @@
-<!-- Top Bar -->
+<!-- Admin header wrapper with title and actions slot -->
 <div class="px-8 py-6 border-b border-slate-200">
     <div class="flex justify-between items-start mb-4">
         <div>
@@ -6,6 +6,7 @@
         </div>
 
         <div class="flex gap-3 items-center">
+            <!-- Consumer-provided action buttons -->
             <ng-content select="[actions]"></ng-content>
         </div>
     </div>

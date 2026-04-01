@@ -1,12 +1,15 @@
+<!-- Discussion threads and input composer. -->
 <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-card">
     <h2 class="font-display font-bold text-lg mb-5">Community Discussion</h2>
 
+    <!-- Thread list -->
     @for (thread of threads; track thread.id) {
         <app-resource-discussion-thread
             [thread]="thread">
         </app-resource-discussion-thread>
     } 
 
+    <!-- New message input -->
     <app-resource-discussion-input
         [resourceId]="resourceId"
     ></app-resource-discussion-input>

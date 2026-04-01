@@ -5,24 +5,46 @@ import { ResourceDetailModel } from '../../../../../../../../shared/models/resou
 import { Filter as SearchSchemaFilter } from '../../../../../../../../shared/models/search-schema';
 import { RouterLink } from '@angular/router';
 
+/**
+ * Tone variants for info row styling.
+ */
 type ResourceInfoTone = 'default' | 'blue' | 'green' | 'amber' | 'muted';
 
+/**
+ * Rendered row in the info card.
+ */
 interface ResourceInfoRow {
+  /** Row label (left column). */
   label: string;
+  /** Row value (right column). */
   value: string;
+  /** Optional external link. */
   href?: string;
+  /** Optional router link for internal navigation. */
   routerLink?: string[];
+  /** Visual tone used for value styling. */
   tone?: ResourceInfoTone;
+  /** Whether the value should render as a pill. */
   pill?: boolean;
 }
 
+/**
+ * Display value resolved from resource data.
+ */
 interface ResourceInfoDisplayValue {
+  /** Display string. */
   value: string;
+  /** Optional external link. */
   href?: string;
+  /** Visual tone for styling. */
   tone?: ResourceInfoTone;
+  /** Whether the value should render as a pill. */
   pill?: boolean;
 }
 
+/**
+ * Card with resource metadata and schema-derived fields.
+ */
 @Component({
   selector: 'app-resource-info-card',
   imports: [RouterLink],
@@ -30,12 +52,16 @@ interface ResourceInfoDisplayValue {
   styleUrl: './resource-info-card.component.scss',
 })
 export class ResourceInfoCardComponent implements OnInit {
+  /** Search service used to load schema labels/metadata. */
   private readonly searchService = inject(SearchService);
 
+  /** Cached schema filters for label lookups. */
   private schemaFilters: SearchSchemaFilter[] = [];
 
+  /** Resource details shown in this card. */
   @Input() resource: ResourceDetailModel | null = null;
 
+  /** Load schema metadata on init. */
   ngOnInit(): void {
     this.searchService.schema().subscribe({
       next: (schema) => {
@@ -47,6 +73,7 @@ export class ResourceInfoCardComponent implements OnInit {
     });
   }
 
+  /** Aggregated rows displayed in the card. */
   get rows(): ResourceInfoRow[] {
     if (!this.resource) {
       return [];
@@ -59,6 +86,7 @@ export class ResourceInfoCardComponent implements OnInit {
     ];
   }
 
+  /** Build CSS classes for a row value based on tone and pill style. */
   getRowValueClass(row: ResourceInfoRow): string {
     const tone = row.tone ?? 'default';
 
@@ -85,6 +113,7 @@ export class ResourceInfoCardComponent implements OnInit {
     return textClasses[tone];
   }
 
+  /** Primary rows (type, domain, language, etc.). */
   private getPrimaryRows(): ResourceInfoRow[] {
     const type = this.getFacetValue(['type', 'resourceType', 'resource-type', 'format']);
     const domain = this.getDomain(this.resource?.url);
@@ -107,6 +136,7 @@ export class ResourceInfoCardComponent implements OnInit {
     ];
   }
 
+  /** Rows derived from non-reserved schema filters. */
   private getSchemaRows(): ResourceInfoRow[] {
     return this.schemaFilters
       .filter((filter) => !this.isReservedSchemaField(filter))
@@ -114,6 +144,7 @@ export class ResourceInfoCardComponent implements OnInit {
       .filter((row): row is ResourceInfoRow => row !== null);
   }
 
+  /** Metadata rows for created/updated/saves/etc. */
   private getMetadataRows(): ResourceInfoRow[] {
     const createdBy = this.resource?.createdBy?.trim();
     const savesCount = this.formatSavesCount(this.resource?.savesCount);
@@ -130,6 +161,7 @@ export class ResourceInfoCardComponent implements OnInit {
     ];
   }
 
+  /** Resolve a single schema filter into a display row. */
   private resolveSchemaRow(filter: SearchSchemaFilter): ResourceInfoRow | null {
     const label = filter.label?.trim();
     if (!label) {
@@ -153,11 +185,13 @@ export class ResourceInfoCardComponent implements OnInit {
     };
   }
 
+  /** Resolve a facet filter to a display value. */
   private resolveFacetFilterValue(filter: SearchSchemaFilter): ResourceInfoDisplayValue | null {
     const value = this.getFacetValue([filter.key], filter.values);
     return value ? { value } : null;
   }
 
+  /** Resolve a resource field (non-facet) to a display value. */
   private resolveResourceFieldValue(resourceField: string, kind: FilterKind): ResourceInfoDisplayValue | null {
     const rawValue = this.getResourceFieldRawValue(resourceField);
     if (rawValue === null || rawValue === undefined) {
@@ -191,6 +225,7 @@ export class ResourceInfoCardComponent implements OnInit {
     }
   }
 
+  /** Format values for generic display based on their type. */
   private formatGenericValue(rawValue: unknown, kind: FilterKind): ResourceInfoDisplayValue | null {
     if (Array.isArray(rawValue)) {
       const joined = rawValue
@@ -217,6 +252,7 @@ export class ResourceInfoCardComponent implements OnInit {
     return value ? { value } : null;
   }
 
+  /** Fetch a raw value from the resource by field name. */
   private getResourceFieldRawValue(resourceField: string): unknown {
     if (!this.resource) {
       return null;
@@ -241,6 +277,7 @@ export class ResourceInfoCardComponent implements OnInit {
     return caseInsensitiveKey ? resourceRecord[caseInsensitiveKey] : null;
   }
 
+  /** Whether a schema filter is already represented in primary rows. */
   private isReservedSchemaField(filter: SearchSchemaFilter): boolean {
     const reservedFacetKeys = new Set([
       'type',
@@ -267,6 +304,7 @@ export class ResourceInfoCardComponent implements OnInit {
       || reservedResourceFields.has(filter.resourceField?.toLowerCase() ?? '');
   }
 
+  /** Resolve facet values by key with optional label mapping. */
   private getFacetValue(
     keys: string[],
     filterValues: { value: string; label: string }[] = [],
@@ -294,6 +332,7 @@ export class ResourceInfoCardComponent implements OnInit {
     return [...new Set(values)].join(', ') || null;
   }
 
+  /** Extract a clean domain from a URL. */
   private getDomain(url: string | null | undefined): string | null {
     if (!url?.trim()) {
       return null;
@@ -310,6 +349,7 @@ export class ResourceInfoCardComponent implements OnInit {
     }
   }
 
+  /** Format ISO dates into a readable short date. */
   private formatDate(value: string | null | undefined): string | null {
     if (!value) {
       return null;
@@ -327,6 +367,7 @@ export class ResourceInfoCardComponent implements OnInit {
     }).format(parsed);
   }
 
+  /** Format saved count with pluralization. */
   private formatSavesCount(value: unknown): string | null {
     if (typeof value !== 'number' || !Number.isFinite(value)) {
       return null;
@@ -335,6 +376,7 @@ export class ResourceInfoCardComponent implements OnInit {
     return `${value} ${value === 1 ? 'save' : 'saves'}`;
   }
 
+  /** Convert a value to a trimmed string. */
   private asString(value: unknown): string | null {
     if (typeof value !== 'string') {
       return null;
@@ -344,6 +386,7 @@ export class ResourceInfoCardComponent implements OnInit {
     return trimmed || null;
   }
 
+  /** Build a row with fallback text and tone. */
   private createRow(
     label: string,
     value: string | null | undefined,
@@ -368,6 +411,7 @@ export class ResourceInfoCardComponent implements OnInit {
     };
   }
 
+  /** Humanize facet values by converting to title case. */
   private humanizeFacetValue(value: string | null | undefined): string {
     return value
       ?.replace(/[-_]+/g, ' ')

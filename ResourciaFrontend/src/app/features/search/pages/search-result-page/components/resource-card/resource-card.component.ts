@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SearchResultResourceModel } from '../../../../../../shared/models/search-result-resource';
 
+/**
+ * Card view for a single resource in search results.
+ */
 @Component({
   selector: 'app-resource-card',
   standalone: true,
@@ -12,28 +15,37 @@ import { SearchResultResourceModel } from '../../../../../../shared/models/searc
   styleUrl: './resource-card.component.scss',
 })
 export class ResourceCardComponent {
+  /** Resource data to render. */
   @Input() resource: SearchResultResourceModel | null = null;
+  /** Emit when the user clicks to open the resource URL. */
   @Output() open = new EventEmitter<SearchResultResourceModel>();
+  /** Emit when the user clicks to share the resource. */
   @Output() share = new EventEmitter<SearchResultResourceModel>();
 
+  /** Router used to navigate to resource detail. */
   private router = inject(Router);
 
+  /** Whether a non-empty description is available. */
   get hasDescription(): boolean {
     return !!this.resource?.description?.trim();
   }
 
+  /** Display text for the description (fallback copy if empty). */
   get descriptionText(): string {
     return this.resource?.description?.trim() || 'No description yet — Add a one-sentence summary';
   }
 
+  /** Tags displayed on the card (limited set). */
   get visibleTags(): string[] {
     return this.displayTags.slice(0, 3);
   }
 
+  /** Count of hidden extra tags. */
   get extraTagCount(): number {
     return Math.max(this.displayTags.length - this.visibleTags.length, 0);
   }
 
+  /** First letter for the avatar badge (from title or domain). */
   get logoLetter(): string {
     const title = this.resource?.title?.trim();
     if (title) {
@@ -44,6 +56,7 @@ export class ResourceCardComponent {
     return domain.charAt(0).toUpperCase() || 'R';
   }
 
+  /** Display type label derived from facets or learning style. */
   get displayType(): string {
     const resource = this.resource;
     if (!resource) {
@@ -65,16 +78,19 @@ export class ResourceCardComponent {
     return 'Resource';
   }
 
+  /** Display average rating or a "New" badge. */
   get ratingText(): string {
     const averageRating = this.resource?.ratings?.averageRating ?? 0;
     return averageRating > 0 ? averageRating.toFixed(1) : 'New';
   }
 
+  /** Display review count string. */
   get ratingCountText(): string {
     const totalCount = this.resource?.ratings?.totalCount ?? 0;
     return totalCount > 0 ? `${totalCount} review${totalCount === 1 ? '' : 's'}` : 'No reviews yet';
   }
 
+  /** Derive display tags from facets and explicit tags. */
   private get displayTags(): string[] {
     if (!this.resource) {
       return [];
@@ -88,6 +104,7 @@ export class ResourceCardComponent {
     return [...new Set([...(this.resource.tags ?? []), ...facetTags])];
   }
 
+  /** Extract a clean domain name from a URL. */
   getDomain(url: string): string {
     try {
       const formatted = url.startsWith('http') ? url : `https://${url}`;
@@ -97,6 +114,7 @@ export class ResourceCardComponent {
     }
   }
 
+  /** Navigate to the resource detail page. */
   goToDetail() {
     if (!this.resource?.id) {
       return;

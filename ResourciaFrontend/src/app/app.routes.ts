@@ -1,8 +1,14 @@
+/**
+ * Top-level application route definitions and lazy-loaded feature mappings.
+ */
 import { Routes } from '@angular/router';
 import { canActivateAdminGuard } from './core/guards/admin.guard';
 import { canActivateGuard } from './core/guards/login.guard';
 import { CompleteProfileComponent } from './features/auth/pages/complete-profile/complete-profile.component';
 
+/**
+ * Router configuration for public, authenticated, and admin sections.
+ */
 export const routes: Routes = [
   {
     path: '',

@@ -10,6 +10,9 @@ import { Review } from '../../../../../../../../../../shared/models/review';
 import { DatePipe } from '@angular/common';
 import { ReviewService } from '../../../../../../../../../../core/services/review.service';
 
+/**
+ * Rating input widget for submitting a review on a resource.
+ */
 @Component({
   selector: 'app-resource-rating-input',
   imports: [ButtonComponent, TextareaComponent, DatePipe],
@@ -17,21 +20,27 @@ import { ReviewService } from '../../../../../../../../../../core/services/revie
   styleUrl: './resource-rating-input.component.scss',
 })
 export class ResourceRatingInputComponent implements OnInit {
+  /** Notify parent when a review is created/updated/deleted. */
   @Output() reviewChange = new EventEmitter<void>();
 
+  /** Review text form control. */
   reviewControl = new FormControl('');
+  /** Current resource id from route. */
   id: string | null = null;
 
+  /** Selected star rating (1-5). */
   rating = 0;
+  /** Hover state for star selection. */
   hoverRating = 0;
+  /** Cached text during submission. */
   text: string | null = null;
 
+  /** Submission state flag. */
   submitting = false;
+  /** Error message for submission failures. */
   error: string | null = null;
 
-<<<<<<< HEAD
-  constructor(private route: ActivatedRoute, private auth: AuthService, private resource: ResourceService, private router: Router) {}
-=======
+  /** Injected dependencies (see conflict resolution below). */
   currentUserReview: Review | null = null;
   currentUser: string | null = null;
 
@@ -44,8 +53,8 @@ export class ResourceRatingInputComponent implements OnInit {
     private review: ReviewService,
     private router: Router
   ) {}
->>>>>>> rescue-mission
 
+  /** Initialize resource id and restore any pending action. */
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
 
@@ -66,6 +75,7 @@ export class ResourceRatingInputComponent implements OnInit {
     }
   }
 
+  /** Load the current user's existing review (if any). */
   private fetchUserReview() {
     this.review.getUserReview(this.id!).subscribe({
       next: (review: Review | null) => {
@@ -76,28 +86,10 @@ export class ResourceRatingInputComponent implements OnInit {
     });
   }
 
+  /** Set a star rating, redirecting to login if required. */
   setRating(i: number) {
     if (!this.auth.isLoggedIn()) {
 
-<<<<<<< HEAD
-    // ✅ store action BEFORE redirect
-    this.auth.setPendingAction({
-      type: 'setRating',
-      payload: {
-        star: i,
-        text: this.text
-      }
-    });
-
-    // ✅ THIS triggers the guard flow
-    this.router.navigate(['/login'], {
-      queryParams: {
-        returnUrl: this.router.url
-      }
-    });
-
-    return;
-=======
       this.auth.setPendingAction(
         { type: 'setRating', payload: { 
             star: i, 
@@ -109,24 +101,27 @@ export class ResourceRatingInputComponent implements OnInit {
       this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
 
       return;
->>>>>>> rescue-mission
     }
 
     this.rating = i;
   }
 
+  /** Update hover state for star rating. */
   setHover(value: number) {
     this.hoverRating = value;
   }
 
+  /** Clear hover state for star rating. */
   clearHover() {
     this.hoverRating = 0;
   }
 
+  /** Rating displayed in the UI (hover takes precedence). */
   get displayRating(): number {
     return this.hoverRating || this.rating;
   }
 
+  /** Submit the review or redirect to login if required. */
   submitReview() {
     if (!this.auth.requireAuth()) 
     {
@@ -146,6 +141,7 @@ export class ResourceRatingInputComponent implements OnInit {
     this.doSubmit();
   }
 
+  /** Delete the user's review if it exists. */
   requestDeleteReview() {
     if (!this.currentUserReview || !this.currentUserReview.id) return;
 
@@ -167,6 +163,7 @@ export class ResourceRatingInputComponent implements OnInit {
     });
   }
 
+  /** Build the request payload and submit the review. */
   private doSubmit() {
     this.text = this.reviewControl.value || '';
 

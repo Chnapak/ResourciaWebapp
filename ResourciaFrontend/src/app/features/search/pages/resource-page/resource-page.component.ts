@@ -8,6 +8,9 @@ import { ResourceService } from '../../../../core/services/resource.service';
 import { ToasterService } from '../../../../shared/toaster/toaster.service';
 import { ResourceSaveStateModel } from '../../../../shared/models/resource-save-state';
 
+/**
+ * Resource detail page that loads a single resource and its metadata.
+ */
 @Component({
   selector: 'app-resource-page',
   imports: [ ResourceHeroComponent, ResourcePageBodyComponent ],
@@ -15,10 +18,15 @@ import { ResourceSaveStateModel } from '../../../../shared/models/resource-save-
   styleUrl: './resource-page.component.scss',
 })
 export class ResourcePageComponent {
+  /** Route param id. */
   resourceId: string | null = null;
+  /** Loaded resource model. */
   resource: ResourceDetailModel | null = null;
+  /** Loading state for the page. */
   loading: boolean = true;
+  /** Error message for loading failures. */
   error: string | null = null;
+  /** Guard against duplicate save/unsave requests. */
   favoritePending = false;
 
   constructor(
@@ -28,6 +36,7 @@ export class ResourcePageComponent {
     private toaster: ToasterService
   ) {}
 
+  /** Pull the resource id from route params and load data. */
   ngOnInit() {
     this.resourceId = this.route.snapshot.paramMap.get('id');
     if (!this.resourceId) {
@@ -39,6 +48,7 @@ export class ResourcePageComponent {
     this.fetchResource(this.resourceId);
   }
 
+  /** Load resource details by id. */
   fetchResource(id: string) {
     this.loading = true;
     this.resourceService.getResource(id).subscribe({
@@ -58,6 +68,7 @@ export class ResourcePageComponent {
     });
   }
 
+  /** Toggle save/unsave for the current user. */
   toggleFavorite(): void {
     const resourceId = this.resource?.id;
     if (!resourceId) {
@@ -95,6 +106,7 @@ export class ResourcePageComponent {
     });
   }
 
+  /** Load save state (isSaved + count) for the logged-in user. */
   private loadSaveState(resourceId: string): void {
     if (!this.authService.isLoggedIn()) {
       this.applySaveState({ isSaved: false, savesCount: this.resource?.savesCount ?? 0 });
@@ -110,6 +122,7 @@ export class ResourcePageComponent {
     });
   }
 
+  /** Apply save state to the current resource. */
   private applySaveState(state: ResourceSaveStateModel): void {
     if (!this.resource) {
       return;

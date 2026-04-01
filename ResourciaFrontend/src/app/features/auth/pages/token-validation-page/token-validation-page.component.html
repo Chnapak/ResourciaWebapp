@@ -1,9 +1,11 @@
+<!-- Token validation flow with optional resource submission -->
 <main class="flex flex-col items-center py-4">
   <div class="w-full max-w-3xl flex flex-col items-center">
     <div class="text-center mb-2 text-sm text-gray-500">
       Takes about 2 minutes. Sharing a resource is optional.
     </div>
 
+    <!-- Progress indicator -->
     <div class="relative w-full max-w-3xl mb-8">
       <div class="absolute w-[calc(100%-20px)] bg-gray-300 rounded-full h-1.5 top-[12px] left-2 right-2 -translate-y-1/2">
         <div
@@ -49,7 +51,9 @@
       </div>
     </div>
 
+    <!-- Step content container -->
     <div class="bg-white rounded-lg shadow-md border border-gray-300 p-8 w-full max-w-2xl">
+      <!-- Step 1: confirm email -->
       <div id="step-1" [hidden]="step !== 1">
         <div class="flex items-center mb-6">
           <i class="fas fa-shield-alt text-blue-600 text-2xl mr-3"></i>
@@ -92,6 +96,7 @@
         </div>
       </div>
 
+      <!-- Step 2: optional resource submission -->
       <div id="step-2" [hidden]="step !== 2">
         <div class="flex items-center mb-6">
           <i class="fas fa-book-open text-blue-600 text-2xl mr-3"></i>
@@ -184,6 +189,7 @@
         </form>
       </div>
 
+      <!-- Step 3: completion -->
       <div id="step-3" [hidden]="step !== 3">
         <div class="flex items-center mb-6">
           <i class="fas fa-check-circle text-blue-600 text-2xl mr-3"></i>

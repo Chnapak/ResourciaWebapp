@@ -1,5 +1,7 @@
+<!-- Checkbox facet group. -->
 <div role="group" [attr.aria-label]="label">
   @for (opt of options; track opt.value; let i = $index) {
+    <!-- Individual checkbox option. -->
     <app-checkbox
       [label]="opt.label"
       [badge]="opt.badge ?? ''"

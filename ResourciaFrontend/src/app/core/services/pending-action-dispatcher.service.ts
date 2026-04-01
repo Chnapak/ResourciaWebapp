@@ -1,3 +1,6 @@
+/**
+ * Dispatcher that replays deferred actions after authentication completes.
+ */
 import { Injectable } from '@angular/core';
 import { PendingAction } from '../auth/auth.service';
 
@@ -10,7 +13,9 @@ import { PendingAction } from '../auth/auth.service';
 @Injectable({ providedIn: 'root' })
 export class PendingActionDispatcher {
 
-  /** Attempt to dispatch a pending action. Returns true if handled. */
+  /**
+   * Attempts to dispatch a pending action and returns true if handled.
+   */
   dispatch(action: PendingAction): boolean {
     switch (action.type) {
       case 'SUBMIT_REVIEW':
@@ -35,21 +40,25 @@ export class PendingActionDispatcher {
     }
   }
 
+  /** Placeholder replay for review submissions. */
   private replayReview(payload: any): void {
     // TODO: inject and call ReviewService.submitReview(payload) when implemented
     console.info('[PendingActionDispatcher] Would replay SUBMIT_REVIEW:', payload);
   }
 
+  /** Placeholder replay for review votes. */
   private replayVote(payload: any): void {
     // TODO: inject and call ReviewService.voteReview(payload) when implemented
     console.info('[PendingActionDispatcher] Would replay VOTE_REVIEW:', payload);
   }
 
+  /** Placeholder replay for discussion comments. */
   private replayComment(payload: any): void {
     // TODO: inject and call DiscussionService.addComment(payload) when implemented
     console.info('[PendingActionDispatcher] Would replay ADD_COMMENT:', payload);
   }
 
+  /** Placeholder replay for resource submissions. */
   private replaySubmitResource(payload: any): void {
     // TODO: inject and call ResourceService.createResource(payload) when implemented
     console.info('[PendingActionDispatcher] Would replay SUBMIT_RESOURCE:', payload);

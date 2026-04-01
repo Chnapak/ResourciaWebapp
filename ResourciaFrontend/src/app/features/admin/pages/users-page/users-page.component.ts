@@ -1,3 +1,6 @@
+/**
+ * Admin page for viewing and moderating users.
+ */
 import { Component, inject, OnInit } from '@angular/core';
 import { AdminHeaderComponent } from '../../components/admin-header/admin-header.component';
 import { AdminTableComponent } from '../../components/admin-table/admin-table.component';
@@ -12,7 +15,11 @@ import { AdminService } from '../../../../core/services/admin.service';
   templateUrl: './users-page.component.html',
   styleUrl: './users-page.component.scss'
 })
+/**
+ * Hosts the admin user table and selection logic.
+ */
 export class UsersAdminPageComponent implements OnInit {
+  /** Column definitions for the user table. */
   columns: AdminTableColumn[] = [
     { key: 'user', label: $localize`User`, widthClass: 'flex-1' },
     { key: 'resources', label: $localize`Resources`, widthClass: 'w-32' },
@@ -20,23 +27,30 @@ export class UsersAdminPageComponent implements OnInit {
     { key: 'status', label: $localize`Status`, widthClass: 'w-28' },
     { key: 'actions', label: '', widthClass: 'w-20', align: 'right' },
   ];
+  /** Selected user ids for bulk actions. */
   selectedIds = new Set<string>();
 
+  /** Current list of users. */
   users: AdminUser[] = [];
+  /** Admin API client used to fetch users. */
   protected readonly AdminService = inject(AdminService);
 
+  /** Loads users on component initialization. */
   ngOnInit(): void {
     this.loadUsers();
   }
 
+  /** True when all rows are selected. */
   get allSelected(): boolean {
     return this.users.length > 0 && this.selectedIds.size === this.users.length;
   }
 
+  /** True when some rows are selected but not all. */
   get someSelected(): boolean {
     return this.selectedIds.size > 0 && !this.allSelected;
   }
 
+  /** Toggles selection for all rows. */
   onToggleAll(checked: boolean): void {
     if (checked) {
       this.users.forEach(user => this.selectedIds.add(user.id));
@@ -46,6 +60,7 @@ export class UsersAdminPageComponent implements OnInit {
     this.selectedIds.clear();
   }
 
+  /** Toggles selection for a single user. */
   onToggleOne(userId: string, checked: boolean): void {
     if (checked) {
       this.selectedIds.add(userId);
@@ -55,6 +70,7 @@ export class UsersAdminPageComponent implements OnInit {
     this.selectedIds.delete(userId);
   }
 
+  /** Loads the user list and reconciles the selection set. */
   private loadUsers(): void {
     this.AdminService.getUsers().subscribe({
       next: ({ items }) => {

@@ -1,3 +1,6 @@
+/**
+ * Full-page registration view with Turnstile captcha.
+ */
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { 
   AbstractControl, FormBuilder, Validators, ValidatorFn, ValidationErrors, 
@@ -18,24 +21,41 @@ declare var turnstile: any;
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
+/**
+ * Collects registration info and triggers confirmation emails.
+ */
 export class RegistrationPageComponent {
+  /** Form builder for the registration form. */
   private readonly fb = inject(FormBuilder);
+  /** Auth service used to register users. */
   private readonly authService = inject(AuthService);
+  /** Router used for navigation after successful registration. */
   private readonly router = inject(Router);
 
+  /** Turnstile site key for captcha rendering. */
   public readonly siteKey = environment.siteKey;
+  /** Base API path for external auth providers. */
   private readonly baseUrl = '/api/Auth';
 
+  /** Whether a register request is in progress. */
   isSubmitting = false;
+  /** Whether resend confirmation is in cooldown. */
   isCooldown = false;
+  /** True when the email is already in use. */
   emailInUse = false;
+  /** True when the display name is already in use. */
   usernameInUse = false;
+  /** True when a non-specific error occurs. */
   generalError = false;
+  /** Cooldown duration in seconds for resend link. */
   cooldownSeconds = 30;
+  /** Reference to the resend button element (optional). */
   resendButton = document.getElementById('resend-button ');
+  /** Label shown on the resend button during cooldown. */
   resendButtonText = 'Resend Email';
 
 
+  /** Renders the Turnstile widget after the view initializes. */
   ngAfterViewInit() {
     turnstile.render('#turnstile-container', {
     sitekey: this.siteKey,
@@ -43,6 +63,7 @@ export class RegistrationPageComponent {
     });
   }
 
+  /** Validator that checks password and confirmation match. */
   private passwordMatchValidator: ValidatorFn = (
     group: AbstractControl
   ): ValidationErrors | null => {
@@ -51,6 +72,7 @@ export class RegistrationPageComponent {
     return password === confirmPassword ? null : { passwordMismatch: true };
   };
 
+  /** Validator that enforces a basic password strength policy. */
   private strengthCheck() {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
@@ -65,6 +87,7 @@ export class RegistrationPageComponent {
     }
   }
 
+  /** Validator that applies a stricter email format check. */
   private strictEmailCheck() {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
@@ -77,7 +100,7 @@ export class RegistrationPageComponent {
     }
   }
 
-  // Form group with password match validator
+  /** Registration form with validation rules. */
   public form = this.fb.group(
     {
       displayName: ['', Validators.required],
@@ -92,6 +115,7 @@ export class RegistrationPageComponent {
 
   
 
+  /** Validates input and submits the registration request. */
   protected onSubmit(): void {
     this.isSubmitting = true;
     const tokenInput = document.querySelector('input[name="cf-turnstile-response"]');
@@ -154,6 +178,7 @@ export class RegistrationPageComponent {
     });
   }
 
+  /** Resends the confirmation email and starts cooldown. */
   resendEmail() {
     console.log('Resending Email...');
     this.startCooldown();
@@ -173,6 +198,7 @@ export class RegistrationPageComponent {
     });
   }
 
+  /** Starts the resend cooldown timer and updates button text. */
   startCooldown() {
     this.isCooldown = true;
     let remaining = this.cooldownSeconds;
@@ -192,6 +218,7 @@ export class RegistrationPageComponent {
     }, 1000)
   }
 
+  /** Redirects to the external login provider flow. */
   loginWithProvider(provider: string) {
     window.location.href = `${this.baseUrl}/ExternalLogin?provider=${provider}`;
   }

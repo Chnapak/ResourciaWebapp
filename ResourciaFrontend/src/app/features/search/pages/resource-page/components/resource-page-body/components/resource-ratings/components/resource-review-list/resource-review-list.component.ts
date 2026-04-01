@@ -5,6 +5,9 @@ import { ButtonComponent } from '../../../../../../../../../../shared/ui/button/
 import { ResourceDetailModel } from '../../../../../../../../../../shared/models/resource-detail';
 import { ReviewService } from '../../../../../../../../../../core/services/review.service';
 
+/**
+ * Paginated list of reviews for a resource.
+ */
 @Component({
   selector: 'app-resource-review-list',
   imports: [ResourceReviewItemComponent, ButtonComponent],
@@ -12,15 +15,22 @@ import { ReviewService } from '../../../../../../../../../../core/services/revie
   styleUrl: './resource-review-list.component.scss',
 })
 export class ResourceReviewListComponent implements OnChanges {
+  /** Resource details (including initial reviews). */
   @Input() resource: ResourceDetailModel | null = null;
 
+  /** Loaded reviews to render. */
   reviews: Review[] = [];
+  /** Current pagination page. */
   page = 1;
+  /** Page size for review API. */
   pageSize = 10;
+  /** Total reviews available. */
   totalItems = 0;
 
+  /** Review API service. */
   private reviewService = inject(ReviewService);
 
+  /** Reload reviews when the resource changes. */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['resource'] && this.resource) {
       this.page = 1;
@@ -29,6 +39,7 @@ export class ResourceReviewListComponent implements OnChanges {
     }
   }
 
+  /** Load the first page of reviews with a fallback. */
   loadReviews() {
     if (!this.resource) return;
 
@@ -54,6 +65,7 @@ export class ResourceReviewListComponent implements OnChanges {
       });
   }
 
+  /** Load the next page of reviews and append results. */
   loadMoreReviews(): void {
     if (!this.resource) return;
 
@@ -75,20 +87,24 @@ export class ResourceReviewListComponent implements OnChanges {
       });
   }
 
+  /** Resource id for child components. */
   get resourceId(): string {
     return this.resource ? this.resource.id : '';
   }
 
+  /** Seed from resource reviews while API loads. */
   private seedReviewsFromResource(): void {
     const fallbackReviews = this.getFallbackReviews();
     this.reviews = fallbackReviews;
     this.totalItems = fallbackReviews.length;
   }
 
+  /** Normalize review data from the resource payload. */
   private getFallbackReviews(): Review[] {
     return (this.resource?.reviews ?? []).map(review => this.normalizeReview(review));
   }
 
+  /** Ensure a review object has all required fields. */
   private normalizeReview(review: Partial<Review>): Review {
     return {
       id: review.id ?? null,

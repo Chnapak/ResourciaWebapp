@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+/**
+ * Static Terms of Service page.
+ */
 @Component({
   selector: 'app-tos-page',
   imports: [],
@@ -7,5 +10,5 @@ import { Component } from '@angular/core';
   styleUrl: './tos-page.component.scss'
 })
 export class TosPageComponent {
-
+  // Template-only page.
 }

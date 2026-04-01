@@ -1,3 +1,4 @@
+<!-- Registration form and post-signup success panel -->
 @if (!showSuccess) {
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col items-center w-full">
 
@@ -95,6 +96,7 @@
       <p i18n class="w-70 text-left text-xs text-red-600 mt-2">Something went wrong, please try again.</p>
     }
 
+    <!-- Submit button -->
     <button
       type="submit"
       class="w-70 mt-4 py-2.5 text-sm font-semibold text-white rounded-[8px] transition-colors
@@ -133,6 +135,7 @@
       <span class="font-semibold text-blue-600">{{ registeredEmail }}</span>.
     </p>
     <p i18n class="text-sm text-gray-400 mb-3">Didn't receive it? Check your spam folder or resend.</p>
+    <!-- Resend confirmation button with cooldown state -->
     <button
       (click)="resendEmail()"
       [disabled]="isCooldown"

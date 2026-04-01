@@ -1,6 +1,8 @@
+<!-- Admin users page -->
 <div class="bg-white rounded-lg shadow-sm">
-<!-- Users Section -->
+    <!-- Users header -->
     <app-admin-header [title]="'Users'"></app-admin-header>
+    <!-- Users table with selectable rows -->
     <app-admin-table
         [columns]="columns"
         [selectable]="true"
@@ -9,6 +11,7 @@
         (toggleAll)="onToggleAll($event)"
     >
         @for (user of users; track user.id) {
+            <!-- Each row displays user info and actions -->
             <app-user-row
                 [user]="user"
                 [selected]="selectedIds.has(user.id)"

@@ -3,6 +3,9 @@ import { Router, RouterLink, RouterOutlet } from "@angular/router";
 import { HeroBannerComponent } from "./components/hero-banner/hero-banner.component";
 import { ChapterSectionComponent } from "./components/chapter-section/chapter-section.component";
 
+/**
+ * Public landing page that stitches together the hero and chapter sections.
+ */
 @Component({
   selector: "app-home-page",
   standalone: true,
@@ -11,6 +14,14 @@ import { ChapterSectionComponent } from "./components/chapter-section/chapter-se
   styleUrl: "./home-page.component.scss"
 })
 export class HomePageComponent {
+  /**
+   * Copy blocks rendered in the chapter section list.
+   * - id: in-page anchor / section id.
+   * - number: display number for the section.
+   * - label: short section label.
+   * - heading/subheading: headline copy.
+   * - text: body copy.
+   */
   chapters = [
     {
       id: "problem",

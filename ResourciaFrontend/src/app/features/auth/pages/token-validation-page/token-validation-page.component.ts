@@ -1,3 +1,6 @@
+/**
+ * Email confirmation page with optional resource creation step.
+ */
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
@@ -15,7 +18,11 @@ import { Filter as SearchSchemaFilter } from '../../../../shared/models/search-s
   templateUrl: './token-validation-page.component.html',
   styleUrl: './token-validation-page.component.scss'
 })
+/**
+ * Confirms an email token and optionally guides the user to add a resource.
+ */
 export class TokenValidationPageComponent implements OnInit {
+  /** Preferred filter keys used to pick a primary facet for the resource form. */
   private readonly featuredFilterKeys = [
     'subject',
     'type',
@@ -24,41 +31,60 @@ export class TokenValidationPageComponent implements OnInit {
     'format',
   ];
 
+  /** Form builder for the resource form. */
   protected readonly fb = inject(FormBuilder);
+  /** Auth service used to validate the confirmation token. */
   protected readonly authService = inject(AuthService);
+  /** Resource service used to submit the optional resource. */
   protected readonly resourceService = inject(ResourceService);
+  /** Router used for navigation between steps. */
   protected readonly router = inject(Router);
+  /** Route used to read token and email parameters. */
   private readonly route = inject(ActivatedRoute);
 
+  /** Whether the token confirmation is in progress. */
   verifying = false;
+  /** Whether the resource submission is in progress. */
   submittingResource = false;
+  /** Whether primary filter options are loading. */
   filtersLoading = true;
+  /** Optional error message displayed to the user. */
   error: string | null = null;
+  /** Current step in the multi-step flow. */
   step = 1;
+  /** Newly created resource id, if any. */
   createdResourceId: string | null = null;
 
+  /** Email parsed from the confirmation link. */
   protected email?: string | null;
+  /** Token parsed from the confirmation link. */
   protected token?: string | null;
+  /** Primary filter used to tag the optional resource. */
   protected primaryFilter: SearchSchemaFilter | null = null;
 
+  /** Reactive form for the optional resource submission. */
   readonly resourceForm = this.fb.nonNullable.group({
     resourceTitle: ['', [Validators.required]],
     resourceUrl: ['', [Validators.required, this.resourceUrlValidator()]],
     resourcePrimaryFilter: [''],
   });
 
+  /** Convenience accessor for the title control. */
   get titleControl(): AbstractControl | null {
     return this.resourceForm.get('resourceTitle');
   }
 
+  /** Convenience accessor for the URL control. */
   get urlControl(): AbstractControl | null {
     return this.resourceForm.get('resourceUrl');
   }
 
+  /** True when the primary filter has selectable values. */
   get hasPrimaryFilterOptions(): boolean {
     return (this.primaryFilter?.values?.length ?? 0) > 0;
   }
 
+  /** Reads query params and loads the primary filter for the resource form. */
   ngOnInit(): void {
     const queryParams = this.route.snapshot.queryParams;
     this.token = typeof queryParams['token'] === 'string'
@@ -75,6 +101,7 @@ export class TokenValidationPageComponent implements OnInit {
     this.loadPrimaryFilter();
   }
 
+  /** Confirms the email token via the auth service. */
   confirmEmail(): void {
     if (!this.token || !this.email || this.verifying) {
       return;
@@ -95,6 +122,7 @@ export class TokenValidationPageComponent implements OnInit {
     });
   }
 
+  /** Submits the optional resource form. */
   addResource(): void {
     if (this.resourceForm.invalid) {
       this.resourceForm.markAllAsTouched();
@@ -117,6 +145,7 @@ export class TokenValidationPageComponent implements OnInit {
     });
   }
 
+  /** Skips resource creation and advances to the final step. */
   skipResource(): void {
     if (this.submittingResource) {
       return;
@@ -126,10 +155,12 @@ export class TokenValidationPageComponent implements OnInit {
     this.step = 3;
   }
 
+  /** Navigates to the home page. */
   goHome(): void {
     this.router.navigate(['/']);
   }
 
+  /** Navigates to the newly created resource (or search as fallback). */
   viewCreatedResource(): void {
     if (!this.createdResourceId) {
       this.router.navigate(['/search']);
@@ -139,6 +170,7 @@ export class TokenValidationPageComponent implements OnInit {
     this.router.navigate(['/resource', this.createdResourceId]);
   }
 
+  /** Loads the primary filter used in the resource form. */
   private loadPrimaryFilter(): void {
     this.filtersLoading = true;
 
@@ -162,6 +194,7 @@ export class TokenValidationPageComponent implements OnInit {
     });
   }
 
+  /** Builds the payload for resource creation based on the form. */
   private buildPayload(): CreateResourceRequestModel {
     const payload: CreateResourceRequestModel = {
       title: this.resourceForm.controls.resourceTitle.value.trim(),
@@ -178,6 +211,7 @@ export class TokenValidationPageComponent implements OnInit {
     return payload;
   }
 
+  /** Validates resource URLs with a permissive protocol check. */
   private resourceUrlValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = this.toNullableString(control.value);
@@ -194,6 +228,7 @@ export class TokenValidationPageComponent implements OnInit {
     };
   }
 
+  /** Normalizes URLs to ensure a protocol is present. */
   private normalizeUrl(value: string): string {
     const trimmed = value.trim();
     if (/^https?:\/\//i.test(trimmed)) {
@@ -203,6 +238,7 @@ export class TokenValidationPageComponent implements OnInit {
     return `https://${trimmed}`;
   }
 
+  /** Coerces a value into a trimmed string or null. */
   private toNullableString(value: unknown): string | null {
     if (typeof value !== 'string') {
       return null;

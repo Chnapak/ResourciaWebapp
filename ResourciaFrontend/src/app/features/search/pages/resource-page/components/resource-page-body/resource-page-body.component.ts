@@ -8,6 +8,9 @@ import { ResourceDetailModel } from '../../../../../../shared/models/resource-de
 import { ResourceInfoCardComponent } from './components/resource-info-card/resource-info-card.component';
 import { ResourceActionCardComponent } from './components/resource-action-card/resource-action-card.component';
 
+/**
+ * Body content for the resource detail page.
+ */
 @Component({
   selector: 'app-resource-page-body',
   standalone: true,
@@ -16,8 +19,12 @@ import { ResourceActionCardComponent } from './components/resource-action-card/r
   styleUrl: './resource-page-body.component.scss',
 })
 export class ResourcePageBodyComponent {
+  /** Resource details used in the body sections. */
   @Input() resource: ResourceDetailModel | null = null
+  /** Disable favorite actions while API calls are pending. */
   @Input() favoritePending = false;
+  /** Notify parent when info (e.g., description) changes. */
   @Output() infoChange = new EventEmitter<void>();
+  /** Emit when the favorite button is toggled. */
   @Output() favoriteToggle = new EventEmitter<void>();
 }

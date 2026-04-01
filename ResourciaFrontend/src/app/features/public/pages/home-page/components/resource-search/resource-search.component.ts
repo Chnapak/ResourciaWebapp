@@ -6,18 +6,34 @@ import { SearchService } from '../../../../../../core/services/search.service';
 import { Filter as SearchSchemaFilter, FilterValue } from '../../../../../../shared/models/search-schema';
 import { FilterKind } from '../../../../../../shared/models/filter-kind';
 
+/**
+ * Supported UI controls for home page filters.
+ */
 type HomeFilterControlType = 'select' | 'text';
 
+/**
+ * Normalized filter representation used by the home page search form.
+ */
 interface HomeSearchFilter {
+  /** Query string key. */
   key: string;
+  /** Human-friendly label used in the UI. */
   label: string;
+  /** Original filter kind from the schema. */
   kind: FilterKind;
+  /** Which input widget to render. */
   controlType: HomeFilterControlType;
+  /** Placeholder for the "no selection" option. */
   emptyOptionLabel?: string;
+  /** Placeholder text for text inputs. */
   placeholder?: string;
+  /** Selectable options for facet/boolean filters. */
   options: FilterValue[];
 }
 
+/**
+ * Compact search form shown in the hero banner on the public home page.
+ */
 @Component({
   selector: 'app-resource-search',
   imports: [CommonModule, FormsModule],
@@ -25,17 +41,23 @@ interface HomeSearchFilter {
   styleUrl: './resource-search.component.scss'
 })
 export class ResourceSearchComponent implements OnInit {
+  /** Max number of filters to surface in the hero search form. */
   readonly homeFilterLimit = 3;
 
+  /** Filters chosen for the home page widget. */
   filters: HomeSearchFilter[] = [];
+  /** Current form values keyed by filter key. */
   formValues: Record<string, string> = {};
+  /** Toggles the loading state while the search schema is fetched. */
   isSchemaLoading = true;
 
+  /** Inject router navigation and schema fetching services. */
   constructor(
     private router: Router,
     private searchService: SearchService
   ) {}
 
+  /** Load the schema and build the home-page filters. */
   ngOnInit(): void {
     this.searchService.schema().subscribe({
       next: (schema) => {
@@ -54,6 +76,7 @@ export class ResourceSearchComponent implements OnInit {
     });
   }
 
+  /** Navigate to the full search page with the filled-in query params. */
   onSearch(): void {
     const queryParams: Record<string, string> = {};
 
@@ -79,6 +102,9 @@ export class ResourceSearchComponent implements OnInit {
     this.router.navigate(['/search'], { queryParams });
   }
 
+  /**
+   * Pick the best filters for the hero form based on preferred kinds/keys.
+   */
   private pickHomeFilters(filters: SearchSchemaFilter[]): HomeSearchFilter[] {
     const available = filters.filter((filter) => this.isEligibleHomeFilter(filter));
     const selected: SearchSchemaFilter[] = [];
@@ -107,6 +133,9 @@ export class ResourceSearchComponent implements OnInit {
       .map((filter) => this.toHomeFilter(filter));
   }
 
+  /**
+   * Add a preferred filter if a match exists and we still have room.
+   */
   private addPreferredFilter(
     selected: SearchSchemaFilter[],
     available: SearchSchemaFilter[],
@@ -125,6 +154,9 @@ export class ResourceSearchComponent implements OnInit {
     available.splice(index, 1);
   }
 
+  /**
+   * Determine whether a schema filter can be shown in the hero widget.
+   */
   private isEligibleHomeFilter(filter: SearchSchemaFilter): boolean {
     switch (filter.kind) {
       case FilterKind.Facet:
@@ -137,6 +169,9 @@ export class ResourceSearchComponent implements OnInit {
     }
   }
 
+  /**
+   * Match filters by key or resource field name, normalized for comparison.
+   */
   private matchesFilter(filter: SearchSchemaFilter, identifiers: string[]): boolean {
     const normalizedKey = this.normalizeIdentifier(filter.key);
     const normalizedField = this.normalizeIdentifier(filter.resourceField);
@@ -147,6 +182,9 @@ export class ResourceSearchComponent implements OnInit {
     });
   }
 
+  /**
+   * Convert a schema filter into the UI model used by this component.
+   */
   private toHomeFilter(filter: SearchSchemaFilter): HomeSearchFilter {
     switch (filter.kind) {
       case FilterKind.Text:
@@ -187,6 +225,9 @@ export class ResourceSearchComponent implements OnInit {
     }
   }
 
+  /**
+   * Select a display label for a filter, falling back to a default.
+   */
   private toDisplayLabel(filter: SearchSchemaFilter, fallback: string): string {
     if (filter.label?.trim()) {
       return filter.label.trim();
@@ -200,16 +241,25 @@ export class ResourceSearchComponent implements OnInit {
     return fallback;
   }
 
+  /**
+   * Placeholder text for facet filters (select inputs).
+   */
   private toFacetPlaceholder(filter: SearchSchemaFilter): string {
     const label = this.toDisplayLabel(filter, 'Filter').toLowerCase();
     return `Any ${label}`;
   }
 
+  /**
+   * Placeholder text for text filters.
+   */
   private toTextPlaceholder(filter: SearchSchemaFilter): string {
     const label = this.toDisplayLabel(filter, 'filter').toLowerCase();
     return `Search ${label}...`;
   }
 
+  /**
+   * Normalize identifiers to improve matching between keys and fields.
+   */
   private normalizeIdentifier(value: string | null | undefined): string {
     return String(value ?? '')
       .replace(/[\s_-]+/g, '')

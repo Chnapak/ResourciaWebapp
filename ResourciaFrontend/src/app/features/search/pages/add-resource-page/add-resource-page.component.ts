@@ -7,8 +7,14 @@ import { CreateResourceRequestModel } from '../../../../shared/models/create-res
 import { FilterKind } from '../../../../shared/models/filter-kind';
 import { Filter as SearchSchemaFilter } from '../../../../shared/models/search-schema';
 
+/**
+ * Resource fields that map directly to request properties (non-facet).
+ */
 type DirectResourceField = 'author' | 'isFree' | 'learningStyle' | 'rating' | 'tags' | 'year';
 
+/**
+ * Page for submitting a new resource and optional filter metadata.
+ */
 @Component({
   selector: 'app-add-resource-page',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
@@ -16,12 +22,17 @@ type DirectResourceField = 'author' | 'isFree' | 'learningStyle' | 'rating' | 't
   styleUrl: './add-resource-page.component.scss'
 })
 export class AddResourcePageComponent implements OnInit {
+  /** Expose enum to template for switch/case rendering. */
   protected readonly FilterKind = FilterKind;
 
+  /** Form builder for the resource form. */
   private readonly fb = inject(UntypedFormBuilder);
+  /** API service used to create resources and load schema. */
   private readonly resourceService = inject(ResourceService);
+  /** Router used for post-submit navigation. */
   private readonly router = inject(Router);
 
+  /** Priority filter keys surfaced at the top of the form. */
   private readonly featuredFilterKeys = new Set([
     'subject',
     'type',
@@ -30,37 +41,48 @@ export class AddResourcePageComponent implements OnInit {
     'format',
   ]);
 
+  /** Base form group for required resource fields. */
   readonly resourceForm = this.fb.group({
     title: ['', [Validators.required]],
     url: ['', [Validators.required, this.resourceUrlValidator()]],
     description: [''],
   });
 
+  /** Filters returned by the backend schema. */
   schemaFilters: SearchSchemaFilter[] = [];
+  /** Loading state for schema-driven filters. */
   filtersLoading = true;
+  /** Submission state for the create request. */
   submitting = false;
+  /** Error message for schema or submit failures. */
   error: string | null = null;
 
+  /** Load schema metadata on page init. */
   ngOnInit(): void {
     this.loadSchema();
   }
 
+  /** Filters shown in the "featured" group. */
   get featuredFilters(): SearchSchemaFilter[] {
     return this.schemaFilters.filter((filter) => this.isFeaturedFilter(filter));
   }
 
+  /** Remaining optional filters. */
   get optionalFilters(): SearchSchemaFilter[] {
     return this.schemaFilters.filter((filter) => !this.isFeaturedFilter(filter));
   }
 
+  /** Shortcut to the title control. */
   get titleControl(): AbstractControl | null {
     return this.resourceForm.get('title');
   }
 
+  /** Shortcut to the url control. */
   get urlControl(): AbstractControl | null {
     return this.resourceForm.get('url');
   }
 
+  /** Submit the form payload to the API. */
   submit(): void {
     if (this.resourceForm.invalid) {
       this.resourceForm.markAllAsTouched();
@@ -82,31 +104,38 @@ export class AddResourcePageComponent implements OnInit {
     });
   }
 
+  /** Build a stable control name for a schema filter. */
   getFilterControlName(filter: SearchSchemaFilter): string {
     return `schema_${filter.key.replace(/[^a-zA-Z0-9]+/g, '_').toLowerCase()}`;
   }
 
+  /** Fetch the control for a schema filter if present. */
   getFilterControl(filter: SearchSchemaFilter): AbstractControl | null {
     return this.resourceForm.get(this.getFilterControlName(filter));
   }
 
+  /** Convenience check for facet options. */
   hasFacetOptions(filter: SearchSchemaFilter): boolean {
     return (filter.values?.length ?? 0) > 0;
   }
 
+  /** Whether the filter uses selectable values (facet with options). */
   usesSelectableValues(filter: SearchSchemaFilter): boolean {
     return filter.kind === FilterKind.Facet && this.hasFacetOptions(filter);
   }
 
+  /** Whether values should be stored in filterValues instead of direct fields. */
   usesStoredFilterValues(filter: SearchSchemaFilter): boolean {
     return filter.kind === FilterKind.Facet || this.getDirectFieldKey(filter.resourceField) === null;
   }
 
+  /** Check if a facet value is currently selected in the form control. */
   isFacetValueSelected(filter: SearchSchemaFilter, value: string): boolean {
     const selectedValues = this.getFilterControl(filter)?.value;
     return Array.isArray(selectedValues) && selectedValues.includes(value);
   }
 
+  /** Toggle a facet value in a multi-select control. */
   toggleFacetValue(filter: SearchSchemaFilter, value: string, checked: boolean): void {
     const control = this.getFilterControl(filter);
     if (!control) {
@@ -123,10 +152,12 @@ export class AddResourcePageComponent implements OnInit {
     control.markAsTouched();
   }
 
+  /** Input type for filters rendered as freeform inputs. */
   getInputType(filter: SearchSchemaFilter): 'number' | 'text' {
     return filter.kind === FilterKind.Range ? 'number' : 'text';
   }
 
+  /** Placeholder text for the filter input. */
   getInputPlaceholder(filter: SearchSchemaFilter): string {
     if (filter.kind === FilterKind.Range) {
       return filter.resourceField?.toLowerCase() === 'year'
@@ -141,6 +172,7 @@ export class AddResourcePageComponent implements OnInit {
     return `Enter ${filter.label.toLowerCase()}`;
   }
 
+  /** Fetch the resource schema and sync form controls. */
   private loadSchema(): void {
     this.filtersLoading = true;
 
@@ -158,6 +190,7 @@ export class AddResourcePageComponent implements OnInit {
     });
   }
 
+  /** Ensure form controls exist for the active schema filters. */
   private syncSchemaControls(): void {
     const activeControls = new Set(this.schemaFilters.map((filter) => this.getFilterControlName(filter)));
 
@@ -180,6 +213,7 @@ export class AddResourcePageComponent implements OnInit {
     });
   }
 
+  /** Build the API payload from the form values. */
   private buildPayload(): CreateResourceRequestModel {
     const payload: CreateResourceRequestModel = {
       title: this.resourceForm.get('title')?.value.trim(),
@@ -194,6 +228,7 @@ export class AddResourcePageComponent implements OnInit {
     };
   }
 
+  /** Build the filterValues map for schema filters. */
   private buildFilterValuePayload(): Record<string, string[]> {
     return this.schemaFilters.reduce<Record<string, string[]>>((filterValues, filter) => {
       if (!this.usesStoredFilterValues(filter)) {
@@ -222,6 +257,7 @@ export class AddResourcePageComponent implements OnInit {
     }, {});
   }
 
+  /** Build direct resource fields from non-facet filters. */
   private buildDirectFieldPayload(): Partial<CreateResourceRequestModel> {
     const payload: Partial<CreateResourceRequestModel> = {};
 
@@ -285,16 +321,19 @@ export class AddResourcePageComponent implements OnInit {
     return payload;
   }
 
+  /** Determine whether a schema filter is supported by this form. */
   private isSupportedFilter(filter: SearchSchemaFilter): boolean {
     return filter.kind === FilterKind.Facet
       || this.getDirectFieldKey(filter.resourceField) !== null
       || !filter.resourceField;
   }
 
+  /** Determine whether a filter should be featured at the top. */
   private isFeaturedFilter(filter: SearchSchemaFilter): boolean {
     return this.featuredFilterKeys.has(filter.key.toLowerCase());
   }
 
+  /** Map schema resourceField values to direct request fields. */
   private getDirectFieldKey(resourceField: string | null): DirectResourceField | null {
     switch (resourceField?.toLowerCase()) {
       case 'author':
@@ -314,6 +353,7 @@ export class AddResourcePageComponent implements OnInit {
     }
   }
 
+  /** Validate URL values and normalize missing protocol. */
   private resourceUrlValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = this.toNullableString(control.value);
@@ -330,6 +370,7 @@ export class AddResourcePageComponent implements OnInit {
     };
   }
 
+  /** Normalize URLs by ensuring a protocol prefix. */
   private normalizeUrl(value: string): string {
     const trimmed = value.trim();
     if (/^https?:\/\//i.test(trimmed)) {
@@ -339,16 +380,19 @@ export class AddResourcePageComponent implements OnInit {
     return `https://${trimmed}`;
   }
 
+  /** Parse a nullable integer from user input. */
   private toNullableInteger(value: unknown): number | null {
     const parsed = Number.parseInt(String(value ?? '').trim(), 10);
     return Number.isNaN(parsed) ? null : parsed;
   }
 
+  /** Parse a nullable float from user input. */
   private toNullableNumber(value: unknown): number | null {
     const parsed = Number.parseFloat(String(value ?? '').trim());
     return Number.isNaN(parsed) ? null : parsed;
   }
 
+  /** Trim a string and convert empty values to null. */
   private toNullableString(value: unknown): string | null {
     if (typeof value !== 'string') {
       return null;
@@ -358,6 +402,7 @@ export class AddResourcePageComponent implements OnInit {
     return trimmed || null;
   }
 
+  /** Convert a comma-separated string into a list of trimmed values. */
   private toStringList(value: unknown): string[] {
     return String(value ?? '')
       .split(',')

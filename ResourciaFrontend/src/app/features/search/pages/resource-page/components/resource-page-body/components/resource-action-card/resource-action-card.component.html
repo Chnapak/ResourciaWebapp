@@ -1,17 +1,22 @@
+<!-- Sidebar actions for this resource. -->
 <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-card flex flex-col gap-2">
+    <!-- Save/unsave button. -->
     <button (click)="handleFavorite()"
             [disabled]="favoritePending"
             class="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm border border-blue-600 transition-all text-left">
     <span class="w-5 text-center">{{ isSaved ? '♥' : '♡' }}</span> {{ favoriteLabel }}
     </button>
+    <!-- Share link action. -->
     <button (click)="handleShare()"
             class="flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-900 font-medium text-sm transition-all text-left">
     <span class="w-5 text-center">⤴</span> Share Resource
     </button>
+    <!-- Suggest improvement (placeholder). -->
     <button (click)="handleSuggestImprovement()"
             class="flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-900 font-medium text-sm transition-all text-left">
     <span class="w-5 text-center">✏️</span> Suggest Improvement
     </button>
+    <!-- Report issue action. -->
     <button (click)="handleReportIssue()"
             class="flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-gray-200 bg-white hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-gray-900 font-medium text-sm transition-all text-left">
     <span class="w-5 text-center">⚑</span> Report Issue

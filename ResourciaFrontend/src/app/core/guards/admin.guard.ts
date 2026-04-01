@@ -1,10 +1,15 @@
+/**
+ * Admin-only route guard that verifies server-side admin status.
+ */
 import { inject } from '@angular/core';
 import { CanMatchFn, Route, Router, UrlSegment } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { map } from 'rxjs';
 
-/** Guards /admin routes — requires the user to be authenticated and have the Admin role.
- *  Uses getUserInfo() for an authoritative server-side check (not just the local JWT). */
+/**
+ * Guards admin routes by requiring an authenticated admin account.
+ * Uses `getUserInfo()` to validate the role against the server.
+ */
 export const canActivateAdminGuard: CanMatchFn = (
   _route: Route,
   _segments: UrlSegment[]
