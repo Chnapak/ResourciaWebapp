@@ -1,3 +1,6 @@
+/**
+ * API client for resource creation, search, and save-state operations.
+ */
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, Resource } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -13,24 +16,32 @@ import { Review } from '../../shared/models/review';
 import { SchemaResponse } from '../../shared/models/search-schema';
 
 
+/**
+ * Service wrapper for resource-related endpoints.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ResourceService {
 
+  /** Creates the resource service with HTTP access. */
   constructor(private httpClient: HttpClient) 
   { }
 
+  /** Base API path for resource endpoints. */
   protected readonly baseUrl = "/api/resources";
 
+  /** Creates a new resource submission. */
   createResource(payload: CreateResourceRequestModel): Observable<CreateResourceResponseModel> {
     return this.httpClient.post<CreateResourceResponseModel>(this.baseUrl, payload);
   }
 
+  /** Fetches the search schema used to build resource filters. */
   getResourceSchema(): Observable<SchemaResponse> {
     return this.httpClient.get<SchemaResponse>(`${this.baseUrl}/schema`);
   }
 
+  /** Builds HTTP query parameters from a filter object. */
   private buildHttpParams(query: Record<string, any>): HttpParams {
     let params = new HttpParams();
 
@@ -49,23 +60,28 @@ export class ResourceService {
     return params;
   }
 
+  /** Executes a search query for resources. */
   searchResource(query: Record<string, any>): Observable<SearchResponse> {
     const params = this.buildHttpParams(query);
     return this.httpClient.get<SearchResponse>(`${this.baseUrl}/search`, { params });
   }
 
+  /** Fetches a detailed resource by id. */
   getResource(id: string): Observable<ResourceDetailModel> {
     return this.httpClient.get<ResourceDetailModel>(`/api/resources/${id}`);
   }
 
+  /** Retrieves the current user's save state for a resource. */
   getSaveState(id: string): Observable<ResourceSaveStateModel> {
     return this.httpClient.get<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save-state`);
   }
 
+  /** Saves a resource for the current user. */
   saveResource(id: string): Observable<ResourceSaveStateModel> {
     return this.httpClient.post<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save`, {});
   }
 
+  /** Removes a resource from the current user's saved list. */
   unsaveResource(id: string): Observable<ResourceSaveStateModel> {
     return this.httpClient.delete<ResourceSaveStateModel>(`${this.baseUrl}/${id}/save`);
   }

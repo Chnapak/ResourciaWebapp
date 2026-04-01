@@ -1,3 +1,4 @@
+/* Vertical timeline line running alongside each chapter. */
 .chapter::before {
     content: '';
     position: absolute;
@@ -7,6 +8,7 @@
     width: 1.5px;
     background: linear-gradient(to bottom, transparent, #e5e7eb 15%, #e5e7eb 85%, transparent);
 }
+/* Timeline dot that lights up when the chapter is in view. */
 .chapter::after {
     content: '';
     position: absolute;
@@ -19,26 +21,31 @@
     border: 2px solid #d1d5db;
     transition: border-color .35s, background .35s;
 }
+/* Active state for the timeline dot. */
 .chapter.in-view::after {
     border-color: #2563eb;
     background: #eff6ff;
 }
 
+/* Fade-in animation for chapter content. */
 .chapter-inner {
   opacity: 0;
   transform: translateY(22px);
   transition: opacity 650ms ease-in-out, transform 650ms ease-in-out;
 }
 
+/* Apply fade-in once the observer marks the chapter as visible. */
 .chapter.in-view .chapter-inner {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* Responsive heading sizing. */
 .chapter-heading {
     font-size: clamp(26px, 3vw, 36px);
 }
 
+/* Serif accent for subheading text. */
 .chapter-heading em {
     font-family: 'Lora', serif;
 }

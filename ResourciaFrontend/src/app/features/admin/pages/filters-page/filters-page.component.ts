@@ -1,3 +1,6 @@
+/**
+ * Admin page for creating, editing, and reordering filters.
+ */
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FilterKind } from '../../../../shared/models/filter-kind';
@@ -18,7 +21,11 @@ import { AdminFilterCreateModel } from '../../models/admin-filter-create.model';
   templateUrl: './filters-page.component.html',
   styleUrl: './filters-page.component.scss'
 })
+/**
+ * Hosts the admin filter list with inline editing and creation panels.
+ */
 export class FiltersAdminPageComponent implements OnInit {
+  /** Column definitions for the filter table. */
   columns: AdminTableColumn[] = [
     { key: 'filter', label: $localize`Filter`, widthClass: 'flex-1' },
     { key: 'type', label: $localize`Type`, widthClass: 'w-32' },
@@ -28,6 +35,7 @@ export class FiltersAdminPageComponent implements OnInit {
     { key: 'actions', label: '', widthClass: 'w-20', align: 'right' },
   ];
 
+  /** Options shown in the "kind" selector for filter creation. */
   readonly kindOptions = [
     { value: FilterKind.Facet, label: 'Facet' },
     { value: FilterKind.Range, label: 'Range' },
@@ -35,35 +43,49 @@ export class FiltersAdminPageComponent implements OnInit {
     { value: FilterKind.Text, label: 'Text' }
   ];
 
+  /** Selected filter ids for bulk actions. */
   selectedKeys = new Set<string>();
+  /** Current filter schema loaded from the server. */
   schema: AdminFilter[] = [];
+  /** Exposes the enum to the template. */
   FilterKind = FilterKind;
 
+  /** Whether the create panel is visible. */
   isCreatePanelOpen = false;
+  /** Whether a create request is in progress. */
   isCreating = false;
+  /** Draft model used for the create form. */
   createDraft = this.createEmptyDraft();
 
+  /** Tracks whether the key field has been manually edited. */
   private createKeyTouched = false;
 
+  /** Admin API client used by the page. */
   protected readonly AdminService = inject(AdminService);
+  /** Toast notifier for validation and API feedback. */
   private readonly toaster = inject(ToasterService);
 
+  /** True when all rows are selected. */
   get allSelected(): boolean {
     return this.schema.length > 0 && this.selectedKeys.size === this.schema.length;
   }
 
+  /** True when some rows are selected but not all. */
   get someSelected(): boolean {
     return this.selectedKeys.size > 0 && !this.allSelected;
   }
 
+  /** Whether the create form is in a facet-kind mode. */
   get usesFacetValues(): boolean {
     return this.createDraft.kind === FilterKind.Facet;
   }
 
+  /** Loads filters on component initialization. */
   ngOnInit(): void {
     this.loadFilters();
   }
 
+  /** Toggles selection for all rows. */
   onToggleAll(checked: boolean): void {
     if (checked) {
       this.schema.forEach(filter => this.selectedKeys.add(filter.id));
@@ -73,6 +95,7 @@ export class FiltersAdminPageComponent implements OnInit {
     this.selectedKeys.clear();
   }
 
+  /** Toggles selection for a single filter. */
   onToggleOne(filterId: string, checked: boolean): void {
     if (checked) {
       this.selectedKeys.add(filterId);
@@ -82,32 +105,38 @@ export class FiltersAdminPageComponent implements OnInit {
     this.selectedKeys.delete(filterId);
   }
 
+  /** Removes a deleted filter from the local list. */
   onDeleteFilter(filterId: string): void {
     this.schema = this.schema.filter((filter) => filter.id !== filterId);
     this.selectedKeys.delete(filterId);
   }
 
+  /** Opens the create panel and resets the draft fields. */
   openCreatePanel(): void {
     this.isCreatePanelOpen = true;
     this.resetCreateDraft();
   }
 
+  /** Cancels creation and clears draft state. */
   cancelCreate(): void {
     this.isCreatePanelOpen = false;
     this.isCreating = false;
     this.resetCreateDraft();
   }
 
+  /** Updates the key draft when the label changes and the key is untouched. */
   onCreateLabelChange(): void {
     if (!this.createKeyTouched) {
       this.createDraft.key = this.generateFilterKey(this.createDraft.label);
     }
   }
 
+  /** Marks the key as manually edited to prevent auto-overwrites. */
   onCreateKeyChange(): void {
     this.createKeyTouched = this.createDraft.key.trim().length > 0;
   }
 
+  /** Applies defaults when the filter kind changes. */
   onCreateKindChange(): void {
     if (this.createDraft.kind === FilterKind.Facet) {
       this.createDraft.isMulti = true;
@@ -124,15 +153,18 @@ export class FiltersAdminPageComponent implements OnInit {
     this.createDraft.facetValues = [];
   }
 
+  /** Adds an empty facet value row to the create draft. */
   addCreateFacetValue(): void {
     this.createDraft.facetValues = [...this.createDraft.facetValues, { label: '' }];
   }
 
+  /** Removes a draft facet value by index. */
   removeCreateFacetValue(index: number): void {
     this.createDraft.facetValues = this.createDraft.facetValues
       .filter((_value, currentIndex) => currentIndex !== index);
   }
 
+  /** Validates and submits the create filter request. */
   saveCreate(): void {
     const label = this.createDraft.label.trim();
     const key = this.createDraft.key.trim();
@@ -194,6 +226,7 @@ export class FiltersAdminPageComponent implements OnInit {
     });
   }
 
+  /** Handles drag-and-drop reorder events and persists the new order. */
   drop(event: CdkDragDrop<any[]>): void {
     if (event.previousIndex === event.currentIndex) return;
 
@@ -215,6 +248,7 @@ export class FiltersAdminPageComponent implements OnInit {
     this.AdminService.reorderFilters(payload).subscribe();
   }
 
+  /** Provides contextual help for the selected filter kind. */
   getCreateKindDescription(): string {
     switch (this.createDraft.kind) {
       case FilterKind.Facet:
@@ -230,10 +264,12 @@ export class FiltersAdminPageComponent implements OnInit {
     }
   }
 
+  /** Returns the label for the currently selected filter kind. */
   getCreateKindLabel(): string {
     return this.kindOptions.find((kind) => kind.value === this.createDraft.kind)?.label ?? 'Filter';
   }
 
+  /** Loads filters and reconciles the current selection set. */
   private loadFilters(): void {
     this.AdminService.getFilters().subscribe((data: AdminFilter[]) => {
       this.schema = data;
@@ -243,11 +279,13 @@ export class FiltersAdminPageComponent implements OnInit {
     });
   }
 
+  /** Resets the create draft to default values. */
   private resetCreateDraft(): void {
     this.createDraft = this.createEmptyDraft();
     this.createKeyTouched = false;
   }
 
+  /** Creates a blank create draft with sensible defaults. */
   private createEmptyDraft(): AdminFilterCreateModel {
     return {
       key: '',
@@ -261,6 +299,7 @@ export class FiltersAdminPageComponent implements OnInit {
     };
   }
 
+  /** Generates a normalized filter key from a label. */
   private generateFilterKey(value: string): string {
     return value
       .trim()
@@ -270,6 +309,7 @@ export class FiltersAdminPageComponent implements OnInit {
       .slice(0, 64);
   }
 
+  /** Extracts a user-friendly error message from an API error. */
   private extractErrorMessage(err: unknown): string | null {
     if (!err || typeof err !== 'object') return null;
 

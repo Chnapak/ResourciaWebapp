@@ -1,3 +1,6 @@
+/**
+ * HTTP interceptor that injects access tokens and refreshes on 401 responses.
+ */
 import {
   HttpEvent,
   HttpHandlerFn,
@@ -16,16 +19,20 @@ import {
   throwError,
 } from 'rxjs';
 
-/** URLs that must never have the Authorization header injected */
+/** URLs that must never have the Authorization header injected. */
 const SKIP_AUTH_URLS = ['/Auth/Login', '/Auth/Register'];
 
-/** URLs that must not trigger a reactive 401 refresh loop */
+/** URLs that must not trigger a reactive 401 refresh loop. */
 const SKIP_REFRESH_URLS = ['/Auth/RefreshToken', '/Auth/Login'];
 
-// Module-level state — shared across all interceptor calls in the same DI scope
+/** Module-level refresh lock shared across all interceptor calls. */
 let isRefreshing = false;
+/** Stream that broadcasts the most recent refreshed token. */
 const refreshToken$ = new BehaviorSubject<string | null>(null);
 
+/**
+ * Adds auth tokens to requests and performs a token refresh on 401 responses.
+ */
 export const tokenInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
@@ -81,6 +88,9 @@ export const tokenInterceptor: HttpInterceptorFn = (
   );
 };
 
+/**
+ * Clones the request with a bearer token header.
+ */
 function addToken(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
   return req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
 }

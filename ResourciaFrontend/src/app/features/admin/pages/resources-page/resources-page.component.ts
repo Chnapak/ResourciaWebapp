@@ -1,3 +1,6 @@
+/**
+ * Admin page for reviewing and soft-deleting resources.
+ */
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -13,18 +16,28 @@ import { AdminResource } from '../../models/admin-resource.model';
   templateUrl: './resources-page.component.html',
   styleUrl: './resources-page.component.scss'
 })
+/**
+ * Displays resource rows with metadata and delete controls.
+ */
 export class ResourcesAdminPageComponent implements OnInit {
+  /** Admin API client for resource moderation. */
   private readonly adminService = inject(AdminService);
+  /** Toast notifier for success and error messages. */
   private readonly toaster = inject(ToasterService);
 
+  /** List of resources to display. */
   resources: AdminResource[] = [];
+  /** Whether the list is currently loading. */
   isLoading = true;
+  /** Optional error message when loading fails. */
   error: string | null = null;
 
+  /** Loads resources on component initialization. */
   ngOnInit(): void {
     this.loadResources();
   }
 
+  /** Soft-deletes a resource after confirmation. */
   softDeleteResource(resource: AdminResource): void {
     if (resource.isDeleted) {
       return;
@@ -55,6 +68,7 @@ export class ResourcesAdminPageComponent implements OnInit {
     });
   }
 
+  /** Extracts a displayable domain from a resource URL. */
   getDomain(url: string): string {
     try {
       return new URL(url).hostname.replace(/^www\./, '');
@@ -63,6 +77,7 @@ export class ResourcesAdminPageComponent implements OnInit {
     }
   }
 
+  /** Loads the resource list from the backend. */
   private loadResources(): void {
     this.isLoading = true;
     this.error = null;

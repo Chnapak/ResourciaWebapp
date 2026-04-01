@@ -8,6 +8,9 @@ import { AuthService } from '../../../../../../../../../../core/auth/auth.servic
 import { Router, RouterLink } from '@angular/router';
 import { DiscussionService } from '../../../../../../../../../../core/services/discussion.service';
 
+/**
+ * Single discussion thread with replies and reply composer.
+ */
 @Component({
   selector: 'app-resource-discussion-thread',
   standalone: true,
@@ -16,15 +19,23 @@ import { DiscussionService } from '../../../../../../../../../../core/services/d
   styleUrl: './resource-discussion-thread.component.scss',
 })
 export class ResourceDiscussionThreadComponent implements OnInit {
+  /** Thread data to render. */
   @Input() thread!: DiscussionThread;
+  /** Emit when a reply is successfully submitted. */
   @Output() replySubmitted = new EventEmitter<DiscussionReply>();
+  /** Toggle visibility of the reply input. */
   showReplyInput = false;
+  /** Current reply draft. */
   replyContent = '';
 
+  /** Auth service for gating replies. */
   private auth = inject(AuthService);
+  /** Router for login redirects. */
   private router = inject(Router);
+  /** Discussion API service. */
   private discussionService = inject(DiscussionService);
 
+  /** Resume any pending reply action after login. */
   ngOnInit() {
     const action = this.auth.peekPendingAction();
     console.log('Pending action on thread init:', action);
@@ -41,6 +52,7 @@ export class ResourceDiscussionThreadComponent implements OnInit {
     }
   }
 
+  /** Toggle the reply input visibility. */
   toggleReply() {
     this.showReplyInput = !this.showReplyInput;
     if (!this.showReplyInput) {
@@ -48,6 +60,7 @@ export class ResourceDiscussionThreadComponent implements OnInit {
     }
   }
 
+  /** Submit the reply, or redirect to login if required. */
   submitReply() {
     if (!this.replyContent.trim()) return;
 
@@ -79,14 +92,17 @@ export class ResourceDiscussionThreadComponent implements OnInit {
     this.showReplyInput = false;
   }
 
+  /** Generate initials for a username (fallback to thread owner). */
   initials(username?: string) {
     return getInitials(username ?? this.thread.username);
   }
 
+  /** Generate avatar gradient for a username. */
   gradient(username?: string) {
     return getUserGradient(username ?? this.thread.username);
   }
 
+  /** Build profile link for a username. */
   profileLink(username: string): string[] {
     return ['/profile', username];
   }

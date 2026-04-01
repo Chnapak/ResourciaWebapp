@@ -1,4 +1,6 @@
+<!-- Single filter section with toggle + control. -->
 <div class="mb-[24px] pb-[24px] border-b border-gray-300">
+  <!-- Section header toggles collapse state. -->
   <div
     class="flex justify-between items-center cursor-pointer select-none hover:text-blue-400"
     (click)="toggle.emit()"
@@ -15,16 +17,19 @@
 
   @if (!collapsed) {
     @if (filter.kind == FilterKind.Facet) {
+      <!-- Facet filter options. -->
       <div class="mt-4">
         @if (filter.values.length > 10) {
 
           @if (filter.isMulti) {
+            <!-- Searchable multi-select for large lists. -->
             <app-searchable-multi-facet
               [options]="filter.values"
               [selected]="facetStateAsMulti(facetState)"
               (selectedChange)="onFacetSelect($event)"
             />
           } @else {
+            <!-- Searchable single-select for large lists. -->
             <app-searchable-single-facet
               [options]="filter.values"
               [selected]="facetStateAsSingle(facetState)"
@@ -36,6 +41,7 @@
         } @else {
 
           @if (filter.isMulti) {
+            <!-- Checkbox list for small multi-select lists. -->
             <app-checkbox-facet
               [options]="filter.values"
               [selected]="facetStateAsMulti(facetState)"
@@ -43,6 +49,7 @@
             />
 
           } @else {
+            <!-- Radio list for small single-select lists. -->
             <app-radio-facet
               [options]="filter.values"
               [selected]="facetStateAsSingle(facetState)"
@@ -55,6 +62,7 @@
     }
 
     @if (filter.kind == FilterKind.Range) {
+      <!-- Numeric range inputs. -->
       <div class="mt-4 flex gap-2">
         <input
           type="number"
@@ -74,6 +82,7 @@
     }
 
     @if (filter.kind == FilterKind.Boolean) {
+      <!-- Boolean checkbox. -->
       <div class="mt-4">
         <label class="flex items-center gap-2">
           <input type="checkbox" [checked]="booleanState" (change)="onBooleanChange($event)" />
@@ -83,6 +92,7 @@
     }
 
     @if (filter.kind == FilterKind.Text) {
+      <!-- Free text input. -->
       <div class="mt-4">
         <input
           type="text"

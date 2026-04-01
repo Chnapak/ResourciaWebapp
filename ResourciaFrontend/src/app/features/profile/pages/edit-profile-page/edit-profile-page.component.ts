@@ -1,3 +1,6 @@
+/**
+ * Profile editing page with live preview and account deletion flow.
+ */
 import {
   Component,
   DestroyRef,
@@ -23,41 +26,68 @@ import { EditProfileService } from '../../services/edit-profile.service';
   templateUrl: './edit-profile-page.component.html',
   styleUrls: ['./edit-profile-page.component.scss'],
 })
+/**
+ * Hosts the profile editor form and manages save/delete flows.
+ */
 export class EditProfilePageComponent implements OnInit, OnDestroy {
+  /** Form builder for the editor form. */
   private readonly fb = inject(FormBuilder);
+  /** Router used for navigation after save/cancel. */
   private readonly router = inject(Router);
+  /** DestroyRef used to clean up subscriptions. */
   private readonly destroyRef = inject(DestroyRef);
+  /** Service used to load and save profile data. */
   private readonly editProfileService = inject(EditProfileService);
+  /** Auth service used to update current user name and handle deletion. */
   private readonly authService = inject(AuthService);
 
+  /** Tracks whether the form has unsaved changes. */
   readonly isDirty = signal(false);
+  /** Live preview data derived from the form. */
   readonly preview = signal<Partial<EditProfileForm>>({});
+  /** Current interest input value. */
   readonly interestInput = signal('');
+  /** Selected interest tags. */
   readonly interests = signal<string[]>([]);
+  /** Whether the editor is loading. */
   readonly isLoading = signal(true);
+  /** Error message when loading fails. */
   readonly loadError = signal<string | null>(null);
+  /** Whether the delete-account confirm dialog is open. */
   readonly isDeleteConfirmOpen = signal(false);
+  /** Whether account deletion is in progress. */
   readonly isDeletingAccount = signal(false);
+  /** Error message when account deletion fails. */
   readonly deleteAccountError = signal<string | null>(null);
+  /** Save status signal provided by the service. */
   readonly saveStatus = this.editProfileService.saveStatus;
+  /** Save message signal provided by the service. */
   readonly saveMessage = this.editProfileService.saveMessage;
 
+  /** True when a save request is in progress. */
   readonly isSaving = computed(() => this.saveStatus() === 'saving');
+  /** True after a successful save. */
   readonly isSaved = computed(() => this.saveStatus() === 'saved');
+  /** True when the last save failed. */
   readonly isError = computed(() => this.saveStatus() === 'error');
 
+  /** Username used for cancel navigation. */
   originalProfileIdentifier = '';
+  /** Reactive form instance for the editor. */
   form!: FormGroup;
 
+  /** Initials used when rendering the avatar preview. */
   get avatarInitial(): string {
     const name = (this.form?.get('displayName')?.value as string | null) ?? '';
     return name.trim().charAt(0).toUpperCase() || '?';
   }
 
+  /** Current character count for the bio field. */
   get bioCharCount(): number {
     return ((this.form?.get('bio')?.value as string | null) ?? '').length;
   }
 
+  /** Loads the profile and initializes the form. */
   ngOnInit(): void {
     this.editProfileService.load()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -76,26 +106,32 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
       });
   }
 
+  /** Resets save status on component teardown. */
   ngOnDestroy(): void {
     this.editProfileService.resetStatus();
   }
 
+  /** Convenience accessor for the display name control. */
   get displayNameControl(): AbstractControl | null {
     return this.form?.get('displayName') ?? null;
   }
 
+  /** Convenience accessor for the username control. */
   get usernameControl(): AbstractControl | null {
     return this.form?.get('username') ?? null;
   }
 
+  /** Convenience accessor for the bio control. */
   get bioControl(): AbstractControl | null {
     return this.form?.get('bio') ?? null;
   }
 
+  /** Convenience accessor for the website control. */
   get websiteControl(): AbstractControl | null {
     return this.form?.get('website') ?? null;
   }
 
+  /** Adds a new interest tag from the input. */
   addInterest(): void {
     const tag = this.interestInput().trim();
     if (!tag || this.interests().includes(tag) || this.interests().length >= 10) {
@@ -108,12 +144,14 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     this.markDirty();
   }
 
+  /** Removes a selected interest tag. */
   removeInterest(tag: string): void {
     this.interests.update((items) => items.filter((item) => item !== tag));
     this.pushPreviewFromForm();
     this.markDirty();
   }
 
+  /** Handles enter/comma to submit interest tags. */
   onInterestKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ',') {
       event.preventDefault();
@@ -121,6 +159,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Persists the profile changes and navigates to the profile page. */
   onSave(): void {
     if (!this.form || this.form.invalid || this.isSaving()) {
       this.form?.markAllAsTouched();
@@ -152,20 +191,24 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
       });
   }
 
+  /** Navigates back to the profile page without saving. */
   onCancel(): void {
     this.router.navigate(['/profile', this.originalProfileIdentifier || this.form?.get('username')?.value || 'me']);
   }
 
+  /** Opens the delete-account confirmation dialog. */
   openDeleteAccountConfirm(): void {
     this.deleteAccountError.set(null);
     this.isDeleteConfirmOpen.set(true);
   }
 
+  /** Closes the delete-account dialog without action. */
   cancelDeleteAccount(): void {
     this.deleteAccountError.set(null);
     this.isDeleteConfirmOpen.set(false);
   }
 
+  /** Confirms and executes account deletion. */
   confirmDeleteAccount(): void {
     if (this.isDeletingAccount()) {
       return;
@@ -187,11 +230,13 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
       });
   }
 
+  /** Checks whether a form field has a specific validation error. */
   fieldHasError(controlName: string, errorKey: string): boolean {
     const control = this.form?.get(controlName);
     return !!(control?.hasError(errorKey) && (control.dirty || control.touched));
   }
 
+  /** Initializes the form and binds value-change listeners. */
   private initialiseForm(profile: EditProfileForm): void {
     this.form = this.fb.group({
       displayName: [
@@ -232,6 +277,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
 
   }
 
+  /** Builds the save payload from the current form values. */
   private buildPayload(): EditProfileForm {
     return {
       displayName: (this.form.get('displayName')?.value as string | null) ?? '',
@@ -244,6 +290,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     };
   }
 
+  /** Syncs the preview state from the current form values. */
   private pushPreviewFromForm(): void {
     if (!this.form) {
       return;
@@ -255,6 +302,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** Marks the form as dirty once the initial load completes. */
   private markDirty(): void {
     if (!this.isLoading()) {
       this.isDirty.set(true);

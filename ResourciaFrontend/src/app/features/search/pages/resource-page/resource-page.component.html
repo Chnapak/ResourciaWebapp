@@ -1,8 +1,10 @@
+<!-- Resource hero header. -->
 <app-resource-hero
     [resource]="resource"
     [favoritePending]="favoritePending"
     (favoriteToggle)="toggleFavorite()"
 ></app-resource-hero>
+<!-- Body content with tabs, ratings, and discussion. -->
 <app-resource-page-body
     [resource]="resource"
     [favoritePending]="favoritePending"

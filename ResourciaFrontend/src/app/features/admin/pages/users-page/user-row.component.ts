@@ -1,3 +1,6 @@
+/**
+ * Row component for the admin user list with moderation actions.
+ */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableRowBase } from '../../components/table-row-base';
 import { AdminUser } from '../../models/admin-user.model';
@@ -15,18 +18,27 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './user-row.component.html',
   styleUrl: './user-row.component.scss'
 })
+/**
+ * Displays a user summary row and exposes admin actions.
+ */
 export class UserRowComponent extends TableRowBase {
+  /** User data bound to this row. */
   @Input({ required: true }) user!: AdminUser;
+  /** Whether the row is currently selected. */
   @Input() selected = false;
 
+  /** Emits selection changes for bulk actions. */
   @Output() toggle = new EventEmitter<{ id: string; checked: boolean }>();
 
+  /** Active moderation modal state, if any. */
   modal: { type: 'suspend' | 'ban'; user: AdminUser } | null = null;
 
+  /** Creates the row component with router and admin APIs. */
   constructor(private router: Router, private adminService: AdminService) {
     super();
   }
 
+  /** Builds the dropdown menu based on the user's current status. */
   get userMenuItems(): DropdownItem[] {
     const items: DropdownItem[] = [
       {
@@ -83,6 +95,7 @@ export class UserRowComponent extends TableRowBase {
     return items;
   }
 
+  /** Opens the user's public profile in a new tab. */
   viewUser(): void {
     const url = this.router.serializeUrl(
       this.router.createUrlTree(['/profile', this.profileIdentifier])
@@ -90,30 +103,36 @@ export class UserRowComponent extends TableRowBase {
     window.open(url, '_blank');
   }
 
+  /** Opens the suspend modal for this user. */
   suspendUser(): void {
     this.openModal('suspend', this.user);
   }
 
+  /** Clears a suspension via the admin API. */
   unsuspendUser(): void {
     this.adminService.unsuspendUser(this.user.id).subscribe(() => {
       this.user.status = 'active';
     });
   }
 
+  /** Opens the ban modal for this user. */
   banUser(): void {
     this.openModal('ban', this.user);
   }
 
+  /** Clears a ban via the admin API. */
   unbanUser(): void {
     this.adminService.unbanUser(this.user.id).subscribe(() => {
       this.user.status = 'active';
     });
   }
 
+  /** Opens the moderation modal with the given action. */
   openModal(type: 'suspend' | 'ban', user: AdminUser): void {
     this.modal = { type, user };
   }
 
+  /** Handles confirmation from the moderation modal. */
   handleConfirm(data: { reason: string; durationDays?: number }): void {
     if (!this.modal) {
       return;
@@ -140,10 +159,12 @@ export class UserRowComponent extends TableRowBase {
     this.modal = null;
   }
 
+  /** Closes the moderation modal. */
   closeModal(): void {
     this.modal = null;
   }
 
+  /** Returns a two-letter initial badge from a user's name. */
   getInitials(name: string): string {
     return name
       .split(' ')
@@ -153,6 +174,7 @@ export class UserRowComponent extends TableRowBase {
       .slice(0, 2);
   }
 
+  /** Generates a stable hash from a string for UI coloring. */
   hashString(str: string): number {
     let hash = 0;
 
@@ -163,6 +185,7 @@ export class UserRowComponent extends TableRowBase {
     return Math.abs(hash);
   }
 
+  /** Builds a two-tone gradient based on a string seed. */
   getUserGradient(seed: string): string {
     const hash = this.hashString(seed);
 
@@ -175,10 +198,12 @@ export class UserRowComponent extends TableRowBase {
     )`;
   }
 
+  /** Picks the identifier used in profile routes. */
   get profileIdentifier(): string {
     return this.user.handle || this.user.name;
   }
 
+  /** Returns the CSS classes for the role badge. */
   get roleBadgeClass(): string {
     if (this.user.role === 'admin') {
       return 'bg-red-50 text-red-700 border border-red-200';
@@ -187,6 +212,7 @@ export class UserRowComponent extends TableRowBase {
     return 'bg-slate-100 text-slate-700 border border-slate-200';
   }
 
+  /** Formats an ISO timestamp into a short relative time label. */
   formatRelative(value: string): string {
     const timestamp = new Date(value).getTime();
     if (Number.isNaN(timestamp)) {
@@ -220,6 +246,7 @@ export class UserRowComponent extends TableRowBase {
     return `${Math.floor(diffInDays / 365)}y ago`;
   }
 
+  /** Emits selection changes for the row checkbox. */
   onCheckboxChange(checked: boolean): void {
     this.toggle.emit({ id: this.user.id, checked });
   }

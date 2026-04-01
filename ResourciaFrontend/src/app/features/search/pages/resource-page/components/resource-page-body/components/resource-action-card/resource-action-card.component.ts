@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ResourceDetailModel } from '../../../../../../../../shared/models/resource-detail';
 import { ToasterService } from '../../../../../../../../shared/toaster/toaster.service';
 
+/**
+ * Sidebar actions card (save/share/report) for a resource.
+ */
 @Component({
   selector: 'app-resource-action-card',
   imports: [],
@@ -9,12 +12,17 @@ import { ToasterService } from '../../../../../../../../shared/toaster/toaster.s
   styleUrl: './resource-action-card.component.scss',
 })
 export class ResourceActionCardComponent {
+  /** Resource details used for actions. */
   @Input() resource: ResourceDetailModel | null = null;
+  /** Disable favorite actions while API is pending. */
   @Input() favoritePending = false;
+  /** Emit when favorite is toggled. */
   @Output() favoriteToggle = new EventEmitter<void>();
 
+  /** Toast notifications for action feedback. */
   private readonly toaster = inject(ToasterService);
 
+  /** Build a shareable URL for this resource. */
   get shareUrl(): string | null {
     if (!this.resource?.id) {
       return null;
@@ -26,18 +34,22 @@ export class ResourceActionCardComponent {
     return origin ? `${origin}${relativePath}` : relativePath;
   }
 
+  /** Whether the resource is saved by the current user. */
   get isSaved(): boolean {
     return !!this.resource?.isSavedByCurrentUser;
   }
 
+  /** Label for the save/unsave button. */
   get favoriteLabel(): string {
     return this.isSaved ? 'Saved to Library' : 'Save to Library';
   }
 
+  /** Emit favorite toggle to the parent. */
   handleFavorite(): void {
     this.favoriteToggle.emit();
   }
 
+  /** Copy share link to clipboard. */
   async handleShare(): Promise<void> {
     const shareUrl = this.shareUrl;
     if (!shareUrl) {
@@ -54,14 +66,17 @@ export class ResourceActionCardComponent {
     this.toaster.show('Could not copy the resource link.', 'error');
   }
 
+  /** Placeholder for future "suggest improvement" flow. */
   handleSuggestImprovement(): void {
     this.toaster.show('Feature not avaible yet', 'info');
   }
 
+  /** Placeholder report-issue action. */
   handleReportIssue(): void {
     this.toaster.show('Report submitted. Thank you.', 'success');
   }
 
+  /** Attempt clipboard copy with a fallback path. */
   private async copyToClipboard(value: string): Promise<boolean> {
     try {
       if (globalThis.navigator?.clipboard?.writeText) {

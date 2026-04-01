@@ -1,3 +1,4 @@
+/* Shared status indicator dot used in admin rows */
 .status-dot {
     display: inline-block;
     width: 6px;
@@ -6,16 +7,19 @@
     margin-right: 6px;
 }
 
+/* Enabled status */
 .status-dot.active {
     background-color: #10b981;
     box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
+/* Suspended status */
 .status-dot.suspended {
     background-color: #f59e0b;
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
 }
 
+/* Disabled/banned status */
 .status-dot.banned {
     background-color: #ef4444;
     box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);

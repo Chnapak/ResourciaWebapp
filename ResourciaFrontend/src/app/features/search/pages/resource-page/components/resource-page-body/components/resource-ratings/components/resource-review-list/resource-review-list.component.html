@@ -1,3 +1,4 @@
+<!-- Review list header + sort select. -->
 <div class="flex items-center justify-between mt-7 mb-0">
     <span class="font-semibold text-[0.95rem]">{{ totalItems }} Reviews</span>
     <select class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-900 outline-none cursor-pointer">
@@ -7,6 +8,7 @@
 </div>
 <div>
 
+    <!-- Render reviews -->
     @for (review of reviews; track review.id) {
         <app-resource-review-item
             [review]="review"
@@ -15,6 +17,7 @@
     }
 
     @if (reviews.length > 0 && reviews.length < totalItems) {
+        <!-- Pagination: load more -->
         <ui-button
         class="w-full mt-10"
         variant="outline"

@@ -1,4 +1,6 @@
+<!-- Sidebar wrapper for search filters. -->
 <aside class="w-[300px] bg-white rounded-[16px] p-[24px] shadow-[0_2px_12px_rgba(0,0,0,0.1)]">
+    <!-- Header with clear action. -->
     <div class="flex justify-between items-center mb-[24px]">
         <h2 i18n class="text-[20px] font-[400]">Filters</h2>
         <button i18n class="text-gray-400 underline cursor-pointer hover:text-blue-400"
@@ -6,6 +8,7 @@
             Clear all
         </button>
     </div>
+    <!-- Render each filter section. -->
     @for (filter of filters; track filter.key ?? $index) {
         <app-filters-section
             [filter]="filter"

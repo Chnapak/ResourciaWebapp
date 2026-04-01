@@ -1,3 +1,6 @@
+/**
+ * Registration form component with Turnstile captcha and validation.
+ */
 import {
   AfterViewInit,
   Component,
@@ -29,31 +32,52 @@ declare var turnstile: any;
   imports: [FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register-form.component.html',
 })
+/**
+ * Collects registration details and submits to the auth service.
+ */
 export class RegisterFormComponent implements AfterViewInit, OnDestroy {
+  /** When true, adjusts layout for use inside the auth modal. */
   @Input() isModal = false;
+  /** Unique suffix so multiple instances don't clash. */
   @Input() instanceId = 'register';
+  /** Emits the registered email on successful signup. */
   @Output() registerSuccess = new EventEmitter<string>(); // emits the email on success
 
+  /** Form builder for reactive form creation. */
   private readonly fb = inject(FormBuilder);
+  /** Auth service used to perform registration calls. */
   private readonly authService = inject(AuthService);
 
+  /** Turnstile site key for captcha rendering. */
   readonly siteKey = environment.siteKey;
 
+  /** Whether a register request is in progress. */
   isSubmitting = false;
+  /** Whether resend confirmation is in cooldown. */
   isCooldown = false;
+  /** True when the email is already in use. */
   emailInUse = false;
+  /** True when the display name is already in use. */
   usernameInUse = false;
+  /** True when a non-specific error occurs. */
   generalError = false;
+  /** Cooldown duration in seconds for resend link. */
   cooldownSeconds = 30;
+  /** Label shown on the resend button during cooldown. */
   resendButtonText = 'Resend Email';
+  /** Captcha token returned by Turnstile. */
   captchaToken: string | null = null;
+  /** Whether to show the post-registration success panel. */
   showSuccess = false;
+  /** Email used in the successful registration. */
   registeredEmail = '';
 
+  /** Unique element id used for the Turnstile container. */
   get turnstileContainerId(): string {
     return `turnstile-register-${this.instanceId}`;
   }
 
+  /** Validator that checks password and confirmation match. */
   private readonly passwordMatchValidator: ValidatorFn = (
     group: AbstractControl
   ): ValidationErrors | null => {
@@ -62,6 +86,7 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
     return password === confirmPassword ? null : { passwordMismatch: true };
   };
 
+  /** Validator that enforces a basic password strength policy. */
   private strengthCheck(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
@@ -73,6 +98,7 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
     };
   }
 
+  /** Validator that applies a stricter email format check. */
   private strictEmailCheck(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
@@ -82,6 +108,7 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
     };
   }
 
+  /** Reactive registration form with validation rules. */
   readonly form = this.fb.group(
     {
       displayName: ['', Validators.required],
@@ -92,20 +119,24 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
     { validators: this.passwordMatchValidator }
   );
 
+  /** Disables submit while loading or without a captcha token. */
   get isSubmitDisabled(): boolean {
     return this.isSubmitting || !this.captchaToken;
   }
 
+  /** Renders the Turnstile widget after the view initializes. */
   ngAfterViewInit(): void {
     this.renderTurnstile();
   }
 
+  /** Cleans up the Turnstile widget on destroy. */
   ngOnDestroy(): void {
     if (typeof turnstile !== 'undefined') {
       try { turnstile.remove(`#${this.turnstileContainerId}`); } catch { /* ignore */ }
     }
   }
 
+  /** Renders the Turnstile widget and wires callbacks. */
   private renderTurnstile(): void {
     if (typeof turnstile === 'undefined') return;
     turnstile.render(`#${this.turnstileContainerId}`, {
@@ -121,6 +152,7 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  /** Validates input and submits the registration request. */
   onSubmit(): void {
     this.emailInUse = false;
     this.usernameInUse = false;
@@ -163,6 +195,7 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  /** Resends the confirmation email and starts cooldown. */
   resendEmail(): void {
     const email = this.form.get('email')?.value;
     if (!email) return;
@@ -170,6 +203,7 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
     this.authService.resendEmail({ email }).subscribe();
   }
 
+  /** Starts the resend cooldown timer and updates button text. */
   startCooldown(): void {
     this.isCooldown = true;
     let remaining = this.cooldownSeconds;

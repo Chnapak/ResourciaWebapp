@@ -1,5 +1,7 @@
+<!-- Radio facet group. -->
 <div role="radiogroup" [attr.aria-label]="label">
     @for (opt of options; track $index) {
+        <!-- Individual radio option. -->
         <app-radio
             [label]="opt.label"
             [value]="opt.value"

@@ -1,3 +1,4 @@
+<!-- Rating overview with score + distribution bars. -->
 <div class="grid grid-cols-[auto_1fr] gap-8 items-center">
     <!-- Score Block -->
     <div class="text-center bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4">
@@ -10,6 +11,7 @@
             
         </div>
 
+        <!-- Star row -->
         <div class="flex justify-center gap-1 my-2">
             @for (i of [1,2,3,4,5]; track i) {
                 <div class="relative text-[1.2rem] leading-none">
@@ -23,6 +25,7 @@
             }
         </div>
 
+        <!-- Totals + sentiment -->
         <div class="text-xs text-gray-400">{{ totalRatings }} ratings · {{ reviewCount }} reviews</div>
 
         <div class="mt-2 inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold"

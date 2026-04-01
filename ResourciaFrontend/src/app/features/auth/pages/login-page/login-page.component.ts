@@ -1,3 +1,6 @@
+/**
+ * Full-page login view with Turnstile captcha.
+ */
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
@@ -15,29 +18,43 @@ declare var turnstile: any;
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
+/**
+ * Collects credentials and navigates to the return URL on success.
+ */
 export class LoginPageComponent {
+  /** Form builder for the login form. */
   private readonly fb = inject(FormBuilder);
+  /** Auth service used to perform login requests. */
   private readonly authService = inject(AuthService);
+  /** Router used to navigate after login or suspension. */
   private readonly router = inject(Router);
+  /** Activated route used to read returnUrl. */
   private readonly route = inject(ActivatedRoute);
   
+  /** Turnstile site key for captcha rendering. */
   public readonly siteKey = environment.siteKey;
   
+  /** Whether a login request is in progress. */
   public isSubmitting = false;
+  /** True when credentials are invalid. */
   public loginFailed = false;
+  /** True when a non-specific error occurs. */
   public generalError = false;
+  /** True when captcha is missing or invalid. */
   public captchaFailed = false;
 
-  // Form definition with Validators
+  /** Reactive form with email and password validators. */
   protected form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
   });
   
+  /** Renders the Turnstile widget after the view initializes. */
   ngAfterViewInit() {
     this.renderTurnstile();
   }
 
+  /** Mounts the Turnstile widget and captures tokens. */
   private renderTurnstile() {
     if (typeof turnstile !== 'undefined') {
       turnstile.render('#turnstile-container', {
@@ -50,6 +67,7 @@ export class LoginPageComponent {
     }
   }
 
+  /** Validates input and submits the login request. */
   onSubmit(): void {
     this.loginFailed = false;
     this.generalError = false;
@@ -81,6 +99,7 @@ export class LoginPageComponent {
     });
   }
 
+  /** Maps API errors to UI state and handles suspended users. */
   private handleError(error: any) {
     this.isSubmitting = false;
     const errorCode = error?.error;

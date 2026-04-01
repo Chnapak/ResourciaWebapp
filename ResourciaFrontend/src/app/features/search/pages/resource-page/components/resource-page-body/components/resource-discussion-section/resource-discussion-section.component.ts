@@ -7,6 +7,9 @@ import { ReviewRequestModel } from '../../../../../../../../shared/models/review
 import { ResourceDetailModel } from '../../../../../../../../shared/models/resource-detail';
 import { DiscussionService } from '../../../../../../../../core/services/discussion.service';
 
+/**
+ * Discussion section for resource comments/threads.
+ */
 @Component({
   selector: 'app-resource-discussion-section',
   standalone: true,
@@ -15,17 +18,24 @@ import { DiscussionService } from '../../../../../../../../core/services/discuss
   styleUrl: './resource-discussion-section.component.scss',
 })
 export class ResourceDiscussionSectionComponent implements OnChanges {
+  /** Resource to load discussion threads for. */
   @Input() resource: ResourceDetailModel | null = null;
+  /** Thread list fetched from the backend. */
   threads: DiscussionThread[] = [];
+  /** Loading state for thread fetch. */
   loading = false;
+  /** Error message for failed loads. */
   error: string | null = null;
 
+  /** Service for discussion threads. */
   constructor(private discussionService: DiscussionService) {}
 
+  /** Current resource id (empty string if missing). */
   get resourceId(): string {
     return this.resource?.id ?? '';
   }
 
+  /** Reload threads when the resource input changes. */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['resource'] && this.resource?.id) {
       console.log('Resource arrived:', this.resource);
@@ -33,6 +43,7 @@ export class ResourceDiscussionSectionComponent implements OnChanges {
     }
   }
 
+  /** Fetch threads for the current resource. */
   loadThreads() {
     this.loading = true;
     this.discussionService.getThreads(this.resourceId).subscribe({

@@ -1,3 +1,6 @@
+/**
+ * Application-wide Angular configuration and dependency providers.
+ */
 import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
@@ -6,10 +9,16 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
 import { AuthService } from './core/auth/auth.service';
 
+/**
+ * Factory that bootstraps authentication during app initialization.
+ */
 export function initAuthFactory(auth: AuthService) {
   return () => auth.initAuth();
 }
 
+/**
+ * Root application config with routing, HTTP, and initialization providers.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 

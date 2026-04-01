@@ -1,3 +1,6 @@
+/**
+ * Page for resetting a password using a tokenized email link.
+ */
 import { Component, inject } from '@angular/core';
 import { TextfieldComponent } from '../../../../shared/ui/textfield/textfield.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
@@ -12,21 +15,33 @@ import { ResetPasswordModel } from '../../models/reset-password';
   templateUrl: './reset-password-page.component.html',
   styleUrl: './reset-password-page.component.scss',
 })
+/**
+ * Collects a new password and submits it with the reset token.
+ */
 export class ResetPasswordPageComponent {
+  /** Form builder for the reset form. */
   private readonly fb = inject(FormBuilder);
+  /** Auth service used to submit the reset payload. */
   private readonly authService = inject(AuthService);
+  /** Router used for post-reset navigation. */
   private readonly router = inject(Router);
+  /** Route used to read the reset token and email. */
   private readonly route = inject(ActivatedRoute);
 
+  /** Whether the reset request is in progress. */
   public isSubmitting = false;
 
   // UI flags
+  /** True when the reset token is missing. */
   public tokenMissing = false;
+  /** True when the reset token is invalid or expired. */
   public tokenInvalidOrExpired = false;
+  /** True when password and confirmation do not match. */
   public passwordsMismatch = false;
+  /** True when a non-specific error occurs. */
   public generalError = false;
 
-  // ✅ Form
+  /** Reactive form with password and confirmation controls. */
   protected form = this.fb.nonNullable.group(
     {
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -35,7 +50,7 @@ export class ResetPasswordPageComponent {
     { validators: [this.passwordsMatchValidator] }
   );
 
-  // ---- Custom validator (group-level)
+  /** Group-level validator that checks password equality. */
   private passwordsMatchValidator(group: any) {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
@@ -44,6 +59,7 @@ export class ResetPasswordPageComponent {
       : null;
   }
 
+  /** Validates input and submits the reset request. */
   onSubmit(): void {
     this.resetFlags();
 
@@ -84,6 +100,7 @@ export class ResetPasswordPageComponent {
     });
   }
 
+  /** Clears all UI error flags. */
   private resetFlags() {
     this.tokenMissing = false;
     this.tokenInvalidOrExpired = false;
@@ -91,6 +108,7 @@ export class ResetPasswordPageComponent {
     this.generalError = false;
   }
 
+  /** Maps API error codes to UI state. */
   private handleError(error: any) {
     this.isSubmitting = false;
 

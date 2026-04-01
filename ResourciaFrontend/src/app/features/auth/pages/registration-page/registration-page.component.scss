@@ -1,3 +1,4 @@
+/* Dark overlay shown when registration succeeds */
 .cover {
     opacity: 0;
     z-index: -1;
@@ -9,6 +10,7 @@
     }
 }
 
+/* Success modal container with slide-in transition */
 .pop-up {
     opacity: 0;
     z-index: -1;
@@ -22,6 +24,7 @@
     }
 }
 
+/* Envelope icon tint */
 .fa-envelope {
     color: white;
 }

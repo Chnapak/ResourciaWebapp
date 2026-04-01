@@ -1,7 +1,9 @@
+/* Root container for the edit profile page */
 :host {
   display: block;
 }
 
+/* Loading skeletons */
 .ep-loading {
   max-width: 1100px;
   margin: 0 auto;
@@ -21,6 +23,7 @@
   height: 160px;
 }
 
+/* Empty-state layout */
 .ep-empty-state {
   max-width: 640px;
   margin: 0 auto;
@@ -46,6 +49,7 @@
   text-decoration: none;
 }
 
+/* Hero banner */
 .ep-hero {
   background: linear-gradient(135deg, #0d1f6b 0%, #1a3aad 50%, #2952d9 100%);
   padding: 2.5rem 0 3.5rem;
@@ -174,6 +178,7 @@
   }
 }
 
+/* Card base */
 .ep-card {
   background: #fff;
   border-radius: 14px;
@@ -193,6 +198,7 @@
   border: 1px solid #fecaca;
 }
 
+/* Card headers and body */
 .ep-card__header {
   padding: 1.5rem 1.75rem 0;
 
@@ -224,6 +230,7 @@
   padding-top: 1.25rem;
 }
 
+/* Form fields */
 .ep-field {
   margin-bottom: 1.5rem;
 
@@ -353,6 +360,7 @@
   input { padding-left: 1.75rem; }
 }
 
+/* Interests list */
 .ep-interests {
   &__input-row {
     display: flex;
@@ -432,6 +440,7 @@
   to   { transform: scale(1); opacity: 1; }
 }
 
+/* Notice for upcoming avatar support */
 .ep-future-notice {
   display: flex;
   align-items: flex-start;
@@ -453,6 +462,7 @@
   }
 }
 
+/* Danger zone layout */
 .ep-danger-zone {
   display: flex;
   align-items: flex-start;
@@ -508,6 +518,7 @@
   justify-content: flex-end;
 }
 
+/* Preview sidebar */
 .ep-preview-card {
   position: sticky;
   top: 1.5rem;
@@ -518,6 +529,7 @@
   }
 }
 
+/* Preview card sections */
 .ep-preview {
   &__hero {
     background: linear-gradient(135deg, #0d1f6b 0%, #1a3aad 50%, #2952d9 100%);
@@ -602,6 +614,7 @@
   }
 }
 
+/* Save status legend */
 .ep-status-legend__title {
   font-size: .72rem;
   font-weight: 700;
@@ -625,6 +638,7 @@
   color: #374151;
 }
 
+/* Sticky action bar */
 .ep-action-bar {
   position: fixed;
   bottom: 0;
@@ -688,6 +702,7 @@
   gap: .75rem;
 }
 
+/* Button styles */
 .ep-btn {
   display: inline-flex;
   align-items: center;

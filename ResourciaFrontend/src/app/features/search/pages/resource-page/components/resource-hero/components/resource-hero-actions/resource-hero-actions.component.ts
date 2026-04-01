@@ -3,6 +3,9 @@ import { ButtonComponent } from '../../../../../../../../shared/ui/button/button
 import { ToasterService } from '../../../../../../../../shared/toaster/toaster.service';
 import { ResourceDetailModel } from '../../../../../../../../shared/models/resource-detail';
 
+/**
+ * Action buttons for the resource hero (save/share/open).
+ */
 @Component({
   selector: 'app-resource-hero-actions',
   imports: [ButtonComponent],
@@ -10,12 +13,17 @@ import { ResourceDetailModel } from '../../../../../../../../shared/models/resou
   styleUrl: './resource-hero-actions.component.scss',
 })
 export class ResourceHeroActionsComponent {
+  /** Resource details to act on. */
   @Input() resource: ResourceDetailModel | null = null;
+  /** Disable favorite button while API call is pending. */
   @Input() favoritePending = false;
+  /** Emit when the favorite state should be toggled. */
   @Output() favoriteToggle = new EventEmitter<void>();
 
+  /** Toast notifications for share actions. */
   private toaster = inject(ToasterService);
 
+  /** Build a shareable URL for the resource. */
   get shareUrl(): string | null {
     if (!this.resource?.id) {
       return null;
@@ -27,22 +35,27 @@ export class ResourceHeroActionsComponent {
     return origin ? `${origin}${relativePath}` : relativePath;
   }
 
+  /** Whether the current user has saved this resource. */
   get isSaved(): boolean {
     return !!this.resource?.isSavedByCurrentUser;
   }
 
+  /** Label for the favorite button. */
   get favoriteLabel(): string {
     return this.isSaved ? 'Saved to Favorites' : 'Add to Favorites';
   }
 
+  /** Icon class for the favorite button. */
   get favoriteIconClass(): string {
     return this.isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
   }
 
+  /** Emit favorite toggle. */
   handleFavorite(): void {
     this.favoriteToggle.emit();
   }
 
+  /** Copy the share URL to the clipboard. */
   async handleShare(): Promise<void> {
     const shareUrl = this.shareUrl;
     if (!shareUrl) {
@@ -59,6 +72,7 @@ export class ResourceHeroActionsComponent {
     this.toaster.show('Could not copy the resource link.', 'error');
   }
 
+  /** Attempt clipboard copy with fallback. */
   private async copyToClipboard(value: string): Promise<boolean> {
     try {
       if (globalThis.navigator?.clipboard?.writeText) {
