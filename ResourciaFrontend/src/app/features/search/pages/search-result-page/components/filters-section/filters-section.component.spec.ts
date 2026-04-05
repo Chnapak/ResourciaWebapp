@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FiltersSectionComponent } from './filters-section.component';
+import { FilterKind } from '../../../../../../shared/models/filter-kind';
 
 describe('FiltersSectionComponent', () => {
   let component: FiltersSectionComponent;
@@ -14,6 +15,13 @@ describe('FiltersSectionComponent', () => {
 
     fixture = TestBed.createComponent(FiltersSectionComponent);
     component = fixture.componentInstance;
+    component.filter = {
+      key: 'subject',
+      label: 'Subject',
+      kind: FilterKind.Facet,
+      values: [],
+      isMulti: true,
+    };
     fixture.detectChanges();
   });
 

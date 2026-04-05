@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ResourceService } from '../../../../core/services/resource.service';
-import { SearchService } from '../../../../core/services/search.service';
 import { FilterKind } from '../../../../shared/models/filter-kind';
 import { AddResourcePageComponent } from './add-resource-page.component';
 
@@ -52,7 +51,7 @@ describe('AddResourcePageComponent', () => {
   };
 
   beforeEach(async () => {
-    resourceServiceSpy = jasmine.createSpyObj<ResourceService>('ResourceService', ['createResource']);
+    resourceServiceSpy = jasmine.createSpyObj<ResourceService>('ResourceService', ['createResource', 'getResourceSchema']);
     resourceServiceSpy.createResource.and.returnValue(
       of({
         id: 'resource-id',
@@ -60,19 +59,16 @@ describe('AddResourcePageComponent', () => {
         url: 'https://www.w3schools.com',
       }),
     );
+    resourceServiceSpy.getResourceSchema.and.returnValue(
+      of({
+        filters: [subjectFilter, authorFilter, yearFilter, isFreeFilter],
+      }),
+    );
 
     await TestBed.configureTestingModule({
       imports: [AddResourcePageComponent],
       providers: [
         provideRouter([]),
-        {
-          provide: SearchService,
-          useValue: {
-            schema: () => of({
-              filters: [subjectFilter, authorFilter, yearFilter, isFreeFilter],
-            }),
-          },
-        },
         { provide: ResourceService, useValue: resourceServiceSpy },
       ],
     }).compileComponents();
@@ -109,7 +105,7 @@ describe('AddResourcePageComponent', () => {
       title: 'W3Schools',
       url: 'https://w3schools.com',
       description: 'Learn coding online.',
-      facets: {
+      filterValues: {
         subject: ['math'],
       },
       author: 'W3Schools',

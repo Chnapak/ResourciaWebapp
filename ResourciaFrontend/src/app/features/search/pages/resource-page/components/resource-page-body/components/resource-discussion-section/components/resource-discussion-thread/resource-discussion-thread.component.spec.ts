@@ -14,6 +14,13 @@ describe('ResourceDiscussionThreadComponent', () => {
 
     fixture = TestBed.createComponent(ResourceDiscussionThreadComponent);
     component = fixture.componentInstance;
+    component.thread = {
+      id: 'thread-1',
+      username: 'alice',
+      createdAt: new Date().toISOString(),
+      content: 'First post',
+      replies: [],
+    };
     fixture.detectChanges();
   });
 

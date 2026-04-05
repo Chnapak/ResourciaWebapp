@@ -14,6 +14,17 @@ describe('UserRowComponent', () => {
 
     fixture = TestBed.createComponent(UserRowComponent);
     component = fixture.componentInstance;
+    component.user = {
+      id: 'user-1',
+      name: 'Alex Doe',
+      handle: 'alex',
+      email: 'alex@example.com',
+      role: 'admin',
+      roleLabel: 'Admin',
+      status: 'active',
+      resourcesCount: 3,
+      lastActiveAt: new Date().toISOString(),
+    };
     fixture.detectChanges();
   });
 

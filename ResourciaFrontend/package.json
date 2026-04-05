@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "lint": "tsc -p tsconfig.json --noEmit",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
