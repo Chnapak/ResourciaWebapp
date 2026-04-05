@@ -1,5 +1,71 @@
-<nav class="bg-white shadow-lg py-3 px-6 w-full top-0 z-0">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+<nav class="bg-white shadow-lg py-3 px-4 sm:px-6 w-full top-0 z-0">
+    <div class="max-w-7xl mx-auto">
+        <!-- Mobile header -->
+        <div class="flex items-center justify-between md:hidden">
+            <app-brand-logo></app-brand-logo>
+            <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-700 hover:bg-gray-100"
+                aria-label="Toggle navigation"
+                (click)="toggleMobileMenu()"
+            >
+                @if (isMobileMenuOpen) {
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                } @else {
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                }
+            </button>
+        </div>
+
+        @if (isMobileMenuOpen) {
+            <div class="md:hidden mt-4 border-t border-gray-100 pt-4">
+                <div class="flex flex-col gap-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search..." i18n-placeholder class="w-full rounded-full border border-gray-300 bg-white py-2 pl-10 pr-4 text-sm outline-none focus:border-blue-500">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400" i18n>Explore</span>
+                        <a routerLink="/" fragment="problem" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600" (click)="isMobileMenuOpen = false" i18n>About us</a>
+                        <a routerLink="/search" class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600" (click)="isMobileMenuOpen = false" i18n>Browse Resources</a>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400" i18n>Account</span>
+                        @if (user == null) {
+                            <a routerLink="/signup" class="rounded-lg border border-blue-500 px-3 py-2 text-center text-sm font-semibold text-blue-600" (click)="isMobileMenuOpen = false" i18n>Sign Up</a>
+                            <a routerLink="/login" class="rounded-lg border border-gray-300 px-3 py-2 text-center text-sm font-semibold text-gray-700" (click)="isMobileMenuOpen = false" i18n>Log In</a>
+                        } @else {
+                            <a [routerLink]="['/profile', user?.name]" class="rounded-lg border border-gray-200 px-3 py-2 text-left text-sm font-medium text-gray-700" (click)="isMobileMenuOpen = false" i18n>Profile</a>
+                            @if (user?.isAdmin) {
+                                <a routerLink="/admin" class="rounded-lg border border-gray-200 px-3 py-2 text-left text-sm font-medium text-gray-700" (click)="isMobileMenuOpen = false" i18n>Admin</a>
+                            }
+                            <button type="button" class="rounded-lg border border-red-200 px-3 py-2 text-left text-sm font-medium text-red-600" (click)="logout(); isMobileMenuOpen = false" i18n>Logout</button>
+                        }
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400" i18n>Language</span>
+                        <div class="flex gap-2">
+                            <a href="/" class="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-center text-sm font-semibold text-gray-600">EN</a>
+                            <a href="/cs" class="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-center text-sm font-semibold text-gray-600">CS</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Desktop header -->
+        <div class="hidden md:flex items-center justify-between">
         <!-- Left Section -->
         <div class="flex items-center space-x-4">
             <app-explore-menu></app-explore-menu>
@@ -16,5 +82,6 @@
             <app-auth-links [user]="user" (logout)="logout()"></app-auth-links>
             <app-language-switcher></app-language-switcher>
         </div>
+    </div>
     </div>
 </nav>

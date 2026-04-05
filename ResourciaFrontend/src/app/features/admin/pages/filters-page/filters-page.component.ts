@@ -47,6 +47,8 @@ export class FiltersAdminPageComponent implements OnInit {
   selectedKeys = new Set<string>();
   /** Current filter schema loaded from the server. */
   schema: AdminFilter[] = [];
+  /** Loading state for filters list. */
+  isLoading = false;
   /** Exposes the enum to the template. */
   FilterKind = FilterKind;
 
@@ -271,11 +273,21 @@ export class FiltersAdminPageComponent implements OnInit {
 
   /** Loads filters and reconciles the current selection set. */
   private loadFilters(): void {
-    this.AdminService.getFilters().subscribe((data: AdminFilter[]) => {
-      this.schema = data;
+    this.isLoading = true;
+    this.AdminService.getFilters().subscribe({
+      next: (data: AdminFilter[]) => {
+        this.schema = data;
 
-      const validIds = new Set(data.map(filter => filter.id));
-      this.selectedKeys = new Set([...this.selectedKeys].filter(id => validIds.has(id)));
+        const validIds = new Set(data.map(filter => filter.id));
+        this.selectedKeys = new Set([...this.selectedKeys].filter(id => validIds.has(id)));
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load filters', err);
+        this.schema = [];
+        this.selectedKeys.clear();
+        this.isLoading = false;
+      }
     });
   }
 

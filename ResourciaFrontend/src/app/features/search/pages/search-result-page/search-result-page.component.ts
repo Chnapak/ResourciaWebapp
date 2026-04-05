@@ -50,6 +50,12 @@ export class SearchResultPageComponent implements OnInit {
 
   /** Current resource results. */
   resources: SearchResultResourceModel[] = [];
+  /** Loading state for results. */
+  isLoading = false;
+  /** True after the first response returns (success or error). */
+  hasLoaded = false;
+  /** True after the schema has been fetched (success or error). */
+  schemaLoaded = false;
   /** Current page index (1-based). */
   currentPage = 1;
   /** Page size for API search. */
@@ -79,9 +85,10 @@ export class SearchResultPageComponent implements OnInit {
 
   /** Load schema and hydrate filter state from URL. */
   ngOnInit(): void {
-    
+    this.schemaLoaded = false;
     this.search.schema().subscribe((data: SchemaResponse) => {
       this.schema = data;
+      this.schemaLoaded = true;
 
       const initial: Record<string, boolean> = {};
       for (const f of data.filters) initial[f.key] = true;
@@ -91,6 +98,10 @@ export class SearchResultPageComponent implements OnInit {
         this.hydrateStateFromQueryParams(data, params);
         this.loadResources();
       });
+    },
+    (err) => {
+      console.error('Failed to load search schema', err);
+      this.schemaLoaded = true;
     });
   }
 
@@ -308,6 +319,7 @@ export class SearchResultPageComponent implements OnInit {
 
   /** Load resources for the current query and pagination. */
   private loadResources(): void {
+    this.isLoading = true;
     const query = this.buildQuery();
 
     query['page'] = this.currentPage;
@@ -319,12 +331,16 @@ export class SearchResultPageComponent implements OnInit {
         this.totalPages = results.totalPages;
         this.currentPage = results.page;
         this.totalItems = results.totalItems;
+        this.isLoading = false;
+        this.hasLoaded = true;
 
         console.log('Resources:', results);
       },
       error: err => {
         console.error('Failed to load resources', err);
         this.toaster.show('Failed to load resources', 'error');
+        this.isLoading = false;
+        this.hasLoaded = true;
       }
     });
   }
