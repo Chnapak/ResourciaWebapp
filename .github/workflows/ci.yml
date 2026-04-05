@@ -16,6 +16,10 @@ jobs:
           fetch-depth: 0
       - name: Lint commit messages
         uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: commitlint.config.cjs
+        with:
+          configFile: commitlint.config.cjs
 
   backend:
     runs-on: ubuntu-latest

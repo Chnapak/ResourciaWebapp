@@ -20,7 +20,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { TextfieldComponent } from '../../../../shared/ui/textfield/textfield.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 
 declare var turnstile: any;
 

@@ -5,7 +5,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 import { TextfieldComponent } from '../../../../shared/ui/textfield/textfield.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 
