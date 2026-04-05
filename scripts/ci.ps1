@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory = $true)]
-  [ValidateSet("lint", "test", "build")]
+  [ValidateSet("lint", "test", "build", "e2e")]
   [string]$Task,
 
   [ValidateSet("all", "frontend", "backend")]
@@ -49,7 +49,7 @@ function Invoke-FrontendTest {
   }
   Push-Location $frontendPath
   try {
-    npm run test -- --watch=false --browsers=ChromeHeadless
+    npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
   }
   finally {
     Pop-Location
@@ -61,12 +61,43 @@ function Invoke-BackendTest {
     Write-Host "Backend not found, skipping tests."
     return
   }
-  $testProjects = Get-ChildItem -Path $backendRoot -Recurse -File -Filter *Test*.csproj -ErrorAction SilentlyContinue
-  if (-not $testProjects) {
+  $unitProjects = Get-ChildItem -Path $backendRoot -Recurse -File -Filter *UnitTests.csproj -ErrorAction SilentlyContinue
+  $integrationProjects = Get-ChildItem -Path $backendRoot -Recurse -File -Filter *IntegrationTests.csproj -ErrorAction SilentlyContinue
+  $otherTestProjects = Get-ChildItem -Path $backendRoot -Recurse -File -Filter *Test*.csproj -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -notin $unitProjects.FullName -and $_.FullName -notin $integrationProjects.FullName }
+
+  if (-not $unitProjects -and -not $integrationProjects -and -not $otherTestProjects) {
     Write-Host "No backend test projects found, skipping tests."
     return
   }
-  dotnet test $backendSln -c Release
+
+  $coverageArgs = @(
+    "/p:CollectCoverage=true",
+    "/p:CoverletOutputFormat=cobertura",
+    "/p:Threshold=0",
+    "/p:ThresholdType=line"
+  )
+
+  if ($unitProjects) {
+    Write-Host "Running backend unit tests..."
+    foreach ($project in $unitProjects) {
+      dotnet test $project.FullName -c Release @coverageArgs
+    }
+  }
+
+  if ($integrationProjects) {
+    Write-Host "Running backend integration tests..."
+    foreach ($project in $integrationProjects) {
+      dotnet test $project.FullName -c Release @coverageArgs
+    }
+  }
+
+  if ($otherTestProjects) {
+    Write-Host "Running backend tests..."
+    foreach ($project in $otherTestProjects) {
+      dotnet test $project.FullName -c Release @coverageArgs
+    }
+  }
 }
 
 function Invoke-FrontendBuild {
@@ -77,6 +108,20 @@ function Invoke-FrontendBuild {
   Push-Location $frontendPath
   try {
     npm run build -- --configuration development
+  }
+  finally {
+    Pop-Location
+  }
+}
+
+function Invoke-FrontendE2E {
+  if (-not (Test-Path $frontendPath)) {
+    Write-Host "Frontend not found, skipping e2e."
+    return
+  }
+  Push-Location $frontendPath
+  try {
+    npm run test:e2e
   }
   finally {
     Pop-Location
@@ -103,6 +148,9 @@ switch ($Task) {
   "build" {
     if ($Scope -in @("all", "frontend")) { Invoke-FrontendBuild }
     if ($Scope -in @("all", "backend")) { Invoke-BackendBuild }
+  }
+  "e2e" {
+    if ($Scope -in @("all", "frontend")) { Invoke-FrontendE2E }
   }
   default {
     throw "Unknown task: $Task"

@@ -62,3 +62,14 @@ Resourcia is a full-stack web application for discovering, saving, and sharing l
 1. The extension lives in `C:\Users\matej\source\repos\ResourciaApi\ResourciaExtension`.
 2. Load it as an unpacked extension in Chromium-based browsers.
 3. It injects UI on Google Search result pages and can talk to the local API.
+
+**Versioning & Releases**
+1. Version is tracked in `C:\Users\matej\source\repos\ResourciaApi\VERSION` (SemVer).
+2. Changelog lives in `C:\Users\matej\source\repos\ResourciaApi\CHANGELOG.md`.
+3. For a release, run `pwsh .\scripts\update-version.ps1 -Version X.Y.Z`, then commit + tag.
+4. Or trigger the GitHub **Release** workflow, which updates `VERSION`, regenerates the changelog, tags, and creates a GitHub Release.
+
+**Testing**
+1. Frontend unit tests: `cd C:\Users\matej\source\repos\ResourciaApi\ResourciaFrontend` then `npm run test -- --watch=false --browsers=ChromeHeadless`.
+2. Frontend e2e tests: `cd C:\Users\matej\source\repos\ResourciaApi\ResourciaFrontend` then `npm run test:e2e`.
+3. Backend unit + integration tests: `pwsh .\scripts\ci.ps1 -Task test -Scope backend`.
