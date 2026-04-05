@@ -4,13 +4,26 @@
 
   @if (isLoading) {
     <!-- Loading state -->
-    <div class="px-8 py-12 text-sm text-slate-500">Loading resources...</div>
+    <div class="px-4 py-12 sm:px-8 animate-pulse">
+      <div class="space-y-4">
+        @for (_ of [1,2,3,4,5]; track $index) {
+          <div class="flex items-center gap-4 border border-slate-100 rounded-lg p-4">
+            <div class="h-4 w-40 rounded bg-slate-200"></div>
+            <div class="h-4 w-24 rounded bg-slate-100"></div>
+            <div class="h-4 w-20 rounded bg-slate-200"></div>
+            <div class="h-4 w-24 rounded bg-slate-100"></div>
+            <div class="h-4 w-16 rounded bg-slate-200"></div>
+            <div class="ml-auto h-7 w-24 rounded bg-slate-200"></div>
+          </div>
+        }
+      </div>
+    </div>
   } @else if (error) {
     <!-- Error state -->
-    <div class="px-8 py-12 text-sm text-red-600">{{ error }}</div>
+    <div class="px-4 py-12 text-sm text-red-600 sm:px-8">{{ error }}</div>
   } @else if (resources.length === 0) {
     <!-- Empty state -->
-    <div class="px-8 py-16 text-center">
+    <div class="px-4 py-16 text-center sm:px-8">
       <div class="mb-2 text-lg font-medium text-slate-700">No resources found</div>
       <div class="text-sm text-slate-400">Once resources are added, admins can manage and soft delete them here.</div>
     </div>
@@ -20,19 +33,19 @@
       <table class="min-w-full border-collapse">
         <thead>
           <tr class="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-            <th class="px-8 py-4">Resource</th>
-            <th class="px-6 py-4">Added By</th>
-            <th class="px-6 py-4">Stats</th>
-            <th class="px-6 py-4">Updated</th>
-            <th class="px-6 py-4">Status</th>
-            <th class="px-8 py-4 text-right">Actions</th>
+            <th class="px-4 py-4 sm:px-8">Resource</th>
+            <th class="px-4 py-4 sm:px-6">Added By</th>
+            <th class="px-4 py-4 sm:px-6">Stats</th>
+            <th class="px-4 py-4 sm:px-6">Updated</th>
+            <th class="px-4 py-4 sm:px-6">Status</th>
+            <th class="px-4 py-4 text-right sm:px-8">Actions</th>
           </tr>
         </thead>
         <tbody>
           @for (resource of resources; track resource.id) {
             <!-- Resource row -->
             <tr class="border-b border-slate-100 align-top">
-              <td class="px-8 py-5">
+              <td class="px-4 py-5 sm:px-8">
                 <div class="flex flex-col gap-1">
                   <a
                     [routerLink]="['/resource', resource.id]"
@@ -43,17 +56,17 @@
                   <div class="text-xs text-slate-500">{{ getDomain(resource.url) }}</div>
                 </div>
               </td>
-              <td class="px-6 py-5 text-sm text-slate-600">
+              <td class="px-4 py-5 text-sm text-slate-600 sm:px-6">
                 {{ resource.createdBy || 'Unknown' }}
               </td>
-              <td class="px-6 py-5">
+              <td class="px-4 py-5 sm:px-6">
                 <div class="text-sm font-medium text-slate-700">{{ resource.reviewCount }} reviews</div>
                 <div class="text-xs text-slate-400">{{ resource.savesCount }} saves</div>
               </td>
-              <td class="px-6 py-5 text-xs text-slate-500">
+              <td class="px-4 py-5 text-xs text-slate-500 sm:px-6">
                 {{ resource.updatedAtUtc | date: 'dd.MM.yyyy HH:mm' }}
               </td>
-              <td class="px-6 py-5">
+              <td class="px-4 py-5 sm:px-6">
                 @if (resource.isDeleted) {
                   <span class="inline-flex items-center gap-2 text-xs font-medium text-red-600">
                     <span class="h-2 w-2 rounded-full bg-red-500"></span>
@@ -66,7 +79,7 @@
                   </span>
                 }
               </td>
-              <td class="px-8 py-5 text-right">
+              <td class="px-4 py-5 text-right sm:px-8">
                 <!-- Soft delete action; disabled when already deleted -->
                 <button
                   type="button"

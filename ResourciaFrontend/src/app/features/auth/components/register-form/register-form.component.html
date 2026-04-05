@@ -3,7 +3,7 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col items-center w-full">
 
     <!-- Username -->
-    <div class="flex flex-col w-fit w-70 relative">
+    <div class="flex flex-col w-full max-w-sm relative sm:w-70">
       @let username = form.get('displayName');
       <label i18n for="username" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
         [class.text-red-500]="(username?.touched && username?.invalid) || usernameInUse">
@@ -11,18 +11,18 @@
       </label>
       <input type="text" placeholder="Write here..." i18n-placeholder name="username"
         formControlName="displayName"
-        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        class="p-[11px_10px] w-full text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors sm:w-70"
         [class.border-red-500]="(username?.touched && username?.invalid) || usernameInUse">
       @if (username?.touched && username?.errors?.['required']) {
-        <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Username is required.</p>
+        <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Username is required.</p>
       }
       @if (usernameInUse) {
-        <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Username is already taken.</p>
+        <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Username is already taken.</p>
       }
     </div>
 
     <!-- Email -->
-    <div class="flex flex-col w-fit w-70 relative mt-2">
+    <div class="flex flex-col w-full max-w-sm relative mt-2 sm:w-70">
       @let email = form.get('email');
       <label i18n for="email" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
         [class.text-red-500]="(email?.touched && email?.invalid) || emailInUse">
@@ -30,23 +30,23 @@
       </label>
       <input type="email" placeholder="Write here..." i18n-placeholder name="email"
         formControlName="email"
-        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        class="p-[11px_10px] w-full text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors sm:w-70"
         [class.border-red-500]="(email?.touched && email?.invalid) || emailInUse">
       @if (email?.touched && email?.invalid) {
         @if (email?.errors?.['required']) {
-          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Email is required.</p>
+          <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Email is required.</p>
         }
         @if (email?.errors?.['invalidEmail']) {
-          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Please enter a valid email.</p>
+          <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Please enter a valid email.</p>
         }
       }
       @if (emailInUse) {
-        <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">This email is already registered.</p>
+        <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">This email is already registered.</p>
       }
     </div>
 
     <!-- Password -->
-    <div class="flex flex-col w-fit w-70 relative mt-2">
+    <div class="flex flex-col w-full max-w-sm relative mt-2 sm:w-70">
       @let password = form.get('password');
       <label i18n for="password" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
         [class.text-red-500]="password?.touched && password?.invalid">
@@ -54,14 +54,14 @@
       </label>
       <input type="password" placeholder="Write here..." i18n-placeholder name="password"
         formControlName="password"
-        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        class="p-[11px_10px] w-full text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors sm:w-70"
         [class.border-red-500]="password?.touched && password?.invalid">
       @if (password?.touched && password?.invalid) {
         @if (password?.errors?.['required']) {
-          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Password is required.</p>
+          <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Password is required.</p>
         }
         @if (password?.errors?.['passwordStrength'] || password?.errors?.['minlength'] || password?.errors?.['maxlength']) {
-          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">
+          <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">
             Password must be 8–32 characters with an uppercase letter, a digit, and a special character.
           </p>
         }
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Confirm Password -->
-    <div class="flex flex-col w-fit w-70 relative mt-2">
+    <div class="flex flex-col w-full max-w-sm relative mt-2 sm:w-70">
       @let confirmPassword = form.get('confirmPassword');
       <label i18n for="confirm" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
         [class.text-red-500]="confirmPassword?.touched && (confirmPassword?.invalid || form.invalid)">
@@ -77,14 +77,14 @@
       </label>
       <input type="password" placeholder="Write here..." i18n-placeholder name="confirm"
         formControlName="confirmPassword"
-        class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+        class="p-[11px_10px] w-full text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors sm:w-70"
         [class.border-red-500]="confirmPassword?.touched && (confirmPassword?.invalid || form.invalid)">
       @if (confirmPassword?.touched) {
         @if (confirmPassword?.invalid) {
-          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Please confirm your password.</p>
+          <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Please confirm your password.</p>
         }
         @else if (form.errors?.['passwordMismatch']) {
-          <p i18n class="w-70 text-left text-xs text-red-600 mt-0.5">Passwords must match.</p>
+          <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Passwords must match.</p>
         }
       }
     </div>
@@ -93,13 +93,13 @@
     <div [id]="turnstileContainerId" class="mt-4 w-full flex justify-center"></div>
 
     @if (generalError) {
-      <p i18n class="w-70 text-left text-xs text-red-600 mt-2">Something went wrong, please try again.</p>
+      <p i18n class="w-full text-left text-xs text-red-600 mt-2 sm:w-70">Something went wrong, please try again.</p>
     }
 
     <!-- Submit button -->
     <button
       type="submit"
-      class="w-70 mt-4 py-2.5 text-sm font-semibold text-white rounded-[8px] transition-colors
+      class="w-full max-w-sm mt-4 py-2.5 text-sm font-semibold text-white rounded-[8px] transition-colors sm:w-70
              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
       [class.bg-blue-500]="!isSubmitDisabled"
       [class.hover:bg-blue-600]="!isSubmitDisabled"
@@ -113,7 +113,7 @@
       }
     </button>
 
-    <p i18n class="text-left text-xs w-70 mt-3 text-gray-500">
+    <p i18n class="text-left text-xs w-full mt-3 text-gray-500 sm:w-70">
       By signing up you agree with our
       <a routerLink="/tos" class="text-blue-600 hover:underline">Terms of Service</a>
       and

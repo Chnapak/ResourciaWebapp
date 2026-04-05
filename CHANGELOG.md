@@ -1,3 +1,14 @@
+## [0.1.0] - 2026-04-05
+
+### Highlights
+- Responsive layouts across auth, admin, search, and home pages.
+- Skeleton loading states for search results, resource detail, and admin lists.
+- Mobile navigation/branding tweaks for consistent Resourcia logo display.
+- Frontend Nginx dev cert auto-generation for local HTTPS.
+- Ignored local `.containers` data to prevent DB artifacts in git.
+
+---
+
 ## [0.0.0](https://github.com/Chnapak/ResourciaWebapp/compare/v0.1.0...v0.0.0) (2026-04-05)
 
 ## [0.1.0](https://github.com/Chnapak/ResourciaWebapp/compare/a84afe94cccc93c03b0d07d29c3815753d38e355...v0.1.0) (2026-04-05)

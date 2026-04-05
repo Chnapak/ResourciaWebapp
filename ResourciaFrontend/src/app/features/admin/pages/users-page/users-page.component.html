@@ -10,13 +10,28 @@
         [indeterminate]="someSelected"
         (toggleAll)="onToggleAll($event)"
     >
-        @for (user of users; track user.id) {
-            <!-- Each row displays user info and actions -->
-            <app-user-row
-                [user]="user"
-                [selected]="selectedIds.has(user.id)"
-                (toggle)="onToggleOne($event.id, $event.checked)"
-            ></app-user-row>
+        @if (isLoading) {
+            @for (_ of [1,2,3,4,5,6]; track $index) {
+                <div class="flex items-center gap-4 px-4 py-4 border-b border-slate-100 sm:px-8 animate-pulse">
+                    <div class="w-10 h-10 rounded-full bg-slate-200"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 w-40 rounded bg-slate-200"></div>
+                        <div class="h-3 w-56 rounded bg-slate-100"></div>
+                    </div>
+                    <div class="h-4 w-16 rounded bg-slate-200"></div>
+                    <div class="h-4 w-24 rounded bg-slate-100"></div>
+                    <div class="h-4 w-16 rounded bg-slate-200"></div>
+                </div>
+            }
+        } @else {
+            @for (user of users; track user.id) {
+                <!-- Each row displays user info and actions -->
+                <app-user-row
+                    [user]="user"
+                    [selected]="selectedIds.has(user.id)"
+                    (toggle)="onToggleOne($event.id, $event.checked)"
+                ></app-user-row>
+            }
         }
     </app-admin-table>
 

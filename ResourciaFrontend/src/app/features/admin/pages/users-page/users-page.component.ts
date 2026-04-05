@@ -32,6 +32,8 @@ export class UsersAdminPageComponent implements OnInit {
 
   /** Current list of users. */
   users: AdminUser[] = [];
+  /** Loading state for user list. */
+  isLoading = false;
   /** Admin API client used to fetch users. */
   protected readonly AdminService = inject(AdminService);
 
@@ -72,17 +74,20 @@ export class UsersAdminPageComponent implements OnInit {
 
   /** Loads the user list and reconciles the selection set. */
   private loadUsers(): void {
+    this.isLoading = true;
     this.AdminService.getUsers().subscribe({
       next: ({ items }) => {
         this.users = items;
 
         const validIds = new Set(items.map(user => user.id));
         this.selectedIds = new Set([...this.selectedIds].filter(id => validIds.has(id)));
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Failed to load users', err);
         this.users = [];
         this.selectedIds.clear();
+        this.isLoading = false;
       }
     });
   }

@@ -1,11 +1,11 @@
-<div class="max-w-7xl mx-auto px-8 py-8">
+<div class="max-w-7xl mx-auto px-4 py-6 sm:px-8 sm:py-8">
     <!-- Section Tabs -->
-    <nav class="bg-white rounded-lg p-2 mb-8 flex gap-2 shadow-sm">
+    <nav class="bg-white rounded-lg p-2 mb-6 sm:mb-8 flex flex-wrap gap-2 shadow-sm">
         @for (item of navItems; track item) {
             <a
                 [routerLink]="item.link"
                 routerLinkActive="bg-blue-600 text-white"
-                class="px-6 py-3 rounded-md text-sm font-medium transition-all cursor-pointer text-gray-600 hover:bg-gray-100"
+                class="px-4 py-2.5 sm:px-6 sm:py-3 rounded-md text-sm font-medium transition-all cursor-pointer text-gray-600 hover:bg-gray-100 whitespace-nowrap"
             >
                 {{ item.label }}
             </a>

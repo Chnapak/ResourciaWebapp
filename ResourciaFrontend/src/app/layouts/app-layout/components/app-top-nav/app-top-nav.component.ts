@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { ExploreMenuComponent } from './components/explore-menu/explore-menu.component';
 import { NavSearchComponent } from './components/nav-search/nav-search.component';
@@ -7,17 +7,17 @@ import { BrandLogoComponent } from './components/brand-logo/brand-logo.component
 import { AuthLinksComponent } from './components/auth-links/auth-links.component';
 import { JwtPayloadModel } from '../../../../shared/models/jwt-payload-model';
 import { jwtDecode } from 'jwt-decode';
-import { DropdownComponent } from '../../../../shared/ui/dropdown/dropdown.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-top-nav',
-  imports: [ ExploreMenuComponent, NavSearchComponent, BrandLogoComponent, AuthLinksComponent, LanguageSwitcherComponent ],
+  imports: [ ExploreMenuComponent, NavSearchComponent, BrandLogoComponent, AuthLinksComponent, LanguageSwitcherComponent, RouterLink ],
   templateUrl: './app-top-nav.component.html',
   styleUrl: './app-top-nav.component.scss'
 })
 export class AppTopNavComponent implements OnInit {
   user: JwtPayloadModel | null = null;
+  isMobileMenuOpen = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -73,6 +73,10 @@ export class AppTopNavComponent implements OnInit {
 
   private getToken(): string | null {
     return localStorage.getItem('accessToken'); // or wherever you store it
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 }
 

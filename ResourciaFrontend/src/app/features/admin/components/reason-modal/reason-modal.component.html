@@ -3,7 +3,7 @@
      (click)="close.emit()">
 
   <!-- Modal card; stop propagation so overlay click closes only outside -->
-  <div class="bg-white rounded-xl w-full max-w-lg p-8 relative"
+  <div class="bg-white rounded-xl w-full max-w-lg p-6 sm:p-8 relative mx-4"
        (click)="$event.stopPropagation()">
 
     <!-- Modal title reflects suspend vs ban mode -->
@@ -18,7 +18,7 @@
 
       <!-- Duration -->
       @if (isSuspend) {
-        <div class="flex flex-col w-fit max-w-240 relative mb-4">
+        <div class="flex flex-col w-full max-w-240 relative mb-4 sm:w-fit">
           @let duration = form.get('duration');
 
           <label i18n class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit">
@@ -26,7 +26,7 @@
           </label>
 
           <select formControlName="duration"
-                  class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-600 focus:outline-none">
+                  class="p-[11px_10px] w-full text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-600 focus:outline-none sm:w-70">
             <option i18n value="1">1 day</option>
             <option i18n value="3">3 days</option>
             <option i18n value="7">7 days</option>
@@ -37,7 +37,7 @@
       }
 
       <!-- Reason -->
-      <div class="flex flex-col w-fit max-w-240 relative">
+      <div class="flex flex-col w-full max-w-240 relative sm:w-fit">
         @let reason = form.get('reason');
 
         <label class="text-xs font-bold text-blue-400 bg-gray-100 relative top-2 ml-2 px-1 w-fit"
@@ -49,30 +49,30 @@
           rows="4"
           placeholder="Write here..."
           formControlName="reason"
-          class="p-[11px_10px] w-70 text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-600 focus:outline-none resize-none"
+          class="p-[11px_10px] w-full text-xs border-2 border-blue-400 rounded bg-gray-100 text-gray-600 focus:outline-none resize-none sm:w-70"
           [class.border-red-500]="reason?.touched && reason?.invalid">
         </textarea>
 
         @if (reason?.touched && reason?.invalid) {
           @if (reason?.errors?.['required']) {
-            <div i18n class="w-70 text-left text-xs text-red-700">
+            <div i18n class="w-full text-left text-xs text-red-700 sm:w-70">
               Reason is required.
             </div>
           }
           @if (reason?.errors?.['maxlength']) {
-            <div i18n class="w-70 text-left text-xs text-red-700">
+            <div i18n class="w-full text-left text-xs text-red-700 sm:w-70">
               Reason cannot exceed 500 characters.
             </div>
           }
         }
 
-        <div class="w-70 text-right text-xs text-gray-400 mt-1">
+        <div class="w-full text-right text-xs text-gray-400 mt-1 sm:w-70">
           {{ reason?.value?.length || 0 }}/500
         </div>
       </div>
 
       <!-- Buttons -->
-      <div class="w-70 border-2 border-blue-400 rounded mt-6"
+      <div class="w-full border-2 border-blue-400 rounded mt-6 sm:w-70"
            [class.border-gray-400]="isSubmitting">
 
         <!-- Primary submit button switches to a disabled state while submitting -->

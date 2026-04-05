@@ -1,4 +1,4 @@
-<div class="flex flex-col w-fit max-w-240 relative">
+<div class="flex flex-col w-full max-w-240 relative sm:w-fit">
 
   <label
     [for]="label"
@@ -14,7 +14,7 @@
   <div class="relative">
     <input
       [id]="label"
-      class="p-[11px_10px] w-70 text-xs border-2 rounded bg-gray-100 focus:outline-none transition-all"
+      class="p-[11px_10px] w-full text-xs border-2 rounded bg-gray-100 focus:outline-none transition-all sm:w-70"
 
       [class.bg-white]="background === 'white'"
       
@@ -46,7 +46,7 @@
   </div>
 
   @if (showError) {
-    <div class="w-70 text-left text-xs text-red-700 mt-1">
+    <div class="w-full text-left text-xs text-red-700 mt-1 sm:w-70">
       @if (control?.errors?.['required']) {
         <span>{{ label }} is required.</span>
       } @else if (control?.errors?.['passwordStrength'] || control?.errors?.['minlength'] || control?.errors?.['maxlength']) {

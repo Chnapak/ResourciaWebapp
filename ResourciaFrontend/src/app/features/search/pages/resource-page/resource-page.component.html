@@ -1,13 +1,42 @@
-<!-- Resource hero header. -->
-<app-resource-hero
-    [resource]="resource"
-    [favoritePending]="favoritePending"
-    (favoriteToggle)="toggleFavorite()"
-></app-resource-hero>
-<!-- Body content with tabs, ratings, and discussion. -->
-<app-resource-page-body
-    [resource]="resource"
-    [favoritePending]="favoritePending"
-    (favoriteToggle)="toggleFavorite()"
-    (infoChange)="fetchResource(resourceId!)"
-></app-resource-page-body>
+@if (loading) {
+    <div class="animate-pulse">
+        <div class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 px-6 py-12">
+            <div class="max-w-6xl mx-auto">
+                <div class="h-4 w-24 rounded bg-white/20"></div>
+                <div class="mt-4 h-8 w-2/3 rounded bg-white/15"></div>
+                <div class="mt-3 h-4 w-1/2 rounded bg-white/10"></div>
+                <div class="mt-8 h-10 w-40 rounded bg-white/15"></div>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto px-6 py-8">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
+                <div class="space-y-4">
+                    <div class="h-5 w-32 rounded bg-gray-200"></div>
+                    <div class="h-4 w-full rounded bg-gray-100"></div>
+                    <div class="h-4 w-5/6 rounded bg-gray-100"></div>
+                    <div class="h-4 w-2/3 rounded bg-gray-100"></div>
+                </div>
+                <div class="h-64 rounded-xl border border-gray-200 bg-white"></div>
+            </div>
+        </div>
+    </div>
+} @else if (error) {
+    <div class="max-w-5xl mx-auto px-6 py-16 text-center">
+        <h2 class="text-2xl font-semibold text-gray-900">Unable to load resource</h2>
+        <p class="mt-2 text-sm text-gray-500">{{ error }}</p>
+    </div>
+} @else {
+    <!-- Resource hero header. -->
+    <app-resource-hero
+        [resource]="resource"
+        [favoritePending]="favoritePending"
+        (favoriteToggle)="toggleFavorite()"
+    ></app-resource-hero>
+    <!-- Body content with tabs, ratings, and discussion. -->
+    <app-resource-page-body
+        [resource]="resource"
+        [favoritePending]="favoritePending"
+        (favoriteToggle)="toggleFavorite()"
+        (infoChange)="fetchResource(resourceId!)"
+    ></app-resource-page-body>
+}

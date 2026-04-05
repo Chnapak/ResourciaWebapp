@@ -1,12 +1,16 @@
 <!-- Admin table header and content slot -->
-<app-admin-table-header
-        [columns]="columns"
-        [selectable]="selectable"
-        [checked]="checked"
-        [indeterminate]="indeterminate"
-        (toggleAll)="toggleAll.emit($event)"
-></app-admin-table-header>
-<div>
-    <!-- Table body content projected from the parent -->
-    <ng-content></ng-content>
+<div class="overflow-x-auto">
+    <div class="min-w-[900px]">
+        <app-admin-table-header
+                [columns]="columns"
+                [selectable]="selectable"
+                [checked]="checked"
+                [indeterminate]="indeterminate"
+                (toggleAll)="toggleAll.emit($event)"
+        ></app-admin-table-header>
+        <div>
+            <!-- Table body content projected from the parent -->
+            <ng-content></ng-content>
+        </div>
+    </div>
 </div>
