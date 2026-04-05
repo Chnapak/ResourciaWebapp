@@ -25,8 +25,11 @@ public class CacheService(IDistributedCache cache)
 
     public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> fetchFn, TimeSpan ttl)
     {
-        var cached = await GetAsync<T>(key);
-        if (cached is not null) return cached;
+        var raw = await cache.GetStringAsync(key, CancellationToken.None);
+        if (raw is not null)
+        {
+            return JsonSerializer.Deserialize<T>(raw, _json)!;
+        }
 
         var data = await fetchFn();         // ct lives here, inside the lambda at the call site
         await SetAsync(key, data, ttl);
