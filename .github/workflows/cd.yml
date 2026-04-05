@@ -3,7 +3,6 @@ name: CD
 on:
   push:
     branches: [main]
-  push:
     tags: ["v*"]
   workflow_dispatch:
     inputs:
@@ -17,11 +16,12 @@ on:
 
 jobs:
   deploy_staging:
-    if: github.ref == 'refs/heads/main' && secrets.STAGING_DEPLOY_HOST != ''
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
     steps:
       - name: Deploy via SSH (staging)
+        if: ${{ secrets.STAGING_DEPLOY_HOST != '' }}
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.STAGING_DEPLOY_HOST }}
@@ -36,6 +36,9 @@ jobs:
             git pull
             cd ResourciaBackend/src
             docker compose up -d --build
+      - name: Skip deploy (missing secrets)
+        if: ${{ secrets.STAGING_DEPLOY_HOST == '' }}
+        run: echo "STAGING_DEPLOY_HOST not set, skipping deploy."
 
   deploy_production:
     if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
@@ -43,6 +46,7 @@ jobs:
     environment: production
     steps:
       - name: Deploy via SSH (production)
+        if: ${{ secrets.PROD_DEPLOY_HOST != '' }}
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.PROD_DEPLOY_HOST }}
@@ -57,3 +61,6 @@ jobs:
             git pull
             cd ResourciaBackend/src
             docker compose up -d --build
+      - name: Skip deploy (missing secrets)
+        if: ${{ secrets.PROD_DEPLOY_HOST == '' }}
+        run: echo "PROD_DEPLOY_HOST not set, skipping deploy."

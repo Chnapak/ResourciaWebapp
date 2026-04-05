@@ -116,9 +116,10 @@ jobs:
   deploy:
     needs: [backend, frontend, e2e, commitlint]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.DEPLOY_HOST != ''
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Deploy via SSH
+        if: ${{ secrets.DEPLOY_HOST != '' }}
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -133,3 +134,6 @@ jobs:
             git pull
             cd ResourciaBackend/src
             docker compose up -d --build
+      - name: Skip deploy (missing secrets)
+        if: ${{ secrets.DEPLOY_HOST == '' }}
+        run: echo "DEPLOY_HOST not set, skipping deploy."
