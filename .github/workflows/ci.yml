@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Lint (backend)
+        shell: pwsh
+        run: ./scripts/ci.ps1 -Task lint -Scope backend
+
+      - name: Test (backend)
+        shell: pwsh
+        run: ./scripts/ci.ps1 -Task test -Scope backend
+
+      - name: Build (backend)
+        shell: pwsh
+        run: ./scripts/ci.ps1 -Task build -Scope backend
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: ResourciaFrontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ResourciaFrontend
+        run: npm ci
+
+      - name: Lint (frontend)
+        shell: pwsh
+        run: ./scripts/ci.ps1 -Task lint -Scope frontend
+
+      - name: Test (frontend)
+        shell: pwsh
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+          CI: "true"
+        run: ./scripts/ci.ps1 -Task test -Scope frontend
+
+      - name: Build (frontend)
+        shell: pwsh
+        run: ./scripts/ci.ps1 -Task build -Scope frontend
+
+  deploy:
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.DEPLOY_HOST != ''
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || '22' }}
+          script: |
+            set -e
+            cd "${{ secrets.DEPLOY_PATH }}"
+            git fetch --all
+            git checkout main
+            git pull
+            cd ResourciaBackend/src
+            docker compose up -d --build

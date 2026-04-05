@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { getInitials, getUserGradient } from '../../../../../../../../../../shared/utils/user.utils';
 
 /**
@@ -6,7 +7,7 @@ import { getInitials, getUserGradient } from '../../../../../../../../../../shar
  */
 @Component({
   selector: 'app-resource-discussion-reply',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './resource-discussion-reply.component.html',
   styleUrl: './resource-discussion-reply.component.scss',
 })

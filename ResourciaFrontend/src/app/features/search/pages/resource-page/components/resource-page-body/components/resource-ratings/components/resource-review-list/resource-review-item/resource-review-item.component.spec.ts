@@ -14,6 +14,17 @@ describe('ResourceReviewItemComponent', () => {
 
     fixture = TestBed.createComponent(ResourceReviewItemComponent);
     component = fixture.componentInstance;
+    component.resourceId = 'resource-1';
+    component.review = {
+      id: 'review-1',
+      username: 'reviewer',
+      createdAt: new Date().toISOString(),
+      rating: 4,
+      content: 'Great resource',
+      upvotes: 0,
+      downvotes: 0,
+      userVote: null,
+    };
     fixture.detectChanges();
   });
 

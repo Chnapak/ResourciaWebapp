@@ -14,6 +14,7 @@ describe('RegistrationPageComponent', () => {
 
     fixture = TestBed.createComponent(RegistrationPageComponent);
     component = fixture.componentInstance;
+    (window as any).turnstile = { render: () => {} };
     fixture.detectChanges();
   });
 
