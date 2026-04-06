@@ -56,6 +56,16 @@ export class ResourceCardComponent {
     return domain.charAt(0).toUpperCase() || 'R';
   }
 
+  /** Whether the resource has a preview image. */
+  get hasImage(): boolean {
+    return !!this.resource?.imageUrl?.trim();
+  }
+
+  /** Preview image URL for the card. */
+  get imageUrl(): string {
+    return this.resource?.imageUrl?.trim() || '';
+  }
+
   /** Display type label derived from facets or learning style. */
   get displayType(): string {
     const resource = this.resource;

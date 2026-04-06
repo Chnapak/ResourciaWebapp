@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule, UntypedFormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ResourceService } from '../../../../core/services/resource.service';
 import { CreateResourceRequestModel } from '../../../../shared/models/create-resource-request';
 import { FilterKind } from '../../../../shared/models/filter-kind';
 import { Filter as SearchSchemaFilter } from '../../../../shared/models/search-schema';
+import { ToasterService } from '../../../../shared/toaster/toaster.service';
 
 /**
  * Resource fields that map directly to request properties (non-facet).
@@ -21,7 +23,7 @@ type DirectResourceField = 'author' | 'isFree' | 'learningStyle' | 'rating' | 't
   templateUrl: './add-resource-page.component.html',
   styleUrl: './add-resource-page.component.scss'
 })
-export class AddResourcePageComponent implements OnInit {
+export class AddResourcePageComponent implements OnInit, OnDestroy {
   /** Expose enum to template for switch/case rendering. */
   protected readonly FilterKind = FilterKind;
 
@@ -31,6 +33,8 @@ export class AddResourcePageComponent implements OnInit {
   private readonly resourceService = inject(ResourceService);
   /** Router used for post-submit navigation. */
   private readonly router = inject(Router);
+  /** Toasts for success/error feedback. */
+  private readonly toaster = inject(ToasterService);
 
   /** Priority filter keys surfaced at the top of the form. */
   private readonly featuredFilterKeys = new Set([
@@ -56,10 +60,23 @@ export class AddResourcePageComponent implements OnInit {
   submitting = false;
   /** Error message for schema or submit failures. */
   error: string | null = null;
+  /** Selected image files for upload. */
+  selectedImages: File[] = [];
+  /** Preview URLs for selected images. */
+  imagePreviews: string[] = [];
+  /** Image selection validation message. */
+  imageError: string | null = null;
+  /** Upload state for images after resource creation. */
+  uploadingImages = false;
 
   /** Load schema metadata on page init. */
   ngOnInit(): void {
     this.loadSchema();
+  }
+
+  /** Clean up object URLs on destroy. */
+  ngOnDestroy(): void {
+    this.imagePreviews.forEach((url) => URL.revokeObjectURL(url));
   }
 
   /** Filters shown in the "featured" group. */
@@ -94,14 +111,89 @@ export class AddResourcePageComponent implements OnInit {
 
     this.resourceService.createResource(this.buildPayload()).subscribe({
       next: (resource) => {
-        this.submitting = false;
-        this.router.navigate(['/resource', resource.id]);
+        if (this.selectedImages.length === 0) {
+          this.submitting = false;
+          this.router.navigate(['/resource', resource.id]);
+          return;
+        }
+
+        this.uploadingImages = true;
+        forkJoin(this.selectedImages.map((file) => this.resourceService.uploadResourceImage(resource.id, file))).subscribe({
+          next: () => {
+            this.uploadingImages = false;
+            this.submitting = false;
+            this.toaster.show('Images uploaded successfully.', 'success');
+            this.router.navigate(['/resource', resource.id]);
+          },
+          error: () => {
+            this.uploadingImages = false;
+            this.submitting = false;
+            this.toaster.show('Resource created, but some images failed to upload.', 'error');
+            this.router.navigate(['/resource', resource.id]);
+          }
+        });
       },
       error: (err) => {
         this.submitting = false;
         this.error = err?.error?.error ?? 'Failed to create resource.';
       },
     });
+  }
+
+  /** Handle image selection input changes. */
+  onImagesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const files = Array.from(input?.files ?? []);
+
+    if (!files.length) {
+      return;
+    }
+
+    const allowedTypes = new Set(['image/png', 'image/jpeg', 'image/gif']);
+    const maxSize = 5_000_000;
+    const nextFiles: File[] = [];
+
+    this.imageError = null;
+
+    files.forEach((file) => {
+      if (!allowedTypes.has(file.type)) {
+        this.imageError = 'Only PNG, JPG, or GIF images are supported.';
+        return;
+      }
+      if (file.size > maxSize) {
+        this.imageError = 'Images must be 5MB or smaller.';
+        return;
+      }
+
+      nextFiles.push(file);
+    });
+
+    if (!nextFiles.length) {
+      return;
+    }
+
+    nextFiles.forEach((file) => {
+      this.selectedImages.push(file);
+      this.imagePreviews.push(URL.createObjectURL(file));
+    });
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  /** Remove a selected image before upload. */
+  removeSelectedImage(index: number): void {
+    const [removed] = this.selectedImages.splice(index, 1);
+    const [preview] = this.imagePreviews.splice(index, 1);
+
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+
+    if (removed && this.selectedImages.length === 0) {
+      this.imageError = null;
+    }
   }
 
   /** Build a stable control name for a schema filter. */

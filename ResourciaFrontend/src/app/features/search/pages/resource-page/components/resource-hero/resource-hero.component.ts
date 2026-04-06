@@ -5,6 +5,7 @@ import { ResourceRatingSummaryComponent } from './components/resource-rating-sum
 import { ResourceHeroActionsComponent } from './components/resource-hero-actions/resource-hero-actions.component';
 import { ResourcePreviewPanelComponent } from './components/resource-preview-panel/resource-preview-panel.component';
 import { ResourceDetailModel } from '../../../../../../shared/models/resource-detail';
+import { ResourceImageModel } from '../../../../../../shared/models/resource-image';
 
 /**
  * Hero section at the top of the resource detail page.
@@ -19,8 +20,20 @@ import { ResourceDetailModel } from '../../../../../../shared/models/resource-de
 export class ResourceHeroComponent {
   /** Resource details used in the hero content. */
   @Input() resource: ResourceDetailModel | null = null;
+  /** Images associated with the resource. */
+  @Input() images: ResourceImageModel[] = [];
+  /** Loading state for image fetches. */
+  @Input() imagesLoading = false;
+  /** Allow image uploads from the preview panel. */
+  @Input() canUploadImages = false;
+  /** Upload pending flag. */
+  @Input() uploadPending = false;
   /** Disable favorite action while requests are pending. */
   @Input() favoritePending = false;
   /** Emit when the favorite button is toggled. */
   @Output() favoriteToggle = new EventEmitter<void>();
+  /** Emit when new images are selected for upload. */
+  @Output() uploadImages = new EventEmitter<FileList | null>();
+  /** Emit when the image lightbox should open. */
+  @Output() openLightbox = new EventEmitter<number>();
 }

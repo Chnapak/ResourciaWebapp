@@ -24,6 +24,7 @@ export const routes: Routes = [
       {
         path: 'addresource',
         title: 'Add Resource',
+        canActivate: [canActivateGuard],
         loadComponent: () =>
           import('./features/search/pages/add-resource-page/add-resource-page.component').then((module) => module.AddResourcePageComponent)
       },

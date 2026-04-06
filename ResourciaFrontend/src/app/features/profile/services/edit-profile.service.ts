@@ -65,6 +65,18 @@ export class EditProfileService {
     return this.httpClient.delete<void>(`${this.baseUrl}/me`);
   }
 
+  /** Uploads a new avatar image for the current user. */
+  uploadAvatar(file: File): Observable<{ avatarUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.httpClient.post<{ avatarUrl: string }>(`${this.baseUrl}/me/avatar`, formData);
+  }
+
+  /** Removes the current user's avatar. */
+  deleteAvatar(): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}/me/avatar`);
+  }
+
   /** Resets save status and message to defaults. */
   resetStatus(): void {
     this.saveStatus.set('idle');
@@ -80,7 +92,7 @@ export class EditProfileService {
       location: profile.location ?? '',
       website: profile.website ?? '',
       interests: profile.interests ?? [],
-      avatarUrl: null,
+      avatarUrl: profile.avatarUrl ?? null,
     };
   }
 }

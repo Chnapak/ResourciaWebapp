@@ -55,7 +55,8 @@ public class ReviewsController : ControllerBase
         pageSize = Math.Clamp(pageSize, 1, 100);
 
         var userId = User.Identity?.IsAuthenticated == true ? User.GetUserId() : (Guid?)null;
-        var (items, totalItems) = await _reviews.GetReviewsAsync(id, page, pageSize, sortBy, userId, ct);
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+        var (items, totalItems) = await _reviews.GetReviewsAsync(id, page, pageSize, sortBy, userId, baseUrl, ct);
 
         return Ok(new { items, page, pageSize, totalItems });
     }
@@ -316,6 +317,9 @@ public class ReviewsController : ControllerBase
             {
                 Id = r.Id,
                 Username = r.User.DisplayName, // or r.User.DisplayName
+                AvatarUrl = r.User.AvatarFileName == null
+                    ? null
+                    : $"{Request.Scheme}://{Request.Host}/uploads/{r.User.AvatarFileName}",
                 Rating = r.Rating,
                 Content = r.Content,
                 CreatedAt = r.CreatedAt,

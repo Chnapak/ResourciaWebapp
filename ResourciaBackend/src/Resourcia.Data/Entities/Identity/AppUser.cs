@@ -35,6 +35,9 @@ public class AppUser : IdentityUser<Guid>, ITrackable
     [MaxLength(255)]
     public string? Website { get; set; }
 
+    [MaxLength(255)]
+    public string? AvatarFileName { get; set; }
+
     public string? InterestsJson { get; set; }
 
     public ICollection<Post> Posts { get; set; } = [];

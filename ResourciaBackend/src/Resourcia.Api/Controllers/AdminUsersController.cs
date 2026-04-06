@@ -33,6 +33,8 @@ public class AdminUsersController : ControllerBase
         page = Math.Max(page, 1);
         pageSize = Math.Clamp(pageSize, 1, 100);
 
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
         var query = _userManager.Users.AsNoTracking();
 
         var totalCount = await query.CountAsync();
@@ -146,6 +148,9 @@ public class AdminUsersController : ControllerBase
                 Role = role,
                 RoleLabel = roleLabel,
                 Status = MapStatus(user.Status),
+                AvatarUrl = string.IsNullOrWhiteSpace(user.AvatarFileName)
+                    ? null
+                    : $"{baseUrl}/uploads/{user.AvatarFileName}",
                 ResourcesCount = resourcesCount,
                 LastActiveAt = lastActiveAt
             });
