@@ -22,6 +22,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     private ImageService _imageService = imageService;
     private CacheService _cache = cache;
 
+    [Authorize]
     [HttpPost("api/resources")]
     public async Task<IActionResult> Create([FromBody] CreateResourceModel req, CancellationToken ct)
     {
@@ -338,6 +339,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     [HttpGet("api/resources/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
         var resource = await _cache.GetOrSetAsync(
             $"resource:v5:{id}",
             async () =>
@@ -387,6 +389,9 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                             {
                                 rv.Id,
                                 Username = rv.User.DisplayName,
+                                AvatarUrl = rv.User.AvatarFileName == null
+                                    ? null
+                                    : $"{baseUrl}/uploads/{rv.User.AvatarFileName}",
                                 rv.Rating,
                                 rv.Content,
                                 rv.CreatedAt,
@@ -580,6 +585,11 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                     r.Tags,
                     r.CreatedBy,
                     r.CreatedAtUtc,
+                    ImageFileName = r.Images
+                        .Where(image => !image.IsDeleted)
+                        .OrderByDescending(image => image.UploadedAtUtc)
+                        .Select(image => image.FileName)
+                        .FirstOrDefault(),
                     Ratings = r.Ratings == null ? null : new
                     {
                         r.Ratings.AverageRating,
@@ -612,6 +622,9 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                     item.Tags,
                     item.CreatedBy,
                     item.CreatedAtUtc,
+                    ImageUrl = string.IsNullOrWhiteSpace(item.ImageFileName)
+                        ? null
+                        : $"/uploads/{item.ImageFileName}",
                     item.Ratings,
                     Facets = item.FilterValues
                         .Select(filterValue => SerializeStoredFilterValue(
@@ -767,6 +780,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
     [HttpGet("api/resources/{id:guid}/threads")]
     public async Task<IActionResult> GetThreads(Guid id)
     {
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
         var threads = await _cache.GetOrSetAsync(
             $"threads:{id}",
             () => _dbContext.Set<Discussions>()
@@ -779,6 +793,9 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                     t.UserId,
                     t.CreatedAt,
                     Username = t.User.DisplayName,
+                    AvatarUrl = t.User.AvatarFileName == null
+                        ? null
+                        : $"{baseUrl}/uploads/{t.User.AvatarFileName}",
                     Replies = t.Replies
                         .OrderBy(r => r.CreatedAt)
                         .Select(r => new
@@ -787,7 +804,10 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                             r.Content,
                             r.UserId,
                             r.CreatedAt,
-                            Username = r.User.DisplayName
+                            Username = r.User.DisplayName,
+                            AvatarUrl = r.User.AvatarFileName == null
+                                ? null
+                                : $"{baseUrl}/uploads/{r.User.AvatarFileName}"
                         })
                         .ToList()
                 })
@@ -826,7 +846,24 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         await _cache.InvalidateAsync($"threads:{id}"); // 👈 bust so next GET is fresh
 
-        return Ok(thread);
+        var user = await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+        return Ok(new
+        {
+            thread.Id,
+            thread.Content,
+            thread.UserId,
+            thread.CreatedAt,
+            Username = user?.DisplayName ?? string.Empty,
+            AvatarUrl = user?.AvatarFileName == null
+                ? null
+                : $"{baseUrl}/uploads/{user.AvatarFileName}",
+            Replies = new List<object>()
+        });
     }
 
     [Authorize]
@@ -860,12 +897,22 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         await _cache.InvalidateAsync($"threads:{thread.ResourceId}");
 
+        var user = await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
         return Ok(new
         {
             reply.Id,
             reply.Content,
             reply.UserId,
-            reply.CreatedAt
+            reply.CreatedAt,
+            Username = user?.DisplayName ?? string.Empty,
+            AvatarUrl = user?.AvatarFileName == null
+                ? null
+                : $"{baseUrl}/uploads/{user.AvatarFileName}"
         });
     }
 
@@ -1009,6 +1056,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         _dbContext.ResourceImages.Add(resourceImage);
         await _dbContext.SaveChangesAsync();
 
+        await InvalidateSearchResultsAsync();
+
         return Ok(new
         {
             resourceImage.Id,
@@ -1025,11 +1074,21 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         var images = await _dbContext.ResourceImages
             .Where(i => i.ResourceId == resourceId && !i.IsDeleted)
-            .Select(i => new
+            .GroupJoin(
+                _dbContext.Users.IgnoreQueryFilters(),
+                image => image.UploadedByUserId,
+                user => user.Id,
+                (image, users) => new { image, user = users.FirstOrDefault() }
+            )
+            .Select(result => new
             {
-                i.Id,
-                i.ContentType,
-                Url = $"{baseUrl}/uploads/{i.FileName}"
+                result.image.Id,
+                result.image.ContentType,
+                Url = $"{baseUrl}/uploads/{result.image.FileName}",
+                UploadedById = result.image.UploadedByUserId,
+                UploadedBy = result.user != null ? result.user.DisplayName : null,
+                UploadedByHandle = result.user != null ? result.user.Handle : null,
+                UploadedAtUtc = result.image.UploadedAtUtc
             })
             .ToListAsync();
 
@@ -1072,6 +1131,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         image.DeletedByUserId = userId;
 
         await _dbContext.SaveChangesAsync();
+
+        await InvalidateSearchResultsAsync();
 
         return NoContent();
     }

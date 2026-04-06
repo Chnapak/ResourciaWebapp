@@ -30,8 +30,11 @@ public class ReviewService
         int pageSize,
         string sortBy,
         Guid? userId = null,
+        string? baseUrl = null,
         CancellationToken ct = default)
     {
+        var basePrefix = string.IsNullOrWhiteSpace(baseUrl) ? string.Empty : baseUrl.TrimEnd('/');
+
         var query = _db.ResourceReviews
             .Where(r => r.ResourceId == resourceId);
 
@@ -54,6 +57,9 @@ public class ReviewService
                 ResourceId = r.ResourceId,
                 UserId     = r.UserId,
                 Username   = r.User.DisplayName,
+                AvatarUrl  = r.User.AvatarFileName == null
+                    ? null
+                    : (string.IsNullOrEmpty(basePrefix) ? $"/uploads/{r.User.AvatarFileName}" : $"{basePrefix}/uploads/{r.User.AvatarFileName}"),
                 Rating     = r.Rating,
                 Content    = r.Content,
                 CreatedAt  = r.CreatedAt,

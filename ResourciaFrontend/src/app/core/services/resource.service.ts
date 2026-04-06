@@ -14,6 +14,7 @@ import { SearchResponse } from '../../shared/models/search-response';
 import { ReviewRequestModel } from '../../shared/models/review-request';
 import { Review } from '../../shared/models/review';
 import { SchemaResponse } from '../../shared/models/search-schema';
+import { ResourceImageModel, ResourceImageUploadResponse } from '../../shared/models/resource-image';
 
 
 /**
@@ -69,6 +70,23 @@ export class ResourceService {
   /** Fetches a detailed resource by id. */
   getResource(id: string): Observable<ResourceDetailModel> {
     return this.httpClient.get<ResourceDetailModel>(`/api/resources/${id}`);
+  }
+
+  /** Fetches images for a resource. */
+  getResourceImages(id: string): Observable<ResourceImageModel[]> {
+    return this.httpClient.get<ResourceImageModel[]>(`${this.baseUrl}/${id}/images`);
+  }
+
+  /** Uploads a single image for a resource. */
+  uploadResourceImage(id: string, file: File): Observable<ResourceImageUploadResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.httpClient.post<ResourceImageUploadResponse>(`${this.baseUrl}/${id}/images`, formData);
+  }
+
+  /** Deletes a resource image by id. */
+  deleteResourceImage(imageId: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}/images/${imageId}`);
   }
 
   /** Retrieves the current user's save state for a resource. */

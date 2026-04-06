@@ -68,10 +68,14 @@
           class="w-20 h-20 rounded-full bg-blue-600 border-2 border-white/30
                  flex items-center justify-center
                  text-white text-2xl font-bold tracking-tight select-none
-                 shadow-lg shadow-blue-950/40"
+                 shadow-lg shadow-blue-950/40 overflow-hidden"
           aria-hidden="true"
         >
-          {{ profile.avatarInitials }}
+          @if (profile.avatarUrl) {
+            <img [src]="profile.avatarUrl" alt="Profile photo" class="h-full w-full object-cover" />
+          } @else {
+            {{ profile.avatarInitials }}
+          }
         </div>
         @if (profile.isVerified) {
           <span

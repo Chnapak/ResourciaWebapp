@@ -9,10 +9,14 @@
         class="flex items-center gap-3 rounded-md transition-colors hover:text-blue-600"
       >
         <div class="w-8 h-8 rounded-full 
-                  flex items-center justify-center text-xs font-bold text-white"
-            [style.background]="gradient"
+                  flex items-center justify-center text-xs font-bold text-white overflow-hidden"
+            [style.background]="review.avatarUrl ? 'transparent' : gradient"
         >
-          {{initials}}
+          @if (review.avatarUrl) {
+            <img [src]="review.avatarUrl" alt="Reviewer avatar" class="h-full w-full object-cover" />
+          } @else {
+            {{initials}}
+          }
         </div>
 
         <div>

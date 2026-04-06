@@ -1,3 +1,13 @@
+## [0.2.0] - 2026-04-07
+
+### Highlights
+- Profile photo upload + removal in the Edit Profile page.
+- Avatars shown across profiles, reviews, discussions, and admin user lists.
+- New avatar API endpoints and DB migration for `AppUser`.
+- Avatar edit badge clickability fix.
+
+---
+
 ## [0.1.0] - 2026-04-05
 
 ### Highlights

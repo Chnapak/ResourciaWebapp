@@ -8,6 +8,7 @@ public class ReviewResponseModel
     public Guid ResourceId { get; set; }
     public Guid UserId { get; set; }
     public string Username { get; set; } = null!;
+    public string? AvatarUrl { get; set; }
     public int Rating { get; set; }
     public string? Content { get; set; }
     public Instant? CreatedAt { get; set; }

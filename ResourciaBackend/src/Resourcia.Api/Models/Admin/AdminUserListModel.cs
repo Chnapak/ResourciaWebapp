@@ -16,6 +16,8 @@ public class AdminUserListItemModel
 
     public string Status { get; set; } = "active";
 
+    public string? AvatarUrl { get; set; }
+
     public int ResourcesCount { get; set; }
 
     public DateTime LastActiveAt { get; set; }

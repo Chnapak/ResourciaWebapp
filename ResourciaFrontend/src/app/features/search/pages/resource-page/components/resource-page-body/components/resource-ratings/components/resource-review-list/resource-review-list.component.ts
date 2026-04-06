@@ -109,6 +109,7 @@ export class ResourceReviewListComponent implements OnChanges {
     return {
       id: review.id ?? null,
       username: review.username ?? 'Anonymous',
+      avatarUrl: review.avatarUrl ?? null,
       createdAt: review.createdAt ?? '',
       rating: review.rating ?? 0,
       content: review.content ?? '',

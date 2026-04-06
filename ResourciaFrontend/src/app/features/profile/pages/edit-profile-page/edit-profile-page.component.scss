@@ -102,11 +102,25 @@
 }
 
 .ep-avatar-shell {
-  position: relative;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ep-avatar-frame {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ep-avatar {
+  position: relative;
+  z-index: 1;
   width: 72px;
   height: 72px;
   border-radius: 50%;
@@ -120,31 +134,101 @@
   color: #fff;
 }
 
+.ep-avatar--image {
+  background: #1f3b8f;
+  overflow: hidden;
+  padding: 0;
+}
+
+.ep-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
 .ep-avatar__badge {
   position: absolute;
+  z-index: 2;
   bottom: 2px;
   right: 2px;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #1a3aad;
   border: 2px solid rgba(255,255,255,.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: .6rem;
+  font-size: .7rem;
   color: rgba(255,255,255,.8);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(13,31,107,.2);
+  overflow: hidden;
 }
 
-.ep-avatar__future-note {
-  position: absolute;
-  bottom: -1.6rem;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: .65rem;
-  color: rgba(255,255,255,.45);
+.ep-avatar__badge-icon {
   pointer-events: none;
+}
+
+.ep-avatar__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.ep-avatar__badge--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ep-avatar__actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.ep-avatar__action {
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(255,255,255,.2);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.ep-avatar__status {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,.55);
+  text-align: center;
+}
+
+.ep-avatar__status--error {
+  color: #fca5a5;
+}
+
+.ep-avatar__status--success {
+  color: #bbf7d0;
 }
 
 .ep-hero__title {
@@ -550,6 +634,19 @@
     font-weight: 700;
     color: #fff;
     margin-bottom: .85rem;
+  }
+
+  &__avatar--image {
+    background: #1f3b8f;
+    overflow: hidden;
+    padding: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
   }
 
   &__name {

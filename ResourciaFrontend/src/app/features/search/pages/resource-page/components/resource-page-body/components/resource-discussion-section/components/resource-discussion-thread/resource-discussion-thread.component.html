@@ -2,9 +2,13 @@
 <div class="flex gap-3 py-4 border-b border-gray-200">
   <a
     [routerLink]="profileLink(thread.username)"
-    class="w-[34px] h-[34px] rounded-full flex items-center justify-center text-xs font-bold text-white"
-    [style.background]="gradient(thread.username)">
-    {{ initials(thread.username) }}
+    class="w-[34px] h-[34px] rounded-full flex items-center justify-center text-xs font-bold text-white overflow-hidden"
+    [style.background]="thread.avatarUrl ? 'transparent' : gradient(thread.username)">
+    @if (thread.avatarUrl) {
+      <img [src]="thread.avatarUrl" alt="Avatar" class="h-full w-full object-cover" />
+    } @else {
+      {{ initials(thread.username) }}
+    }
   </a>
 
   <div class="flex-1">
@@ -56,9 +60,13 @@
         <div class="flex gap-3">
           <a
             [routerLink]="profileLink(reply.username)"
-            class="w-7 h-7 rounded-full flex items-center justify-center text-[0.65rem] font-bold text-white"
-            [style.background]="gradient(reply.username)">
-            {{ initials(reply.username) }}
+            class="w-7 h-7 rounded-full flex items-center justify-center text-[0.65rem] font-bold text-white overflow-hidden"
+            [style.background]="reply.avatarUrl ? 'transparent' : gradient(reply.username)">
+            @if (reply.avatarUrl) {
+              <img [src]="reply.avatarUrl" alt="Avatar" class="h-full w-full object-cover" />
+            } @else {
+              {{ initials(reply.username) }}
+            }
           </a>
 
           <div class="min-w-0">

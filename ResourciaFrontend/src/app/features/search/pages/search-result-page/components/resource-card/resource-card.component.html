@@ -2,9 +2,19 @@
 <div class="flex flex-col bg-white rounded-[16px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.1)] cursor-pointer transition duration-300 hover:-translate-y-[4px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
 (click)="goToDetail()"
 >
-  <!-- Avatar header with brand initial. -->
-  <div class="w-full h-[160px] mb-[8px] text-white text-[48px] font-[700] flex justify-center items-center bg-linear-to-r from-cyan-500 to-blue-500">
-    {{ logoLetter }}
+  <!-- Avatar header with optional image. -->
+  <div class="w-full h-[160px] mb-[8px] overflow-hidden bg-linear-to-r from-cyan-500 to-blue-500">
+    @if (hasImage) {
+      <img
+        [src]="imageUrl"
+        [alt]="resource?.title ?? 'Resource image'"
+        class="w-full h-full object-cover"
+      />
+    } @else {
+      <div class="w-full h-full text-white text-[48px] font-[700] flex justify-center items-center">
+        {{ logoLetter }}
+      </div>
+    }
   </div>
 
   <div class="p-[18px] flex flex-col flex-1">
