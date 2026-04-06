@@ -7,7 +7,6 @@
 - Avatar edit badge clickability fix.
 
 ---
-
 ## [0.1.0] - 2026-04-05
 
 ### Highlights
