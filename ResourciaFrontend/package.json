@@ -31,7 +31,7 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular/build": "^20.3.18",
+    "@angular/build": "^21.2.6",
     "@angular/cli": "^20.3.18",
     "@angular/compiler-cli": "^20.3.17",
     "@angular/localize": "^20.3.17",
