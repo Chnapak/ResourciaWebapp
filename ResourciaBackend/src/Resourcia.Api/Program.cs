@@ -267,7 +267,19 @@ public class Program
             }
         }
 
-        await IdentitySeed.SeedAsync(scope.ServiceProvider);
+        var bootstrapOwner =
+            builder.Configuration.GetValue<bool>("BootstrapOwner") ||
+            string.Equals(Environment.GetEnvironmentVariable("BOOTSTRAP_OWNER"), "true", StringComparison.OrdinalIgnoreCase);
+
+        if (bootstrapOwner)
+        {
+            app.Logger.LogWarning("BOOTSTRAP_OWNER is enabled. Remember to remove it after the owner account is created.");
+        }
+
+        if (app.Environment.IsDevelopment() || bootstrapOwner)
+        {
+            await IdentitySeed.SeedAsync(scope.ServiceProvider);
+        }
 
         var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "uploads");
         Directory.CreateDirectory(uploadsPath);
