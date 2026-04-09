@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Deploy via SSH (staging)
         if: ${{ env.STAGING_DEPLOY_HOST != '' }}
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ env.STAGING_DEPLOY_HOST }}
           username: ${{ env.STAGING_DEPLOY_USER }}
@@ -59,7 +59,7 @@ jobs:
     steps:
       - name: Deploy via SSH (production)
         if: ${{ env.PROD_DEPLOY_HOST != '' }}
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ env.PROD_DEPLOY_HOST }}
           username: ${{ env.PROD_DEPLOY_USER }}
