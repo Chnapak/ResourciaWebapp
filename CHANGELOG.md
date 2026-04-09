@@ -1,3 +1,10 @@
+## [0.2.4] - 2026-04-09
+
+### Highlights
+- Rewrote git history to remove previously committed secrets (`.env`, `appsettings*.json`).
+- Security report updated to mark history cleanup as resolved.
+
+---
 ## [0.2.3] - 2026-04-09
 
 ### Highlights

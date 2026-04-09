@@ -6,13 +6,13 @@
 - Configuration and repo root: `C:\Users\matej\source\repos\ResourciaApi`
 
 ## Summary
-I reviewed authentication, token handling, configuration, and edge exposure. The highest-impact issues around exposed secrets and unsafe authentication flows have been substantially reduced, with remaining risk concentrated in token storage and brute-force protections.
+I reviewed authentication, token handling, configuration, and edge exposure. All known critical and high issues have been addressed, and the repo history has been scrubbed of previously committed secrets. Remaining work is operational (rotate any previously exposed secrets and keep secret-scanning in place).
 
 ## Risk Rating (Open)
-- Critical: 1 (partial)
+- Critical: 0
 - High: 0
 - Medium: 0
-- Low: 1 (partial)
+- Low: 0
 
 ---
 
@@ -24,8 +24,8 @@ I reviewed authentication, token handling, configuration, and edge exposure. The
   - `C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\appsettings.json`
   - `C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\appsettings.Development.json`
 - Impact: Credential leakage, environment compromise, OAuth app takeover, JWT forgery.
-- Status: **Partially fixed** — tracked secrets removed from working tree, `.env`/`appsettings*.json` ignored, example templates added. **History may still contain old secrets** if previously pushed.
-- Recommendation: Rotate all values and scrub git history if secrets were already pushed.
+- Status: **Fixed** — tracked secrets removed from working tree, `.env`/`appsettings*.json` ignored, example templates added, and **git history rewritten** to remove previously committed secrets.
+- Recommendation: Rotate any secrets that were ever exposed (even if now removed from history).
 
 ### C-2. Owner/Admin seed runs in all environments
 - Evidence: `C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\Seedings\IdentitySeed.cs`
@@ -117,11 +117,11 @@ I reviewed authentication, token handling, configuration, and edge exposure. The
 
 ### L-3. Sensitive files exist despite `.gitignore`
 - Evidence: `.gitignore` excludes secrets, yet they exist in the repo.
-- Status: **Partially fixed** — tracked secrets removed; history may still contain old secrets.
-- Recommendation: Verify git history and rotate any previously exposed secrets.
+- Status: **Fixed** — tracked secrets removed and history cleaned.
+- Recommendation: Rotate any secrets that were ever exposed.
 
 ---
 
 ## Recommended Next Actions (Priority Order)
-1. Rotate any secrets that were ever committed and scrub history if exposed.
-2. Audit git history for secrets and validate token/credential rotation.
+1. Rotate any secrets that were ever committed or otherwise exposed.
+2. Keep secret-scanning (pre-commit or CI) to prevent regressions.
