@@ -1,3 +1,10 @@
+## [0.2.5] - 2026-04-09
+
+### Highlights
+- Added CI secret scanning via Gitleaks with repo allowlist config.
+- Added `scripts/rotate-secrets.ps1` helper and documented rotation in security report.
+
+---
 ## [0.2.4] - 2026-04-09
 
 ### Highlights

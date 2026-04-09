@@ -6,7 +6,7 @@
 - Configuration and repo root: `C:\Users\matej\source\repos\ResourciaApi`
 
 ## Summary
-I reviewed authentication, token handling, configuration, and edge exposure. All known critical and high issues have been addressed, and the repo history has been scrubbed of previously committed secrets. Remaining work is operational (rotate any previously exposed secrets and keep secret-scanning in place).
+I reviewed authentication, token handling, configuration, and edge exposure. All known critical and high issues have been addressed, and the repo history has been scrubbed of previously committed secrets. Secret scanning is now enforced in CI (Gitleaks), and a rotation helper script has been added; remaining work is to rotate any previously exposed secrets in each environment.
 
 ## Risk Rating (Open)
 - Critical: 0
@@ -123,5 +123,5 @@ I reviewed authentication, token handling, configuration, and edge exposure. All
 ---
 
 ## Recommended Next Actions (Priority Order)
-1. Rotate any secrets that were ever committed or otherwise exposed.
-2. Keep secret-scanning (pre-commit or CI) to prevent regressions.
+1. Run `scripts/rotate-secrets.ps1` per environment and rotate all exposed secrets in your secret store.
+2. Keep secret-scanning enabled in CI (Gitleaks) and optionally enable local hooks.

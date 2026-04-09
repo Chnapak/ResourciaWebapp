@@ -1,0 +1,9 @@
+title = "Resourcia Gitleaks Config"
+
+[allowlist]
+description = "Allow example config templates."
+paths = [
+  '''\.env\.example$''',
+  '''appsettings\.example\.json$''',
+  '''appsettings\.Development\.example\.json$'''
+]
