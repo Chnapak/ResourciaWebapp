@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Resourcia.Api.Utils;
 using Resourcia.Data.Entities.Identity;
 
 namespace Resourcia.Api.Seedings;
@@ -33,13 +34,22 @@ public class IdentitySeed
         {
             var adminUsername = _ownerDetails.GetValue<string>("Username");
             var adminPassword = _ownerDetails.GetValue<string>("Password");
+            var adminHandle = _ownerDetails.GetValue<string>("Handle");
 
             var now = _clock.GetCurrentInstant();
+            var baseHandleSource = string.IsNullOrWhiteSpace(adminUsername) ? adminEmail ?? "owner" : adminUsername;
+            var handleSource = string.IsNullOrWhiteSpace(adminHandle) ? baseHandleSource : adminHandle;
+            var handle = ProfileHandleUtility.BuildHandle(handleSource);
+            if (string.IsNullOrWhiteSpace(handle))
+            {
+                handle = "owner";
+            }
 
             adminUser = new AppUser
             {
                 Id = Guid.NewGuid(),
                 DisplayName = adminUsername,
+                Handle = handle,
                 Email = adminEmail,
                 EmailConfirmed = true,
                 UserName = adminEmail,
