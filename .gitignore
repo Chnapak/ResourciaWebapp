@@ -27,8 +27,10 @@ secrets.txt
 appsettings.*.json
 
 # Allow example config templates to be committed
+!.env.example
 !ResourciaBackend/src/Resourcia.Api/appsettings.example.json
 !ResourciaBackend/src/Resourcia.Api/appsettings.Development.example.json
+
 # Playwright
 playwright-report/
 test-results/

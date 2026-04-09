@@ -63,7 +63,6 @@ public class Program
         builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
         builder.Services.Configure<OAuthOptions>(builder.Configuration.GetSection(nameof(OAuthOptions)));
 
-        var jwtSettings = builder.Configuration.GetRequiredSection(nameof(JwtSettings)).Get<JwtSettings>();
         var oauthSettings = builder.Configuration.GetSection(nameof(OAuthOptions)).Get<OAuthOptions>();
 
         builder.Services.AddAuthentication(options =>
@@ -74,19 +73,7 @@ public class Program
         })
         .AddCookie(IdentityConstants.ExternalScheme)
         .AddCookie(IdentityConstants.ApplicationScheme)
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
-                ValidIssuer = jwtSettings.Issuer,
-                ValidAudience = jwtSettings.Audience
-            };
-        })
+        .AddJwtBearer()
         .AddGoogle(options =>
         {
             options.ClientId = oauthSettings?.Google?.ClientId ?? "invalid";
@@ -98,6 +85,30 @@ public class Program
             options.AppId = oauthSettings?.Facebook?.AppId ?? "invalid";
             options.AppSecret = oauthSettings?.Facebook?.AppSecret ?? "invalid";
             options.SaveTokens = false;
+        });
+
+        builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+        {
+            var jwtSettings = builder.Configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+            if (jwtSettings == null
+                || string.IsNullOrWhiteSpace(jwtSettings.SecretKey)
+                || string.IsNullOrWhiteSpace(jwtSettings.Issuer)
+                || string.IsNullOrWhiteSpace(jwtSettings.Audience))
+            {
+                throw new InvalidOperationException(
+                    "JwtSettings configuration is missing or incomplete. Provide JwtSettings in appsettings or environment variables.");
+            }
+
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience
+            };
         });
 
         builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpSettings"));
@@ -120,9 +131,16 @@ public class Program
         builder.Services.AddScoped<ReviewService>();
         builder.Services.AddScoped<OAuthService>();
 
-        builder.Services.AddStackExchangeRedisCache(options =>
+        builder.Services.AddStackExchangeRedisCache(_ => { });
+        builder.Services.Configure<Microsoft.Extensions.Caching.StackExchangeRedis.RedisCacheOptions>(options =>
         {
-            var redisOptions = builder.Configuration.GetSection("Redis").Get<RedisOptions>()!;
+            var redisOptions = builder.Configuration.GetSection("Redis").Get<RedisOptions>();
+            if (redisOptions == null || string.IsNullOrWhiteSpace(redisOptions.ConnectionString))
+            {
+                throw new InvalidOperationException(
+                    "Redis settings are missing. Provide Redis:ConnectionString in configuration.");
+            }
+
             options.Configuration = redisOptions.ConnectionString;
             options.InstanceName = "resourcia:";
         });
@@ -267,7 +285,19 @@ public class Program
             }
         }
 
-        await IdentitySeed.SeedAsync(scope.ServiceProvider);
+        var bootstrapOwner =
+            builder.Configuration.GetValue<bool>("BootstrapOwner") ||
+            string.Equals(Environment.GetEnvironmentVariable("BOOTSTRAP_OWNER"), "true", StringComparison.OrdinalIgnoreCase);
+
+        if (bootstrapOwner)
+        {
+            app.Logger.LogWarning("BOOTSTRAP_OWNER is enabled. Remember to remove it after the owner account is created.");
+        }
+
+        if (app.Environment.IsDevelopment() || bootstrapOwner)
+        {
+            await IdentitySeed.SeedAsync(scope.ServiceProvider);
+        }
 
         var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "uploads");
         Directory.CreateDirectory(uploadsPath);
