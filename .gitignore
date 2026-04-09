@@ -24,7 +24,9 @@ node_modules/
 **/bin/
 **/obj/
 secrets.txt
+appsettings.json
 appsettings.*.json
+ResourciaBackend/src/Resourcia.Api/wwwroot/uploads/
 
 # Allow example config templates to be committed
 !.env.example
