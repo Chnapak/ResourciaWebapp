@@ -19,9 +19,13 @@
         class="flex-1 flex items-center gap-4 cursor-pointer text-current no-underline hover:no-underline">
         <!-- Avatar badge with initials -->
         <div
-            class="w-10 h-10 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring"
-            [style.background]="getUserGradient(user.email)">
-            {{ getInitials(user.name) }}
+            class="w-10 h-10 text-white rounded-full flex items-center justify-center font-semibold text-sm shadow-sm avatar-ring overflow-hidden"
+            [style.background]="user.avatarUrl ? 'transparent' : getUserGradient(user.email)">
+            @if (user.avatarUrl) {
+                <img [src]="user.avatarUrl" alt="User avatar" class="h-full w-full object-cover" />
+            } @else {
+                {{ getInitials(user.name) }}
+            }
         </div>
         <div class="flex-1">
             <div class="flex items-center gap-2">

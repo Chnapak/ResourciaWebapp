@@ -63,6 +63,12 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
   readonly saveStatus = this.editProfileService.saveStatus;
   /** Save message signal provided by the service. */
   readonly saveMessage = this.editProfileService.saveMessage;
+  /** Whether an avatar upload is in progress. */
+  readonly avatarUploading = signal(false);
+  /** Avatar upload error message. */
+  readonly avatarError = signal<string | null>(null);
+  /** Avatar upload success message. */
+  readonly avatarSuccess = signal<string | null>(null);
 
   /** True when a save request is in progress. */
   readonly isSaving = computed(() => this.saveStatus() === 'saving');
@@ -82,6 +88,11 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     return name.trim().charAt(0).toUpperCase() || '?';
   }
 
+  /** Current avatar URL for preview (if available). */
+  get avatarUrl(): string | null {
+    return (this.preview().avatarUrl ?? null) as string | null;
+  }
+
   /** Current character count for the bio field. */
   get bioCharCount(): number {
     return ((this.form?.get('bio')?.value as string | null) ?? '').length;
@@ -97,6 +108,8 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
           this.interests.set(profile.interests);
           this.initialiseForm(profile);
           this.preview.set({ ...profile });
+          this.avatarSuccess.set(null);
+          this.avatarError.set(null);
           this.isLoading.set(false);
         },
         error: () => {
@@ -187,6 +200,88 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
         },
         error: () => {
           // The service already exposes the API error state for the action bar.
+        }
+      });
+  }
+
+  /** Handles avatar file selection and upload. */
+  onAvatarSelected(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const file = input?.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const allowedTypes = new Set(['image/png', 'image/jpeg', 'image/gif']);
+    if (!allowedTypes.has(file.type)) {
+      this.avatarError.set('Only PNG, JPG, or GIF images are supported.');
+      this.avatarSuccess.set(null);
+      input.value = '';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      this.avatarError.set('Avatar images must be 5MB or smaller.');
+      this.avatarSuccess.set(null);
+      input.value = '';
+      return;
+    }
+
+    this.avatarUploading.set(true);
+    this.avatarError.set(null);
+    this.avatarSuccess.set(null);
+
+    this.editProfileService.uploadAvatar(file)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.avatarUploading.set(false);
+          this.preview.set({
+            ...this.preview(),
+            avatarUrl: res.avatarUrl,
+          });
+          this.avatarSuccess.set('Avatar updated.');
+          this.markDirty();
+          input.value = '';
+        },
+        error: () => {
+          this.avatarUploading.set(false);
+          this.avatarError.set('Could not upload avatar. Please try again.');
+          input.value = '';
+        }
+      });
+  }
+
+  /** Removes the current avatar. */
+  removeAvatar(): void {
+    if (this.avatarUploading()) {
+      return;
+    }
+
+    const confirmed = confirm('Remove your profile photo?');
+    if (!confirmed) {
+      return;
+    }
+
+    this.avatarUploading.set(true);
+    this.avatarError.set(null);
+    this.avatarSuccess.set(null);
+
+    this.editProfileService.deleteAvatar()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.avatarUploading.set(false);
+          this.preview.set({
+            ...this.preview(),
+            avatarUrl: null,
+          });
+          this.avatarSuccess.set('Avatar removed.');
+          this.markDirty();
+        },
+        error: () => {
+          this.avatarUploading.set(false);
+          this.avatarError.set('Could not remove avatar. Please try again.');
         }
       });
   }
@@ -286,7 +381,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
       location: (this.form.get('location')?.value as string | null) ?? '',
       website: (this.form.get('website')?.value as string | null) ?? '',
       interests: this.interests(),
-      avatarUrl: null,
+      avatarUrl: this.preview().avatarUrl ?? null,
     };
   }
 
@@ -299,6 +394,7 @@ export class EditProfilePageComponent implements OnInit, OnDestroy {
     this.preview.set({
       ...this.form.getRawValue(),
       interests: this.interests(),
+      avatarUrl: this.preview().avatarUrl ?? null,
     });
   }
 

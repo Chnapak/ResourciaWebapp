@@ -31,10 +31,49 @@
 
     <!-- Identity line -->
     <div class="ep-hero__identity">
-      <div class="ep-avatar-shell" title="Avatar upload coming soon">
-        <div class="ep-avatar">{{ avatarInitial }}</div>
-        <div class="ep-avatar__badge" title="Edit">✎</div>
-        <span class="ep-avatar__future-note">Photo upload coming soon</span>
+      <div class="ep-avatar-shell">
+        <div class="ep-avatar-frame">
+          <div class="ep-avatar" [class.ep-avatar--image]="avatarUrl">
+            @if (avatarUrl) {
+              <img [src]="avatarUrl" alt="Profile photo" class="ep-avatar__image" />
+            } @else {
+              {{ avatarInitial }}
+            }
+          </div>
+          <input
+            id="avatar-upload"
+            type="file"
+            accept="image/png,image/jpeg,image/gif"
+            class="ep-avatar__input"
+            (change)="onAvatarSelected($event)"
+            [disabled]="avatarUploading()"
+          />
+          <label
+            class="ep-avatar__badge"
+            [class.ep-avatar__badge--disabled]="avatarUploading()"
+            for="avatar-upload"
+            title="Change photo"
+          >
+            <span class="ep-avatar__badge-icon">✎</span>
+          </label>
+        </div>
+        <div class="ep-avatar__actions">
+          <button
+            type="button"
+            class="ep-avatar__action"
+            (click)="removeAvatar()"
+            [disabled]="!avatarUrl || avatarUploading()"
+          >
+            {{ avatarUploading() ? 'Working...' : 'Remove' }}
+          </button>
+        </div>
+        @if (avatarError()) {
+          <span class="ep-avatar__status ep-avatar__status--error">{{ avatarError() }}</span>
+        } @else if (avatarSuccess()) {
+          <span class="ep-avatar__status ep-avatar__status--success">{{ avatarSuccess() }}</span>
+        } @else {
+          <span class="ep-avatar__status">PNG, JPG, or GIF (max 5MB)</span>
+        }
       </div>
 
       <div class="ep-hero__title">
@@ -329,7 +368,13 @@
       <hr class="ep-card__divider" />
 
       <div class="ep-preview__hero">
-        <div class="ep-preview__avatar">{{ avatarInitial }}</div>
+        <div class="ep-preview__avatar" [class.ep-preview__avatar--image]="preview().avatarUrl">
+          @if (preview().avatarUrl) {
+            <img [src]="preview().avatarUrl!" alt="Profile photo preview" />
+          } @else {
+            {{ avatarInitial }}
+          }
+        </div>
         <p class="ep-preview__name">
           {{ preview().displayName || 'Your Name' }}
         </p>
@@ -365,8 +410,8 @@
             Display name, handle, bio, location, website, and interests save through `/api/Profile/me`
           </div>
           <div class="ep-status-legend__row">
-            <span class="ep-field__badge ep-field__badge--derived">Soon</span>
-            Avatar upload still needs a dedicated backend upload flow
+            <span class="ep-field__badge ep-field__badge--derived">Media</span>
+            Profile photos upload through `/api/Profile/me/avatar`
           </div>
         </div>
       </div>

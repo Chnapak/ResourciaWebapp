@@ -22,6 +22,8 @@ export interface AdminUser {
   roleLabel: string;
   /** Current moderation status. */
   status: UserStatus;
+  /** Optional avatar image URL. */
+  avatarUrl?: string | null;
   /** Number of resources submitted by the user. */
   resourcesCount: number;
   /** ISO timestamp of the user's last activity. */

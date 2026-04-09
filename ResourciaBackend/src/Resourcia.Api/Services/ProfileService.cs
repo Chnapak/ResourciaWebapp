@@ -28,6 +28,7 @@ public class ProfileService
     public async Task<(ProfileResponseModel? Profile, string? Error, int StatusCode)> GetProfileAsync(
         string identifier,
         Guid? currentUserId,
+        string baseUrl,
         CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(identifier))
@@ -41,13 +42,14 @@ public class ProfileService
             return (null, "Profile not found.", 404);
         }
 
-        var profile = await BuildProfileAsync(user, ct);
+        var profile = await BuildProfileAsync(user, baseUrl, ct);
         return (profile, null, 200);
     }
 
     public async Task<(ProfileResponseModel? Profile, string? Error, int StatusCode)> UpdateProfileAsync(
         Guid userId,
         UpdateProfileModel model,
+        string baseUrl,
         CancellationToken ct = default)
     {
         var displayName = model.DisplayName.Trim();
@@ -135,7 +137,7 @@ public class ProfileService
             }
         }
 
-        var profile = await BuildProfileAsync(user, ct);
+        var profile = await BuildProfileAsync(user, baseUrl, ct);
         return (profile, null, 200);
     }
 
@@ -191,7 +193,7 @@ public class ProfileService
         return (null, 204);
     }
 
-    private async Task<ProfileResponseModel> BuildProfileAsync(AppUser user, CancellationToken ct)
+    private async Task<ProfileResponseModel> BuildProfileAsync(AppUser user, string baseUrl, CancellationToken ct)
     {
         var roles = await _userManager.GetRolesAsync(user);
         var sharedResources = await GetSharedResourcesAsync(user, ct);
@@ -255,6 +257,7 @@ public class ProfileService
             Handle = string.IsNullOrWhiteSpace(user.Handle) ? ProfileHandleUtility.BuildHandle(user.DisplayName) : user.Handle,
             Bio = string.IsNullOrWhiteSpace(user.Bio) ? BuildBio(user.DisplayName, resourcesShared, reviewsWritten) : user.Bio,
             AvatarInitials = BuildAvatarInitials(user.DisplayName),
+            AvatarUrl = BuildAvatarUrl(baseUrl, user.AvatarFileName),
             Role = MapRole(roles),
             IsVerified = user.EmailConfirmed,
             JoinedAt = joinedAt,
@@ -274,6 +277,22 @@ public class ProfileService
             RecentReviews = recentReviews,
             RecentActivity = recentActivity
         };
+    }
+
+    private static string? BuildAvatarUrl(string baseUrl, string? fileName)
+    {
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            return null;
+        }
+
+        var trimmedBaseUrl = baseUrl?.TrimEnd('/');
+        if (string.IsNullOrWhiteSpace(trimmedBaseUrl))
+        {
+            return $"/uploads/{fileName}";
+        }
+
+        return $"{trimmedBaseUrl}/uploads/{fileName}";
     }
 
     private async Task<AppUser?> ResolveUserAsync(string identifier, Guid? currentUserId, CancellationToken ct)

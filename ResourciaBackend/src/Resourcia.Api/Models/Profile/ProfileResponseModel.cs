@@ -12,6 +12,8 @@ public class ProfileResponseModel
 
     public string AvatarInitials { get; set; } = string.Empty;
 
+    public string? AvatarUrl { get; set; }
+
     public string Role { get; set; } = "contributor";
 
     public bool IsVerified { get; set; }

@@ -107,6 +107,8 @@ export interface ProfileViewModel {
   bio: string;
   /** Initials derived for avatar display. */
   avatarInitials: string;
+  /** Optional avatar image URL. */
+  avatarUrl?: string | null;
   /** Role assigned to the user. */
   role: UserRole;
   /** Whether the user is verified. */

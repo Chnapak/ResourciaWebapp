@@ -1,41 +1,98 @@
-<!-- Carousel wrapper -->
-<div class="relative w-full rounded-xl overflow-hidden border border-gray-200">
+<!-- Image preview panel for resource images. -->
+<div class="relative w-full rounded-xl overflow-hidden border border-gray-200 bg-white">
+  <div class="relative h-64 sm:h-72 md:h-80 bg-gray-100">
+    @if (loading) {
+      <div class="absolute inset-0 animate-pulse bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100"></div>
+    } @else if (!hasImages) {
+      <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 text-gray-500">
+        <span class="rounded-full bg-white p-3 shadow-sm">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h3l2-3h8l2 3h3v12H3z" />
+            <circle cx="12" cy="13" r="3.5" />
+          </svg>
+        </span>
+        <p class="text-sm font-medium">No images uploaded yet</p>
+      </div>
+    } @else {
+      <button
+        type="button"
+        class="h-full w-full cursor-zoom-in"
+        (click)="requestLightbox()"
+        aria-label="Open image preview"
+      >
+        <img
+          [src]="activeImage?.url"
+          [alt]="resourceTitle ?? 'Resource image'"
+          class="h-full w-full object-cover"
+        />
+      </button>
 
-  <div id="carousel" class="relative h-64 overflow-hidden bg-gray-800">
+      @if (images.length > 1) {
+        <button
+          type="button"
+          class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white border-0 cursor-pointer flex items-center justify-center text-xl transition-all"
+          (click)="previousImage()"
+        >
+          &#8249;
+        </button>
+        <button
+          type="button"
+          class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white border-0 cursor-pointer flex items-center justify-center text-xl transition-all"
+          (click)="nextImage()"
+        >
+          &#8250;
+        </button>
 
-    <!-- Slide 1 -->
-    <div class="item absolute inset-0 flex items-center justify-center bg-gray-800">
-        <img src="" class="rounded-xl w-full h-full object-cover" alt="Lecture notes" />
-        <span class="absolute bottom-3 left-3 text-xs text-white bg-black bg-opacity-50 px-2.5 py-1 rounded-md">Lecture notes</span>
-    </div>
-
-    <!-- Slide 2 -->
-    <div class="item absolute inset-0 flex items-center justify-center bg-gray-900" style="transform:translateX(100%)">
-        <img src="/your-photo-2.jpg" class="rounded-xl w-full h-full object-cover" alt="Video lecture" />
-        <span class="absolute bottom-3 left-3 text-xs text-white bg-black bg-opacity-50 px-2.5 py-1 rounded-md">Video lecture</span>
-    </div>
-
-
-    <!-- Prev button -->
-    <button onclick="nav(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-gray-600 bg-opacity-20 hover:bg-opacity-40 text-white border-0 cursor-pointer flex items-center justify-center text-xl transition-all">&#8249;</button>
-
-    <!-- Next button -->
-    <button onclick="nav(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-gray-600 bg-opacity-20 hover:bg-opacity-40 text-white border-0 cursor-pointer flex items-center justify-center text-xl transition-all">&#8250;</button>
-
-    <!-- Dot indicators -->
-    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-      <button class="dot w-2.5 h-2.5 rounded-full bg-white border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(0)"></button>
-      <button class="dot w-2.5 h-2.5 rounded-full bg-transparent border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(1)"></button>
-      <button class="dot w-2.5 h-2.5 rounded-full bg-transparent border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(2)"></button>
-      <button class="dot w-2.5 h-2.5 rounded-full bg-transparent border-2 border-white border-opacity-60 p-0 cursor-pointer transition-all" onclick="go(3)"></button>
-    </div>
+        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+          @for (image of images; track image.id; let index = $index) {
+            <button
+              type="button"
+              class="w-2.5 h-2.5 rounded-full border-2 border-white border-opacity-60 transition-all"
+              [class.bg-white]="index === activeIndex"
+              [class.bg-transparent]="index !== activeIndex"
+              (click)="selectImage(index)"
+            ></button>
+          }
+        </div>
+      }
+    }
   </div>
 
-  <!-- Meta bar -->
-  <div class="flex items-center gap-2 px-3.5 py-2.5 bg-white border-t border-gray-200">
-    <span class="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></span>
-    <span class="text-xs text-gray-500">ocw.mit.edu</span>
-    <span class="ml-auto text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded border border-gray-200">Course</span>
-    <button class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded border-0 cursor-pointer transition-colors">&#8599; Open</button>
+  <div class="flex items-center gap-2 px-3.5 py-2.5 bg-white border-t border-gray-200 text-xs text-gray-500">
+    <span class="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></span>
+    <span>{{ resourceHost ?? 'Resource images' }}</span>
+    <span class="ml-auto rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-[11px]">
+      {{ images.length }} image{{ images.length === 1 ? '' : 's' }}
+    </span>
+
+    @if (canUpload) {
+      <input
+        type="file"
+        accept="image/png,image/jpeg,image/gif"
+        multiple
+        class="sr-only"
+        #uploadInput
+        (change)="onFilesSelected($event)"
+      />
+      <button
+        type="button"
+        class="text-xs font-semibold bg-white text-blue-600 border border-blue-200 px-3 py-1 rounded hover:bg-blue-50 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        (click)="uploadInput.click()"
+        [disabled]="uploadPending"
+      >
+        {{ uploadPending ? 'Uploading...' : 'Add image' }}
+      </button>
+    }
+
+    @if (resourceUrl) {
+      <a
+        class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded border-0 cursor-pointer transition-colors"
+        [href]="resourceUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        &#8599; Open
+      </a>
+    }
   </div>
 </div>

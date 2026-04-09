@@ -327,7 +327,15 @@ export class SearchResultPageComponent implements OnInit {
 
     this.resource.searchResource(query).subscribe({
       next: results => {
-        this.resources = results.items;
+        this.resources = results.items.map((item) => {
+          const rawImageUrl = (item as any).imageUrl ?? (item as any).ImageUrl ?? null;
+          const normalizedImageUrl = rawImageUrl ? this.normalizeImageUrl(rawImageUrl) : null;
+
+          return {
+            ...item,
+            imageUrl: normalizedImageUrl,
+          };
+        });
         this.totalPages = results.totalPages;
         this.currentPage = results.page;
         this.totalItems = results.totalItems;
@@ -343,6 +351,24 @@ export class SearchResultPageComponent implements OnInit {
         this.hasLoaded = true;
       }
     });
+  }
+
+  /** Normalize image URLs for search result cards. */
+  private normalizeImageUrl(value: string): string {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return trimmed;
+    }
+
+    if (/^https?:\/\//i.test(trimmed)) {
+      return trimmed;
+    }
+
+    if (trimmed.startsWith('/')) {
+      return `${globalThis.location?.origin ?? ''}${trimmed}`;
+    }
+
+    return trimmed;
   }
 
   /** Update the URL query parameters and reload resources. */

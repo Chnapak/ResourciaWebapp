@@ -13,6 +13,7 @@ export interface SearchResultResourceModel {
   tags: string[];
   createdBy?: string | null;
   createdAtUtc: string;
+  imageUrl?: string | null;
   ratings?: Pick<RatingsModel, 'averageRating' | 'totalCount'> | null;
   facets: FacetModel[];
 }
