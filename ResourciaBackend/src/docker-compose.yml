@@ -1,9 +1,12 @@
+name: resourcia
 services:
   resourcia.api:
     image: ${DOCKER_REGISTRY-}resourciaapi
     build:
       context: .
       dockerfile: Resourcia.Api/Dockerfile
+    env_file:
+      - ../../.env
     ports:
       - "5000:5000"
       - "5001:5001"
@@ -27,10 +30,8 @@ services:
 
   resourcia.db:
     image: postgres:latest
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - ../../.env
     ports:
       - "5432:5432"
     volumes:
