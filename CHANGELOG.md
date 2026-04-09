@@ -1,3 +1,13 @@
+## [0.2.2] - 2026-04-09
+
+### Highlights
+- Security hardening: stop returning confirmation tokens from auth endpoints and enforce generic responses for email flows.
+- Turnstile verification now requires `success=true`.
+- Refresh cookie now `Secure` + `HttpOnly`; HTTPS redirection, HSTS, and forwarded headers enabled.
+- Token header injection limited to same-origin requests.
+- Added security headers in API and Nginx; removed `proxy_ssl_verify off` by proxying to API over internal HTTP.
+
+---
 ## [0.2.1] - 2026-04-09
 
 ### Highlights

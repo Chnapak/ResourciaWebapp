@@ -1,5 +1,5 @@
 /**
- * Root application shell that wires routing and boot-time token handling.
+ * Root application shell that wires routing and boot-time URL cleanup.
  */
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
@@ -14,10 +14,10 @@ import { ToasterComponent } from './shared/toaster/toaster.component';
   styleUrl: './app.component.scss'
 })
 /**
- * Hosts the router outlet and handles access-token query param cleanup.
+ * Hosts the router outlet and removes sensitive query params when needed.
  */
 export class AppComponent {
-  /** Routes that must keep their token query param intact. */
+  /** Routes that must keep their token query params intact. */
   private readonly tokenReservedPaths = new Set(['/confirm-token', '/reset-password']);
   /** Display title used by the application shell. */
   title = 'ResourciaFrontend';
@@ -26,7 +26,7 @@ export class AppComponent {
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   /**
-   * Initializes Flowbite and consumes access tokens passed via query params.
+   * Initializes Flowbite and removes stray token params from non-auth routes.
    */
   ngOnInit(): void {
     initFlowbite();
@@ -35,28 +35,15 @@ export class AppComponent {
       const accessToken = params['token'];
       const currentPath = this.router.url.split('?')[0].toLowerCase();
 
-      if (!this.isAccessTokenParam(accessToken, params['email'], currentPath)) {
+      if (typeof accessToken !== 'string' || this.tokenReservedPaths.has(currentPath)) {
         return;
       }
 
-      localStorage.setItem('accessToken', accessToken);
-
       this.router.navigate([], {
-        queryParams: { token: null },
+        queryParams: { token: null, email: null },
         queryParamsHandling: 'merge',
         replaceUrl: true
       });
     });
-  }
-
-  /**
-   * Checks whether the query parameter looks like a JWT access token and is safe to consume.
-   */
-  private isAccessTokenParam(token: unknown, email: unknown, currentPath: string): token is string {
-    if (typeof token !== 'string' || typeof email === 'string' || this.tokenReservedPaths.has(currentPath)) {
-      return false;
-    }
-
-    return token.split('.').length === 3;
   }
 }

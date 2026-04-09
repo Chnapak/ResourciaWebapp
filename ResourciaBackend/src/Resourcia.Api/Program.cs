@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.StaticFiles;\r\nusing Microsoft.AspNetCore.HttpOverrides;\r\nusing Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -32,6 +31,13 @@ public class Program
 
             // Required so keep-alive actually works properly
             options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(30);
+        });
+
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
         });
 
         builder.Services.AddDbContext<AppDbContext>(options =>
@@ -309,6 +315,24 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseForwardedHeaders();
+
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.Use(async (context, next) =>
+        {
+            context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            context.Response.Headers["X-Frame-Options"] = "DENY";
+            context.Response.Headers["Referrer-Policy"] = "no-referrer";
+            context.Response.Headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()";
+            await next();
+        });
+
         app.UseStaticFiles();
 
         app.UseStaticFiles(new StaticFileOptions
@@ -327,8 +351,6 @@ public class Program
             }
         });
 
-
-        //app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();

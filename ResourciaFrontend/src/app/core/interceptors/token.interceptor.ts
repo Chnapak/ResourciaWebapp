@@ -44,6 +44,10 @@ export const tokenInterceptor: HttpInterceptorFn = (
     return next(req);
   }
 
+  if (!isSameOriginRequest(req.url)) {
+    return next(req);
+  }
+
   const token = authService.getToken();
   const enriched = token ? addToken(req, token) : req;
 
@@ -93,4 +97,24 @@ export const tokenInterceptor: HttpInterceptorFn = (
  */
 function addToken(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
   return req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+}
+
+function isSameOriginRequest(url: string): boolean {
+  if (url.startsWith('/')) {
+    return true;
+  }
+
+  if (!/^https?:\/\//i.test(url)) {
+    return true;
+  }
+
+  try {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    const target = new URL(url);
+    return target.origin === window.location.origin;
+  } catch {
+    return false;
+  }
 }

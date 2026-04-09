@@ -127,46 +127,47 @@ public class AuthController : ControllerBase
         // Method with SaveChanges()!
         await _userManager.AddPasswordAsync(newUser, model.Password);
 
-        var token = await GenerateEmailConfirmation(newUser);
+        await GenerateEmailConfirmation(newUser);
         
-        return Ok(new { token });
+        return NoContent();
     }
 
     [HttpPost("ResendEmail")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> ResendEmail([FromBody] ResendEmailModel emailModel)
     {
-        var normalizedMail = emailModel.Email?.Trim().ToUpperInvariant();
+        const string responseMessage =
+            "If an account exists for that email, a confirmation message will be sent shortly.";
+
+        if (string.IsNullOrWhiteSpace(emailModel.Email))
+        {
+            return Ok(new { message = responseMessage });
+        }
+
+        var normalizedMail = emailModel.Email.Trim().ToUpperInvariant();
         var user = await _userManager.Users.SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedMail);
 
-        if (user == null)
+        if (user == null || user.EmailConfirmed)
         {
-            return BadRequest(new { message = "User not found." });
-        }
-        else if (user.EmailConfirmed)
-        {
-            return BadRequest(new { message = "Email is already confirmed." });
+            return Ok(new { message = responseMessage });
         }
 
         var unsentEmails = await _dbContext.Emails.SingleOrDefaultAsync(x => !x.Sent && x.RecipientEmail == user.Email);
-
         if (unsentEmails != null)
         {
-            return Ok(new { message = "Original email is still waiting to be sent." , token = string.Empty});
+            return Ok(new { message = responseMessage });
         }
 
         var email = await _dbContext.Emails.SingleOrDefaultAsync(x => x.RecipientEmail == user.Email);
-        string? tokenEmailed = null;
         if (email == null)
         {
-            tokenEmailed = await GenerateEmailConfirmation(user);
-            return Ok(new { message = "No email to be resent, created a new one.", token = tokenEmailed});
+            await GenerateEmailConfirmation(user);
+            return Ok(new { message = responseMessage });
         }
 
         await _emailSenderService.AddEmail(email.Body, user.Email, user.DisplayName);
 
-        return Ok(new { message = "Confirmation email has been resent.", token = string.Empty });
+        return Ok(new { message = responseMessage });
     }
 
     /// <summary>
@@ -203,13 +204,7 @@ public class AuthController : ControllerBase
         var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
 
-        Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = false, // For HTTPS
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
-        });
+        Response.Cookies.Append("RefreshToken", refreshToken, BuildRefreshTokenCookieOptions());
 
         return Ok(new { Token = accessToken });
     }
@@ -268,13 +263,7 @@ public class AuthController : ControllerBase
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = GenerateAccessToken(user.Id, model.Email, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
-        Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = false, // For HTTPS
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
-        });
+        Response.Cookies.Append("RefreshToken", refreshToken, BuildRefreshTokenCookieOptions());
         return Ok(new { Token = accessToken });
     }
 
@@ -287,7 +276,7 @@ public class AuthController : ControllerBase
             .SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail);
         if (user == null || !user.EmailConfirmed)
         {
-            return BadRequest("Email invalid");
+            return Ok();
         }
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         var url = $"{_environmentSettings.FrontendHostUrl.TrimEnd('/')}/{_environmentSettings.FrontendResetPasswordUrl.TrimStart('/')}";
@@ -348,13 +337,7 @@ public class AuthController : ControllerBase
         storedToken.RevokedAt = _clock.GetCurrentInstant();
         await _dbContext.SaveChangesAsync();
 
-        Response.Cookies.Append("RefreshToken", newRefreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = false, // For HTTPS
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
-        });
+        Response.Cookies.Append("RefreshToken", newRefreshToken, BuildRefreshTokenCookieOptions());
         return Ok(new
         {
             Token = newAccessToken,
@@ -481,6 +464,17 @@ public class AuthController : ControllerBase
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    private CookieOptions BuildRefreshTokenCookieOptions()
+    {
+        return new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
+        };
+    }
+
     public static string Hash(string token)
     {
         var bytes = Encoding.UTF8.GetBytes(token);
@@ -490,6 +484,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("TestMail")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> Test(
     [FromServices] EmailSenderService service
     )
