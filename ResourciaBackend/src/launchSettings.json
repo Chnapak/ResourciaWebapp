@@ -3,6 +3,9 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "environmentVariables": {
+        "COMPOSE_PROJECT_NAME": "resourcia"
+      },
       "serviceActions": {
         "resourcia.api": "StartDebugging",
         "resourcia.frontend": "StartWithoutDebugging"
