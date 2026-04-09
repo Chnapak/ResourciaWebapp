@@ -71,9 +71,10 @@ export class CompleteProfileComponent {
     };
 
     this.authService.completeExternalLogin(payload).subscribe({
-      next: (res: { token: string }) => {
-        this.authService.establishAuthenticatedSession(res.token);
-        this.router.navigate(['/']); 
+      next: () => {
+        this.authService.initAuth().then(() => {
+          this.router.navigate(['/']);
+        });
       },
       error: (err) => {
         console.log(err)

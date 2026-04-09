@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -61,6 +62,7 @@ public class AuthController : ControllerBase
 
     // We will also add verion of endpoint into post controller
     [HttpPost("Register")]
+    [EnableRateLimiting("auth")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Register(
@@ -133,6 +135,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("ResendEmail")]
+    [EnableRateLimiting("auth")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> ResendEmail([FromBody] ResendEmailModel emailModel)
     {
@@ -176,6 +179,7 @@ public class AuthController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost("ValidateToken")]
+    [EnableRateLimiting("auth")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ValidateToken(
@@ -204,12 +208,14 @@ public class AuthController : ControllerBase
         var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
 
+        Response.Cookies.Append("AccessToken", accessToken, BuildAccessTokenCookieOptions());
         Response.Cookies.Append("RefreshToken", refreshToken, BuildRefreshTokenCookieOptions());
 
-        return Ok(new { Token = accessToken });
+        return Ok();
     }
 
     [HttpPost("Login")]
+    [EnableRateLimiting("auth")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Login([FromBody] LoginModel model)
@@ -225,20 +231,18 @@ public class AuthController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var signInResult = await _userManager.CheckPasswordAsync(user, model.Password);
+        var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, true);
 
-
-        if (await _userManager.IsLockedOutAsync(user) && signInResult)
+        if (signInResult.IsLockedOut)
         {
             var lockoutEnd = user.LockoutEnd;
-
             Instant? lockoutInstant = null;
 
             if (lockoutEnd.HasValue)
             {
                 lockoutInstant = Instant.FromDateTimeOffset(lockoutEnd.Value);
             }
-            Console.WriteLine("Test");
+
             return Unauthorized(new
             {
                 error = "USER_LOCKED_OUT",
@@ -247,8 +251,7 @@ public class AuthController : ControllerBase
             });
         }
 
-
-        if (!signInResult)
+        if (!signInResult.Succeeded)
         {
             ModelState.AddModelError(string.Empty, "LOGIN_FAILED");
             return ValidationProblem(ModelState);
@@ -263,11 +266,13 @@ public class AuthController : ControllerBase
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = GenerateAccessToken(user.Id, model.Email, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
+        Response.Cookies.Append("AccessToken", accessToken, BuildAccessTokenCookieOptions());
         Response.Cookies.Append("RefreshToken", refreshToken, BuildRefreshTokenCookieOptions());
-        return Ok(new { Token = accessToken });
+        return Ok();
     }
 
     [HttpPost("ForgotPassword")]
+    [EnableRateLimiting("auth")]
     public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
     {
         var normalizedEmail = model.Email.ToUpperInvariant();
@@ -286,6 +291,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("ResetPassword")]
+    [EnableRateLimiting("auth")]
     public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordModel model)
     {
         var normalizedEmail = model.Email.ToUpperInvariant();
@@ -337,11 +343,9 @@ public class AuthController : ControllerBase
         storedToken.RevokedAt = _clock.GetCurrentInstant();
         await _dbContext.SaveChangesAsync();
 
+        Response.Cookies.Append("AccessToken", newAccessToken, BuildAccessTokenCookieOptions());
         Response.Cookies.Append("RefreshToken", newRefreshToken, BuildRefreshTokenCookieOptions());
-        return Ok(new
-        {
-            Token = newAccessToken,
-        });
+        return Ok();
     }
 
     [Authorize]
@@ -401,6 +405,7 @@ public class AuthController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
         Response.Cookies.Delete("RefreshToken");
+        Response.Cookies.Delete("AccessToken");
         return NoContent();
     }
 
@@ -472,6 +477,17 @@ public class AuthController : ControllerBase
             Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays)
+        };
+    }
+
+    private CookieOptions BuildAccessTokenCookieOptions()
+    {
+        return new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationInMinutes)
         };
     }
 

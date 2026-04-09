@@ -1,5 +1,5 @@
 /**
- * HTTP interceptor that injects access tokens and refreshes on 401 responses.
+ * HTTP interceptor that refreshes access cookies on 401 responses.
  */
 import {
   HttpEvent,
@@ -10,25 +10,29 @@ import {
 import { inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import {
-  BehaviorSubject,
+  Subject,
   catchError,
-  filter,
   Observable,
   switchMap,
   take,
   throwError,
 } from 'rxjs';
 
-/** URLs that must never have the Authorization header injected. */
-const SKIP_AUTH_URLS = ['/Auth/Login', '/Auth/Register'];
-
 /** URLs that must not trigger a reactive 401 refresh loop. */
-const SKIP_REFRESH_URLS = ['/Auth/RefreshToken', '/Auth/Login'];
+const SKIP_REFRESH_URLS = [
+  '/Auth/RefreshToken',
+  '/Auth/Login',
+  '/Auth/Register',
+  '/Auth/ValidateToken',
+  '/Auth/ResendEmail',
+  '/Auth/ForgotPassword',
+  '/Auth/ResetPassword',
+];
 
 /** Module-level refresh lock shared across all interceptor calls. */
 let isRefreshing = false;
-/** Stream that broadcasts the most recent refreshed token. */
-const refreshToken$ = new BehaviorSubject<string | null>(null);
+/** Stream that signals a refresh completion to queued requests. */
+const refreshToken$ = new Subject<void>();
 
 /**
  * Adds auth tokens to requests and performs a token refresh on 401 responses.
@@ -39,19 +43,11 @@ export const tokenInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
 
-  // Skip auth header injection for public auth endpoints
-  if (SKIP_AUTH_URLS.some(url => req.url.includes(url))) {
-    return next(req);
-  }
-
   if (!isSameOriginRequest(req.url)) {
     return next(req);
   }
 
-  const token = authService.getToken();
-  const enriched = token ? addToken(req, token) : req;
-
-  return next(enriched).pipe(
+  return next(req).pipe(
     catchError(error => {
       const is401 = error.status === 401;
       const isRefreshUrl = SKIP_REFRESH_URLS.some(url => req.url.includes(url));
@@ -63,26 +59,23 @@ export const tokenInterceptor: HttpInterceptorFn = (
 
       // ── Serialise concurrent refresh calls ───────────────────────────────
       if (isRefreshing) {
-        // Another call is already refreshing — wait for the new token
+        // Another call is already refreshing — wait for completion
         return refreshToken$.pipe(
-          filter(t => t !== null),
           take(1),
-          switchMap(newToken => next(addToken(req, newToken!)))
+          switchMap(() => next(req))
         );
       }
 
       isRefreshing = true;
-      refreshToken$.next(null);
 
       return authService.refreshToken().pipe(
-        switchMap(newToken => {
+        switchMap(() => {
           isRefreshing = false;
-          refreshToken$.next(newToken);
-          return next(addToken(req, newToken));
+          refreshToken$.next();
+          return next(req);
         }),
         catchError(refreshError => {
           isRefreshing = false;
-          refreshToken$.next(null);
           // Refresh token is dead — clean up the session
           authService.handleSessionExpired();
           return throwError(() => refreshError);
@@ -95,10 +88,6 @@ export const tokenInterceptor: HttpInterceptorFn = (
 /**
  * Clones the request with a bearer token header.
  */
-function addToken(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
-  return req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
-}
-
 function isSameOriginRequest(url: string): boolean {
   if (url.startsWith('/')) {
     return true;

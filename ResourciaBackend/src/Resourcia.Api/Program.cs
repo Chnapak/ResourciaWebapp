@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.StaticFiles;\r\nusing Microsoft.AspNetCore.HttpOverrides;\r\nusing Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -62,8 +66,12 @@ public class Program
             options.Password.RequireLowercase = true;
             options.Password.RequireNonAlphanumeric = true;
             options.Password.RequireUppercase = true;
-            options.Password.RequiredLength = 6;
+            options.Password.RequiredLength = 8;
             options.Password.RequiredUniqueChars = 1;
+
+            options.Lockout.AllowedForNewUsers = true;
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
         });
 
         builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
@@ -115,6 +123,20 @@ public class Program
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience
             };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    if (string.IsNullOrEmpty(context.Token)
+                        && context.Request.Cookies.TryGetValue("AccessToken", out var accessToken))
+                    {
+                        context.Token = accessToken;
+                    }
+
+                    return Task.CompletedTask;
+                }
+            };
         });
 
         builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpSettings"));
@@ -162,6 +184,17 @@ public class Program
             options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(
                 camelCaseText: true
             ));
+        });
+
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.AddFixedWindowLimiter("auth", limiter =>
+            {
+                limiter.PermitLimit = 5;
+                limiter.Window = TimeSpan.FromMinutes(1);
+                limiter.QueueLimit = 0;
+            });
         });
 
         builder.Services.AddHealthChecks();
@@ -332,6 +365,8 @@ public class Program
             context.Response.Headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()";
             await next();
         });
+
+        app.UseRateLimiter();
 
         app.UseStaticFiles();
 

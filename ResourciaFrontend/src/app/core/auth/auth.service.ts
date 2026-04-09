@@ -3,20 +3,17 @@
  */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { RegisterModel } from '../../features/auth/models/register';
 import { MeInfoModel } from '../../shared/models/me-info';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { LoginModel } from '../../features/auth/models/login';
 import { Router } from '@angular/router';
 import { ResendConfirmationModel } from '../../features/auth/models/resend-confirmation';
 import { ResetPasswordModel } from '../../features/auth/models/reset-password';
 import { ForgotPasswordModel } from '../../features/auth/models/forgot-password';
-import { jwtDecode } from 'jwt-decode';
-import { JwtPayloadModel } from '../../shared/models/jwt-payload-model';
 import { ToasterService } from '../../shared/toaster/toaster.service';
 import { CompleteExternalLoginModel } from '../../shared/models/complete-external-login';
-import { Review } from '../../shared/models/review';
 
 /**
  * Authentication lifecycle states used across guards and components.
@@ -63,9 +60,9 @@ export class AuthService {
   public readonly isLoggedIn$ = this.authState$.pipe(map(s => s === 'authenticated'));
 
   // ── Current user (decoded from JWT after successful initAuth) ────────────
-  /** Internal subject with the decoded current user payload. */
-  private readonly currentUserSubject = new BehaviorSubject<JwtPayloadModel | null>(null);
-  /** Observable stream of the decoded current user payload. */
+  /** Internal subject with the current user profile. */
+  private readonly currentUserSubject = new BehaviorSubject<MeInfoModel | null>(null);
+  /** Observable stream of the current user profile. */
   public readonly currentUser$ = this.currentUserSubject.asObservable();
 
   // ── Auth modal trigger ───────────────────────────────────────────────────
@@ -78,21 +75,9 @@ export class AuthService {
   /** Cached action to resume after successful authentication. */
   private pendingAction: PendingAction | null = null;
 
-  // ── Proactive refresh timer ──────────────────────────────────────────────
-  /** Timer handle for proactive token refresh scheduling. */
-  private refreshTimer: ReturnType<typeof setTimeout> | null = null;
-
   // ────────────────────────────────────────────────────────────────────────
   /** Initializes auth state from any cached access token. */
   constructor() {
-    // Emit an initial conservative state from localStorage so the guard
-    // works synchronously before initAuth() resolves.
-    const token = localStorage.getItem('accessToken');
-    if (token && !this.isTokenExpired(token)) {
-      const user = this.decodeToken(token);
-      this.currentUserSubject.next(user);
-      // Still 'initialising' until server confirms — avoids false positives
-    }
   }
 
   // ── APP_INITIALIZER ──────────────────────────────────────────────────────
@@ -101,49 +86,24 @@ export class AuthService {
    */
   initAuth(): Promise<void> {
     this.authStateSubject.next('initialising');
-    const token = this.getToken();
-
-    if (!token || this.isTokenExpired(token)) {
-      localStorage.removeItem('accessToken');
-      this.authStateSubject.next('anonymous');
-      this.currentUserSubject.next(null);
-      return Promise.resolve();
-    }
-
     return this.httpClient
       .get<MeInfoModel>(`${this.baseUrl}/UserInfo`)
       .toPromise()
-      .then(() => {
-        const decoded = this.decodeToken(token);
-        this.currentUserSubject.next(decoded);
-        this.authStateSubject.next('authenticated');
-        this.scheduleProactiveRefresh(token);
+      .then(user => {
+        this.applyUserInfo(user);
       })
       .catch(() => {
-        // Server rejected the token — try a silent refresh
         return this.httpClient
-          .post<{ Token: string }>(`${this.baseUrl}/RefreshToken`, {})
+          .post<void>(`${this.baseUrl}/RefreshToken`, {})
           .toPromise()
-          .then(response => {
-            const newToken = response!.Token;
-            localStorage.setItem('accessToken', newToken);
-            const decoded = this.decodeToken(newToken);
-            this.currentUserSubject.next(decoded);
-            this.authStateSubject.next('authenticated');
-            this.scheduleProactiveRefresh(newToken);
+          .then(() => this.httpClient.get<MeInfoModel>(`${this.baseUrl}/UserInfo`).toPromise())
+          .then(user => {
+            this.applyUserInfo(user);
           })
           .catch(() => {
-            localStorage.removeItem('accessToken');
-            this.authStateSubject.next('anonymous');
-            this.currentUserSubject.next(null);
+            this.applyUserInfo(null);
           });
       });
-  }
-
-  // ── Token access ─────────────────────────────────────────────────────────
-  /** Returns the currently stored access token, if any. */
-  getToken(): string | null {
-    return localStorage.getItem('accessToken');
   }
 
   /** Checks whether the service considers the user authenticated. */
@@ -171,12 +131,9 @@ export class AuthService {
 
   // ── Login ────────────────────────────────────────────────────────────────
   /** Attempts login and establishes an authenticated session on success. */
-  login(data: LoginModel): Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/Login`, data).pipe(
-      tap(response => {
-        const token = response.token ?? response.Token;
-        this.establishAuthenticatedSession(token);
-      })
+  login(data: LoginModel): Observable<MeInfoModel | null> {
+    return this.httpClient.post<void>(`${this.baseUrl}/Login`, data).pipe(
+      switchMap(() => this.syncUserInfo())
     );
   }
 
@@ -192,8 +149,6 @@ export class AuthService {
 
   /** Performs local logout cleanup and post-logout navigation. */
   private doLogout(wasOnGatedRoute: boolean): void {
-    this.clearRefreshTimer();
-    localStorage.removeItem('accessToken');
     this.currentUserSubject.next(null);
     this.authStateSubject.next('anonymous');
     this.toaster.show("You've been signed out.", 'info');
@@ -207,11 +162,9 @@ export class AuthService {
 
   /** Clears local session state after the account is deleted. */
   handleAccountDeleted(): void {
-    this.clearRefreshTimer();
-    localStorage.removeItem('accessToken');
+    this.currentUserSubject.next(null);
     localStorage.removeItem('pendingAction');
     sessionStorage.removeItem('returnUrl');
-    this.currentUserSubject.next(null);
     this.authStateSubject.next('anonymous');
     this.toaster.show('Your account has been deleted.', 'info');
     this.router.navigate(['/'], { replaceUrl: true });
@@ -220,8 +173,6 @@ export class AuthService {
   // ── Session expired (refresh token dead) ─────────────────────────────────
   /** Handles an expired session and prompts re-authentication if needed. */
   handleSessionExpired(): void {
-    this.clearRefreshTimer();
-    localStorage.removeItem('accessToken');
     this.currentUserSubject.next(null);
     this.authStateSubject.next('anonymous');
 
@@ -277,44 +228,14 @@ export class AuthService {
   }
 
   // ── Token refresh ────────────────────────────────────────────────────────
-  /** Requests a new access token and updates local session state. */
-  refreshToken(): Observable<string> {
+  /** Requests a new access token cookie and refreshes the current user profile. */
+  refreshToken(): Observable<void> {
     return this.httpClient
-      .post<{ Token: string }>(`${this.baseUrl}/RefreshToken`, {})
+      .post<void>(`${this.baseUrl}/RefreshToken`, {})
       .pipe(
-        map(response => {
-          const newToken = response.Token;
-          this.establishAuthenticatedSession(newToken);
-          return newToken;
-        })
+        switchMap(() => this.syncUserInfo()),
+        map(() => undefined)
       );
-  }
-
-  /** Schedules an automatic refresh shortly before token expiration. */
-  private scheduleProactiveRefresh(token: string): void {
-    this.clearRefreshTimer();
-    try {
-      const payload = jwtDecode<{ exp: number }>(token);
-      const expiresInMs = (payload.exp * 1000) - Date.now();
-      const refreshInMs = Math.max(expiresInMs - 60_000, 0); // 60 s before expiry
-
-      this.refreshTimer = setTimeout(() => {
-        this.authStateSubject.next('token_expired');
-        this.refreshToken().subscribe({
-          error: () => this.handleSessionExpired()
-        });
-      }, refreshInMs);
-    } catch {
-      // Bad token — leave it to the interceptor to catch 401s
-    }
-  }
-
-  /** Clears any scheduled token refresh timers. */
-  private clearRefreshTimer(): void {
-    if (this.refreshTimer !== null) {
-      clearTimeout(this.refreshTimer);
-      this.refreshTimer = null;
-    }
   }
 
   // ── Auth methods ──────────────────────────────────────────────────────────
@@ -329,15 +250,10 @@ export class AuthService {
   }
 
   /** Validates a confirmation token and stores the access token if provided. */
-  confirmToken(token: string, email: string): Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/ValidateToken`, { token, email }).pipe(
-      tap(response => {
-        const confirmedToken = response?.token ?? response?.Token;
-        if (confirmedToken) {
-          this.establishAuthenticatedSession(confirmedToken);
-        }
-      })
-    );
+  confirmToken(token: string, email: string): Observable<MeInfoModel | null> {
+    return this.httpClient
+      .post<void>(`${this.baseUrl}/ValidateToken`, { token, email })
+      .pipe(switchMap(() => this.syncUserInfo()));
   }
 
   /** Initiates the forgot password flow. */
@@ -392,42 +308,27 @@ export class AuthService {
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  /** Checks whether a JWT access token is expired. */
-  private isTokenExpired(token: string): boolean {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp < Math.floor(Date.now() / 1000);
-    } catch {
-      return true;
-    }
+  /** Fetches the current user profile and updates auth state. */
+  private syncUserInfo(): Observable<MeInfoModel | null> {
+    return this.httpClient.get<MeInfoModel>(`${this.baseUrl}/UserInfo`).pipe(
+      tap(user => this.applyUserInfo(user)),
+      catchError(() => {
+        this.applyUserInfo(null);
+        return of(null);
+      })
+    );
   }
 
-  /** Updates local session state after receiving a valid access token. */
-  public establishAuthenticatedSession(token: string): void {
-    localStorage.setItem('accessToken', token);
-    const decoded = this.decodeToken(token);
-    this.currentUserSubject.next(decoded);
+  /** Applies user info to local auth state. */
+  private applyUserInfo(user: MeInfoModel | null | undefined): void {
+    if (!user || !user.isAuthenticated) {
+      this.currentUserSubject.next(null);
+      this.authStateSubject.next('anonymous');
+      return;
+    }
+
+    this.currentUserSubject.next(user);
     this.authStateSubject.next('authenticated');
-    this.scheduleProactiveRefresh(token);
-  }
-
-  /** Decodes a JWT access token into the expected payload shape. */
-  private decodeToken(token: string): JwtPayloadModel | null {
-    try {
-      const payload = jwtDecode<any>(token);
-      const roles: string[] =
-        payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? [];
-      return {
-        id: payload.sub,
-        email: payload.email,
-        name: payload.name,
-        exp: payload.exp,
-        isAdmin: roles.includes('Admin'),
-        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role': roles,
-      } satisfies JwtPayloadModel;
-    } catch {
-      return null;
-    }
   }
 
 }

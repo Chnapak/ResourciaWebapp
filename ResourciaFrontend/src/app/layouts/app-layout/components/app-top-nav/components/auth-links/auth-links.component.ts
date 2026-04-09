@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MeInfoModel } from '../../../../../../shared/models/me-info';
 import { Router, RouterLink } from '@angular/router';
 import { Dropdown } from 'flowbite';
 import { DropdownComponent, DropdownItem } from '../../../../../../shared/ui/dropdown/dropdown.component';
-import { JwtPayloadModel } from '../../../../../../shared/models/jwt-payload-model';
+import { MeInfoModel } from '../../../../../../shared/models/me-info';
 
 @Component({
   selector: 'app-auth-links',
@@ -12,7 +11,7 @@ import { JwtPayloadModel } from '../../../../../../shared/models/jwt-payload-mod
   styleUrl: './auth-links.component.scss'
 })
 export class AuthLinksComponent {
-  @Input() user: JwtPayloadModel | null = null;
+  @Input() user: MeInfoModel | null = null;
   @Output() logout = new EventEmitter<void>();
 
   constructor(private router: Router) {}

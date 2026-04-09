@@ -1,3 +1,11 @@
+## [0.2.3] - 2026-04-09
+
+### Highlights
+- Cookie-based access tokens (HttpOnly) replace localStorage; auth now uses `/UserInfo` for session state.
+- Login lockout + rate limiting added to auth endpoints.
+- Backend password policy minimum length raised to 8.
+
+---
 ## [0.2.2] - 2026-04-09
 
 ### Highlights

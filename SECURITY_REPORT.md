@@ -10,9 +10,9 @@ I reviewed authentication, token handling, configuration, and edge exposure. The
 
 ## Risk Rating (Open)
 - Critical: 1 (partial)
-- High: 1 (partial)
-- Medium: 1
-- Low: 2 (1 open, 1 partial)
+- High: 0
+- Medium: 0
+- Low: 1 (partial)
 
 ---
 
@@ -65,8 +65,7 @@ I reviewed authentication, token handling, configuration, and edge exposure. The
   - `C:\Users\matej\source\repos\ResourciaApi\ResourciaFrontend\src\app\app.component.ts`
   - `C:\Users\matej\source\repos\ResourciaApi\ResourciaFrontend\src\app\core\auth\auth.service.ts`
 - Impact: XSS-driven token theft; tokens leak via URL history/referrers.
-- Status: **Partially fixed** — token query-param ingestion removed, but access tokens are still stored in `localStorage`.
-- Recommendation: Move access tokens to HttpOnly cookies and eliminate localStorage usage.
+- Status: **Fixed** — access tokens now stored in HttpOnly cookies; localStorage usage removed and query-param ingestion removed.
 
 ---
 
@@ -76,8 +75,7 @@ I reviewed authentication, token handling, configuration, and edge exposure. The
 - Evidence: `AuthController.Login` uses `CheckPasswordAsync` in
   `C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\Controllers\AuthController.cs`
 - Impact: Brute-force risk.
-- Status: **Open**
-- Recommendation: Use `PasswordSignInAsync` with lockout and add rate limiting.
+- Status: **Fixed** — login now uses `PasswordSignInAsync` with lockout and endpoints are rate limited.
 
 ### M-2. User enumeration via error messages
 - Evidence: `ForgotPassword` and `ResendEmail` return distinct errors in
@@ -110,8 +108,7 @@ I reviewed authentication, token handling, configuration, and edge exposure. The
 ### L-1. Password minimum length is 6
 - Evidence: Identity password rules in
   `C:\Users\matej\source\repos\ResourciaApi\ResourciaBackend\src\Resourcia.Api\Program.cs`
-- Status: **Open**
-- Recommendation: Increase to 8-12, add strength guidance.
+- Status: **Fixed** — minimum length raised to 8.
 
 ### L-2. Unprotected test email endpoint
 - Evidence: `AuthController.TestMail` in
@@ -127,5 +124,4 @@ I reviewed authentication, token handling, configuration, and edge exposure. The
 
 ## Recommended Next Actions (Priority Order)
 1. Rotate any secrets that were ever committed and scrub history if exposed.
-2. Replace localStorage access tokens with HttpOnly cookie-based auth.
-3. Add lockout and rate limiting to login endpoints.
+2. Audit git history for secrets and validate token/credential rotation.

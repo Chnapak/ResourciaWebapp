@@ -9,7 +9,7 @@ import { ToasterService } from '../../../../shared/toaster/toaster.service';
 import { ResourceSaveStateModel } from '../../../../shared/models/resource-save-state';
 import { ResourceImageModel } from '../../../../shared/models/resource-image';
 import { forkJoin } from 'rxjs';
-import { JwtPayloadModel } from '../../../../shared/models/jwt-payload-model';
+import { MeInfoModel } from '../../../../shared/models/me-info';
 
 /**
  * Resource detail page that loads a single resource and its metadata.
@@ -42,7 +42,7 @@ export class ResourcePageComponent {
   /** Active lightbox index. */
   lightboxIndex = 0;
   /** Cached current user (decoded). */
-  currentUser: JwtPayloadModel | null = null;
+  currentUser: MeInfoModel | null = null;
   /** Track images that failed to load. */
   brokenImageIds = new Set<string>();
   /** Guard against duplicate save/unsave requests. */
