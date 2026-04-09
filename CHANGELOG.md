@@ -1,3 +1,12 @@
+## [0.2.1] - 2026-04-09
+
+### Highlights
+- Stop tracking local secrets/config (`.env`, `appsettings.json`, `appsettings.*.json`) to keep credentials out of git.
+- Added/updated safe example config templates (`.env.example`, `appsettings.example.json`, `appsettings.Development.example.json`).
+- Owner bootstrap seeding now runs only in Development or when `BOOTSTRAP_OWNER=true`.
+- Ignore API upload artifacts under `wwwroot/uploads/`.
+
+---
 ## [0.2.0] - 2026-04-07
 
 ### Highlights
