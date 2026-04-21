@@ -1,0 +1,292 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" (click)="close.emit()">
+  <div
+    class="mx-4 w-full max-w-4xl rounded-2xl bg-white shadow-xl"
+    (click)="$event.stopPropagation()"
+  >
+    <form [formGroup]="resourceForm" (ngSubmit)="submit()" class="flex max-h-[90vh] flex-col">
+      <div class="border-b border-gray-200 px-6 py-5 sm:px-8">
+        <h2 class="text-2xl font-semibold text-gray-900">Suggest Changes</h2>
+        <p class="mt-2 text-sm text-gray-600">
+          Share edits to improve this resource. Domain changes are not supported.
+        </p>
+      </div>
+
+      <div class="flex-1 overflow-y-auto px-6 py-6 sm:px-8">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-6">
+          <div class="lg:col-span-6">
+            <label class="block text-sm font-medium text-gray-900 mb-2">
+              Resource Title <span class="text-red-500">*</span>
+            </label>
+            <input
+              formControlName="title"
+              type="text"
+              placeholder="Enter a resource title"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            @if (titleControl?.touched && titleControl?.hasError('required')) {
+              <p class="mt-1 text-sm text-red-500">Resource title is required.</p>
+            }
+          </div>
+
+          <div class="lg:col-span-6">
+            <label class="block text-sm font-medium text-gray-900 mb-2">Description</label>
+            <textarea
+              formControlName="description"
+              rows="4"
+              placeholder="Update the description..."
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            ></textarea>
+          </div>
+
+          <div class="lg:col-span-3">
+            <label class="block text-sm font-medium text-gray-900 mb-2">Author</label>
+            <input
+              formControlName="author"
+              type="text"
+              placeholder="Author name"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div class="lg:col-span-3">
+            <label class="block text-sm font-medium text-gray-900 mb-2">Learning Style</label>
+            <input
+              formControlName="learningStyle"
+              type="text"
+              placeholder="Video, article, course..."
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div class="lg:col-span-2">
+            <label class="block text-sm font-medium text-gray-900 mb-2">Year</label>
+            <input
+              formControlName="year"
+              type="number"
+              placeholder="2024"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div class="lg:col-span-2">
+            <label class="block text-sm font-medium text-gray-900 mb-2">Cost</label>
+            <select
+              formControlName="isFree"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option value="">Not specified</option>
+              <option value="true">Free</option>
+              <option value="false">Paid</option>
+            </select>
+          </div>
+
+          <div class="lg:col-span-2">
+            <label class="block text-sm font-medium text-gray-900 mb-2">Tags</label>
+            <input
+              formControlName="tags"
+              type="text"
+              placeholder="Comma-separated tags"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          @if (featuredFilters.length > 0) {
+            <div class="lg:col-span-6 border-t border-gray-100 pt-6">
+              <div class="mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Primary Filters</h3>
+                <p class="text-sm text-gray-600">Optional metadata from the active schema.</p>
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                @for (filter of featuredFilters; track filter.key) {
+                  <div>
+                    <label class="block text-sm font-medium text-gray-900 mb-2">
+                      {{ filter.label }}
+                    </label>
+
+                    @if (usesSelectableValues(filter) && filter.isMulti) {
+                      <div class="rounded-lg border border-gray-300 p-4">
+                        @if (hasFacetOptions(filter)) {
+                          <div class="flex flex-wrap gap-2">
+                            @for (option of filter.values; track option.value) {
+                              <label class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-2 text-sm text-gray-700">
+                                <input
+                                  type="checkbox"
+                                  class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                  [checked]="isFacetValueSelected(filter, option.value)"
+                                  (change)="toggleFacetValue(filter, option.value, $any($event.target).checked)"
+                                />
+                                <span>{{ option.label }}</span>
+                              </label>
+                            }
+                          </div>
+                        } @else {
+                          <p class="text-sm text-gray-500">No options configured yet.</p>
+                        }
+                      </div>
+                    } @else if (usesSelectableValues(filter)) {
+                      <div class="relative">
+                        <select
+                          [formControlName]="getFilterControlName(filter)"
+                          class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700 disabled:bg-gray-50 disabled:text-gray-400"
+                          [disabled]="!hasFacetOptions(filter)"
+                        >
+                          <option value="">Select {{ filter.label.toLowerCase() }}...</option>
+                          @for (option of filter.values; track option.value) {
+                            <option [value]="option.value">{{ option.label }}</option>
+                          }
+                        </select>
+
+                        <svg
+                          class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                        </svg>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <div class="lg:col-span-6 pt-2">
+            <details class="border-t border-gray-100 pt-4" [attr.open]="optionalFilters.length > 0 ? true : null">
+              <summary class="list-none cursor-pointer flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                </svg>
+                <span>Optional Filters</span>
+              </summary>
+
+              <div class="mt-6">
+                @if (filtersLoading) {
+                  <p class="text-sm text-gray-500">Loading optional filters...</p>
+                } @else if (optionalFilters.length === 0) {
+                  <p class="text-sm text-gray-500">No additional schema-driven filters are active right now.</p>
+                } @else {
+                  <div class="grid grid-cols-1 gap-6 lg:grid-cols-6">
+                    @for (filter of optionalFilters; track filter.key) {
+                      <div class="lg:col-span-3">
+                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                          {{ filter.label }}
+                        </label>
+
+                        @if (usesSelectableValues(filter) && filter.isMulti) {
+                          <div class="rounded-lg border border-gray-300 p-4 min-h-[58px]">
+                            @if (hasFacetOptions(filter)) {
+                              <div class="flex flex-wrap gap-2">
+                                @for (option of filter.values; track option.value) {
+                                  <label class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-2 text-sm text-gray-700">
+                                    <input
+                                      type="checkbox"
+                                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                      [checked]="isFacetValueSelected(filter, option.value)"
+                                      (change)="toggleFacetValue(filter, option.value, $any($event.target).checked)"
+                                    />
+                                    <span>{{ option.label }}</span>
+                                  </label>
+                                }
+                              </div>
+                            } @else {
+                              <p class="text-sm text-gray-500">No options configured yet.</p>
+                            }
+                          </div>
+                        } @else if (usesSelectableValues(filter)) {
+                          <div class="relative">
+                            <select
+                              [formControlName]="getFilterControlName(filter)"
+                              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700 disabled:bg-gray-50 disabled:text-gray-400"
+                              [disabled]="!hasFacetOptions(filter)"
+                            >
+                              <option value="">Select {{ filter.label.toLowerCase() }}...</option>
+                              @for (option of filter.values; track option.value) {
+                                <option [value]="option.value">{{ option.label }}</option>
+                              }
+                            </select>
+
+                            <svg
+                              class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                            </svg>
+                          </div>
+                        } @else if (filter.kind === FilterKind.Boolean) {
+                          <div class="relative">
+                            <select
+                              [formControlName]="getFilterControlName(filter)"
+                              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-gray-700"
+                            >
+                              <option value="">Not specified</option>
+                              <option value="true">Yes</option>
+                              <option value="false">No</option>
+                            </select>
+
+                            <svg
+                              class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+                            </svg>
+                          </div>
+                        } @else {
+                          <input
+                            [formControlName]="getFilterControlName(filter)"
+                            [type]="getInputType(filter)"
+                            [placeholder]="getInputPlaceholder(filter)"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </details>
+          </div>
+
+          @if (schemaError) {
+            <div class="lg:col-span-6">
+              <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {{ schemaError }}
+              </div>
+            </div>
+          }
+
+          @if (submitError) {
+            <div class="lg:col-span-6">
+              <div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                {{ submitError }}
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200 px-6 py-4 sm:px-8 flex flex-wrap justify-end gap-3">
+        <button
+          type="button"
+          class="rounded-lg border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+          (click)="close.emit()"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+          [disabled]="isSubmitting || filtersLoading"
+        >
+          {{ isSubmitting ? 'Submitting...' : 'Submit Changes' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

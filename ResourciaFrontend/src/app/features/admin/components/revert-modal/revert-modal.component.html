@@ -1,0 +1,70 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" (click)="close.emit()">
+  <div
+    class="mx-4 w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl sm:p-8"
+    (click)="$event.stopPropagation()">
+    <h2 class="text-2xl font-semibold text-slate-900">Confirm Revert</h2>
+    <p class="mt-2 text-sm text-slate-500">
+      Provide a reason and review the changes that will be applied.
+    </p>
+
+    <div class="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Change Preview</div>
+
+      @if (!entry) {
+        <div class="mt-3 text-sm text-slate-500">No entry selected.</div>
+      } @else if (entry.diff.length === 0) {
+        <div class="mt-3 text-sm text-slate-500">No differences recorded.</div>
+      } @else {
+        <div class="mt-3 space-y-3">
+          @for (item of entry.diff; track item.field) {
+            <div class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ item.field }}</div>
+              @if (item.added?.length) {
+                <div class="mt-2 text-emerald-600">Added: {{ formatList(item.added) }}</div>
+              }
+              @if (item.removed?.length) {
+                <div class="mt-1 text-red-600">Removed: {{ formatList(item.removed) }}</div>
+              }
+              @if (item.before !== undefined || item.after !== undefined) {
+                <div class="mt-2 text-slate-600">Before: {{ formatValue(item.before) }}</div>
+                <div class="text-slate-900">After: {{ formatValue(item.after) }}</div>
+              }
+              @if (item.warnings?.length) {
+                <div class="mt-2 text-amber-600">Warnings: {{ formatList(item.warnings) }}</div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="mt-6">
+      <label class="text-xs font-semibold uppercase tracking-wide text-slate-500">Reason</label>
+      <textarea
+        [(ngModel)]="reason"
+        rows="3"
+        class="mt-2 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none"
+        [class.border-red-400]="showReasonError"
+        placeholder="Why are you reverting this change?"></textarea>
+      @if (showReasonError) {
+        <div class="mt-1 text-xs text-red-600">Reason is required.</div>
+      }
+    </div>
+
+    <div class="mt-6 flex flex-wrap justify-end gap-3">
+      <button
+        type="button"
+        class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+        (click)="close.emit()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+        [disabled]="isSubmitting"
+        (click)="submit()">
+        {{ isSubmitting ? 'Reverting...' : 'Confirm Revert' }}
+      </button>
+    </div>
+  </div>
+</div>

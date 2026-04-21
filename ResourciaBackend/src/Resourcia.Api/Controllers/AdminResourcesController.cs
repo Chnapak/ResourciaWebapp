@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Resourcia.Api.Models.Admin;
 using Resourcia.Api.Services;
+using Resourcia.Api.Models.Audit;
 using Resourcia.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Resourcia.Data.Entities;
 
 namespace Resourcia.Api.Controllers;
 
@@ -16,11 +18,19 @@ public class AdminResourcesController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
     private readonly CacheService _cache;
+    private readonly ResourceAuditService _auditService;
+    private readonly ILogger<AdminResourcesController> _logger;
 
-    public AdminResourcesController(AppDbContext dbContext, CacheService cache)
+    public AdminResourcesController(
+        AppDbContext dbContext,
+        CacheService cache,
+        ResourceAuditService auditService,
+        ILogger<AdminResourcesController> logger)
     {
         _dbContext = dbContext;
         _cache = cache;
+        _auditService = auditService;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -79,6 +89,8 @@ public class AdminResourcesController : ControllerBase
             return NotFound("Resource is already deleted.");
         }
 
+        var beforeSnapshot = await _auditService.BuildSnapshotAsync(id, HttpContext.RequestAborted);
+
         resource.DeletedAtUtc = DateTime.UtcNow;
         resource.DeletedBy = GetCurrentDisplayName() ?? "Admin";
         resource.UpdatedAtUtc = DateTime.UtcNow;
@@ -89,6 +101,45 @@ public class AdminResourcesController : ControllerBase
         await _cache.InvalidateAsync($"threads:{id}");
         await _cache.InvalidateNamespaceAsync("search-results");
         await InvalidateSearchSchemaAsync();
+
+        var afterSnapshot = await _auditService.BuildSnapshotAsync(id, HttpContext.RequestAborted);
+        await TryWriteAuditAsync(id, ResourceAuditActionType.SoftDelete, beforeSnapshot, afterSnapshot, "admin", null, null, null, HttpContext.RequestAborted);
+
+        return NoContent();
+    }
+
+    [HttpPost("{id:guid}/restore")]
+    public async Task<IActionResult> RestoreResource(Guid id)
+    {
+        var resource = await _dbContext.Resources
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(currentResource => currentResource.Id == id);
+
+        if (resource == null)
+        {
+            return NotFound();
+        }
+
+        if (resource.DeletedAtUtc == null)
+        {
+            return BadRequest("Resource is not deleted.");
+        }
+
+        var beforeSnapshot = await _auditService.BuildSnapshotAsync(id, HttpContext.RequestAborted);
+
+        resource.DeletedAtUtc = null;
+        resource.DeletedBy = null;
+        resource.UpdatedAtUtc = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        await _cache.InvalidateAsync($"resource:v5:{id}");
+        await _cache.InvalidateAsync($"threads:{id}");
+        await _cache.InvalidateNamespaceAsync("search-results");
+        await InvalidateSearchSchemaAsync();
+
+        var afterSnapshot = await _auditService.BuildSnapshotAsync(id, HttpContext.RequestAborted);
+        await TryWriteAuditAsync(id, ResourceAuditActionType.Restore, beforeSnapshot, afterSnapshot, "admin", null, null, null, HttpContext.RequestAborted);
 
         return NoContent();
     }
@@ -109,5 +160,37 @@ public class AdminResourcesController : ControllerBase
 
         return User.FindFirstValue(ClaimTypes.Name)
             ?? User.FindFirstValue(JwtRegisteredClaimNames.Name);
+    }
+
+    private async Task TryWriteAuditAsync(
+        Guid resourceId,
+        ResourceAuditActionType actionType,
+        ResourceAuditSnapshot? before,
+        ResourceAuditSnapshot? after,
+        string source,
+        string? reason,
+        Guid? revertedAuditId,
+        IReadOnlyList<string>? warnings,
+        CancellationToken ct)
+    {
+        try
+        {
+            var entry = _auditService.BuildEntry(
+                resourceId,
+                actionType,
+                before,
+                after,
+                source,
+                HttpContext,
+                reason,
+                revertedAuditId,
+                warnings);
+
+            await _auditService.TryWriteEntryAsync(entry, ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to write audit entry for resource {ResourceId}.", resourceId);
+        }
     }
 }

@@ -96,6 +96,12 @@ export const routes: Routes = [
           import('./features/search/pages/resource-page/resource-page.component').then((module) => module.ResourcePageComponent)
       },
       {
+        path: 'resource/:id/history',
+        canActivate: [canActivateGuard],
+        loadComponent: () =>
+          import('./features/search/pages/resource-history-page/resource-history-page.component').then((module) => module.ResourceHistoryPageComponent)
+      },
+      {
         path: 'search',
         title: 'Resources',
         loadComponent: () =>
@@ -124,6 +130,11 @@ export const routes: Routes = [
             path: 'users',
             loadComponent: () =>
               import('./features/admin/pages/users-page/users-page.component').then((module) => module.UsersAdminPageComponent)
+          },
+          {
+            path: 'resources/:id/history',
+            loadComponent: () =>
+              import('./features/admin/pages/resource-history-page/resource-history-page.component').then((module) => module.ResourceHistoryPageComponent)
           },
           {
             path: 'resources',

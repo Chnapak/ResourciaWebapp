@@ -28,6 +28,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<ResourceRatings> ResourceRatings { get; set; }
     public DbSet<SavedResource> SavedResources { get; set; }
     public DbSet<ResourceImage> ResourceImages { get; set; } = null!;
+    public DbSet<ResourceAuditEntry> ResourceAuditEntries { get; set; } = null!;
 
     public AppDbContext(DbContextOptions options) : base(options)
     {
@@ -122,6 +123,21 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
         .WithOne(rr => rr.Resource)
         .HasForeignKey<ResourceRatings>(rr => rr.ResourceId)
         .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ResourceAuditEntry>()
+            .HasOne(entry => entry.Resource)
+            .WithMany()
+            .HasForeignKey(entry => entry.ResourceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ResourceAuditEntry>()
+            .HasIndex(entry => entry.ResourceId);
+
+        modelBuilder.Entity<ResourceAuditEntry>()
+            .HasIndex(entry => entry.CreatedAtUtc);
+
+        modelBuilder.Entity<ResourceAuditEntry>()
+            .HasIndex(entry => new { entry.ResourceId, entry.CreatedAtUtc });
 
     }
 }

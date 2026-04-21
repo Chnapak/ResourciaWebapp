@@ -2,77 +2,94 @@ name: CD
 
 on:
   push:
-    branches: [main]
-    tags: ["v*"]
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
-      environment:
-        description: "Target environment"
+      ref:
+        description: "Branch or tag to deploy"
         required: true
-        type: choice
-        options:
-          - staging
-          - production
+        default: "main"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
 
 jobs:
-  deploy_staging:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: staging
-    env:
-      STAGING_DEPLOY_HOST: ${{ secrets.STAGING_DEPLOY_HOST }}
-      STAGING_DEPLOY_USER: ${{ secrets.STAGING_DEPLOY_USER }}
-      STAGING_DEPLOY_KEY: ${{ secrets.STAGING_DEPLOY_KEY }}
-      STAGING_DEPLOY_PORT: ${{ secrets.STAGING_DEPLOY_PORT }}
-      STAGING_DEPLOY_PATH: ${{ secrets.STAGING_DEPLOY_PATH }}
-    steps:
-      - name: Deploy via SSH (staging)
-        if: ${{ env.STAGING_DEPLOY_HOST != '' }}
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ env.STAGING_DEPLOY_HOST }}
-          username: ${{ env.STAGING_DEPLOY_USER }}
-          key: ${{ env.STAGING_DEPLOY_KEY }}
-          port: ${{ env.STAGING_DEPLOY_PORT || '22' }}
-          script: |
-            set -e
-            cd "${{ env.STAGING_DEPLOY_PATH }}"
-            git fetch --all
-            git checkout main
-            git pull
-            cd ResourciaBackend/src
-            docker compose up -d --build
-      - name: Skip deploy (missing secrets)
-        if: ${{ env.STAGING_DEPLOY_HOST == '' }}
-        run: echo "STAGING_DEPLOY_HOST not set, skipping deploy."
-
-  deploy_production:
-    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
+  deploy:
+    name: Deploy to VPS
     runs-on: ubuntu-latest
     environment: production
     env:
-      PROD_DEPLOY_HOST: ${{ secrets.PROD_DEPLOY_HOST }}
-      PROD_DEPLOY_USER: ${{ secrets.PROD_DEPLOY_USER }}
-      PROD_DEPLOY_KEY: ${{ secrets.PROD_DEPLOY_KEY }}
-      PROD_DEPLOY_PORT: ${{ secrets.PROD_DEPLOY_PORT }}
-      PROD_DEPLOY_PATH: ${{ secrets.PROD_DEPLOY_PATH }}
+      DEPLOY_REF: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref_name }}
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+      VPS_PORT: ${{ secrets.VPS_PORT }}
+      VPS_APP_PATH: ${{ secrets.VPS_APP_PATH }}
+      VPS_COMPOSE_FILE: ${{ secrets.VPS_COMPOSE_FILE }}
+      VPS_HEALTHCHECK_URL: ${{ secrets.VPS_HEALTHCHECK_URL }}
+
     steps:
-      - name: Deploy via SSH (production)
-        if: ${{ env.PROD_DEPLOY_HOST != '' }}
-        uses: appleboy/ssh-action@v0.1.10
+      - name: Validate deployment secrets
+        shell: bash
+        run: |
+          missing=0
+
+          for secret_name in VPS_HOST VPS_USER VPS_SSH_KEY VPS_APP_PATH; do
+            if [ -z "${!secret_name}" ]; then
+              echo "::error::Required GitHub secret ${secret_name} is not set."
+              missing=1
+            fi
+          done
+
+          exit "$missing"
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ env.PROD_DEPLOY_HOST }}
-          username: ${{ env.PROD_DEPLOY_USER }}
-          key: ${{ env.PROD_DEPLOY_KEY }}
-          port: ${{ env.PROD_DEPLOY_PORT || '22' }}
+          host: ${{ env.VPS_HOST }}
+          username: ${{ env.VPS_USER }}
+          key: ${{ env.VPS_SSH_KEY }}
+          port: ${{ env.VPS_PORT || '22' }}
+          script_stop: true
+          command_timeout: 20m
+          envs: DEPLOY_REF,VPS_APP_PATH,VPS_COMPOSE_FILE
           script: |
-            set -e
-            cd "${{ env.PROD_DEPLOY_PATH }}"
-            git fetch --all
-            git checkout main
-            git pull
+            set -eu
+
+            app_path="${VPS_APP_PATH}"
+            compose_file="${VPS_COMPOSE_FILE:-docker-compose.yml}"
+            deploy_ref="${DEPLOY_REF:-main}"
+
+            cd "$app_path"
+
+            if ! git diff --quiet || ! git diff --cached --quiet; then
+              echo "Server checkout has local changes. Commit or clean them before deploying."
+              exit 1
+            fi
+
+            git fetch --all --tags --prune
+
+            if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null; then
+              git checkout --detach "refs/tags/$deploy_ref"
+            else
+              git checkout "$deploy_ref"
+              git pull --ff-only origin "$deploy_ref"
+            fi
+
             cd ResourciaBackend/src
-            docker compose up -d --build
-      - name: Skip deploy (missing secrets)
-        if: ${{ env.PROD_DEPLOY_HOST == '' }}
-        run: echo "PROD_DEPLOY_HOST not set, skipping deploy."
+
+            docker compose -f "$compose_file" pull || true
+            docker compose -f "$compose_file" up -d --build --remove-orphans
+            docker compose -f "$compose_file" ps
+
+      - name: Health check
+        if: ${{ env.VPS_HEALTHCHECK_URL != '' }}
+        shell: bash
+        run: |
+          curl --fail --show-error --location --retry 10 --retry-delay 5 "${VPS_HEALTHCHECK_URL}"

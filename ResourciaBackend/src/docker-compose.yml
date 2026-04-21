@@ -11,6 +11,8 @@ services:
       - "5000:5000"
       - "5001:5001"
     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=5000
       - REDIS_URL=redis://resourcia.redis:6379
     depends_on:
       - resourcia.db

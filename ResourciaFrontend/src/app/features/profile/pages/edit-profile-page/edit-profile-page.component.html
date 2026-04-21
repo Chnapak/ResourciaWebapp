@@ -16,74 +16,17 @@
   </section>
 } @else {
 
-<!-- ── Hero ──────────────────────────────────────────────── -->
-<section class="ep-hero">
-  <div class="ep-hero__inner">
-
-    <!-- Breadcrumb -->
-    <nav class="ep-hero__breadcrumb" aria-label="Breadcrumb">
-      <a routerLink="/">Home</a>
-      <span class="sep">›</span>
-      <a [routerLink]="['/profile', originalProfileIdentifier || form.get('username')?.value]">Profile</a>
-      <span class="sep">›</span>
-      <span class="current">Edit Profile</span>
-    </nav>
-
-    <!-- Identity line -->
-    <div class="ep-hero__identity">
-      <div class="ep-avatar-shell">
-        <div class="ep-avatar-frame">
-          <div class="ep-avatar" [class.ep-avatar--image]="avatarUrl">
-            @if (avatarUrl) {
-              <img [src]="avatarUrl" alt="Profile photo" class="ep-avatar__image" />
-            } @else {
-              {{ avatarInitial }}
-            }
-          </div>
-          <input
-            id="avatar-upload"
-            type="file"
-            accept="image/png,image/jpeg,image/gif"
-            class="ep-avatar__input"
-            (change)="onAvatarSelected($event)"
-            [disabled]="avatarUploading()"
-          />
-          <label
-            class="ep-avatar__badge"
-            [class.ep-avatar__badge--disabled]="avatarUploading()"
-            for="avatar-upload"
-            title="Change photo"
-          >
-            <span class="ep-avatar__badge-icon">✎</span>
-          </label>
-        </div>
-        <div class="ep-avatar__actions">
-          <button
-            type="button"
-            class="ep-avatar__action"
-            (click)="removeAvatar()"
-            [disabled]="!avatarUrl || avatarUploading()"
-          >
-            {{ avatarUploading() ? 'Working...' : 'Remove' }}
-          </button>
-        </div>
-        @if (avatarError()) {
-          <span class="ep-avatar__status ep-avatar__status--error">{{ avatarError() }}</span>
-        } @else if (avatarSuccess()) {
-          <span class="ep-avatar__status ep-avatar__status--success">{{ avatarSuccess() }}</span>
-        } @else {
-          <span class="ep-avatar__status">PNG, JPG, or GIF (max 5MB)</span>
-        }
-      </div>
-
-      <div class="ep-hero__title">
-        <h1>Edit Your Profile</h1>
-        <p>Customize how you appear to the Resourcia community.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
+<app-edit-profile-hero
+  [originalProfileIdentifier]="originalProfileIdentifier"
+  [username]="form?.get('username')?.value"
+  [avatarUrl]="avatarUrl"
+  [avatarInitial]="avatarInitial"
+  [avatarUploading]="avatarUploading()"
+  [avatarError]="avatarError()"
+  [avatarSuccess]="avatarSuccess()"
+  (avatarSelected)="onAvatarSelected($event)"
+  (removeAvatar)="removeAvatar()"
+></app-edit-profile-hero>
 
 <!-- ── Two-column layout ──────────────────────────────────── -->
 <div class="ep-layout" [formGroup]="form">
@@ -357,109 +300,25 @@
 
   </div>
 
-  <!-- ── Right: Preview ─────────────────────────────────── -->
-  <aside class="ep-preview-card">
-
-    <div class="ep-card">
-      <div class="ep-card__header">
-        <h2>Profile Preview</h2>
-        <p>How your public profile will look after saving.</p>
-      </div>
-      <hr class="ep-card__divider" />
-
-      <div class="ep-preview__hero">
-        <div class="ep-preview__avatar" [class.ep-preview__avatar--image]="preview().avatarUrl">
-          @if (preview().avatarUrl) {
-            <img [src]="preview().avatarUrl!" alt="Profile photo preview" />
-          } @else {
-            {{ avatarInitial }}
-          }
-        </div>
-        <p class="ep-preview__name">
-          {{ preview().displayName || 'Your Name' }}
-        </p>
-        <p class="ep-preview__handle">
-          &#64;{{ preview().username || 'username' }}
-        </p>
-        <p class="ep-preview__bio" *ngIf="preview().bio">
-          "{{ preview().bio }}"
-        </p>
-        <div class="ep-preview__meta">
-          <span *ngIf="preview().location">📍 {{ preview().location }}</span>
-          <span *ngIf="preview().website">🔗 {{ preview().website }}</span>
-        </div>
-      </div>
-
-      <div class="ep-preview__body">
-        <div class="ep-preview__label">Interests</div>
-        <div class="ep-preview__tags" *ngIf="interests().length; else noPreviewTags">
-          <span class="ep-tag" *ngFor="let tag of interests()">{{ tag }}</span>
-        </div>
-        <ng-template #noPreviewTags>
-          <span class="ep-preview__empty">No interests added yet.</span>
-        </ng-template>
-      </div>
-    </div>
-
-    <div class="ep-card ep-card--spaced-sm">
-      <div class="ep-card__body ep-card__body--compact">
-        <div class="ep-status-legend__title">Editor Status</div>
-        <div class="ep-status-legend">
-          <div class="ep-status-legend__row">
-            <span class="ep-field__badge ep-field__badge--current">Live</span>
-            Display name, handle, bio, location, website, and interests save through `/api/Profile/me`
-          </div>
-          <div class="ep-status-legend__row">
-            <span class="ep-field__badge ep-field__badge--derived">Media</span>
-            Profile photos upload through `/api/Profile/me/avatar`
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </aside>
+  <app-edit-profile-preview
+    [preview]="preview()"
+    [avatarInitial]="avatarInitial"
+    [interests]="interests()"
+  ></app-edit-profile-preview>
 
 </div>
 
-<!-- ── Sticky action bar (always visible) ─────────────────── -->
-<div class="ep-action-bar" role="region" aria-label="Save actions">
-  <div
-    class="ep-action-bar__status"
-    [class.ep-action-bar__status--saving]="isSaving()"
-    [class.ep-action-bar__status--saved]="isSaved()"
-    [class.ep-action-bar__status--error]="isError()"
-    [class.ep-action-bar__status--idle]="saveStatus() === 'idle'"
-  >
-    <span class="ep-status-dot"></span>
-    <span *ngIf="saveStatus() === 'idle'">
-      {{ isDirty() ? 'Unsaved changes' : 'Loaded from your live profile' }}
-    </span>
-    <span *ngIf="isSaving()">Saving profile...</span>
-    <span *ngIf="isSaved()">{{ saveMessage() || 'Profile saved.' }}</span>
-    <span *ngIf="isError()">{{ saveMessage() || 'Save failed. Try again.' }}</span>
-  </div>
-
-  <div class="ep-action-bar__actions">
-    <button
-      type="button"
-      class="ep-btn ep-btn--ghost"
-      (click)="onCancel()"
-      [disabled]="isSaving() || isDeletingAccount()"
-    >
-      Back to profile
-    </button>
-    <button
-      type="button"
-      class="ep-btn ep-btn--primary"
-      [class.ep-btn--saving]="isSaving()"
-      (click)="onSave()"
-      [disabled]="form.invalid || isSaving() || isDeletingAccount()"
-      [attr.aria-busy]="isSaving()"
-    >
-      <span class="ep-btn__spinner" *ngIf="isSaving()"></span>
-      <span>{{ isSaving() ? 'Saving...' : 'Save Profile' }}</span>
-    </button>
-  </div>
-</div>
+<app-edit-profile-action-bar
+  [isDirty]="isDirty()"
+  [isSaving]="isSaving()"
+  [isSaved]="isSaved()"
+  [isError]="isError()"
+  [saveStatus]="saveStatus()"
+  [saveMessage]="saveMessage()"
+  [isDeletingAccount]="isDeletingAccount()"
+  [formInvalid]="form?.invalid ?? true"
+  (cancel)="onCancel()"
+  (save)="onSave()"
+></app-edit-profile-action-bar>
 
 }

@@ -1,0 +1,40 @@
+<!-- ── Sticky action bar (always visible) ─────────────────── -->
+<div class="ep-action-bar" role="region" aria-label="Save actions">
+  <div
+    class="ep-action-bar__status"
+    [class.ep-action-bar__status--saving]="isSaving"
+    [class.ep-action-bar__status--saved]="isSaved"
+    [class.ep-action-bar__status--error]="isError"
+    [class.ep-action-bar__status--idle]="saveStatus === 'idle'"
+  >
+    <span class="ep-status-dot"></span>
+    <span *ngIf="saveStatus === 'idle'">
+      {{ isDirty ? 'Unsaved changes' : 'Loaded from your live profile' }}
+    </span>
+    <span *ngIf="isSaving">Saving profile...</span>
+    <span *ngIf="isSaved">{{ saveMessage || 'Profile saved.' }}</span>
+    <span *ngIf="isError">{{ saveMessage || 'Save failed. Try again.' }}</span>
+  </div>
+
+  <div class="ep-action-bar__actions">
+    <button
+      type="button"
+      class="ep-btn ep-btn--ghost"
+      (click)="cancel.emit()"
+      [disabled]="isSaving || isDeletingAccount"
+    >
+      Back to profile
+    </button>
+    <button
+      type="button"
+      class="ep-btn ep-btn--primary"
+      [class.ep-btn--saving]="isSaving"
+      (click)="save.emit()"
+      [disabled]="formInvalid || isSaving || isDeletingAccount"
+      [attr.aria-busy]="isSaving"
+    >
+      <span class="ep-btn__spinner" *ngIf="isSaving"></span>
+      <span>{{ isSaving ? 'Saving...' : 'Save Profile' }}</span>
+    </button>
+  </div>
+</div>

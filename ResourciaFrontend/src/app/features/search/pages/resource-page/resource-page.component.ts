@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ResourceHeroComponent } from './components/resource-hero/resource-hero.component';
 import { ResourcePageBodyComponent } from './components/resource-page-body/resource-page-body.component';
+import { SuggestChangeModalComponent } from './components/suggest-change-modal/suggest-change-modal.component';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { ResourceDetailModel } from '../../../../shared/models/resource-detail';
 import { ActivatedRoute } from '@angular/router';
@@ -10,13 +11,14 @@ import { ResourceSaveStateModel } from '../../../../shared/models/resource-save-
 import { ResourceImageModel } from '../../../../shared/models/resource-image';
 import { forkJoin } from 'rxjs';
 import { MeInfoModel } from '../../../../shared/models/me-info';
+import { UpdateResourceRequestModel } from '../../../../shared/models/update-resource-request';
 
 /**
  * Resource detail page that loads a single resource and its metadata.
  */
 @Component({
   selector: 'app-resource-page',
-  imports: [ ResourceHeroComponent, ResourcePageBodyComponent ],
+  imports: [ ResourceHeroComponent, ResourcePageBodyComponent, SuggestChangeModalComponent ],
   templateUrl: './resource-page.component.html',
   styleUrl: './resource-page.component.scss',
 })
@@ -47,6 +49,19 @@ export class ResourcePageComponent {
   brokenImageIds = new Set<string>();
   /** Guard against duplicate save/unsave requests. */
   favoritePending = false;
+  /** Suggest-changes modal open state. */
+  suggestModalOpen = false;
+  /** Suggest-changes submit pending flag. */
+  suggestSubmitting = false;
+
+  /** Link to the resource history page. */
+  get resourceHistoryLink(): string[] | null {
+    if (!this.resource?.id) {
+      return null;
+    }
+
+    return ['/resource', this.resource.id, 'history'];
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -153,6 +168,47 @@ export class ResourcePageComponent {
         console.error('Error updating favorites:', error);
         this.favoritePending = false;
         this.toaster.show('Could not update favorites right now.', 'error');
+      },
+    });
+  }
+
+  /** Open the suggest-changes modal (requires auth). */
+  openSuggestChanges(): void {
+    if (!this.authService.requireAuth()) {
+      return;
+    }
+
+    if (!this.resource) {
+      return;
+    }
+
+    this.suggestModalOpen = true;
+  }
+
+  /** Close the suggest-changes modal. */
+  closeSuggestChanges(): void {
+    this.suggestModalOpen = false;
+  }
+
+  /** Submit suggested changes to the API. */
+  submitSuggestedChanges(payload: UpdateResourceRequestModel): void {
+    if (!this.resourceId || this.suggestSubmitting) {
+      return;
+    }
+
+    this.suggestSubmitting = true;
+
+    this.resourceService.updateResource(this.resourceId, payload).subscribe({
+      next: () => {
+        this.suggestSubmitting = false;
+        this.suggestModalOpen = false;
+        this.toaster.show('Thanks! Your changes were saved.', 'success');
+        this.fetchResource(this.resourceId!);
+      },
+      error: (error) => {
+        console.error('Error updating resource:', error);
+        this.suggestSubmitting = false;
+        this.toaster.show('Could not save changes right now.', 'error');
       },
     });
   }

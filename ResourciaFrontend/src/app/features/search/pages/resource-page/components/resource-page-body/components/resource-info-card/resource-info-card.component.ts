@@ -60,6 +60,8 @@ export class ResourceInfoCardComponent implements OnInit {
 
   /** Resource details shown in this card. */
   @Input() resource: ResourceDetailModel | null = null;
+  /** Optional link to the resource history page. */
+  @Input() historyLink: string[] | null = null;
 
   /** Load schema metadata on init. */
   ngOnInit(): void {
@@ -82,6 +84,7 @@ export class ResourceInfoCardComponent implements OnInit {
     return [
       ...this.getPrimaryRows(),
       ...this.getSchemaRows(),
+      ...this.getHistoryRows(),
       ...this.getMetadataRows(),
     ];
   }
@@ -158,6 +161,22 @@ export class ResourceInfoCardComponent implements OnInit {
       this.createRow('Saves', savesCount, '0 saves'),
       this.createRow('Added', added, 'Unknown'),
       this.createRow('Updated', updated, 'Unknown'),
+    ];
+  }
+
+  /** Optional rows that link to resource history. */
+  private getHistoryRows(): ResourceInfoRow[] {
+    if (!this.historyLink) {
+      return [];
+    }
+
+    return [
+      {
+        label: 'History',
+        value: 'View changes',
+        tone: 'blue',
+        routerLink: this.historyLink,
+      }
     ];
   }
 

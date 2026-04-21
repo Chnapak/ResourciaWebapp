@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CreateResourceRequestModel } from '../../shared/models/create-resource-request';
+import { UpdateResourceRequestModel } from '../../shared/models/update-resource-request';
 import { CreateResourceResponseModel } from '../../shared/models/create-resource-response';
 import { ResourceDetailModel } from '../../shared/models/resource-detail';
 import { ResourceSaveStateModel } from '../../shared/models/resource-save-state';
@@ -15,6 +16,7 @@ import { ReviewRequestModel } from '../../shared/models/review-request';
 import { Review } from '../../shared/models/review';
 import { SchemaResponse } from '../../shared/models/search-schema';
 import { ResourceImageModel, ResourceImageUploadResponse } from '../../shared/models/resource-image';
+import { ResourceAuditEntryDetail, ResourceAuditEntryListResponse } from '../../features/admin/models/resource-audit.model';
 
 
 /**
@@ -75,6 +77,23 @@ export class ResourceService {
   /** Fetches images for a resource. */
   getResourceImages(id: string): Observable<ResourceImageModel[]> {
     return this.httpClient.get<ResourceImageModel[]>(`${this.baseUrl}/${id}/images`);
+  }
+
+  /** Updates a resource by id. */
+  updateResource(id: string, payload: UpdateResourceRequestModel): Observable<Partial<ResourceDetailModel>> {
+    return this.httpClient.put<Partial<ResourceDetailModel>>(`${this.baseUrl}/${id}`, payload);
+  }
+
+  /** Retrieves audit entries for a resource. */
+  getResourceAudit(resourceId: string, page = 1, pageSize = 20): Observable<ResourceAuditEntryListResponse> {
+    return this.httpClient.get<ResourceAuditEntryListResponse>(
+      `${this.baseUrl}/${resourceId}/audit?page=${page}&pageSize=${pageSize}`
+    );
+  }
+
+  /** Retrieves a single audit entry detail for a resource. */
+  getResourceAuditEntry(resourceId: string, auditId: string): Observable<ResourceAuditEntryDetail> {
+    return this.httpClient.get<ResourceAuditEntryDetail>(`${this.baseUrl}/${resourceId}/audit/${auditId}`);
   }
 
   /** Uploads a single image for a resource. */

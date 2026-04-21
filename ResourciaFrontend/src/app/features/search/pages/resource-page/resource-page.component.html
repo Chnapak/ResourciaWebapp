@@ -41,9 +41,11 @@
     <!-- Body content with tabs, ratings, and discussion. -->
     <app-resource-page-body
         [resource]="resource"
+        [historyLink]="resourceHistoryLink"
         [favoritePending]="favoritePending"
         (favoriteToggle)="toggleFavorite()"
         (infoChange)="fetchResource(resourceId!)"
+        (suggestImprovement)="openSuggestChanges()"
     ></app-resource-page-body>
 
     @if (lightboxOpen) {
@@ -118,5 +120,14 @@
                 }
             </div>
         </div>
+    }
+
+    @if (suggestModalOpen) {
+        <app-suggest-change-modal
+            [resource]="resource"
+            [isSubmitting]="suggestSubmitting"
+            (close)="closeSuggestChanges()"
+            (submitChanges)="submitSuggestedChanges($event)"
+        ></app-suggest-change-modal>
     }
 }

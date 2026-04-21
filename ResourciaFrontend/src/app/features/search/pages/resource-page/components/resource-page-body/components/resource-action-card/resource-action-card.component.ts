@@ -18,6 +18,8 @@ export class ResourceActionCardComponent {
   @Input() favoritePending = false;
   /** Emit when favorite is toggled. */
   @Output() favoriteToggle = new EventEmitter<void>();
+  /** Emit when user wants to suggest changes. */
+  @Output() suggestImprovement = new EventEmitter<void>();
 
   /** Toast notifications for action feedback. */
   private readonly toaster = inject(ToasterService);
@@ -68,7 +70,7 @@ export class ResourceActionCardComponent {
 
   /** Placeholder for future "suggest improvement" flow. */
   handleSuggestImprovement(): void {
-    this.toaster.show('Feature not avaible yet', 'info');
+    this.suggestImprovement.emit();
   }
 
   /** Placeholder report-issue action. */

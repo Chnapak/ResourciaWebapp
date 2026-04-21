@@ -80,19 +80,29 @@
                 }
               </td>
               <td class="px-4 py-5 text-right sm:px-8">
-                <!-- Soft delete action; disabled when already deleted -->
-                <button
-                  type="button"
-                  class="rounded-lg border px-3 py-2 text-xs font-semibold transition"
-                  [class.border-red-200]="!resource.isDeleted"
-                  [class.text-red-600]="!resource.isDeleted"
-                  [class.hover:bg-red-50]="!resource.isDeleted"
-                  [class.border-slate-200]="resource.isDeleted"
-                  [class.text-slate-400]="resource.isDeleted"
-                  [disabled]="resource.isDeleted"
-                  (click)="softDeleteResource(resource)">
-                  {{ resource.isDeleted ? 'Deleted' : 'Soft Delete' }}
-                </button>
+                <div class="flex flex-col items-end gap-2 sm:flex-row sm:justify-end">
+                  <a
+                    [routerLink]="['/admin/resources', resource.id, 'history']"
+                    class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">
+                    History
+                  </a>
+
+                  @if (resource.isDeleted) {
+                    <button
+                      type="button"
+                      class="rounded-lg border border-emerald-200 px-3 py-2 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-50"
+                      (click)="restoreResource(resource)">
+                      Restore
+                    </button>
+                  } @else {
+                    <button
+                      type="button"
+                      class="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+                      (click)="softDeleteResource(resource)">
+                      Soft Delete
+                    </button>
+                  }
+                </div>
               </td>
             </tr>
           }

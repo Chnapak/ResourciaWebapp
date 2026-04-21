@@ -12,6 +12,11 @@ import { FilterActivityModel } from '../../shared/models/filter-activity-model';
 import { AdminFilterUpdateModel } from '../../features/admin/models/admin-filter-update.model';
 import { AdminFilterCreateModel } from '../../features/admin/models/admin-filter-create.model';
 import { AdminResource } from '../../features/admin/models/admin-resource.model';
+import {
+  ResourceAuditEntryDetail,
+  ResourceAuditEntryListResponse,
+  ResourceRevertRequest
+} from '../../features/admin/models/resource-audit.model';
 
 /**
  * Service wrapper for admin-only backend endpoints.
@@ -103,5 +108,29 @@ export class AdminService {
   deleteResource(resourceId: string): Observable<void> {
     const url = this.baseUrl + "/resources/" + resourceId;
     return this.httpClient.delete<void>(url);
+  }
+
+  /** Restores a soft-deleted resource by id. */
+  restoreResource(resourceId: string): Observable<void> {
+    const url = this.baseUrl + "/resources/" + resourceId + "/restore";
+    return this.httpClient.post<void>(url, {});
+  }
+
+  /** Retrieves audit entries for a resource. */
+  getResourceAudit(resourceId: string, page = 1, pageSize = 20): Observable<ResourceAuditEntryListResponse> {
+    const url = `/api/resources/${resourceId}/audit?page=${page}&pageSize=${pageSize}`;
+    return this.httpClient.get<ResourceAuditEntryListResponse>(url);
+  }
+
+  /** Retrieves audit entry detail for a resource. */
+  getResourceAuditEntry(resourceId: string, auditId: string): Observable<ResourceAuditEntryDetail> {
+    const url = `/api/resources/${resourceId}/audit/${auditId}`;
+    return this.httpClient.get<ResourceAuditEntryDetail>(url);
+  }
+
+  /** Reverts a resource to a specific audit entry. */
+  revertResource(resourceId: string, request: ResourceRevertRequest): Observable<void> {
+    const url = `/api/resources/${resourceId}/revert`;
+    return this.httpClient.post<void>(url, request);
   }
 }

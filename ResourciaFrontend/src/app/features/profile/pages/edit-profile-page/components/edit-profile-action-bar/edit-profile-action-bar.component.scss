@@ -1,0 +1,63 @@
+/* Sticky action bar */
+.ep-action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid #e8edf5;
+  padding: .85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 -4px 20px rgba(13,31,107,.07);
+  animation: barIn .2s ease;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@keyframes barIn {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.ep-action-bar__status {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .8rem;
+
+  &--saving { color: #6b7a9e; }
+  &--saved  { color: #059669; }
+  &--error  { color: #ef4444; }
+  &--idle   { color: #aab2c4; }
+}
+
+.ep-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+
+  .ep-action-bar__status--saving & {
+    animation: pulse 1s infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+
+.ep-action-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}

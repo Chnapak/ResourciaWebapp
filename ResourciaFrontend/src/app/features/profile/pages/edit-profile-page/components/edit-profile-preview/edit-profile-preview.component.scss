@@ -1,0 +1,132 @@
+/* Preview sidebar */
+.ep-preview-card {
+  position: sticky;
+  top: 1.5rem;
+
+  @media (max-width: 860px) {
+    position: static;
+    order: -1;
+  }
+}
+
+/* Preview card sections */
+.ep-preview {
+  &__hero {
+    background: linear-gradient(135deg, #0d1f6b 0%, #1a3aad 50%, #2952d9 100%);
+    border-radius: 14px 14px 0 0;
+    padding: 1.5rem;
+  }
+
+  &__avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b6fe8, #5b8ff9);
+    border: 2.5px solid rgba(255,255,255,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: .85rem;
+  }
+
+  &__avatar--image {
+    background: #1f3b8f;
+    overflow: hidden;
+    padding: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &__name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 .15rem;
+    word-break: break-word;
+  }
+
+  &__handle {
+    font-size: .8rem;
+    color: rgba(255,255,255,.65);
+    margin: 0 0 .6rem;
+  }
+
+  &__bio {
+    font-size: .8rem;
+    color: rgba(255,255,255,.8);
+    line-height: 1.5;
+    margin: 0 0 .6rem;
+    font-style: italic;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem .85rem;
+    font-size: .72rem;
+    color: rgba(255,255,255,.55);
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+    }
+  }
+
+  &__body {
+    padding: 1rem 1.5rem 1.25rem;
+  }
+
+  &__label {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #8b95a8;
+    margin-bottom: .65rem;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+  }
+
+  &__empty {
+    font-size: .78rem;
+    color: #c0c8d8;
+    font-style: italic;
+  }
+}
+
+/* Save status legend */
+.ep-status-legend__title {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #8b95a8;
+  margin-bottom: .75rem;
+}
+
+.ep-status-legend {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+}
+
+.ep-status-legend__row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .8rem;
+  color: #374151;
+}

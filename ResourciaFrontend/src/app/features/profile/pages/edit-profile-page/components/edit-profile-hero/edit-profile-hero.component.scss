@@ -1,0 +1,201 @@
+/* Hero banner */
+.ep-hero {
+  background: linear-gradient(135deg, #0d1f6b 0%, #1a3aad 50%, #2952d9 100%);
+  padding: 2.5rem 0 3.5rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 20%, rgba(255,255,255,.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(41,82,217,.4) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+.ep-hero__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.ep-hero__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: 1.75rem;
+  font-size: .8rem;
+  color: rgba(255,255,255,.6);
+
+  a {
+    color: rgba(255,255,255,.6);
+    text-decoration: none;
+    transition: color .15s;
+
+    &:hover { color: #fff; }
+  }
+
+  .sep { opacity: .4; }
+  .current { color: rgba(255,255,255,.9); }
+}
+
+.ep-hero__identity {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.ep-avatar-shell {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ep-avatar-frame {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ep-avatar {
+  position: relative;
+  z-index: 1;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b6fe8, #5b8ff9);
+  border: 3px solid rgba(255,255,255,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ep-avatar--image {
+  background: #1f3b8f;
+  overflow: hidden;
+  padding: 0;
+}
+
+.ep-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.ep-avatar__badge {
+  position: absolute;
+  z-index: 2;
+  bottom: 2px;
+  right: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1a3aad;
+  border: 2px solid rgba(255,255,255,.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7rem;
+  color: rgba(255,255,255,.8);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(13,31,107,.2);
+  overflow: hidden;
+}
+
+.ep-avatar__badge-icon {
+  pointer-events: none;
+}
+
+.ep-avatar__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.ep-avatar__badge--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ep-avatar__actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.ep-avatar__action {
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(255,255,255,.2);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.ep-avatar__status {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,.55);
+  text-align: center;
+}
+
+.ep-avatar__status--error {
+  color: #fca5a5;
+}
+
+.ep-avatar__status--success {
+  color: #bbf7d0;
+}
+
+.ep-hero__title {
+  h1 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 .25rem;
+    letter-spacing: -.02em;
+  }
+
+  p {
+    font-size: .875rem;
+    color: rgba(255,255,255,.65);
+    margin: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .ep-hero__inner { padding: 0 1rem; }
+}

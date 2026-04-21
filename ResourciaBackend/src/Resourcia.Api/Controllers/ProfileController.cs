@@ -80,8 +80,11 @@ public class ProfileController : ControllerBase
 
     [Authorize]
     [HttpPost("me/avatar")]
-    public async Task<IActionResult> UploadAvatar([FromForm] IFormFile file, CancellationToken ct)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UploadAvatar([FromForm] UploadAvatarRequest request, CancellationToken ct)
     {
+        var file = request.File;
+
         if (file == null || file.Length == 0)
         {
             return BadRequest(new { error = "No file provided." });

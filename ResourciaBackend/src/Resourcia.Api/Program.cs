@@ -158,6 +158,7 @@ public class Program
         builder.Services.AddScoped<ProfileService>();
         builder.Services.AddScoped<ReviewService>();
         builder.Services.AddScoped<OAuthService>();
+        builder.Services.AddScoped<ResourceAuditService>();
 
         builder.Services.AddStackExchangeRedisCache(_ => { });
         builder.Services.Configure<Microsoft.Extensions.Caching.StackExchangeRedis.RedisCacheOptions>(options =>

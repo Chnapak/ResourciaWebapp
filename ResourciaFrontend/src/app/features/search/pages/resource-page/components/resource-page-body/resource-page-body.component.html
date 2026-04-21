@@ -22,13 +22,17 @@
   </div>
 
   <!-- Sidebar: info card -->
-  <app-resource-info-card [resource]="resource"></app-resource-info-card>
+  <app-resource-info-card
+    [resource]="resource"
+    [historyLink]="historyLink"
+  ></app-resource-info-card>
  
     <!-- Sidebar: actions card -->
     <app-resource-action-card
       [resource]="resource"
       [favoritePending]="favoritePending"
       (favoriteToggle)="favoriteToggle.emit()"
+      (suggestImprovement)="suggestImprovement.emit()"
     ></app-resource-action-card>
  
     <!-- Sidebar: related resources (static placeholders). -->

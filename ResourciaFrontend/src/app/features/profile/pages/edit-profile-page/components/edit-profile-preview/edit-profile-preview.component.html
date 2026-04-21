@@ -1,0 +1,61 @@
+<!-- ── Right: Preview ─────────────────────────────────── -->
+<aside class="ep-preview-card">
+
+  <div class="ep-card">
+    <div class="ep-card__header">
+      <h2>Profile Preview</h2>
+      <p>How your public profile will look after saving.</p>
+    </div>
+    <hr class="ep-card__divider" />
+
+    <div class="ep-preview__hero">
+      <div class="ep-preview__avatar" [class.ep-preview__avatar--image]="preview?.avatarUrl">
+        @if (preview?.avatarUrl) {
+          <img [src]="preview?.avatarUrl!" alt="Profile photo preview" />
+        } @else {
+          {{ avatarInitial }}
+        }
+      </div>
+      <p class="ep-preview__name">
+        {{ preview?.displayName || 'Your Name' }}
+      </p>
+      <p class="ep-preview__handle">
+        &#64;{{ preview?.username || 'username' }}
+      </p>
+      <p class="ep-preview__bio" *ngIf="preview?.bio">
+        "{{ preview?.bio }}"
+      </p>
+      <div class="ep-preview__meta">
+        <span *ngIf="preview?.location">📍 {{ preview?.location }}</span>
+        <span *ngIf="preview?.website">🔗 {{ preview?.website }}</span>
+      </div>
+    </div>
+
+    <div class="ep-preview__body">
+      <div class="ep-preview__label">Interests</div>
+      <div class="ep-preview__tags" *ngIf="interests.length; else noPreviewTags">
+        <span class="ep-tag" *ngFor="let tag of interests">{{ tag }}</span>
+      </div>
+      <ng-template #noPreviewTags>
+        <span class="ep-preview__empty">No interests added yet.</span>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="ep-card ep-card--spaced-sm">
+    <div class="ep-card__body ep-card__body--compact">
+      <div class="ep-status-legend__title">Editor Status</div>
+      <div class="ep-status-legend">
+        <div class="ep-status-legend__row">
+          <span class="ep-field__badge ep-field__badge--current">Live</span>
+          Display name, handle, bio, location, website, and interests save through `/api/Profile/me`
+        </div>
+        <div class="ep-status-legend__row">
+          <span class="ep-field__badge ep-field__badge--derived">Media</span>
+          Profile photos upload through `/api/Profile/me/avatar`
+        </div>
+      </div>
+    </div>
+  </div>
+
+</aside>

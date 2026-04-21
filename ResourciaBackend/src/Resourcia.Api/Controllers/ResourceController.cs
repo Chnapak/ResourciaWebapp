@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Resourcia.Api.Models.Filters;
+using Resourcia.Api.Models.Audit;
 using Resourcia.Api.Models.Resources;
 using Resourcia.Api.Services;
 using Resourcia.Api.Utils;
@@ -16,11 +17,18 @@ using System.Globalization;
 namespace Resourcia.Api.Controllers;
 
 [ApiController]
-public class ResourceController(AppDbContext dbContext, ImageService imageService, CacheService cache) : ControllerBase
+public class ResourceController(
+    AppDbContext dbContext,
+    ImageService imageService,
+    CacheService cache,
+    ResourceAuditService auditService,
+    ILogger<ResourceController> logger) : ControllerBase
 {
     private AppDbContext _dbContext = dbContext;
     private ImageService _imageService = imageService;
     private CacheService _cache = cache;
+    private ResourceAuditService _auditService = auditService;
+    private ILogger<ResourceController> _logger = logger;
 
     [Authorize]
     [HttpPost("api/resources")]
@@ -33,71 +41,7 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         if (string.IsNullOrWhiteSpace(req.Url))
             return BadRequest(new { error = "Url is required." });
 
-        var requestedFilterValues = MergeRequestedFilterValues(req);
-
-        // --- Normalize provided filter keys + values ---
-        var filterKeys = requestedFilterValues.Keys
-            .Select(k => k.Trim())
-            .Where(k => k.Length > 0)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
-        // Load filter definitions for provided keys
-        var defs = filterKeys.Count == 0
-            ? new List<FilterDefinitions>()
-            : await _dbContext.Set<FilterDefinitions>()
-                .Where(d => filterKeys.Contains(d.Key) && d.IsActive)
-                .ToListAsync(ct);
-
-        var defByKey = defs.ToDictionary(d => d.Key, d => d, StringComparer.OrdinalIgnoreCase);
-
-        // Unknown keys?
-        var unknownKeys = filterKeys.Where(k => !defByKey.ContainsKey(k)).ToList();
-        if (unknownKeys.Count > 0)
-            return BadRequest(new { error = "Unknown or disabled filter keys.", keys = unknownKeys });
-
-        var filterRequests = requestedFilterValues
-            .Select(kvp => new
-            {
-                Key = kvp.Key.Trim(),
-                Def = defByKey[kvp.Key],
-                Values = (kvp.Value ?? new List<string>())
-                    .Where(v => !string.IsNullOrWhiteSpace(v))
-                    .Select(v => v.Trim())
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
-                    .ToList()
-            })
-            .Where(x => x.Values.Count > 0)
-            .ToList();
-
-        // Validate IsMulti constraints
-        var multiViolations = filterRequests
-            .Select(filterRequest => new { filterRequest.Def.Key, filterRequest.Def.IsMulti, Count = filterRequest.Values.Count })
-            .Where(x => !x.IsMulti && x.Count > 1)
-            .Select(x => x.Key)
-            .ToList();
-
-        if (multiViolations.Count > 0)
-            return BadRequest(new { error = "Multiple values provided for a single-value filter.", keys = multiViolations });
-
-        var invalidDirectFieldFilterKeys = filterRequests
-            .Where(filterRequest =>
-                filterRequest.Def.Kind != FilterKind.Facet &&
-                !string.IsNullOrWhiteSpace(FilterResourceFieldResolver.Resolve(
-                    filterRequest.Def.ResourceField,
-                    filterRequest.Def.Key,
-                    filterRequest.Def.Label)))
-            .Select(filterRequest => filterRequest.Key)
-            .ToList();
-
-        if (invalidDirectFieldFilterKeys.Count > 0)
-        {
-            return BadRequest(new
-            {
-                error = "These filters map directly to resource fields and should be sent through the top-level resource payload.",
-                keys = invalidDirectFieldFilterKeys
-            });
-        }
+        var requestedFilterValues = MergeRequestedFilterValues(req.Facets, req.FilterValues);
 
         // --- Create resource entity ---
         var resource = new Resource
@@ -131,101 +75,15 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         resource.Ratings = ratings; // ← this is what makes it non-null in memory
 
         // --- Resolve stored filter values ---
-        var defIds = filterRequests.Select(x => x.Def.Id).Distinct().ToList();
-
-        var allowedFacetValues = defIds.Count == 0
-            ? new List<FacetValues>()
-            : await _dbContext.Set<FacetValues>()
-                .Where(fv => defIds.Contains(fv.FilterDefinitionsId) && fv.IsActive)
-                .ToListAsync(ct);
-
-        var storedFilterValues = new List<ResourceFilterValues>();
-
-        foreach (var filterRequest in filterRequests)
+        var filterBuild = await TryBuildFilterValuesAsync(requestedFilterValues, resource, ct);
+        if (filterBuild.Error != null)
         {
-            var matchingFacetValues = allowedFacetValues
-                .Where(facetValue =>
-                    facetValue.FilterDefinitionsId == filterRequest.Def.Id &&
-                    filterRequest.Values.Contains(facetValue.Value, StringComparer.OrdinalIgnoreCase))
-                .ToList();
-
-            storedFilterValues.AddRange(matchingFacetValues.Select(matchingFacetValue => new ResourceFilterValues
-            {
-                Resource = resource,
-                FilterDefinitionsId = filterRequest.Def.Id,
-                FacetValuesId = matchingFacetValue.Id
-            }));
-
-            var matchedFacetValueKeys = matchingFacetValues
-                .Select(matchingFacetValue => matchingFacetValue.Value)
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-            var remainingValues = filterRequest.Values
-                .Where(value => !matchedFacetValueKeys.Contains(value))
-                .ToList();
-
-            if (remainingValues.Count == 0)
-            {
-                continue;
-            }
-
-            switch (filterRequest.Def.Kind)
-            {
-                case FilterKind.Facet:
-                    return BadRequest(new { error = $"Invalid values for '{filterRequest.Key}'.", values = remainingValues });
-
-                case FilterKind.Boolean:
-                {
-                    foreach (var value in remainingValues)
-                    {
-                        if (!bool.TryParse(value, out var booleanValue))
-                        {
-                            return BadRequest(new { error = $"Invalid boolean value for '{filterRequest.Key}'.", value });
-                        }
-
-                        storedFilterValues.Add(new ResourceFilterValues
-                        {
-                            Resource = resource,
-                            FilterDefinitionsId = filterRequest.Def.Id,
-                            BooleanValue = booleanValue
-                        });
-                    }
-
-                    break;
-                }
-
-                case FilterKind.Range:
-                {
-                    foreach (var value in remainingValues)
-                    {
-                        if (!double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var numberValue))
-                        {
-                            return BadRequest(new { error = $"Invalid numeric value for '{filterRequest.Key}'.", value });
-                        }
-
-                        storedFilterValues.Add(new ResourceFilterValues
-                        {
-                            Resource = resource,
-                            FilterDefinitionsId = filterRequest.Def.Id,
-                            NumberValue = numberValue
-                        });
-                    }
-
-                    break;
-                }
-
-                case FilterKind.Text:
-                {
-                    storedFilterValues.AddRange(remainingValues.Select(value => new ResourceFilterValues
-                    {
-                        Resource = resource,
-                        FilterDefinitionsId = filterRequest.Def.Id,
-                        StringValue = value
-                    }));
-                    break;
-                }
-            }
+            return filterBuild.Error;
         }
+
+        var storedFilterValues = filterBuild.StoredFilterValues;
+        var filterRequests = filterBuild.FilterRequests;
+        var allowedFacetValues = filterBuild.AllowedFacetValues;
 
         // --- Transaction: insert resource + ratings + stored values ---
         await using var tx = await _dbContext.Database.BeginTransactionAsync(ct);
@@ -248,6 +106,9 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         await InvalidateSearchSchemaAsync();
         await InvalidateSearchResultsAsync();
+
+        var createSnapshot = await _auditService.BuildSnapshotAsync(resource.Id, ct);
+        await TryWriteAuditAsync(resource.Id, ResourceAuditActionType.Create, null, createSnapshot, "api", null, null, null, ct);
 
         var responseFilterValues = filterRequests.ToDictionary(
             filterRequest => filterRequest.Key,
@@ -288,6 +149,142 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
                 ratings.Count4,
                 ratings.Count5
             }
+        });
+    }
+
+    [Authorize]
+    [HttpPut("api/resources/{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateResourceModel req, CancellationToken ct)
+    {
+        var resource = await _dbContext.Resources
+            .Include(r => r.ResourceFilterValues)
+            .FirstOrDefaultAsync(r => r.Id == id, ct);
+
+        if (resource == null)
+        {
+            return NotFound("Resource not found.");
+        }
+
+        var isAdmin = User.IsInRole("Admin");
+
+        var beforeSnapshot = await _auditService.BuildSnapshotAsync(id, ct);
+
+        var coreChanged = false;
+
+        if (req.Title != null)
+        {
+            if (string.IsNullOrWhiteSpace(req.Title))
+            {
+                return BadRequest(new { error = "Title cannot be empty." });
+            }
+
+            resource.Title = req.Title.Trim();
+            coreChanged = true;
+        }
+
+        if (req.Description != null)
+        {
+            resource.Description = req.Description;
+            coreChanged = true;
+        }
+
+        if (req.Url != null)
+        {
+            if (!isAdmin)
+            {
+                return BadRequest(new { error = "Changing the resource domain is not allowed." });
+            }
+
+            if (string.IsNullOrWhiteSpace(req.Url))
+            {
+                return BadRequest(new { error = "Url cannot be empty." });
+            }
+
+            resource.Url = req.Url.Trim();
+            coreChanged = true;
+        }
+
+        if (req.IsFree.HasValue)
+        {
+            resource.IsFree = req.IsFree.Value;
+            coreChanged = true;
+        }
+
+        if (req.Year.HasValue)
+        {
+            resource.Year = req.Year.Value;
+            coreChanged = true;
+        }
+
+        if (req.Author != null)
+        {
+            resource.Author = req.Author;
+            coreChanged = true;
+        }
+
+        if (req.LearningStyle != null)
+        {
+            resource.LearningStyle = req.LearningStyle.Trim();
+            coreChanged = true;
+        }
+
+        if (req.Tags != null)
+        {
+            resource.Tags = req.Tags;
+            coreChanged = true;
+        }
+
+        var filtersChanged = false;
+        if (req.Facets != null || req.FilterValues != null)
+        {
+            var requestedFilterValues = MergeRequestedFilterValues(req.Facets, req.FilterValues);
+            var filterBuild = await TryBuildFilterValuesAsync(requestedFilterValues, resource, ct);
+            if (filterBuild.Error != null)
+            {
+                return filterBuild.Error;
+            }
+
+            _dbContext.ResourceFilterValues.RemoveRange(resource.ResourceFilterValues);
+            resource.ResourceFilterValues.Clear();
+
+            if (filterBuild.StoredFilterValues.Count > 0)
+            {
+                _dbContext.ResourceFilterValues.AddRange(filterBuild.StoredFilterValues);
+            }
+
+            filtersChanged = true;
+        }
+
+        if (!coreChanged && !filtersChanged)
+        {
+            return Ok(new { resource.Id });
+        }
+
+        resource.UpdatedAtUtc = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync(ct);
+
+        await _cache.InvalidateAsync($"resource:v5:{id}");
+        await InvalidateSearchResultsAsync();
+
+        var afterSnapshot = await _auditService.BuildSnapshotAsync(id, ct);
+        var actionType = filtersChanged && !coreChanged
+            ? ResourceAuditActionType.FiltersUpdate
+            : ResourceAuditActionType.Update;
+
+        await TryWriteAuditAsync(id, actionType, beforeSnapshot, afterSnapshot, "api", null, null, null, ct);
+
+        return Ok(new
+        {
+            resource.Id,
+            resource.Title,
+            resource.Description,
+            resource.Url,
+            resource.IsFree,
+            resource.Year,
+            resource.Author,
+            resource.LearningStyle,
+            resource.CreatedBy,
+            resource.Tags
         });
     }
 
@@ -1022,8 +1019,11 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
     [Authorize]
     [HttpPost("api/resources/{resourceId:guid}/images")]
-    public async Task<IActionResult> UploadResourceImage(Guid resourceId, IFormFile file)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UploadResourceImage(Guid resourceId, [FromForm] UploadResourceImageRequest request)
     {
+        var file = request.File;
+
         var resourceExists = await _dbContext.Resources
             .AnyAsync(r => r.Id == resourceId);
 
@@ -1042,6 +1042,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         if (!Guid.TryParse(userIdStr, out var userId))
             return Unauthorized();
 
+        var beforeSnapshot = await _auditService.BuildSnapshotAsync(resourceId, HttpContext.RequestAborted);
+
         var savedFileName = await _imageService.SaveImageAsync(file);
 
         var resourceImage = new ResourceImage
@@ -1057,6 +1059,9 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         await _dbContext.SaveChangesAsync();
 
         await InvalidateSearchResultsAsync();
+
+        var afterSnapshot = await _auditService.BuildSnapshotAsync(resourceId, HttpContext.RequestAborted);
+        await TryWriteAuditAsync(resourceId, ResourceAuditActionType.ImageAdd, beforeSnapshot, afterSnapshot, "api", null, null, null, HttpContext.RequestAborted);
 
         return Ok(new
         {
@@ -1112,6 +1117,8 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         if (!isAdmin && image.UploadedByUserId != userId)
             return Forbid();
 
+        var beforeSnapshot = await _auditService.BuildSnapshotAsync(image.ResourceId, HttpContext.RequestAborted);
+
         // delete the physical file
         var filePath = Path.Combine("wwwroot/uploads", image.FileName);
         if (System.IO.File.Exists(filePath))
@@ -1134,6 +1141,9 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         await InvalidateSearchResultsAsync();
 
+        var afterSnapshot = await _auditService.BuildSnapshotAsync(image.ResourceId, HttpContext.RequestAborted);
+        await TryWriteAuditAsync(image.ResourceId, ResourceAuditActionType.ImageDelete, beforeSnapshot, afterSnapshot, "api", null, null, null, HttpContext.RequestAborted);
+
         return NoContent();
     }
 
@@ -1144,6 +1154,42 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
 
         return User.FindFirstValue(ClaimTypes.Name)
             ?? User.FindFirstValue(JwtRegisteredClaimNames.Name);
+    }
+
+    private bool IsOwner(Resource resource)
+    {
+        var currentName = GetCurrentDisplayName();
+        if (string.IsNullOrWhiteSpace(currentName) || string.IsNullOrWhiteSpace(resource.CreatedBy))
+        {
+            return false;
+        }
+
+        return string.Equals(resource.CreatedBy, currentName, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private async Task TryWriteAuditAsync(
+        Guid resourceId,
+        ResourceAuditActionType actionType,
+        ResourceAuditSnapshot? before,
+        ResourceAuditSnapshot? after,
+        string source,
+        string? reason,
+        Guid? revertedAuditId,
+        IReadOnlyList<string>? warnings,
+        CancellationToken ct)
+    {
+        var entry = _auditService.BuildEntry(
+            resourceId,
+            actionType,
+            before,
+            after,
+            source,
+            HttpContext,
+            reason,
+            revertedAuditId,
+            warnings);
+
+        await _auditService.TryWriteEntryAsync(entry, ct);
     }
 
     private static string? NormalizeDomain(string? value)
@@ -1178,12 +1224,19 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
             .ToList();
     }
 
-    private static Dictionary<string, List<string>> MergeRequestedFilterValues(CreateResourceModel request)
+    private static Dictionary<string, List<string>> MergeRequestedFilterValues(
+        Dictionary<string, List<string>>? facets,
+        Dictionary<string, List<string>>? filterValues)
     {
         var merged = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var source in new[] { request.Facets, request.FilterValues })
+        foreach (var source in new[] { facets, filterValues })
         {
+            if (source == null)
+            {
+                continue;
+            }
+
             foreach (var (key, values) in source)
             {
                 if (!merged.TryGetValue(key, out var existingValues))
@@ -1197,6 +1250,210 @@ public class ResourceController(AppDbContext dbContext, ImageService imageServic
         }
 
         return merged;
+    }
+
+    private sealed record FilterRequest(string Key, FilterDefinitions Def, List<string> Values);
+
+    private sealed class FilterBuildResult
+    {
+        public List<ResourceFilterValues> StoredFilterValues { get; init; } = new();
+        public List<FilterRequest> FilterRequests { get; init; } = new();
+        public List<FacetValues> AllowedFacetValues { get; init; } = new();
+        public IActionResult? Error { get; init; }
+    }
+
+    private async Task<FilterBuildResult> TryBuildFilterValuesAsync(
+        Dictionary<string, List<string>> requestedFilterValues,
+        Resource resource,
+        CancellationToken ct)
+    {
+        if (requestedFilterValues.Count == 0)
+        {
+            return new FilterBuildResult();
+        }
+
+        var filterKeys = requestedFilterValues.Keys
+            .Select(key => key.Trim())
+            .Where(key => key.Length > 0)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var defs = filterKeys.Count == 0
+            ? new List<FilterDefinitions>()
+            : await _dbContext.Set<FilterDefinitions>()
+                .Where(d => filterKeys.Contains(d.Key) && d.IsActive)
+                .ToListAsync(ct);
+
+        var defByKey = defs.ToDictionary(d => d.Key, d => d, StringComparer.OrdinalIgnoreCase);
+
+        var unknownKeys = filterKeys.Where(key => !defByKey.ContainsKey(key)).ToList();
+        if (unknownKeys.Count > 0)
+        {
+            return new FilterBuildResult
+            {
+                Error = BadRequest(new { error = "Unknown or disabled filter keys.", keys = unknownKeys })
+            };
+        }
+
+        var filterRequests = requestedFilterValues
+            .Select(kvp => new FilterRequest(
+                kvp.Key.Trim(),
+                defByKey[kvp.Key],
+                (kvp.Value ?? new List<string>())
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .Select(v => v.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList()))
+            .Where(request => request.Values.Count > 0)
+            .ToList();
+
+        var multiViolations = filterRequests
+            .Select(request => new { request.Def.Key, request.Def.IsMulti, Count = request.Values.Count })
+            .Where(x => !x.IsMulti && x.Count > 1)
+            .Select(x => x.Key)
+            .ToList();
+
+        if (multiViolations.Count > 0)
+        {
+            return new FilterBuildResult
+            {
+                Error = BadRequest(new { error = "Multiple values provided for a single-value filter.", keys = multiViolations })
+            };
+        }
+
+        var invalidDirectFieldFilterKeys = filterRequests
+            .Where(request =>
+                request.Def.Kind != FilterKind.Facet &&
+                !string.IsNullOrWhiteSpace(FilterResourceFieldResolver.Resolve(
+                    request.Def.ResourceField,
+                    request.Def.Key,
+                    request.Def.Label)))
+            .Select(request => request.Key)
+            .ToList();
+
+        if (invalidDirectFieldFilterKeys.Count > 0)
+        {
+            return new FilterBuildResult
+            {
+                Error = BadRequest(new
+                {
+                    error = "These filters map directly to resource fields and should be sent through the top-level resource payload.",
+                    keys = invalidDirectFieldFilterKeys
+                })
+            };
+        }
+
+        var defIds = filterRequests.Select(request => request.Def.Id).Distinct().ToList();
+
+        var allowedFacetValues = defIds.Count == 0
+            ? new List<FacetValues>()
+            : await _dbContext.Set<FacetValues>()
+                .Where(fv => defIds.Contains(fv.FilterDefinitionsId) && fv.IsActive)
+                .ToListAsync(ct);
+
+        var storedFilterValues = new List<ResourceFilterValues>();
+
+        foreach (var filterRequest in filterRequests)
+        {
+            var matchingFacetValues = allowedFacetValues
+                .Where(facetValue =>
+                    facetValue.FilterDefinitionsId == filterRequest.Def.Id &&
+                    filterRequest.Values.Contains(facetValue.Value, StringComparer.OrdinalIgnoreCase))
+                .ToList();
+
+            storedFilterValues.AddRange(matchingFacetValues.Select(matchingFacetValue => new ResourceFilterValues
+            {
+                Resource = resource,
+                FilterDefinitionsId = filterRequest.Def.Id,
+                FacetValuesId = matchingFacetValue.Id
+            }));
+
+            var matchedFacetValueKeys = matchingFacetValues
+                .Select(matchingFacetValue => matchingFacetValue.Value)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            var remainingValues = filterRequest.Values
+                .Where(value => !matchedFacetValueKeys.Contains(value))
+                .ToList();
+
+            if (remainingValues.Count == 0)
+            {
+                continue;
+            }
+
+            switch (filterRequest.Def.Kind)
+            {
+                case FilterKind.Facet:
+                    return new FilterBuildResult
+                    {
+                        Error = BadRequest(new { error = $"Invalid values for '{filterRequest.Key}'.", values = remainingValues })
+                    };
+
+                case FilterKind.Boolean:
+                {
+                    foreach (var value in remainingValues)
+                    {
+                        if (!bool.TryParse(value, out var booleanValue))
+                        {
+                            return new FilterBuildResult
+                            {
+                                Error = BadRequest(new { error = $"Invalid boolean value for '{filterRequest.Key}'.", value })
+                            };
+                        }
+
+                        storedFilterValues.Add(new ResourceFilterValues
+                        {
+                            Resource = resource,
+                            FilterDefinitionsId = filterRequest.Def.Id,
+                            BooleanValue = booleanValue
+                        });
+                    }
+
+                    break;
+                }
+
+                case FilterKind.Range:
+                {
+                    foreach (var value in remainingValues)
+                    {
+                        if (!double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var numberValue))
+                        {
+                            return new FilterBuildResult
+                            {
+                                Error = BadRequest(new { error = $"Invalid numeric value for '{filterRequest.Key}'.", value })
+                            };
+                        }
+
+                        storedFilterValues.Add(new ResourceFilterValues
+                        {
+                            Resource = resource,
+                            FilterDefinitionsId = filterRequest.Def.Id,
+                            NumberValue = numberValue
+                        });
+                    }
+
+                    break;
+                }
+
+                case FilterKind.Text:
+                {
+                    storedFilterValues.AddRange(remainingValues.Select(value => new ResourceFilterValues
+                    {
+                        Resource = resource,
+                        FilterDefinitionsId = filterRequest.Def.Id,
+                        StringValue = value
+                    }));
+                    break;
+                }
+            }
+        }
+
+        return new FilterBuildResult
+        {
+            StoredFilterValues = storedFilterValues,
+            FilterRequests = filterRequests,
+            AllowedFacetValues = allowedFacetValues
+        };
     }
 
     private async Task InvalidateSearchSchemaAsync()

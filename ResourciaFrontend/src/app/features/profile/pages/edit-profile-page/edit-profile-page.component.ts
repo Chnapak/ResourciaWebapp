@@ -18,11 +18,21 @@ import { debounceTime } from 'rxjs/operators';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { EditProfileForm } from '../../models/edit-profile.model';
 import { EditProfileService } from '../../services/edit-profile.service';
+import { EditProfileHeroComponent } from './components/edit-profile-hero/edit-profile-hero.component';
+import { EditProfilePreviewComponent } from './components/edit-profile-preview/edit-profile-preview.component';
+import { EditProfileActionBarComponent } from './components/edit-profile-action-bar/edit-profile-action-bar.component';
 
 @Component({
   selector: 'app-edit-profile-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    EditProfileHeroComponent,
+    EditProfilePreviewComponent,
+    EditProfileActionBarComponent,
+  ],
   templateUrl: './edit-profile-page.component.html',
   styleUrls: ['./edit-profile-page.component.scss'],
 })

@@ -1,0 +1,129 @@
+/* Shared edit-profile styles used across multiple components. */
+.ep-field__badge {
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  padding: .15em .5em;
+  border-radius: 4px;
+  text-transform: uppercase;
+
+  &--current {
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
+
+  &--derived {
+    background: #f5f3ff;
+    color: #6d28d9;
+  }
+
+  &--draft {
+    background: #ecfdf5;
+    color: #059669;
+  }
+}
+
+.ep-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  padding: .3em .75em;
+  font-size: .78rem;
+  font-weight: 500;
+  animation: tagIn .15s ease;
+
+  &__remove {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: .9rem;
+    line-height: 1;
+    color: #93c5fd;
+    transition: color .15s;
+    display: flex;
+    align-items: center;
+
+    &:hover { color: #1d4ed8; }
+  }
+}
+
+@keyframes tagIn {
+  from { transform: scale(.85); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.ep-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .6rem 1.35rem;
+  border-radius: 8px;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background .15s, transform .1s, opacity .15s;
+  font-family: inherit;
+
+  &:active { transform: scale(.97); }
+
+  &--primary {
+    background: #2952d9;
+    color: #fff;
+
+    &:hover:not(:disabled) { background: #1e3fb5; }
+    &:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: #5b6a8a;
+    border: 1.5px solid #e2e7f0;
+
+    &:hover:not(:disabled) {
+      background: #f5f7fc;
+      border-color: #c9d1e0;
+    }
+  }
+
+  &--danger {
+    background: #b91c1c;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: #991b1b;
+    }
+
+    &:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+  }
+
+  &--saving {
+    opacity: .8;
+    cursor: wait;
+  }
+}
+
+.ep-btn__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

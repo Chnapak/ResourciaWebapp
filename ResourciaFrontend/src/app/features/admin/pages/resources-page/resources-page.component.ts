@@ -68,6 +68,37 @@ export class ResourcesAdminPageComponent implements OnInit {
     });
   }
 
+  /** Restores a soft-deleted resource after confirmation. */
+  restoreResource(resource: AdminResource): void {
+    if (!resource.isDeleted) {
+      return;
+    }
+
+    const confirmed = window.confirm(`Restore "${resource.title}"? It will become visible in public search again.`);
+    if (!confirmed) {
+      return;
+    }
+
+    this.adminService.restoreResource(resource.id).subscribe({
+      next: () => {
+        this.resources = this.resources.map((currentResource) =>
+          currentResource.id === resource.id
+            ? {
+                ...currentResource,
+                isDeleted: false,
+                deletedAtUtc: null
+              }
+            : currentResource
+        );
+        this.toaster.show('Resource restored.', 'success');
+      },
+      error: (err) => {
+        console.error('Failed to restore resource', err);
+        this.toaster.show('Failed to restore resource.', 'error');
+      }
+    });
+  }
+
   /** Extracts a displayable domain from a resource URL. */
   getDomain(url: string): string {
     try {

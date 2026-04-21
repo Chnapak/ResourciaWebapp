@@ -21,10 +21,14 @@ import { ResourceActionCardComponent } from './components/resource-action-card/r
 export class ResourcePageBodyComponent {
   /** Resource details used in the body sections. */
   @Input() resource: ResourceDetailModel | null = null
+  /** Resource history link when available. */
+  @Input() historyLink: string[] | null = null;
   /** Disable favorite actions while API calls are pending. */
   @Input() favoritePending = false;
   /** Notify parent when info (e.g., description) changes. */
   @Output() infoChange = new EventEmitter<void>();
   /** Emit when the favorite button is toggled. */
   @Output() favoriteToggle = new EventEmitter<void>();
+  /** Emit when user wants to suggest improvements. */
+  @Output() suggestImprovement = new EventEmitter<void>();
 }
