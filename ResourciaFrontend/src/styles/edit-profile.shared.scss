@@ -1,4 +1,170 @@
 /* Shared edit-profile styles used across multiple components. */
+.ep-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(13,31,107,.08), 0 1px 3px rgba(13,31,107,.04);
+  overflow: visible;
+}
+
+.ep-card--spaced {
+  margin-top: 1.25rem;
+}
+
+.ep-card--spaced-sm {
+  margin-top: 1rem;
+}
+
+.ep-card--danger {
+  border: 1px solid #fecaca;
+}
+
+.ep-card__header {
+  padding: 1.5rem 1.75rem 0;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0d1f6b;
+    margin: 0 0 .25rem;
+  }
+
+  p {
+    font-size: .8rem;
+    color: #8b95a8;
+    margin: 0 0 1.25rem;
+  }
+}
+
+.ep-card__divider {
+  border: none;
+  border-top: 1px solid #f0f2f7;
+  margin: 0 1.75rem;
+}
+
+.ep-card__body {
+  padding: 1.5rem 1.75rem;
+}
+
+.ep-card__body--compact {
+  padding-top: 1.25rem;
+}
+
+.ep-field {
+  margin-bottom: 1.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ep-field__label {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: .45rem;
+}
+
+.ep-input,
+.ep-textarea {
+  width: 100%;
+  padding: .65rem .9rem;
+  border: 1.5px solid #e2e7f0;
+  border-radius: 9px;
+  font-size: .9rem;
+  color: #1e2a45;
+  background: #fafbfd;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+
+  &::placeholder {
+    color: #b0b9c9;
+  }
+
+  &:focus {
+    border-color: #2952d9;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(41,82,217,.1);
+  }
+
+  &.ng-invalid.ng-dirty,
+  &.ng-invalid.ng-touched {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239,68,68,.08);
+  }
+}
+
+.ep-input--readonly {
+  background: #f3f5f9;
+  color: #667085;
+}
+
+.ep-textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.55;
+}
+
+.ep-field__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: .35rem;
+  gap: .5rem;
+}
+
+.ep-field__helper {
+  font-size: .75rem;
+  color: #8b95a8;
+}
+
+.ep-field__helper--top {
+  margin-top: .35rem;
+}
+
+.ep-field__count {
+  font-size: .72rem;
+  color: #b0b9c9;
+  flex-shrink: 0;
+
+  &--warn {
+    color: #f59e0b;
+  }
+
+  &--over {
+    color: #ef4444;
+  }
+}
+
+.ep-field__error {
+  font-size: .75rem;
+  color: #ef4444;
+  margin-top: .3rem;
+}
+
+.ep-input-prefix {
+  position: relative;
+
+  &__at {
+    position: absolute;
+    left: .9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: .9rem;
+    color: #b0b9c9;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  input {
+    padding-left: 1.75rem;
+  }
+}
+
 .ep-field__badge {
   font-size: .6rem;
   font-weight: 700;
@@ -55,6 +221,77 @@
 @keyframes tagIn {
   from { transform: scale(.85); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
+}
+
+.ep-interests {
+  &__input-row {
+    display: flex;
+    gap: .6rem;
+  }
+
+  &__add-btn {
+    padding: .65rem .9rem;
+    background: #f0f4ff;
+    border: 1.5px solid #dce5ff;
+    border-radius: 9px;
+    color: #2952d9;
+    font-size: .875rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s, border-color .15s, opacity .15s;
+
+    &:hover:not(:disabled) {
+      background: #e3eaff;
+      border-color: #b3c5ff;
+    }
+
+    &:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+    margin-top: .75rem;
+    min-height: 32px;
+  }
+
+  &__empty {
+    font-size: .78rem;
+    color: #b0b9c9;
+    font-style: italic;
+    align-self: center;
+  }
+}
+
+.ep-future-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  background: #f8faff;
+  border: 1px solid #dce8ff;
+  border-radius: 9px;
+  padding: .85rem 1rem;
+  margin-top: 1.25rem;
+
+  &__icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    font-size: .78rem;
+    color: #4b6cb7;
+    line-height: 1.5;
+
+    strong {
+      color: #2952d9;
+    }
+  }
 }
 
 .ep-btn {
@@ -126,4 +363,14 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .ep-card__header {
+    padding: 1.25rem 1.25rem 0;
+  }
+
+  .ep-card__body {
+    padding: 1.25rem;
+  }
 }

@@ -1,7 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging.Abstractions;
 using Resourcia.Api.Controllers;
@@ -19,6 +27,7 @@ public class ResourceAuditTests
     private static AppDbContext CreateDbContext(string dbName)
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
+            .ConfigureWarnings((warnings) => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .UseInMemoryDatabase(dbName)
             .Options;
         return new AppDbContext(options);
@@ -50,7 +59,7 @@ public class ResourceAuditTests
     public async Task Create_resource_writes_audit_entry()
     {
         await using var db = CreateDbContext(nameof(Create_resource_writes_audit_entry));
-        var cache = new CacheService(new MemoryDistributedCache(new MemoryDistributedCacheOptions()));
+        var cache = new CacheService(new MemoryDistributedCache(Microsoft.Extensions.Options.Options.Create(new MemoryDistributedCacheOptions())));
         var imageService = new ImageService(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads"));
         var auditService = new ResourceAuditService(db, NullLogger<ResourceAuditService>.Instance);
         var controller = new ResourceController(db, imageService, cache, auditService, NullLogger<ResourceController>.Instance)
@@ -83,7 +92,7 @@ public class ResourceAuditTests
     public async Task Update_resource_writes_audit_entry()
     {
         await using var db = CreateDbContext(nameof(Update_resource_writes_audit_entry));
-        var cache = new CacheService(new MemoryDistributedCache(new MemoryDistributedCacheOptions()));
+        var cache = new CacheService(new MemoryDistributedCache(Microsoft.Extensions.Options.Options.Create(new MemoryDistributedCacheOptions())));
         var imageService = new ImageService(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads"));
         var auditService = new ResourceAuditService(db, NullLogger<ResourceAuditService>.Instance);
         var controller = new ResourceController(db, imageService, cache, auditService, NullLogger<ResourceController>.Instance)
@@ -121,7 +130,7 @@ public class ResourceAuditTests
     public async Task Soft_delete_writes_audit_entry()
     {
         await using var db = CreateDbContext(nameof(Soft_delete_writes_audit_entry));
-        var cache = new CacheService(new MemoryDistributedCache(new MemoryDistributedCacheOptions()));
+        var cache = new CacheService(new MemoryDistributedCache(Microsoft.Extensions.Options.Options.Create(new MemoryDistributedCacheOptions())));
         var auditService = new ResourceAuditService(db, NullLogger<ResourceAuditService>.Instance);
         var controller = new AdminResourcesController(db, cache, auditService, NullLogger<AdminResourcesController>.Instance)
         {
@@ -157,7 +166,7 @@ public class ResourceAuditTests
     public async Task Revert_restores_snapshot_and_logs_warning_for_missing_image()
     {
         await using var db = CreateDbContext(nameof(Revert_restores_snapshot_and_logs_warning_for_missing_image));
-        var cache = new CacheService(new MemoryDistributedCache(new MemoryDistributedCacheOptions()));
+        var cache = new CacheService(new MemoryDistributedCache(Microsoft.Extensions.Options.Options.Create(new MemoryDistributedCacheOptions())));
         var auditService = new ResourceAuditService(db, NullLogger<ResourceAuditService>.Instance);
         var controller = new ResourceAuditController(db, auditService, cache, NullLogger<ResourceAuditController>.Instance)
         {

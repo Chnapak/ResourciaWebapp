@@ -24,14 +24,14 @@ services:
       context: ../../ResourciaFrontend
       dockerfile: Dockerfile
       args:
-        BUILD_CONFIGURATION: development
+        BUILD_CONFIGURATION: production
     ports:
       - "4200:443"
     depends_on:
       - resourcia.api
 
   resourcia.db:
-    image: postgres:latest
+    image: postgres:17
     env_file:
       - ../../.env
     ports:

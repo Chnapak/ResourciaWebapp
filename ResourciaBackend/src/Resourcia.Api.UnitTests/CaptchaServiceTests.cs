@@ -15,7 +15,10 @@ public class CaptchaServiceTests
     [Fact]
     public async Task VerifyCaptchaAsync_ReturnsTrue_WhenResponseIsSuccessful()
     {
-        var handler = new StubHttpMessageHandler(_ => new HttpResponseMessage(HttpStatusCode.OK));
+        var handler = new StubHttpMessageHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("{\"success\":true}")
+        });
         var httpClient = new HttpClient(handler);
         var options = Microsoft.Extensions.Options.Options.Create(new CloudflareOptions
         {
