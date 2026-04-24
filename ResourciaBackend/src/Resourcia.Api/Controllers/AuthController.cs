@@ -220,14 +220,21 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Login([FromBody] LoginModel model)
     {
-        var normalizedEmail = model.Email.ToUpperInvariant();
+        var email = model.Email.Trim();
+        var normalizedEmail = email.ToUpperInvariant();
         var user = await _userManager
             .Users
-            .SingleOrDefaultAsync(x => x.EmailConfirmed && x.NormalizedEmail == normalizedEmail);
+            .SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail);
 
         if (user == null)
         {
             ModelState.AddModelError(string.Empty, "LOGIN_FAILED");
+            return ValidationProblem(ModelState);
+        }
+
+        if (!user.EmailConfirmed)
+        {
+            ModelState.AddModelError<LoginModel>(x => x.Email, "EMAIL_NOT_CONFIRMED");
             return ValidationProblem(ModelState);
         }
 
@@ -264,7 +271,7 @@ public class AuthController : ControllerBase
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = GenerateAccessToken(user.Id, model.Email, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
+        var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
         Response.Cookies.Append("AccessToken", accessToken, BuildAccessTokenCookieOptions());
         Response.Cookies.Append("RefreshToken", refreshToken, BuildRefreshTokenCookieOptions());

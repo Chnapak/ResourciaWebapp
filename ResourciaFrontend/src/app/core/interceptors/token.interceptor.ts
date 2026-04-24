@@ -23,6 +23,7 @@ const SKIP_REFRESH_URLS = [
   '/Auth/RefreshToken',
   '/Auth/Login',
   '/Auth/Register',
+  '/Auth/UserInfo',
   '/Auth/ValidateToken',
   '/Auth/ResendEmail',
   '/Auth/ForgotPassword',
@@ -76,8 +77,11 @@ export const tokenInterceptor: HttpInterceptorFn = (
         }),
         catchError(refreshError => {
           isRefreshing = false;
-          // Refresh token is dead — clean up the session
-          authService.handleSessionExpired();
+          // Only surface an expired-session message when we previously had
+          // an authenticated client state. Anonymous startup probes are normal.
+          if (authService.currentState === 'authenticated') {
+            authService.handleSessionExpired();
+          }
           return throwError(() => refreshError);
         })
       );

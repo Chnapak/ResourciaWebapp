@@ -38,6 +38,8 @@ export class LoginPageComponent {
   public isSubmitting = false;
   /** True when credentials are invalid. */
   public loginFailed = false;
+  /** True when the email address exists but is not confirmed yet. */
+  public emailNotConfirmed = false;
   /** True when a non-specific error occurs. */
   public generalError = false;
   /** True when captcha is missing or invalid. */
@@ -70,6 +72,7 @@ export class LoginPageComponent {
   /** Validates input and submits the login request. */
   onSubmit(): void {
     this.loginFailed = false;
+    this.emailNotConfirmed = false;
     this.generalError = false;
     this.captchaFailed = false;
 
@@ -85,7 +88,12 @@ export class LoginPageComponent {
     }
 
     this.isSubmitting = true;
-    const data = { ...this.form.getRawValue(), captchaToken: token };
+    const rawValue = this.form.getRawValue();
+    const data = {
+      email: rawValue.email.trim(),
+      password: rawValue.password,
+      captchaToken: token,
+    };
 
     this.authService.login(data).subscribe({
       next: async () => {
@@ -99,11 +107,20 @@ export class LoginPageComponent {
     });
   }
 
+  /** Resends the confirmation email using the current form value. */
+  resendConfirmation(): void {
+    const email = this.form.get('email')?.value?.trim();
+    if (!email) return;
+    this.authService.resendEmail({ email }).subscribe();
+  }
+
   /** Maps API errors to UI state and handles suspended users. */
   private handleError(error: any) {
     this.isSubmitting = false;
     const errorCode = error?.error;
     const validationErrors = errorCode?.errors;
+    const generalErrors: string[] = Array.isArray(validationErrors?.['']) ? validationErrors[''] : [];
+    const emailErrors: string[] = Array.isArray(validationErrors?.Email) ? validationErrors.Email : [];
 
     if (errorCode?.error === 'USER_LOCKED_OUT') {
       this.router.navigate(['/suspended'], {
@@ -117,12 +134,16 @@ export class LoginPageComponent {
       return;
     }
 
-    if (validationErrors?.Email?.includes('LOGIN_FAILED')) {
+    if (emailErrors.includes('EMAIL_NOT_CONFIRMED') || errorCode?.error === 'EMAIL_NOT_CONFIRMED') {
+      this.emailNotConfirmed = true;
+    } else if (emailErrors.includes('LOGIN_FAILED') || generalErrors.includes('LOGIN_FAILED') || errorCode?.error === 'LOGIN_FAILED') {
       this.loginFailed = true;
     } else {
       this.generalError = true;
     }
 
-    turnstile.reset('#turnstile-container');
+    if (typeof turnstile !== 'undefined') {
+      try { turnstile.reset('#turnstile-container'); } catch { /* ignore */ }
+    }
   }
 }

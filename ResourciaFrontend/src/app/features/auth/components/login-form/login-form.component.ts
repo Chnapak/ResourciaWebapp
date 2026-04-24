@@ -151,6 +151,8 @@ export class LoginFormComponent implements AfterViewInit, OnDestroy {
     this.isSubmitting = false;
     const errorCode = error?.error;
     const validationErrors = errorCode?.errors;
+    const generalErrors: string[] = Array.isArray(validationErrors?.['']) ? validationErrors[''] : [];
+    const emailErrors: string[] = Array.isArray(validationErrors?.Email) ? validationErrors.Email : [];
 
     if (errorCode?.error === 'USER_LOCKED_OUT') {
       this.router.navigate(['/suspended'], {
@@ -164,9 +166,10 @@ export class LoginFormComponent implements AfterViewInit, OnDestroy {
     }
 
     if (errorCode?.error === 'EMAIL_NOT_CONFIRMED' ||
-        validationErrors?.Email?.includes('EMAIL_NOT_CONFIRMED')) {
+        emailErrors.includes('EMAIL_NOT_CONFIRMED')) {
       this.emailNotConfirmed = true;
-    } else if (validationErrors?.Email?.includes('LOGIN_FAILED') ||
+    } else if (emailErrors.includes('LOGIN_FAILED') ||
+               generalErrors.includes('LOGIN_FAILED') ||
                errorCode?.error === 'LOGIN_FAILED') {
       this.loginFailed = true;
     } else {

@@ -46,6 +46,18 @@
           <div i18n class="text-xs text-red-700">Invalid email or password. Please try again.</div>
         }
 
+        @if (emailNotConfirmed) {
+          <div i18n class="text-xs text-amber-700">
+            You haven't confirmed your email yet.
+            <button
+              type="button"
+              (click)="resendConfirmation()"
+              class="font-medium underline hover:text-amber-900 transition-colors">
+              Resend confirmation email ↗
+            </button>
+          </div>
+        }
+
         @if (captchaFailed) {
           <div i18n class="text-xs text-red-700">Please complete the security check.</div>
         }
