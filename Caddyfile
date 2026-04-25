@@ -1,0 +1,30 @@
+resourcia.net, www.resourcia.net {
+    encode gzip zstd
+
+    request_body {
+        max_size 10MB
+    }
+
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy no-referrer
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    }
+
+    handle /api/* {
+        reverse_proxy resourcia.api:5000
+    }
+
+    handle /uploads/* {
+        reverse_proxy resourcia.api:5000
+    }
+
+    handle /healthz {
+        reverse_proxy resourcia.api:5000
+    }
+
+    handle {
+        reverse_proxy resourcia.frontend:80
+    }
+}
