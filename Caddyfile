@@ -1,4 +1,8 @@
-resourcia.net, www.resourcia.net {
+www.resourcia.net {
+    redir https://resourcia.net{uri} permanent
+}
+
+resourcia.net {
     encode gzip zstd
 
     request_body {
