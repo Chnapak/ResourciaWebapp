@@ -155,20 +155,13 @@ public class AuthController : ControllerBase
             return Ok(new { message = responseMessage });
         }
 
-        var unsentEmails = await _dbContext.Emails.SingleOrDefaultAsync(x => !x.Sent && x.RecipientEmail == user.Email);
-        if (unsentEmails != null)
+        var hasPendingEmail = await _dbContext.Emails.AnyAsync(x => !x.Sent && x.RecipientEmail == user.Email);
+        if (hasPendingEmail)
         {
             return Ok(new { message = responseMessage });
         }
 
-        var email = await _dbContext.Emails.SingleOrDefaultAsync(x => x.RecipientEmail == user.Email);
-        if (email == null)
-        {
-            await GenerateEmailConfirmation(user);
-            return Ok(new { message = responseMessage });
-        }
-
-        await _emailSenderService.AddEmail(email.Subject, email.Body, user.Email!, user.DisplayName);
+        await GenerateEmailConfirmation(user);
 
         return Ok(new { message = responseMessage });
     }
