@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -22,6 +23,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace Resourcia.Api.Controllers;
 [ApiController]
@@ -37,6 +39,7 @@ public class AuthController : ControllerBase
     private readonly CaptchaService _captchaService;
     private readonly EmailSenderService _emailSenderService;
     private readonly OAuthService _oAuthService;
+    private readonly ITimeLimitedDataProtector _externalLoginProtector;
 
     public AuthController(
         IClock clock,
@@ -47,7 +50,8 @@ public class AuthController : ControllerBase
         CaptchaService captchaService,
         IOptions<JwtSettings> options,
         IOptions<EnvironmentOptions> environmentSettings,
-        OAuthService oAuthService)
+        OAuthService oAuthService,
+        IDataProtectionProvider dataProtectionProvider)
     {
         _clock = clock;
         _dbContext = dbContext;
@@ -58,6 +62,9 @@ public class AuthController : ControllerBase
         _captchaService = captchaService;
         _environmentSettings = environmentSettings.Value;
         _oAuthService = oAuthService;
+        _externalLoginProtector = dataProtectionProvider
+            .CreateProtector("Resourcia.Api.ExternalLogin")
+            .ToTimeLimitedDataProtector();
     }
 
     // We will also add verion of endpoint into post controller
@@ -271,6 +278,197 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("ExternalLogin")]
+    [EnableRateLimiting("auth")]
+    public IActionResult ExternalLogin([FromQuery] string provider, [FromQuery] string? returnUrl = null)
+    {
+        var loginProvider = NormalizeExternalLoginProvider(provider);
+        if (loginProvider == null)
+        {
+            return BadRequest(new { message = "Unsupported external login provider." });
+        }
+
+        var safeReturnUrl = NormalizeFrontendReturnUrl(returnUrl);
+        var callbackPath = Url.Action(nameof(ExternalLoginCallback), "Auth", new { returnUrl = safeReturnUrl });
+        if (string.IsNullOrWhiteSpace(callbackPath))
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        var callbackUrl = $"{_environmentSettings.FrontendHostUrl.TrimEnd('/')}{callbackPath}";
+        var properties = _signInManager.ConfigureExternalAuthenticationProperties(loginProvider, callbackUrl);
+
+        return Challenge(properties, loginProvider);
+    }
+
+    [HttpGet("ExternalLoginCallback")]
+    [EnableRateLimiting("auth")]
+    public async Task<IActionResult> ExternalLoginCallback([FromQuery] string? returnUrl = null)
+    {
+        var safeReturnUrl = NormalizeFrontendReturnUrl(returnUrl);
+        var info = await _signInManager.GetExternalLoginInfoAsync();
+        if (info == null)
+        {
+            return Redirect(BuildFrontendLoginErrorRedirect("external_login_failed"));
+        }
+
+        var externalLogin = await _oAuthService.HandleExternalLoginAsync(info);
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+        if (externalLogin.User != null)
+        {
+            if (externalLogin.User.DeletedAt != null)
+            {
+                return Redirect(BuildFrontendLoginErrorRedirect("deactivated_account"));
+            }
+
+            await SignInWithJwtCookiesAsync(externalLogin.User);
+            return Redirect(BuildFrontendUrl(safeReturnUrl));
+        }
+
+        if (string.IsNullOrWhiteSpace(externalLogin.Provider)
+            || string.IsNullOrWhiteSpace(externalLogin.ProviderKey)
+            || string.IsNullOrWhiteSpace(externalLogin.Email))
+        {
+            return Redirect(BuildFrontendLoginErrorRedirect("external_email_missing"));
+        }
+
+        var payload = new ExternalLoginRegistrationPayload(
+            externalLogin.Provider,
+            externalLogin.ProviderKey,
+            externalLogin.Email,
+            externalLogin.Name);
+
+        var registrationToken = _externalLoginProtector.Protect(
+            JsonSerializer.Serialize(payload),
+            TimeSpan.FromMinutes(15));
+
+        var completeProfilePath = NormalizeFrontendReturnUrl(_environmentSettings.CompleteProfileUrl);
+        var redirectUrl =
+            $"{BuildFrontendUrl(completeProfilePath)}?registrationToken={Uri.EscapeDataString(registrationToken)}";
+
+        return Redirect(redirectUrl);
+    }
+
+    [HttpPost("CompleteExternalLogin")]
+    [EnableRateLimiting("auth")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> CompleteExternalLogin([FromBody] CompleteExternalLoginModel model)
+    {
+        ExternalLoginRegistrationPayload payload;
+        try
+        {
+            var serializedPayload = _externalLoginProtector.Unprotect(model.RegistrationToken);
+            payload = JsonSerializer.Deserialize<ExternalLoginRegistrationPayload>(serializedPayload)
+                ?? throw new CryptographicException("External login registration payload was empty.");
+        }
+        catch (CryptographicException)
+        {
+            ModelState.AddModelError(nameof(model.RegistrationToken), "INVALID_OR_EXPIRED_REGISTRATION_TOKEN");
+            return ValidationProblem(ModelState);
+        }
+        catch (JsonException)
+        {
+            ModelState.AddModelError(nameof(model.RegistrationToken), "INVALID_OR_EXPIRED_REGISTRATION_TOKEN");
+            return ValidationProblem(ModelState);
+        }
+
+        if (string.IsNullOrWhiteSpace(payload.Provider)
+            || string.IsNullOrWhiteSpace(payload.ProviderKey)
+            || string.IsNullOrWhiteSpace(payload.Email))
+        {
+            ModelState.AddModelError(nameof(model.RegistrationToken), "INVALID_OR_EXPIRED_REGISTRATION_TOKEN");
+            return ValidationProblem(ModelState);
+        }
+
+        var displayName = model.DisplayName.Trim();
+        var existingUsernameUser = await _userManager.Users.FirstOrDefaultAsync(x => x.DisplayName == displayName);
+        if (existingUsernameUser != null)
+        {
+            ModelState.AddModelError("displayName", "USERNAME_ALREADY_IN_USE");
+        }
+
+        var requestedHandle = ProfileHandleUtility.BuildHandle(displayName);
+        if (string.IsNullOrWhiteSpace(requestedHandle))
+        {
+            ModelState.AddModelError("displayName", "USERNAME_INVALID");
+        }
+        else
+        {
+            var existingHandleUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Handle == requestedHandle);
+            if (existingHandleUser != null)
+            {
+                ModelState.AddModelError("displayName", "USERNAME_ALREADY_IN_USE");
+            }
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return ValidationProblem(ModelState);
+        }
+
+        var existingEmailUser = await _userManager.FindByEmailAsync(payload.Email);
+        if (existingEmailUser != null)
+        {
+            var linkResult = await _userManager.AddLoginAsync(
+                existingEmailUser,
+                new UserLoginInfo(payload.Provider, payload.ProviderKey, payload.Provider));
+
+            if (!linkResult.Succeeded)
+            {
+                foreach (var error in linkResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return ValidationProblem(ModelState);
+            }
+
+            await SignInWithJwtCookiesAsync(existingEmailUser);
+            return Ok();
+        }
+
+        var now = _clock.GetCurrentInstant();
+        var newUser = new AppUser
+        {
+            Id = Guid.NewGuid(),
+            DisplayName = displayName,
+            Handle = requestedHandle,
+            Email = payload.Email,
+            EmailConfirmed = true,
+            UserName = payload.Email,
+        }.SetCreateBySystem(now);
+
+        var createResult = await _userManager.CreateAsync(newUser);
+        if (!createResult.Succeeded)
+        {
+            foreach (var error in createResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return ValidationProblem(ModelState);
+        }
+
+        var addLoginResult = await _userManager.AddLoginAsync(
+            newUser,
+            new UserLoginInfo(payload.Provider, payload.ProviderKey, payload.Provider));
+
+        if (!addLoginResult.Succeeded)
+        {
+            foreach (var error in addLoginResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return ValidationProblem(ModelState);
+        }
+
+        await SignInWithJwtCookiesAsync(newUser);
+        return Ok();
+    }
+
     [HttpPost("ForgotPassword")]
     [EnableRateLimiting("auth")]
     public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
@@ -429,6 +627,50 @@ public class AuthController : ControllerBase
         return token;
     }
 
+    private async Task SignInWithJwtCookiesAsync(AppUser user)
+    {
+        var roles = await _userManager.GetRolesAsync(user);
+        var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
+        var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
+
+        Response.Cookies.Append("AccessToken", accessToken, BuildAccessTokenCookieOptions());
+        Response.Cookies.Append("RefreshToken", refreshToken, BuildRefreshTokenCookieOptions());
+    }
+
+    private static string? NormalizeExternalLoginProvider(string provider)
+    {
+        if (string.Equals(provider, "Google", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Google";
+        }
+
+        if (string.Equals(provider, "Facebook", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Facebook";
+        }
+
+        return null;
+    }
+
+    private static string NormalizeFrontendReturnUrl(string? returnUrl)
+    {
+        if (string.IsNullOrWhiteSpace(returnUrl) || !returnUrl.StartsWith('/'))
+        {
+            return "/";
+        }
+
+        return returnUrl.StartsWith("//") ? "/" : returnUrl;
+    }
+
+    private string BuildFrontendUrl(string path)
+    {
+        var normalizedPath = NormalizeFrontendReturnUrl(path);
+        return $"{_environmentSettings.FrontendHostUrl.TrimEnd('/')}{normalizedPath}";
+    }
+
+    private string BuildFrontendLoginErrorRedirect(string error)
+        => $"{BuildFrontendUrl("/login")}?externalLoginError={Uri.EscapeDataString(error)}";
+
     private async Task<string> GenerateRefreshTokenAsync(Guid userId, int expirationInDays)
     {
         var refreshToken = Guid.NewGuid().ToString();
@@ -498,6 +740,12 @@ public class AuthController : ControllerBase
         return Convert.ToBase64String(hash);
 
     }
+
+    private sealed record ExternalLoginRegistrationPayload(
+        string Provider,
+        string ProviderKey,
+        string Email,
+        string? Name);
 
     [HttpGet("TestMail")]
     [Authorize(Roles = "Admin")]

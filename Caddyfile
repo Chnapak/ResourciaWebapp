@@ -28,6 +28,14 @@ resourcia.net {
         reverse_proxy resourcia.api:5000
     }
 
+    handle /signin-google {
+        reverse_proxy resourcia.api:5000
+    }
+
+    handle /signin-facebook {
+        reverse_proxy resourcia.api:5000
+    }
+
     handle {
         reverse_proxy resourcia.frontend:80
     }

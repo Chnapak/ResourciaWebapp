@@ -81,7 +81,8 @@ export class CompleteProfileComponent {
         this.isSubmitting = false;
         // Check for the 'USERNAME_ALREADY_IN_USE' error you set in C#
         const validationErrors = err.error?.errors;
-        if (validationErrors?.displayName?.includes('USERNAME_ALREADY_IN_USE')) {
+        const displayNameErrors = validationErrors?.displayName ?? validationErrors?.DisplayName;
+        if (displayNameErrors?.includes('USERNAME_ALREADY_IN_USE')) {
           this.usernameInUse = true;
         } else {
           this.generalError = true;
