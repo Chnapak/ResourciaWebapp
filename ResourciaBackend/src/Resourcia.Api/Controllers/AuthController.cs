@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -23,7 +22,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 
 namespace Resourcia.Api.Controllers;
 [ApiController]
@@ -38,8 +36,7 @@ public class AuthController : ControllerBase
     private readonly EnvironmentOptions _environmentSettings;
     private readonly CaptchaService _captchaService;
     private readonly EmailSenderService _emailSenderService;
-    private readonly OAuthService _oAuthService;
-    private readonly ITimeLimitedDataProtector _externalLoginProtector;
+    private readonly ExternalAuthService _externalAuthService;
 
     public AuthController(
         IClock clock,
@@ -50,8 +47,7 @@ public class AuthController : ControllerBase
         CaptchaService captchaService,
         IOptions<JwtSettings> options,
         IOptions<EnvironmentOptions> environmentSettings,
-        OAuthService oAuthService,
-        IDataProtectionProvider dataProtectionProvider)
+        ExternalAuthService externalAuthService)
     {
         _clock = clock;
         _dbContext = dbContext;
@@ -61,10 +57,7 @@ public class AuthController : ControllerBase
         _emailSenderService = emailSenderService;
         _captchaService = captchaService;
         _environmentSettings = environmentSettings.Value;
-        _oAuthService = oAuthService;
-        _externalLoginProtector = dataProtectionProvider
-            .CreateProtector("Resourcia.Api.ExternalLogin")
-            .ToTimeLimitedDataProtector();
+        _externalAuthService = externalAuthService;
     }
 
     // We will also add verion of endpoint into post controller
@@ -282,7 +275,7 @@ public class AuthController : ControllerBase
     [EnableRateLimiting("auth")]
     public IActionResult ExternalLogin([FromQuery] string provider, [FromQuery] string? returnUrl = null)
     {
-        var loginProvider = NormalizeExternalLoginProvider(provider);
+        var loginProvider = _externalAuthService.NormalizeProvider(provider);
         if (loginProvider == null)
         {
             return BadRequest(new { message = "Unsupported external login provider." });
@@ -312,10 +305,10 @@ public class AuthController : ControllerBase
             return Redirect(BuildFrontendLoginErrorRedirect("external_login_failed"));
         }
 
-        var externalLogin = await _oAuthService.HandleExternalLoginAsync(info);
+        var externalLogin = await _externalAuthService.HandleCallbackAsync(info);
         await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-        if (externalLogin.User != null)
+        if (externalLogin.Status == ExternalLoginCallbackStatus.SignedIn && externalLogin.User != null)
         {
             if (externalLogin.User.DeletedAt != null)
             {
@@ -326,28 +319,17 @@ public class AuthController : ControllerBase
             return Redirect(BuildFrontendUrl(safeReturnUrl));
         }
 
-        if (string.IsNullOrWhiteSpace(externalLogin.Provider)
-            || string.IsNullOrWhiteSpace(externalLogin.ProviderKey)
-            || string.IsNullOrWhiteSpace(externalLogin.Email))
+        if (externalLogin.Status == ExternalLoginCallbackStatus.NeedsProfile
+            && !string.IsNullOrWhiteSpace(externalLogin.RegistrationToken))
         {
-            return Redirect(BuildFrontendLoginErrorRedirect("external_email_missing"));
+            var completeProfilePath = NormalizeFrontendReturnUrl(_environmentSettings.CompleteProfileUrl);
+            var redirectUrl =
+                $"{BuildFrontendUrl(completeProfilePath)}?registrationToken={Uri.EscapeDataString(externalLogin.RegistrationToken)}";
+
+            return Redirect(redirectUrl);
         }
 
-        var payload = new ExternalLoginRegistrationPayload(
-            externalLogin.Provider,
-            externalLogin.ProviderKey,
-            externalLogin.Email,
-            externalLogin.Name);
-
-        var registrationToken = _externalLoginProtector.Protect(
-            JsonSerializer.Serialize(payload),
-            TimeSpan.FromMinutes(15));
-
-        var completeProfilePath = NormalizeFrontendReturnUrl(_environmentSettings.CompleteProfileUrl);
-        var redirectUrl =
-            $"{BuildFrontendUrl(completeProfilePath)}?registrationToken={Uri.EscapeDataString(registrationToken)}";
-
-        return Redirect(redirectUrl);
+        return Redirect(BuildFrontendLoginErrorRedirect(externalLogin.ErrorCode ?? "external_login_failed"));
     }
 
     [HttpPost("CompleteExternalLogin")]
@@ -356,116 +338,14 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> CompleteExternalLogin([FromBody] CompleteExternalLoginModel model)
     {
-        ExternalLoginRegistrationPayload payload;
-        try
+        var result = await _externalAuthService.CompleteExternalLoginAsync(model);
+        if (result.Status == CompleteExternalLoginStatus.ValidationFailed || result.User == null)
         {
-            var serializedPayload = _externalLoginProtector.Unprotect(model.RegistrationToken);
-            payload = JsonSerializer.Deserialize<ExternalLoginRegistrationPayload>(serializedPayload)
-                ?? throw new CryptographicException("External login registration payload was empty.");
-        }
-        catch (CryptographicException)
-        {
-            ModelState.AddModelError(nameof(model.RegistrationToken), "INVALID_OR_EXPIRED_REGISTRATION_TOKEN");
-            return ValidationProblem(ModelState);
-        }
-        catch (JsonException)
-        {
-            ModelState.AddModelError(nameof(model.RegistrationToken), "INVALID_OR_EXPIRED_REGISTRATION_TOKEN");
+            AddExternalAuthErrorsToModelState(result.Errors);
             return ValidationProblem(ModelState);
         }
 
-        if (string.IsNullOrWhiteSpace(payload.Provider)
-            || string.IsNullOrWhiteSpace(payload.ProviderKey)
-            || string.IsNullOrWhiteSpace(payload.Email))
-        {
-            ModelState.AddModelError(nameof(model.RegistrationToken), "INVALID_OR_EXPIRED_REGISTRATION_TOKEN");
-            return ValidationProblem(ModelState);
-        }
-
-        var displayName = model.DisplayName.Trim();
-        var existingUsernameUser = await _userManager.Users.FirstOrDefaultAsync(x => x.DisplayName == displayName);
-        if (existingUsernameUser != null)
-        {
-            ModelState.AddModelError("displayName", "USERNAME_ALREADY_IN_USE");
-        }
-
-        var requestedHandle = ProfileHandleUtility.BuildHandle(displayName);
-        if (string.IsNullOrWhiteSpace(requestedHandle))
-        {
-            ModelState.AddModelError("displayName", "USERNAME_INVALID");
-        }
-        else
-        {
-            var existingHandleUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Handle == requestedHandle);
-            if (existingHandleUser != null)
-            {
-                ModelState.AddModelError("displayName", "USERNAME_ALREADY_IN_USE");
-            }
-        }
-
-        if (!ModelState.IsValid)
-        {
-            return ValidationProblem(ModelState);
-        }
-
-        var existingEmailUser = await _userManager.FindByEmailAsync(payload.Email);
-        if (existingEmailUser != null)
-        {
-            var linkResult = await _userManager.AddLoginAsync(
-                existingEmailUser,
-                new UserLoginInfo(payload.Provider, payload.ProviderKey, payload.Provider));
-
-            if (!linkResult.Succeeded)
-            {
-                foreach (var error in linkResult.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-
-                return ValidationProblem(ModelState);
-            }
-
-            await SignInWithJwtCookiesAsync(existingEmailUser);
-            return Ok();
-        }
-
-        var now = _clock.GetCurrentInstant();
-        var newUser = new AppUser
-        {
-            Id = Guid.NewGuid(),
-            DisplayName = displayName,
-            Handle = requestedHandle,
-            Email = payload.Email,
-            EmailConfirmed = true,
-            UserName = payload.Email,
-        }.SetCreateBySystem(now);
-
-        var createResult = await _userManager.CreateAsync(newUser);
-        if (!createResult.Succeeded)
-        {
-            foreach (var error in createResult.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
-            return ValidationProblem(ModelState);
-        }
-
-        var addLoginResult = await _userManager.AddLoginAsync(
-            newUser,
-            new UserLoginInfo(payload.Provider, payload.ProviderKey, payload.Provider));
-
-        if (!addLoginResult.Succeeded)
-        {
-            foreach (var error in addLoginResult.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
-            return ValidationProblem(ModelState);
-        }
-
-        await SignInWithJwtCookiesAsync(newUser);
+        await SignInWithJwtCookiesAsync(result.User);
         return Ok();
     }
 
@@ -637,21 +517,6 @@ public class AuthController : ControllerBase
         Response.Cookies.Append("RefreshToken", refreshToken, BuildRefreshTokenCookieOptions());
     }
 
-    private static string? NormalizeExternalLoginProvider(string provider)
-    {
-        if (string.Equals(provider, "Google", StringComparison.OrdinalIgnoreCase))
-        {
-            return "Google";
-        }
-
-        if (string.Equals(provider, "Facebook", StringComparison.OrdinalIgnoreCase))
-        {
-            return "Facebook";
-        }
-
-        return null;
-    }
-
     private static string NormalizeFrontendReturnUrl(string? returnUrl)
     {
         if (string.IsNullOrWhiteSpace(returnUrl) || !returnUrl.StartsWith('/'))
@@ -670,6 +535,23 @@ public class AuthController : ControllerBase
 
     private string BuildFrontendLoginErrorRedirect(string error)
         => $"{BuildFrontendUrl("/login")}?externalLoginError={Uri.EscapeDataString(error)}";
+
+    private void AddExternalAuthErrorsToModelState(IReadOnlyDictionary<string, string[]>? errors)
+    {
+        if (errors == null || errors.Count == 0)
+        {
+            ModelState.AddModelError(string.Empty, "EXTERNAL_LOGIN_FAILED");
+            return;
+        }
+
+        foreach (var errorGroup in errors)
+        {
+            foreach (var error in errorGroup.Value)
+            {
+                ModelState.AddModelError(errorGroup.Key, error);
+            }
+        }
+    }
 
     private async Task<string> GenerateRefreshTokenAsync(Guid userId, int expirationInDays)
     {
@@ -740,12 +622,6 @@ public class AuthController : ControllerBase
         return Convert.ToBase64String(hash);
 
     }
-
-    private sealed record ExternalLoginRegistrationPayload(
-        string Provider,
-        string ProviderKey,
-        string Email,
-        string? Name);
 
     [HttpGet("TestMail")]
     [Authorize(Roles = "Admin")]

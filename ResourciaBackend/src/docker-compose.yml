@@ -13,6 +13,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:5000
       - REDIS_URL=redis://resourcia.redis:6379
+    volumes:
+      - resourcia-api-data-protection:/home/app/.aspnet/DataProtection-Keys
+      - resourcia-api-uploads:/app/wwwroot/uploads
     depends_on:
       - resourcia.db
       - resourcia.redis
@@ -61,3 +64,7 @@ services:
 networks:
   default:
     name: resourcia.local
+
+volumes:
+  resourcia-api-data-protection:
+  resourcia-api-uploads:

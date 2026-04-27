@@ -174,7 +174,7 @@ public class Program
         builder.Services.AddHttpClient<CaptchaService>();
         builder.Services.AddScoped<ProfileService>();
         builder.Services.AddScoped<ReviewService>();
-        builder.Services.AddScoped<OAuthService>();
+        builder.Services.AddScoped<ExternalAuthService>();
         builder.Services.AddScoped<ResourceAuditService>();
 
         builder.Services.AddStackExchangeRedisCache(_ => { });

@@ -2,10 +2,14 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
+
+USER root
+RUN mkdir -p /app/wwwroot/uploads /home/app/.aspnet/DataProtection-Keys \
+    && chown -R $APP_UID:0 /app /home/app/.aspnet
+USER $APP_UID
 
 
 # This stage is used to build the service project
@@ -26,7 +30,11 @@ RUN dotnet publish "./Resourcia.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
+USER root
 WORKDIR /app
-COPY --from=publish /app/publish .
-COPY --chmod=755 Resourcia.Api/docker-entrypoint.sh /app/docker-entrypoint.sh
+COPY --from=publish --chown=$APP_UID:0 /app/publish .
+COPY --chmod=755 --chown=$APP_UID:0 Resourcia.Api/docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN mkdir -p /app/wwwroot/uploads /home/app/.aspnet/DataProtection-Keys \
+    && chown -R $APP_UID:0 /app/wwwroot /home/app/.aspnet
+USER $APP_UID
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
