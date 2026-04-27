@@ -78,6 +78,11 @@ public class Program
         builder.Services.Configure<OAuthOptions>(builder.Configuration.GetSection(nameof(OAuthOptions)));
 
         var oauthSettings = builder.Configuration.GetSection(nameof(OAuthOptions)).Get<OAuthOptions>();
+        var frontendHostUrl = builder.Configuration
+            .GetSection(nameof(EnvironmentOptions))
+            .Get<EnvironmentOptions>()?
+            .FrontendHostUrl?
+            .TrimEnd('/') ?? "/";
 
         builder.Services.AddAuthentication(options =>
         {
@@ -93,12 +98,24 @@ public class Program
             options.ClientId = oauthSettings?.Google?.ClientId ?? "invalid";
             options.ClientSecret = oauthSettings?.Google?.ClientSecret ?? "invalid";
             options.SaveTokens = false;
+            options.Events.OnRemoteFailure = context =>
+            {
+                context.Response.Redirect($"{frontendHostUrl}/login?externalLoginError=external_login_failed");
+                context.HandleResponse();
+                return Task.CompletedTask;
+            };
         })
         .AddFacebook(options =>
         {
             options.AppId = oauthSettings?.Facebook?.AppId ?? "invalid";
             options.AppSecret = oauthSettings?.Facebook?.AppSecret ?? "invalid";
             options.SaveTokens = false;
+            options.Events.OnRemoteFailure = context =>
+            {
+                context.Response.Redirect($"{frontendHostUrl}/login?externalLoginError=external_login_failed");
+                context.HandleResponse();
+                return Task.CompletedTask;
+            };
         });
 
         builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
