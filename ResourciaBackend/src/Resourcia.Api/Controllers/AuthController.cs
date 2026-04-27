@@ -168,7 +168,7 @@ public class AuthController : ControllerBase
             return Ok(new { message = responseMessage });
         }
 
-        await _emailSenderService.AddEmail(email.Body, user.Email, user.DisplayName);
+        await _emailSenderService.AddEmail(email.Subject, email.Body, user.Email!, user.DisplayName);
 
         return Ok(new { message = responseMessage });
     }
