@@ -79,7 +79,7 @@ public class Program
 
         var oauthSettings = builder.Configuration.GetSection(nameof(OAuthOptions)).Get<OAuthOptions>();
         var frontendHostUrl = builder.Configuration
-            .GetSection(nameof(EnvironmentOptions))
+            .GetSection("EnvironmentSettings")
             .Get<EnvironmentOptions>()?
             .FrontendHostUrl?
             .TrimEnd('/') ?? "/";
