@@ -1,66 +1,63 @@
 <!-- Two-column resource detail layout (content + sidebar). -->
-<div class="max-w-6xl mx-auto px-8 pt-14 pb-16 grid grid-cols-[1fr_300px] gap-10 items-amber-400t">
- 
-  <!-- ── MAIN COLUMN ── -->
-  <div class="flex flex-col gap-7">
- 
-    <!-- Description Card -->
+<div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-10 lg:px-8 lg:pt-14">
+
+  <!-- Main content column. -->
+  <div class="min-w-0 flex flex-col gap-6 lg:gap-7">
+
     <app-resource-description-card
       [resource]="resource"
     ></app-resource-description-card>
 
-    <!-- Ratings & Reviews Card -->
     <app-resource-ratings
       [resource]="resource"
       (reviewChange)="infoChange.emit()"
     ></app-resource-ratings>
 
-    <!-- Discussion Card -->
     <app-resource-discussion-section
       [resource]="resource"
     ></app-resource-discussion-section>
   </div>
 
-  <!-- Sidebar: info card -->
-  <app-resource-info-card
-    [resource]="resource"
-    [historyLink]="historyLink"
-  ></app-resource-info-card>
- 
-    <!-- Sidebar: actions card -->
+  <!-- Sidebar stacks underneath the main content on phones. -->
+  <aside class="min-w-0 space-y-5" aria-label="Resource details and actions">
+    <app-resource-info-card
+      [resource]="resource"
+      [historyLink]="historyLink"
+    ></app-resource-info-card>
+
     <app-resource-action-card
       [resource]="resource"
       [favoritePending]="favoritePending"
       (favoriteToggle)="favoriteToggle.emit()"
       (suggestImprovement)="suggestImprovement.emit()"
     ></app-resource-action-card>
- 
-    <!-- Sidebar: related resources (static placeholders). -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-card">
-      <div class="text-[0.7rem] font-bold tracking-widest uppercase text-gray-400 mb-4">Related Resources</div>
+
+    <!-- Related resources (static placeholders). -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-card sm:p-5">
+      <div class="mb-4 text-[0.7rem] font-bold uppercase tracking-widest text-gray-400">Related Resources</div>
       <div class="flex flex-col gap-1">
-        <div class="flex gap-3 p-2 rounded-lg card-hover cursor-pointer">
-          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-base flex-shrink-0">📊</div>
-          <div>
+        <div class="flex gap-3 rounded-lg p-2 card-hover cursor-pointer">
+          <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-pink-400 to-rose-500 text-base">📊</div>
+          <div class="min-w-0">
             <div class="text-[0.825rem] font-semibold leading-snug">3Blue1Brown: Essence of Linear Algebra</div>
-            <div class="text-xs text-gray-400 mt-0.5">★ 4.9 · YouTube · Free</div>
+            <div class="mt-0.5 text-xs text-gray-400">★ 4.9 · YouTube · Free</div>
           </div>
         </div>
-        <div class="flex gap-3 p-2 rounded-lg card-hover cursor-pointer">
-          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-base flex-shrink-0">📚</div>
-          <div>
+        <div class="flex gap-3 rounded-lg p-2 card-hover cursor-pointer">
+          <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-teal-400 text-base">📚</div>
+          <div class="min-w-0">
             <div class="text-[0.825rem] font-semibold leading-snug">Khan Academy: Linear Algebra</div>
-            <div class="text-xs text-gray-400 mt-0.5">★ 4.6 · khanacademy.org · Free</div>
+            <div class="mt-0.5 text-xs text-gray-400">★ 4.6 · khanacademy.org · Free</div>
           </div>
         </div>
-        <div class="flex gap-3 p-2 rounded-lg card-hover cursor-pointer">
-          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-sky-400 to-cyan-400 flex items-center justify-center text-base flex-shrink-0">🛠️</div>
-          <div>
+        <div class="flex gap-3 rounded-lg p-2 card-hover cursor-pointer">
+          <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-sky-400 to-cyan-400 text-base">🛠️</div>
+          <div class="min-w-0">
             <div class="text-[0.825rem] font-semibold leading-snug">Jupyter: Linear Algebra Notebooks</div>
-            <div class="text-xs text-gray-400 mt-0.5">★ 4.7 · GitHub · Free</div>
+            <div class="mt-0.5 text-xs text-gray-400">★ 4.7 · GitHub · Free</div>
           </div>
         </div>
       </div>
     </div>
- 
-  </div><!-- /sidebar -->
+  </aside>
+</div>

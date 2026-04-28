@@ -61,6 +61,7 @@
 
   @media (max-width: 860px) {
     grid-template-columns: 1fr;
+    margin-top: -1rem;
   }
 }
 
@@ -127,5 +128,5 @@
 }
 
 @media (max-width: 640px) {
-  .ep-layout { padding: 0 1rem 6rem; gap: 1rem; }
+  .ep-layout { padding: 0 1rem 8.5rem; gap: 1rem; }
 }

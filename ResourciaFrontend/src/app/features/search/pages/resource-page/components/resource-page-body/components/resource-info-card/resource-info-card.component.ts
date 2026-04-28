@@ -102,15 +102,15 @@ export class ResourceInfoCardComponent implements OnInit {
         muted: 'bg-gray-100 text-gray-500',
       };
 
-      return `inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${toneClasses[tone]}`;
+      return `inline-flex w-fit items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${toneClasses[tone]}`;
     }
 
     const textClasses = {
-      default: 'text-sm font-medium text-gray-900 text-right',
-      blue: 'text-sm font-medium text-blue-600 text-right',
-      green: 'text-sm font-semibold text-green-600 text-right',
-      amber: 'text-sm font-semibold text-amber-600 text-right',
-      muted: 'text-sm font-medium text-gray-400 text-right',
+      default: 'break-words text-sm font-medium text-gray-900 sm:text-right',
+      blue: 'break-words text-sm font-medium text-blue-600 sm:text-right',
+      green: 'break-words text-sm font-semibold text-green-600 sm:text-right',
+      amber: 'break-words text-sm font-semibold text-amber-600 sm:text-right',
+      muted: 'break-words text-sm font-medium text-gray-400 sm:text-right',
     };
 
     return textClasses[tone];

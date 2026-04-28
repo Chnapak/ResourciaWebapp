@@ -1,11 +1,11 @@
 <!-- Resource hero gradient background. -->
-<div class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 hero-pattern pt-10 pb-0 px-8 min-h-[400px]">
+<div class="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 hero-pattern px-4 pb-8 pt-6 sm:px-6 sm:pt-8 lg:min-h-[400px] lg:px-8 lg:pb-0 lg:pt-10">
   <div class="max-w-6xl mx-auto">
  
-    <div class="grid grid-cols-[1fr_340px] gap-10 items-start">
+    <div class="grid grid-cols-1 gap-6 items-start lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)] lg:gap-10">
  
       <!-- Left column: title, tags, rating, actions. -->
-      <div>
+      <div class="min-w-0">
         <app-resource-header 
           [resource]="resource">
         </app-resource-header>
@@ -26,7 +26,7 @@
       </div>
  
       <!-- Right column: preview panel (overlaps fold). -->
-      <div class="relative top-8 bg-black/30 border border-white/10 rounded-card overflow-hidden shadow-lg backdrop-blur-sm">
+      <div class="relative top-0 min-w-0 bg-black/30 border border-white/10 rounded-card overflow-hidden shadow-lg backdrop-blur-sm lg:top-8">
         <!-- Thumbnail -->
         <app-resource-preview-panel
           [images]="images"

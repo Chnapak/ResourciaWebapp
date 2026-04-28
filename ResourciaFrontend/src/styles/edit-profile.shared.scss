@@ -70,6 +70,7 @@
 .ep-input,
 .ep-textarea {
   width: 100%;
+  min-height: 44px;
   padding: .65rem .9rem;
   border: 1.5px solid #e2e7f0;
   border-radius: 9px;
@@ -227,10 +228,15 @@
   &__input-row {
     display: flex;
     gap: .6rem;
+
+    @media (max-width: 520px) {
+      flex-direction: column;
+    }
   }
 
   &__add-btn {
     padding: .65rem .9rem;
+    min-height: 44px;
     background: #f0f4ff;
     border: 1.5px solid #dce5ff;
     border-radius: 9px;
@@ -300,6 +306,7 @@
   justify-content: center;
   gap: .4rem;
   padding: .6rem 1.35rem;
+  min-height: 44px;
   border-radius: 8px;
   font-size: .875rem;
   font-weight: 600;
@@ -372,5 +379,9 @@
 
   .ep-card__body {
     padding: 1.25rem;
+  }
+
+  .ep-field__meta {
+    flex-direction: column;
   }
 }

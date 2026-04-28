@@ -1,6 +1,6 @@
 <!-- Resource description card with expandable text. -->
-<div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-card">
-    <div class="flex items-center justify-between mb-5">
+<div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-card sm:p-7">
+    <div class="flex flex-col gap-3 mb-5 sm:flex-row sm:items-center sm:justify-between">
     <h2 class="font-display font-bold text-lg">About this Resource</h2>
     <!-- Toggle description visibility. -->
     <button (click)="toggleDesc()"
@@ -14,7 +14,7 @@
     </div>
     <!-- Description text with line clamp when collapsed. -->
     <p 
-        class="text-gray-500 text-[0.95rem] leading-relaxed"
+        class="break-words text-[0.95rem] leading-relaxed text-gray-500"
         [class.line-clamp-4]="!isExpanded">
         {{ resource?.description }}
     </p>

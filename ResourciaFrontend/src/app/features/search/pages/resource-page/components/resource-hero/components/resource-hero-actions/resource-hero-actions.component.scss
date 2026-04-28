@@ -1,1 +1,8 @@
 /* Resource hero actions overrides go here if needed. */
+@media (max-width: 640px) {
+  :host ::ng-deep ui-button > a,
+  :host ::ng-deep ui-button > button {
+    width: 100%;
+    min-height: 44px;
+  }
+}

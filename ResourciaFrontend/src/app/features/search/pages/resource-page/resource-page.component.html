@@ -49,10 +49,10 @@
     ></app-resource-page-body>
 
     @if (lightboxOpen) {
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" (click)="closeLightbox()">
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 sm:p-4" (click)="closeLightbox()">
             <button
                 type="button"
-                class="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-2 text-sm font-semibold text-gray-800 hover:bg-white"
+                class="absolute right-3 top-3 z-[60] min-h-11 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-white sm:right-4 sm:top-4"
                 (click)="closeLightbox(); $event.stopPropagation()"
             >
                 Close
@@ -61,7 +61,7 @@
             @if (canDeleteImage(lightboxImage)) {
                 <button
                     type="button"
-                    class="absolute right-24 top-4 rounded-full bg-red-500/90 px-3 py-2 text-sm font-semibold text-white hover:bg-red-500"
+                    class="absolute left-3 top-3 z-[60] min-h-11 rounded-full bg-red-500/90 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 sm:left-auto sm:right-24 sm:top-4"
                     (click)="deleteImage(lightboxImage); $event.stopPropagation()"
                     [disabled]="imageDeletePendingId === lightboxImage?.id"
                 >
@@ -72,21 +72,21 @@
             @if (images.length > 1) {
                 <button
                     type="button"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full bg-white/90 text-gray-800 hover:bg-white flex items-center justify-center text-2xl"
+                    class="absolute left-3 top-1/2 z-50 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-gray-800 hover:bg-white sm:left-4"
                     (click)="previousLightbox(); $event.stopPropagation()"
                 >
                     &#8249;
                 </button>
                 <button
                     type="button"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full bg-white/90 text-gray-800 hover:bg-white flex items-center justify-center text-2xl"
+                    class="absolute right-3 top-1/2 z-50 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-gray-800 hover:bg-white sm:right-4"
                     (click)="nextLightbox(); $event.stopPropagation()"
                 >
                     &#8250;
                 </button>
             }
 
-            <div class="max-h-[85vh] max-w-[90vw] rounded-xl bg-black flex flex-col" (click)="$event.stopPropagation()">
+            <div class="flex max-h-[82vh] w-full max-w-[94vw] flex-col rounded-xl bg-black sm:max-h-[85vh] sm:max-w-[90vw]" (click)="$event.stopPropagation()">
                 <div class="flex-1 min-h-0 overflow-hidden">
                     @if (!isImageBroken(lightboxImage)) {
                         <img
@@ -105,7 +105,7 @@
                     }
                 </div>
                 @if (lightboxImage) {
-                    <div class="border-t border-white/10 bg-black/70 px-4 py-3 text-sm text-white">
+                    <div class="border-t border-white/10 bg-black/70 px-3 py-3 text-xs leading-relaxed text-white sm:px-4 sm:text-sm">
                         Uploaded by
                         <span class="font-semibold">{{ lightboxImage?.uploadedBy ?? 'Unknown user' }}</span>
                         @if (lightboxImage?.uploadedByHandle) {

@@ -19,6 +19,7 @@
   @media (max-width: 500px) {
     flex-direction: column;
     align-items: stretch;
+    padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
   }
 }
 
@@ -32,6 +33,7 @@
   align-items: center;
   gap: .5rem;
   font-size: .8rem;
+  min-width: 0;
 
   &--saving { color: #6b7a9e; }
   &--saved  { color: #059669; }
@@ -60,4 +62,13 @@
   display: flex;
   align-items: center;
   gap: .75rem;
+
+  @media (max-width: 500px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .ep-btn {
+      width: 100%;
+    }
+  }
 }

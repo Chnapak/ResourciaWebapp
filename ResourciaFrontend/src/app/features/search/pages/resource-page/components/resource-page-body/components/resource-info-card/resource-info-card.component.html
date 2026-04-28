@@ -1,17 +1,17 @@
 <!-- Resource metadata card. -->
-<div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-card">
+<div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-card sm:p-5">
   <div class="text-[0.7rem] font-bold tracking-widest uppercase text-gray-400 mb-4">Resource Info</div>
 
   @if (rows.length > 0) {
     @for (row of rows; track row.label) {
       <!-- Row with optional link styling. -->
-      <div class="flex items-center justify-between gap-4 py-2.5" [class.border-b]="!$last" [class.border-gray-200]="!$last">
+      <div class="flex flex-col gap-1.5 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4" [class.border-b]="!$last" [class.border-gray-200]="!$last">
         <span class="text-xs text-gray-400 font-medium">{{ row.label }}</span>
 
         @if (row.routerLink) {
           <a
             [routerLink]="row.routerLink"
-            class="text-sm font-medium text-blue-600 hover:underline text-right"
+            class="break-words text-sm font-medium text-blue-600 hover:underline sm:text-right"
           >
             {{ row.value }}
           </a>
@@ -20,7 +20,7 @@
             [href]="row.href"
             target="_blank"
             rel="noreferrer"
-            class="text-sm font-medium text-blue-600 hover:underline text-right"
+            class="break-all text-sm font-medium text-blue-600 hover:underline sm:text-right"
           >
             {{ row.value }}
           </a>
