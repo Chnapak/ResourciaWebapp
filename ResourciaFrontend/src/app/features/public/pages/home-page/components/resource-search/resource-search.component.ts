@@ -113,7 +113,7 @@ export class ResourceSearchComponent implements OnInit {
       filter.kind === FilterKind.Facet && this.matchesFilter(filter, ['subject']));
 
     this.addPreferredFilter(selected, available, (filter) =>
-      filter.kind === FilterKind.Text && this.matchesFilter(filter, ['author']));
+      this.isUsesAiFilter(filter) && (filter.kind === FilterKind.Boolean || filter.kind === FilterKind.Facet));
 
     this.addPreferredFilter(selected, available, (filter) =>
       filter.kind === FilterKind.Boolean && this.matchesFilter(filter, ['isfree', 'price', 'cost']));
@@ -158,6 +158,10 @@ export class ResourceSearchComponent implements OnInit {
    * Determine whether a schema filter can be shown in the hero widget.
    */
   private isEligibleHomeFilter(filter: SearchSchemaFilter): boolean {
+    if (this.isAuthorFilter(filter)) {
+      return false;
+    }
+
     switch (filter.kind) {
       case FilterKind.Facet:
         return filter.values.length > 0;
@@ -170,16 +174,44 @@ export class ResourceSearchComponent implements OnInit {
   }
 
   /**
-   * Match filters by key or resource field name, normalized for comparison.
+   * Match filters by key, label, or resource field name, normalized for comparison.
    */
   private matchesFilter(filter: SearchSchemaFilter, identifiers: string[]): boolean {
     const normalizedKey = this.normalizeIdentifier(filter.key);
+    const normalizedLabel = this.normalizeIdentifier(filter.label);
     const normalizedField = this.normalizeIdentifier(filter.resourceField);
 
     return identifiers.some((identifier) => {
       const normalizedIdentifier = this.normalizeIdentifier(identifier);
-      return normalizedIdentifier === normalizedKey || normalizedIdentifier === normalizedField;
+      return normalizedIdentifier === normalizedKey
+        || normalizedIdentifier === normalizedLabel
+        || normalizedIdentifier === normalizedField;
     });
+  }
+
+  /**
+   * Detects the "uses AI" filter even if the backend/admin naming varies slightly.
+   */
+  private isUsesAiFilter(filter: SearchSchemaFilter): boolean {
+    return this.matchesFilter(filter, [
+      'usesAi',
+      'uses-ai',
+      'uses_ai',
+      'uses AI',
+      'hasAi',
+      'has AI',
+      'ai',
+      'ai assisted',
+      'ai generated',
+      'contains AI'
+    ]);
+  }
+
+  /**
+   * The home hero intentionally shows "Uses AI" in place of author.
+   */
+  private isAuthorFilter(filter: SearchSchemaFilter): boolean {
+    return this.matchesFilter(filter, ['author']);
   }
 
   /**
@@ -200,14 +232,14 @@ export class ResourceSearchComponent implements OnInit {
       case FilterKind.Boolean:
         return {
           key: filter.key,
-          label: this.toDisplayLabel(filter, 'Access'),
+          label: this.toDisplayLabel(filter, this.isUsesAiFilter(filter) ? 'Uses AI' : 'Access'),
           kind: filter.kind,
           controlType: 'select',
-          emptyOptionLabel: 'Any access',
+          emptyOptionLabel: this.toBooleanPlaceholder(filter),
           options: [
             {
               value: 'true',
-              label: filter.label || 'Free only'
+              label: this.toBooleanOptionLabel(filter)
             }
           ]
         };
@@ -235,7 +267,12 @@ export class ResourceSearchComponent implements OnInit {
 
     const resourceField = filter.resourceField?.trim();
     if (resourceField) {
-      return resourceField;
+      return this.humanizeIdentifier(resourceField);
+    }
+
+    const key = filter.key?.trim();
+    if (key) {
+      return this.humanizeIdentifier(key);
     }
 
     return fallback;
@@ -247,6 +284,37 @@ export class ResourceSearchComponent implements OnInit {
   private toFacetPlaceholder(filter: SearchSchemaFilter): string {
     const label = this.toDisplayLabel(filter, 'Filter').toLowerCase();
     return `Any ${label}`;
+  }
+
+  /**
+   * Placeholder text for boolean filters.
+   */
+  private toBooleanPlaceholder(filter: SearchSchemaFilter): string {
+    if (this.isUsesAiFilter(filter)) {
+      return 'Any AI usage';
+    }
+
+    if (this.matchesFilter(filter, ['isfree', 'price', 'cost'])) {
+      return 'Any access';
+    }
+
+    const label = this.toDisplayLabel(filter, 'option').toLowerCase();
+    return `Any ${label}`;
+  }
+
+  /**
+   * Select label for the enabled state of boolean filters.
+   */
+  private toBooleanOptionLabel(filter: SearchSchemaFilter): string {
+    if (this.isUsesAiFilter(filter)) {
+      return filter.label?.trim() || 'Uses AI';
+    }
+
+    if (this.matchesFilter(filter, ['isfree', 'price', 'cost'])) {
+      return filter.label?.trim() || 'Free only';
+    }
+
+    return filter.label?.trim() || this.toDisplayLabel(filter, 'Yes');
   }
 
   /**
@@ -264,5 +332,17 @@ export class ResourceSearchComponent implements OnInit {
     return String(value ?? '')
       .replace(/[\s_-]+/g, '')
       .toLowerCase();
+  }
+
+  /**
+   * Converts schema identifiers such as "usesAi" into readable labels.
+   */
+  private humanizeIdentifier(value: string): string {
+    return value
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .replace(/[\s_-]+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, (character) => character.toUpperCase())
+      .replace(/\bAi\b/g, 'AI');
   }
 }
