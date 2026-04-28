@@ -37,6 +37,7 @@ public class AuthController : ControllerBase
     private readonly CaptchaService _captchaService;
     private readonly EmailSenderService _emailSenderService;
     private readonly ExternalAuthService _externalAuthService;
+    private readonly RegistrationInviteService _registrationInviteService;
 
     public AuthController(
         IClock clock,
@@ -47,7 +48,8 @@ public class AuthController : ControllerBase
         CaptchaService captchaService,
         IOptions<JwtSettings> options,
         IOptions<EnvironmentOptions> environmentSettings,
-        ExternalAuthService externalAuthService)
+        ExternalAuthService externalAuthService,
+        RegistrationInviteService registrationInviteService)
     {
         _clock = clock;
         _dbContext = dbContext;
@@ -58,6 +60,7 @@ public class AuthController : ControllerBase
         _captchaService = captchaService;
         _environmentSettings = environmentSettings.Value;
         _externalAuthService = externalAuthService;
+        _registrationInviteService = registrationInviteService;
     }
 
     // We will also add verion of endpoint into post controller
@@ -83,6 +86,12 @@ public class AuthController : ControllerBase
         if (existingEmailUser != null)
         {
             ModelState.AddModelError<RegisterModel>(x => x.Email, "EMAIL_ALREADY_IN_USE");
+        }
+
+        var inviteAllowsRegistration = await _registrationInviteService.CanRegisterAsync(model.Email);
+        if (!inviteAllowsRegistration)
+        {
+            ModelState.AddModelError<RegisterModel>(x => x.Email, "REGISTRATION_INVITE_REQUIRED");
         }
 
         var existingUsernameUser = await _userManager.Users.FirstOrDefaultAsync(x => x.DisplayName == model.DisplayName);
@@ -124,12 +133,28 @@ public class AuthController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        // Method with SaveChanges()!
-        await _userManager.CreateAsync(newUser);
-        // Method with SaveChanges()!
-        await _userManager.AddPasswordAsync(newUser, model.Password);
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+        // Identity calls SaveChanges internally, so we keep them inside a transaction with invite usage.
+        var createResult = await _userManager.CreateAsync(newUser);
+        if (!createResult.Succeeded)
+        {
+            AddIdentityErrorsToModelState(createResult);
+            return ValidationProblem(ModelState);
+        }
+
+        var passwordResult = await _userManager.AddPasswordAsync(newUser, model.Password);
+        if (!passwordResult.Succeeded)
+        {
+            AddIdentityErrorsToModelState(passwordResult);
+            return ValidationProblem(ModelState);
+        }
+
+        await _registrationInviteService.MarkInviteUsedAsync(model.Email, newUser.Id);
 
         await GenerateEmailConfirmation(newUser);
+
+        await transaction.CommitAsync();
         
         return NoContent();
     }
@@ -550,6 +575,14 @@ public class AuthController : ControllerBase
             {
                 ModelState.AddModelError(errorGroup.Key, error);
             }
+        }
+    }
+
+    private void AddIdentityErrorsToModelState(IdentityResult result)
+    {
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
         }
     }
 

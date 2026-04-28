@@ -132,6 +132,11 @@ export const routes: Routes = [
               import('./features/admin/pages/users-page/users-page.component').then((module) => module.UsersAdminPageComponent)
           },
           {
+            path: 'invites',
+            loadComponent: () =>
+              import('./features/admin/pages/beta-invites-page/beta-invites-page.component').then((module) => module.BetaInvitesPageComponent)
+          },
+          {
             path: 'resources/:id/history',
             loadComponent: () =>
               import('./features/admin/pages/resource-history-page/resource-history-page.component').then((module) => module.ResourceHistoryPageComponent)

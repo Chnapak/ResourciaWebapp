@@ -27,16 +27,19 @@ public sealed class ExternalAuthService
     private readonly UserManager<AppUser> _userManager;
     private readonly IClock _clock;
     private readonly ITimeLimitedDataProtector _registrationProtector;
+    private readonly RegistrationInviteService _registrationInviteService;
 
     public ExternalAuthService(
         AppDbContext dbContext,
         UserManager<AppUser> userManager,
         IClock clock,
-        IDataProtectionProvider dataProtectionProvider)
+        IDataProtectionProvider dataProtectionProvider,
+        RegistrationInviteService registrationInviteService)
     {
         _dbContext = dbContext;
         _userManager = userManager;
         _clock = clock;
+        _registrationInviteService = registrationInviteService;
         _registrationProtector = dataProtectionProvider
             .CreateProtector("Resourcia.Api.ExternalLogin")
             .ToTimeLimitedDataProtector();
@@ -75,6 +78,11 @@ public sealed class ExternalAuthService
             }
 
             return ExternalLoginCallbackResult.SignedIn(existingEmailUser);
+        }
+
+        if (!await _registrationInviteService.CanRegisterAsync(email))
+        {
+            return ExternalLoginCallbackResult.Failed("external_invite_required");
         }
 
         var payload = new ExternalLoginRegistrationPayload(
@@ -116,6 +124,13 @@ public sealed class ExternalAuthService
                 : CompleteExternalLoginResult.ValidationFailed(ToValidationErrors(linkResult));
         }
 
+        if (!await _registrationInviteService.CanRegisterAsync(payload.Email))
+        {
+            return CompleteExternalLoginResult.ValidationFailed(
+                nameof(CompleteExternalLoginModel.RegistrationToken),
+                "REGISTRATION_INVITE_REQUIRED");
+        }
+
         await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
         var now = _clock.GetCurrentInstant();
@@ -143,6 +158,8 @@ public sealed class ExternalAuthService
         {
             return CompleteExternalLoginResult.ValidationFailed(ToValidationErrors(addLoginResult));
         }
+
+        await _registrationInviteService.MarkInviteUsedAsync(payload.Email, newUser.Id);
 
         await transaction.CommitAsync();
         return CompleteExternalLoginResult.Completed(newUser);

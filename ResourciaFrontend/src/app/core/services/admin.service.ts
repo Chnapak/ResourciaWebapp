@@ -17,6 +17,7 @@ import {
   ResourceAuditEntryListResponse,
   ResourceRevertRequest
 } from '../../features/admin/models/resource-audit.model';
+import { BetaInvite, BetaInviteListResponse } from '../../features/admin/models/beta-invite.model';
 
 /**
  * Service wrapper for admin-only backend endpoints.
@@ -132,5 +133,23 @@ export class AdminService {
   revertResource(resourceId: string, request: ResourceRevertRequest): Observable<void> {
     const url = `/api/resources/${resourceId}/revert`;
     return this.httpClient.post<void>(url, request);
+  }
+
+  /** Retrieves closed-beta registration invites. */
+  getBetaInvites(): Observable<BetaInviteListResponse> {
+    const url = `${this.baseUrl}/beta-invites`;
+    return this.httpClient.get<BetaInviteListResponse>(url);
+  }
+
+  /** Creates a registration invite for a single email address. */
+  createBetaInvite(email: string): Observable<BetaInvite> {
+    const url = `${this.baseUrl}/beta-invites`;
+    return this.httpClient.post<BetaInvite>(url, { email });
+  }
+
+  /** Revokes a pending registration invite. */
+  revokeBetaInvite(inviteId: string): Observable<void> {
+    const url = `${this.baseUrl}/beta-invites/${inviteId}`;
+    return this.httpClient.delete<void>(url);
   }
 }

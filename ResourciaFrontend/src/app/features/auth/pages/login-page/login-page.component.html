@@ -62,6 +62,10 @@
           <div i18n class="text-xs text-red-700">Please complete the security check.</div>
         }
 
+        @if (externalInviteRequired) {
+          <div i18n class="text-xs text-amber-700">Resourcia is currently invite-only. Ask an admin for beta access before using social sign-in.</div>
+        }
+
         @if (generalError) {
           <div i18n class="text-xs text-red-700">Something went wrong. Please check your connection and try again.</div>
         }

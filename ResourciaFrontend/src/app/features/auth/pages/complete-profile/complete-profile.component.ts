@@ -36,6 +36,8 @@ export class CompleteProfileComponent {
   public usernameInUse = false;
   /** True when a non-specific error occurs. */
   public generalError = false;
+  /** True when closed beta access is missing or revoked mid-flow. */
+  public inviteRequired = false;
 
   /** Reactive form for the display name. */
   protected form = this.fb.nonNullable.group({
@@ -63,6 +65,7 @@ export class CompleteProfileComponent {
     this.isSubmitting = true;
     this.usernameInUse = false;
     this.generalError = false;
+    this.inviteRequired = false;
 
     // Must match the C# model: { displayName, registrationToken }
     const payload = {
@@ -82,8 +85,11 @@ export class CompleteProfileComponent {
         // Check for the 'USERNAME_ALREADY_IN_USE' error you set in C#
         const validationErrors = err.error?.errors;
         const displayNameErrors = validationErrors?.displayName ?? validationErrors?.DisplayName;
+        const tokenErrors = validationErrors?.registrationToken ?? validationErrors?.RegistrationToken;
         if (displayNameErrors?.includes('USERNAME_ALREADY_IN_USE')) {
           this.usernameInUse = true;
+        } else if (tokenErrors?.includes('REGISTRATION_INVITE_REQUIRED')) {
+          this.inviteRequired = true;
         } else {
           this.generalError = true;
         }

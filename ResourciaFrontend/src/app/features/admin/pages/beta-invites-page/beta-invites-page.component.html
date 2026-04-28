@@ -1,0 +1,125 @@
+<!-- Closed beta invite management -->
+<div class="bg-white rounded-lg shadow-sm">
+  <app-admin-header [title]="'Beta Invites'"></app-admin-header>
+
+  <div class="grid gap-6 px-4 py-6 sm:px-8 lg:grid-cols-[minmax(0,420px)_1fr]">
+    <section class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Registration mode</p>
+      <div class="mt-3 flex items-center gap-3">
+        <span
+          class="inline-flex rounded-full px-3 py-1 text-xs font-semibold ring-1"
+          [ngClass]="registrationMode === 'ClosedBeta'
+            ? 'bg-amber-50 text-amber-700 ring-amber-200'
+            : 'bg-emerald-50 text-emerald-700 ring-emerald-200'">
+          {{ registrationMode }}
+        </span>
+        <span class="text-sm text-slate-500">
+          @if (registrationMode === 'ClosedBeta') {
+            Only invited emails can register.
+          } @else {
+            Anyone can register.
+          }
+        </span>
+      </div>
+
+      <form class="mt-6 flex flex-col gap-3" [formGroup]="form" (ngSubmit)="createInvite()">
+        <label for="beta-invite-email" class="text-sm font-semibold text-slate-700">Invite email</label>
+        <input
+          id="beta-invite-email"
+          type="email"
+          formControlName="email"
+          placeholder="student@example.com"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          [class.border-red-300]="form.controls.email.touched && form.controls.email.invalid">
+
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <p class="text-xs text-red-600">Enter a valid email address.</p>
+        }
+
+        @if (inviteError) {
+          <p class="text-xs text-red-600">{{ inviteError }}</p>
+        }
+
+        <button
+          type="submit"
+          class="mt-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+          [disabled]="isSubmitting">
+          @if (isSubmitting) {
+            Creating invite...
+          } @else {
+            Add invite
+          }
+        </button>
+      </form>
+    </section>
+
+    <section class="min-w-0">
+      @if (isLoading) {
+        <div class="space-y-3 animate-pulse">
+          @for (_ of [1,2,3,4]; track $index) {
+            <div class="rounded-2xl border border-slate-100 p-4">
+              <div class="h-4 w-48 rounded bg-slate-200"></div>
+              <div class="mt-3 h-3 w-32 rounded bg-slate-100"></div>
+            </div>
+          }
+        </div>
+      } @else if (error) {
+        <div class="rounded-2xl border border-red-100 bg-red-50 p-5 text-sm text-red-700">{{ error }}</div>
+      } @else if (invites.length === 0) {
+        <div class="rounded-2xl border border-dashed border-slate-200 p-8 text-center">
+          <div class="text-lg font-semibold text-slate-800">No invites yet</div>
+          <p class="mt-1 text-sm text-slate-500">Add an email to let someone join the closed beta.</p>
+        </div>
+      } @else {
+        <div class="overflow-hidden rounded-2xl border border-slate-200">
+          <div class="grid grid-cols-1 gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500 md:grid-cols-[minmax(0,1fr)_110px_150px_120px]">
+            <span>Email</span>
+            <span>Status</span>
+            <span>Created</span>
+            <span class="md:text-right">Action</span>
+          </div>
+
+          @for (invite of invites; track invite.id) {
+            <div class="grid grid-cols-1 gap-3 border-b border-slate-100 px-4 py-4 last:border-b-0 md:grid-cols-[minmax(0,1fr)_110px_150px_120px] md:items-center">
+              <div class="min-w-0">
+                <div class="truncate text-sm font-semibold text-slate-900">{{ invite.email }}</div>
+                <div class="mt-1 text-xs text-slate-400">
+                  Created by {{ invite.createdBy || 'Unknown admin' }}
+                </div>
+              </div>
+
+              <div>
+                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ring-1" [ngClass]="statusClass(invite.status)">
+                  {{ invite.status }}
+                </span>
+              </div>
+
+              <div class="text-xs text-slate-500">
+                {{ invite.createdAtUtc | date: 'dd.MM.yyyy HH:mm' }}
+                @if (invite.usedAtUtc) {
+                  <div class="mt-1 text-emerald-600">Used {{ invite.usedAtUtc | date: 'dd.MM.yyyy HH:mm' }}</div>
+                }
+                @if (invite.revokedAtUtc) {
+                  <div class="mt-1 text-slate-500">Revoked {{ invite.revokedAtUtc | date: 'dd.MM.yyyy HH:mm' }}</div>
+                }
+              </div>
+
+              <div class="md:text-right">
+                @if (invite.status === 'Pending') {
+                  <button
+                    type="button"
+                    class="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+                    (click)="revokeInvite(invite)">
+                    Revoke
+                  </button>
+                } @else {
+                  <span class="text-xs text-slate-400">No action</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>

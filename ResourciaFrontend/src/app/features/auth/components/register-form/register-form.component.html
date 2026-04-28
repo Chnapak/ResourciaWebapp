@@ -25,13 +25,13 @@
     <div class="flex flex-col w-full max-w-sm relative mt-2 sm:w-70">
       @let email = form.get('email');
       <label i18n for="email" class="text-xs font-bold text-blue-400 bg-white relative top-2 ml-2 px-1 w-fit"
-        [class.text-red-500]="(email?.touched && email?.invalid) || emailInUse">
+        [class.text-red-500]="(email?.touched && email?.invalid) || emailInUse || inviteRequired">
         Email:
       </label>
       <input type="email" placeholder="Write here..." i18n-placeholder name="email"
         formControlName="email"
         class="p-[11px_10px] w-full text-xs border-2 border-blue-400 rounded bg-white text-gray-600 focus:outline-none focus:border-blue-500 transition-colors sm:w-70"
-        [class.border-red-500]="(email?.touched && email?.invalid) || emailInUse">
+        [class.border-red-500]="(email?.touched && email?.invalid) || emailInUse || inviteRequired">
       @if (email?.touched && email?.invalid) {
         @if (email?.errors?.['required']) {
           <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">Email is required.</p>
@@ -42,6 +42,9 @@
       }
       @if (emailInUse) {
         <p i18n class="w-full text-left text-xs text-red-600 mt-0.5 sm:w-70">This email is already registered.</p>
+      }
+      @if (inviteRequired) {
+        <p i18n class="w-full text-left text-xs text-amber-700 mt-0.5 sm:w-70">Resourcia is currently invite-only. Ask an admin for beta access.</p>
       }
     </div>
 

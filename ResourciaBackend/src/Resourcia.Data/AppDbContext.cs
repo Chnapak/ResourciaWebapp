@@ -29,6 +29,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<SavedResource> SavedResources { get; set; }
     public DbSet<ResourceImage> ResourceImages { get; set; } = null!;
     public DbSet<ResourceAuditEntry> ResourceAuditEntries { get; set; } = null!;
+    public DbSet<BetaInvite> BetaInvites { get; set; } = null!;
 
     public AppDbContext(DbContextOptions options) : base(options)
     {
@@ -138,6 +139,15 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
 
         modelBuilder.Entity<ResourceAuditEntry>()
             .HasIndex(entry => new { entry.ResourceId, entry.CreatedAtUtc });
+
+        modelBuilder.Entity<BetaInvite>()
+            .HasIndex(invite => invite.NormalizedEmail);
+
+        modelBuilder.Entity<BetaInvite>()
+            .HasIndex(invite => invite.NormalizedEmail)
+            .HasDatabaseName("IX_BetaInvites_NormalizedEmail_Pending")
+            .IsUnique()
+            .HasFilter("\"UsedAtUtc\" IS NULL AND \"RevokedAtUtc\" IS NULL");
 
     }
 }

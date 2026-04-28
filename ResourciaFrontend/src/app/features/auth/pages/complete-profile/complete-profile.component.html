@@ -26,6 +26,10 @@
         <div i18n class="w-full text-left text-xs text-red-700 mt-1">This username is already taken.</div>
       }
 
+      @if (inviteRequired) {
+        <div i18n class="w-full text-left text-xs text-amber-700 mt-1">Resourcia is currently invite-only. Ask an admin for beta access.</div>
+      }
+
       <div class="w-full text-left mt-2">
         @if (generalError) {
           <div i18n class="text-xs text-red-700">Something went wrong. Please try again.</div>

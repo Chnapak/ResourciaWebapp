@@ -59,6 +59,8 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
   emailInUse = false;
   /** True when the display name is already in use. */
   usernameInUse = false;
+  /** True when registration is limited to invited beta testers. */
+  inviteRequired = false;
   /** True when a non-specific error occurs. */
   generalError = false;
   /** Cooldown duration in seconds for resend link. */
@@ -156,6 +158,7 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
   onSubmit(): void {
     this.emailInUse = false;
     this.usernameInUse = false;
+    this.inviteRequired = false;
     this.generalError = false;
 
     if (this.form.invalid) {
@@ -185,8 +188,9 @@ export class RegisterFormComponent implements AfterViewInit, OnDestroy {
         this.isSubmitting = false;
         const errors = error?.error?.errors;
         if (errors?.Email?.includes('EMAIL_ALREADY_IN_USE')) this.emailInUse = true;
+        if (errors?.Email?.includes('REGISTRATION_INVITE_REQUIRED')) this.inviteRequired = true;
         if (errors?.DisplayName?.includes('USERNAME_ALREADY_IN_USE')) this.usernameInUse = true;
-        if (!errors) this.generalError = true;
+        if (!errors || (!this.emailInUse && !this.usernameInUse && !this.inviteRequired)) this.generalError = true;
         this.captchaToken = null;
         if (typeof turnstile !== 'undefined') {
           try { turnstile.reset(`#${this.turnstileContainerId}`); } catch { /* ignore */ }

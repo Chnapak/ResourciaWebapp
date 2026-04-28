@@ -44,6 +44,8 @@ export class LoginPageComponent {
   public generalError = false;
   /** True when captcha is missing or invalid. */
   public captchaFailed = false;
+  /** True when an external auth signup was blocked by closed beta mode. */
+  public externalInviteRequired = false;
 
   /** Reactive form with email and password validators. */
   protected form = this.fb.nonNullable.group({
@@ -51,6 +53,12 @@ export class LoginPageComponent {
     password: ['', [Validators.required]]
   });
   
+  /** Reads external auth errors sent back from the backend. */
+  ngOnInit() {
+    this.externalInviteRequired =
+      this.route.snapshot.queryParamMap.get('externalLoginError') === 'external_invite_required';
+  }
+
   /** Renders the Turnstile widget after the view initializes. */
   ngAfterViewInit() {
     this.renderTurnstile();
@@ -75,6 +83,7 @@ export class LoginPageComponent {
     this.emailNotConfirmed = false;
     this.generalError = false;
     this.captchaFailed = false;
+    this.externalInviteRequired = false;
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();

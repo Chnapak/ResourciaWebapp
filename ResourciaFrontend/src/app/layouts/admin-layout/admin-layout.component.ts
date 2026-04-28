@@ -12,5 +12,6 @@ export class AdminLayoutComponent {
     { label: $localize`Filters`, link: 'filters' },
     { label: $localize`Users`, link: 'users' },
     { label: $localize`Resources`, link: 'resources' },
+    { label: $localize`Beta Invites`, link: 'invites' },
   ];
 }

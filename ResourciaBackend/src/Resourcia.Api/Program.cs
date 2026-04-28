@@ -161,6 +161,7 @@ public class Program
         builder.Services.Configure<CloudflareOptions>(builder.Configuration.GetSection("CloudflareSettings"));
         builder.Services.Configure<OwnerDetailsOptions>(builder.Configuration.GetSection("OwnerDetailsSettings"));
         builder.Services.Configure<RedisOptions>(builder.Configuration.GetSection("Redis"));
+        builder.Services.Configure<RegistrationOptions>(builder.Configuration.GetSection("RegistrationSettings"));
 
         // Add services to the container.
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
@@ -176,6 +177,7 @@ public class Program
         builder.Services.AddScoped<ReviewService>();
         builder.Services.AddScoped<ExternalAuthService>();
         builder.Services.AddScoped<ResourceAuditService>();
+        builder.Services.AddScoped<RegistrationInviteService>();
 
         builder.Services.AddStackExchangeRedisCache(_ => { });
         builder.Services.Configure<Microsoft.Extensions.Caching.StackExchangeRedis.RedisCacheOptions>(options =>

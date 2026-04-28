@@ -45,6 +45,8 @@ export class RegistrationPageComponent {
   emailInUse = false;
   /** True when the display name is already in use. */
   usernameInUse = false;
+  /** True when registration is limited to invited beta testers. */
+  inviteRequired = false;
   /** True when a non-specific error occurs. */
   generalError = false;
   /** Cooldown duration in seconds for resend link. */
@@ -149,6 +151,7 @@ export class RegistrationPageComponent {
         this.isSubmitting = false;
         this.emailInUse = false;
         this.usernameInUse = false;
+        this.inviteRequired = false;
         this.generalError = false;
 
         var cover = document.getElementById('cover');
@@ -167,9 +170,16 @@ export class RegistrationPageComponent {
           if (errors.Email?.includes('EMAIL_ALREADY_IN_USE')) {
             this.emailInUse = true;
           }
+
+          if (errors.Email?.includes('REGISTRATION_INVITE_REQUIRED')) {
+            this.inviteRequired = true;
+          }
           
           if (errors.DisplayName?.includes('USERNAME_ALREADY_IN_USE')) {
             this.usernameInUse = true;
+          }
+          if (!this.emailInUse && !this.usernameInUse && !this.inviteRequired) {
+            this.generalError = true;
           }
           } else {
           this.generalError = true;
