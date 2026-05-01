@@ -21,7 +21,7 @@ export class FiltersSidebarComponent {
   /** Current range filter values. */
   @Input() rangeState: Record<string, { min?: string; max?: string }> = {};
   /** Current boolean filter values. */
-  @Input() booleanState: Record<string, boolean> = {};
+  @Input() booleanState: Record<string, boolean | null> = {};
   /** Current text filter values. */
   @Input() textState: Record<string, string> = {};
 
@@ -32,7 +32,7 @@ export class FiltersSidebarComponent {
   /** Emit updated range values. */
   @Output() rangeChange = new EventEmitter<{ filter: any; type: 'min' | 'max'; value: string }>();
   /** Emit updated boolean values. */
-  @Output() booleanChange = new EventEmitter<{ filter: any; value: boolean }>();
+  @Output() booleanChange = new EventEmitter<{ filter: any; value: boolean | null }>();
   /** Emit updated text values. */
   @Output() textChange = new EventEmitter<{ filter: any; value: string }>();
   /** Clear all filters. */

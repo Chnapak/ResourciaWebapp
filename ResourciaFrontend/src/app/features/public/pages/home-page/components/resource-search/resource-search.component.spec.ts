@@ -42,6 +42,14 @@ describe('ResourceSearchComponent', () => {
                   values: []
                 },
                 {
+                  key: 'usesAi',
+                  label: 'Uses AI',
+                  kind: FilterKind.Boolean,
+                  isMulti: false,
+                  resourceField: 'UsesAi',
+                  values: []
+                },
+                {
                   key: 'isFree',
                   label: 'Free only',
                   kind: FilterKind.Boolean,
@@ -73,14 +81,14 @@ describe('ResourceSearchComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should prioritise subject, author, and free filters from schema', () => {
-    expect(component.filters.map((filter) => filter.key)).toEqual(['subject', 'author', 'isFree']);
+  it('should prioritise subject, uses AI, and free filters from schema', () => {
+    expect(component.filters.map((filter) => filter.key)).toEqual(['subject', 'usesAi', 'isFree']);
   });
 
-  it('should navigate using backend filter keys', () => {
+  it('should navigate using backend filter keys and both boolean states', () => {
     component.formValues = {
       subject: 'math',
-      author: 'Khan',
+      usesAi: 'false',
       isFree: 'true'
     };
 
@@ -89,7 +97,7 @@ describe('ResourceSearchComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/search'], {
       queryParams: {
         subject: 'math',
-        author: 'Khan',
+        usesAi: 'false',
         isFree: 'true'
       }
     });

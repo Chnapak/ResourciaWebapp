@@ -82,12 +82,17 @@
     }
 
     @if (filter.kind == FilterKind.Boolean) {
-      <!-- Boolean checkbox. -->
+      <!-- Tri-state boolean filter: any, true, or false. -->
       <div class="mt-4">
-        <label class="flex items-center gap-2">
-          <input type="checkbox" [checked]="booleanState" (change)="onBooleanChange($event)" />
-          <span>{{ filter.label }}</span>
-        </label>
+        <select
+          class="w-full cursor-pointer rounded-[8px] border border-gray-300 bg-white px-3 py-2"
+          [value]="booleanState === null ? '' : booleanState ? 'true' : 'false'"
+          (change)="onBooleanChange($event)"
+        >
+          <option value="">Any value</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </div>
     }
 

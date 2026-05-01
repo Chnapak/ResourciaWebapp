@@ -179,11 +179,11 @@ export class SearchResultPageComponent implements OnInit {
   }
 
   /** Handle changes to a boolean filter. */
-  onBoolChange(filter: any, value: boolean): void {
-    if (value) {
-      this.queryState.booleans[filter.key] = true;
-    } else {
+  onBoolChange(filter: any, value: boolean | null): void {
+    if (value === null) {
       delete this.queryState.booleans[filter.key];
+    } else {
+      this.queryState.booleans[filter.key] = value;
     }
 
     this.updateUrl(1);
@@ -561,11 +561,11 @@ export class SearchResultPageComponent implements OnInit {
         case FilterKind.Boolean: {
           const raw = this.queryState.booleans[key];
 
-          if (raw === true) {
+          if (raw === true || raw === false) {
             chips.push({
               key,
-              value: 'true',
-              label: label
+              value: String(raw),
+              label: `${label}: ${raw ? 'Yes' : 'No'}`
             });
           }
 

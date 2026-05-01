@@ -25,8 +25,8 @@ export class FiltersSectionComponent {
   @Input() facetState: string | string[] | null = null;
   /** Current numeric range state. */
   @Input() rangeState: { min?: string; max?: string } = {};
-  /** Current boolean state. */
-  @Input() booleanState = false;
+  /** Current boolean state. Null means "any value". */
+  @Input() booleanState: boolean | null = null;
   /** Current text state. */
   @Input() textState = '';
 
@@ -36,8 +36,8 @@ export class FiltersSectionComponent {
   @Output() facetChange = new EventEmitter<string | string[] | null>();
   /** Emit updated range values. */
   @Output() rangeChange = new EventEmitter<{ type: 'min' | 'max'; value: string }>();
-  /** Emit updated boolean values. */
-  @Output() booleanChange = new EventEmitter<boolean>();
+  /** Emit updated boolean values. Null means "any value". */
+  @Output() booleanChange = new EventEmitter<boolean | null>();
   /** Emit updated text values. */
   @Output() textChange = new EventEmitter<string>();
 
@@ -62,8 +62,19 @@ export class FiltersSectionComponent {
 
   /** Emit changes for boolean inputs. */
   onBooleanChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).checked;
-    this.booleanChange.emit(value);
+    const value = (event.target as HTMLSelectElement).value;
+
+    if (value === 'true') {
+      this.booleanChange.emit(true);
+      return;
+    }
+
+    if (value === 'false') {
+      this.booleanChange.emit(false);
+      return;
+    }
+
+    this.booleanChange.emit(null);
   }
 
   /** Emit changes for text inputs. */

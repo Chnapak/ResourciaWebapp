@@ -15,7 +15,7 @@
             [collapsed]="isCollapsed(filter.key)"
             [facetState]="facetState[filter.key] ?? null"
             [rangeState]="rangeState[filter.key] ?? {}"
-            [booleanState]="booleanState[filter.key] ?? false"
+            [booleanState]="booleanState[filter.key] ?? null"
             [textState]="textState[filter.key] ?? ''"
             (toggle)="toggleSection.emit(filter.key)"
             (facetChange)="facetChange.emit({ filter, value: $event })"

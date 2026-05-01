@@ -89,8 +89,8 @@ export class ResourceSearchComponent implements OnInit {
       }
 
       if (filter.kind === FilterKind.Boolean) {
-        if (value === 'true') {
-          queryParams[filter.key] = 'true';
+        if (value === 'true' || value === 'false') {
+          queryParams[filter.key] = value;
         }
 
         continue;
@@ -239,7 +239,11 @@ export class ResourceSearchComponent implements OnInit {
           options: [
             {
               value: 'true',
-              label: this.toBooleanOptionLabel(filter)
+              label: this.toBooleanOptionLabel(filter, true)
+            },
+            {
+              value: 'false',
+              label: this.toBooleanOptionLabel(filter, false)
             }
           ]
         };
@@ -303,18 +307,19 @@ export class ResourceSearchComponent implements OnInit {
   }
 
   /**
-   * Select label for the enabled state of boolean filters.
+   * Select label for a specific boolean value.
    */
-  private toBooleanOptionLabel(filter: SearchSchemaFilter): string {
+  private toBooleanOptionLabel(filter: SearchSchemaFilter, value: boolean): string {
     if (this.isUsesAiFilter(filter)) {
-      return filter.label?.trim() || 'Uses AI';
+      return value ? 'Uses AI' : 'Does not use AI';
     }
 
     if (this.matchesFilter(filter, ['isfree', 'price', 'cost'])) {
-      return filter.label?.trim() || 'Free only';
+      return value ? (filter.label?.trim() || 'Free only') : 'Paid only';
     }
 
-    return filter.label?.trim() || this.toDisplayLabel(filter, 'Yes');
+    const label = this.toDisplayLabel(filter, 'Option');
+    return `${label}: ${value ? 'Yes' : 'No'}`;
   }
 
   /**
