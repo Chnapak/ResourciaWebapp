@@ -1,5 +1,19 @@
 name: resourcia
 services:
+  resourcia.migrator:
+    image: ${DOCKER_REGISTRY-}resourciaapi
+    build:
+      context: .
+      dockerfile: Resourcia.Api/Dockerfile
+    env_file:
+      - ../../.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - MIGRATE_ONLY=true
+    depends_on:
+      - resourcia.db
+    restart: "no"
+
   resourcia.api:
     image: ${DOCKER_REGISTRY-}resourciaapi
     build:
@@ -17,8 +31,12 @@ services:
       - resourcia-api-data-protection:/home/app/.aspnet/DataProtection-Keys
       - resourcia-api-uploads:/app/wwwroot/uploads
     depends_on:
-      - resourcia.db
-      - resourcia.redis
+      resourcia.db:
+        condition: service_started
+      resourcia.redis:
+        condition: service_started
+      resourcia.migrator:
+        condition: service_completed_successfully
 
   resourcia.frontend:
     image: ${DOCKER_REGISTRY-}resourciafrontend

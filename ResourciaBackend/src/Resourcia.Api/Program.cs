@@ -25,6 +25,22 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        if (Environment.GetEnvironmentVariable("MIGRATE_ONLY") == "true")
+        {
+            var migrationHost = Host.CreateDefaultBuilder(args)
+                .ConfigureServices((ctx, services) =>
+                    services.AddDbContext<AppDbContext>(o =>
+                        o.UseNpgsql(
+                            ctx.Configuration.GetConnectionString("DefaultConnection"),
+                            b => b.UseNodaTime())))
+                .Build();
+
+            using var migrationScope = migrationHost.Services.CreateScope();
+            await migrationScope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
+            Console.WriteLine("[migrator] All migrations applied.");
+            return;
+        }
+
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
