@@ -50,12 +50,15 @@ describe('ResourceSearchComponent', () => {
                   values: []
                 },
                 {
-                  key: 'isFree',
-                  label: 'Free only',
-                  kind: FilterKind.Boolean,
+                  key: 'monetization',
+                  label: 'Monetization',
+                  kind: FilterKind.Facet,
                   isMulti: false,
-                  resourceField: 'IsFree',
-                  values: []
+                  resourceField: null,
+                  values: [
+                    { value: 'free', label: 'Free' },
+                    { value: 'subscription', label: 'Subscription' }
+                  ]
                 },
                 {
                   key: 'year',
@@ -81,15 +84,15 @@ describe('ResourceSearchComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should prioritise subject, uses AI, and free filters from schema', () => {
-    expect(component.filters.map((filter) => filter.key)).toEqual(['subject', 'usesAi', 'isFree']);
+  it('should prioritise subject, uses AI, and monetization filters from schema', () => {
+    expect(component.filters.map((filter) => filter.key)).toEqual(['subject', 'usesAi', 'monetization']);
   });
 
   it('should navigate using backend filter keys and both boolean states', () => {
     component.formValues = {
       subject: 'math',
       usesAi: 'false',
-      isFree: 'true'
+      monetization: 'subscription'
     };
 
     component.onSearch();
@@ -98,7 +101,7 @@ describe('ResourceSearchComponent', () => {
       queryParams: {
         subject: 'math',
         usesAi: 'false',
-        isFree: 'true'
+        monetization: 'subscription'
       }
     });
   });

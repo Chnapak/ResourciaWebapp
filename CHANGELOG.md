@@ -1,3 +1,20 @@
+## [0.3.0] - 2026-05-02
+
+### Highlights
+- Beta invite system for controlled early access.
+- External OAuth flow (Google/Facebook) with proper error handling and frontend URL redirects.
+- Resource audit feature update.
+- AI usage stats displayed on the homepage search.
+- Search engine indexing: `robots.txt` and `sitemap.xml` added.
+- Caddy reverse proxy deployment with www→apex redirect.
+- VPS CD pipeline stabilised (compose override fix, password integration, domain connectivity).
+- API uploads and auth keys persisted correctly across deployments.
+- Email resend made idempotent and delivery fixed.
+- Mobile responsiveness improvements.
+- Boolean `false` filter values now handled correctly.
+- Site favicon updated.
+
+---
 ## [0.2.5] - 2026-04-09
 
 ### Highlights

@@ -41,13 +41,16 @@ describe('AddResourcePageComponent', () => {
     values: [],
   };
 
-  const isFreeFilter = {
-    key: 'isFree',
-    label: 'Free only',
-    kind: FilterKind.Boolean,
+  const monetizationFilter = {
+    key: 'monetization',
+    label: 'Monetization',
+    kind: FilterKind.Facet,
     isMulti: false,
-    resourceField: 'IsFree',
-    values: [],
+    resourceField: null,
+    values: [
+      { value: 'free', label: 'Free' },
+      { value: 'subscription', label: 'Subscription' },
+    ],
   };
 
   beforeEach(async () => {
@@ -61,7 +64,7 @@ describe('AddResourcePageComponent', () => {
     );
     resourceServiceSpy.getResourceSchema.and.returnValue(
       of({
-        filters: [subjectFilter, authorFilter, yearFilter, isFreeFilter],
+        filters: [subjectFilter, authorFilter, yearFilter, monetizationFilter],
       }),
     );
 
@@ -95,7 +98,7 @@ describe('AddResourcePageComponent', () => {
     component.getFilterControl(subjectFilter)?.setValue(['math']);
     component.getFilterControl(authorFilter)?.setValue('W3Schools');
     component.getFilterControl(yearFilter)?.setValue('1998');
-    component.getFilterControl(isFreeFilter)?.setValue('true');
+    component.getFilterControl(monetizationFilter)?.setValue('free');
 
     component.submit();
 
@@ -107,6 +110,7 @@ describe('AddResourcePageComponent', () => {
       description: 'Learn coding online.',
       filterValues: {
         subject: ['math'],
+        monetization: ['free'],
       },
       author: 'W3Schools',
       year: 1998,

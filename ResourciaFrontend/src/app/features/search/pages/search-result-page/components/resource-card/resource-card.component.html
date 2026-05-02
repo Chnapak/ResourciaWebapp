@@ -50,8 +50,8 @@
       <span class="px-[8px] py-[2px] bg-gray-200 text-gray-800 text-[11px] font-[600] border border-gray-400 rounded-[10px]">
         {{ displayType }}
       </span>
-      <span class="px-[8px] py-[2px] bg-blue-50 text-blue-700 text-[11px] font-[600] border border-blue-100 rounded-[10px]">
-        {{ resource?.isFree ? 'Free' : 'Paid' }}
+      <span class="px-[8px] py-[2px] text-[11px] font-[600] border rounded-[10px]" [ngClass]="monetizationBadgeClass">
+        {{ monetizationLabel }}
       </span>
     </div>
 

@@ -258,7 +258,7 @@ export class FiltersAdminPageComponent implements OnInit {
       case FilterKind.Range:
         return 'Filters a numeric field using min and max bounds, for example Year.';
       case FilterKind.Boolean:
-        return 'Filters a true or false field such as IsFree.';
+        return 'Filters a true or false field such as Uses AI.';
       case FilterKind.Text:
         return 'Filters a searchable text field such as Author or Title.';
       default:

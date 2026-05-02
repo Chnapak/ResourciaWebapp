@@ -132,7 +132,7 @@ public class ProfileService
         {
             foreach (var resourceId in impactedResourceIds)
             {
-                await _cache.InvalidateAsync($"resource:v5:{resourceId}");
+                await _cache.InvalidateAsync($"resource:v6:{resourceId}");
                 await _cache.InvalidateAsync($"threads:{resourceId}");
             }
         }
@@ -186,7 +186,7 @@ public class ProfileService
 
         foreach (var resourceId in impactedResourceIds)
         {
-            await _cache.InvalidateAsync($"resource:v5:{resourceId}");
+            await _cache.InvalidateAsync($"resource:v6:{resourceId}");
             await _cache.InvalidateAsync($"threads:{resourceId}");
         }
 

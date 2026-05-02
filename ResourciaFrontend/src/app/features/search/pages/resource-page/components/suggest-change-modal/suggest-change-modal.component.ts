@@ -7,8 +7,9 @@ import { FacetModel } from '../../../../../../shared/models/facet';
 import { ResourceDetailModel } from '../../../../../../shared/models/resource-detail';
 import { Filter as SearchSchemaFilter } from '../../../../../../shared/models/search-schema';
 import { UpdateResourceRequestModel } from '../../../../../../shared/models/update-resource-request';
+import { deriveIsFreeFromFilterValues } from '../../../../../../shared/utils/monetization.utils';
 
-type DirectResourceField = 'author' | 'isFree' | 'learningStyle' | 'rating' | 'tags' | 'year';
+type DirectResourceField = 'author' | 'learningStyle' | 'rating' | 'tags' | 'year';
 
 @Component({
   selector: 'app-suggest-change-modal',
@@ -34,6 +35,7 @@ export class SuggestChangeModalComponent implements OnInit, OnChanges {
     'resourcetype',
     'resource-type',
     'format',
+    'monetization',
   ]);
 
   readonly resourceForm = this.fb.group({
@@ -42,7 +44,6 @@ export class SuggestChangeModalComponent implements OnInit, OnChanges {
     author: [''],
     learningStyle: [''],
     year: [''],
-    isFree: [''],
     tags: [''],
   });
 
@@ -206,7 +207,6 @@ export class SuggestChangeModalComponent implements OnInit, OnChanges {
       author: this.resource.author ?? '',
       learningStyle: this.resource.learningStyle ?? '',
       year: this.resource.year ? String(this.resource.year) : '',
-      isFree: typeof this.resource.isFree === 'boolean' ? String(this.resource.isFree) : '',
       tags: Array.isArray(this.resource.tags) ? this.resource.tags.join(', ') : '',
     }, { emitEvent: false });
   }
@@ -268,11 +268,6 @@ export class SuggestChangeModalComponent implements OnInit, OnChanges {
       payload.year = yearValue;
     }
 
-    const isFreeValue = this.toNullableBoolean(this.resourceForm.get('isFree')?.value);
-    if (isFreeValue !== (this.resource.isFree ?? null)) {
-      payload.isFree = isFreeValue;
-    }
-
     const tagValues = this.toStringList(this.resourceForm.get('tags')?.value);
     if (!this.areStringArraysEqual(tagValues, this.resource.tags ?? [])) {
       payload.tags = tagValues;
@@ -282,6 +277,11 @@ export class SuggestChangeModalComponent implements OnInit, OnChanges {
     const resourceFilterValues = this.buildResourceFilterValues();
     if (!this.areFilterValuesEqual(filterValues, resourceFilterValues)) {
       payload.filterValues = filterValues;
+    }
+
+    const derivedIsFree = deriveIsFreeFromFilterValues(filterValues);
+    if (derivedIsFree !== null && derivedIsFree !== (this.resource.isFree ?? null)) {
+      payload.isFree = derivedIsFree;
     }
 
     return Object.keys(payload).length > 0 ? payload : null;
@@ -431,8 +431,6 @@ export class SuggestChangeModalComponent implements OnInit, OnChanges {
     switch (resourceField?.toLowerCase()) {
       case 'author':
         return 'author';
-      case 'isfree':
-        return 'isFree';
       case 'learningstyle':
         return 'learningStyle';
       case 'rating':
@@ -453,16 +451,6 @@ export class SuggestChangeModalComponent implements OnInit, OnChanges {
   private toNullableInteger(value: unknown): number | null {
     const parsed = Number.parseInt(String(value ?? '').trim(), 10);
     return Number.isNaN(parsed) ? null : parsed;
-  }
-
-  private toNullableBoolean(value: unknown): boolean | null {
-    if (value === true || value === 'true') {
-      return true;
-    }
-    if (value === false || value === 'false') {
-      return false;
-    }
-    return null;
   }
 
   private toStringList(value: unknown): string[] {

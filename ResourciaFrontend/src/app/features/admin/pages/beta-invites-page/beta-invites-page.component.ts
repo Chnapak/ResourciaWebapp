@@ -22,7 +22,7 @@ export class BetaInvitesPageComponent implements OnInit {
   private readonly toaster = inject(ToasterService);
 
   invites: BetaInvite[] = [];
-  registrationMode = 'FullRelease';
+  registrationMode: string | null = null;
   isLoading = true;
   isSubmitting = false;
   error: string | null = null;
@@ -113,6 +113,7 @@ export class BetaInvitesPageComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load beta invites', err);
+        this.registrationMode = null;
         this.error = 'Failed to load beta invites.';
         this.isLoading = false;
       }

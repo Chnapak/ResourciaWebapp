@@ -8,6 +8,7 @@ import { CreateResourceRequestModel } from '../../../../shared/models/create-res
 import { FilterKind } from '../../../../shared/models/filter-kind';
 import { Filter as SearchSchemaFilter } from '../../../../shared/models/search-schema';
 import { ToasterService } from '../../../../shared/toaster/toaster.service';
+import { deriveIsFreeFromFilterValues } from '../../../../shared/utils/monetization.utils';
 
 /**
  * Resource fields that map directly to request properties (non-facet).
@@ -43,6 +44,7 @@ export class AddResourcePageComponent implements OnInit, OnDestroy {
     'resourcetype',
     'resource-type',
     'format',
+    'monetization',
   ]);
 
   /** Base form group for required resource fields. */
@@ -307,16 +309,21 @@ export class AddResourcePageComponent implements OnInit, OnDestroy {
 
   /** Build the API payload from the form values. */
   private buildPayload(): CreateResourceRequestModel {
+    const filterValues = this.buildFilterValuePayload();
     const payload: CreateResourceRequestModel = {
       title: this.resourceForm.get('title')?.value.trim(),
       url: this.normalizeUrl(this.resourceForm.get('url')?.value),
       description: this.toNullableString(this.resourceForm.get('description')?.value),
-      filterValues: this.buildFilterValuePayload(),
+      filterValues,
     };
+
+    const directFieldPayload = this.buildDirectFieldPayload();
+    const derivedIsFree = deriveIsFreeFromFilterValues(filterValues);
 
     return {
       ...payload,
-      ...this.buildDirectFieldPayload(),
+      ...directFieldPayload,
+      ...(derivedIsFree !== null && directFieldPayload.isFree === undefined ? { isFree: derivedIsFree } : {}),
     };
   }
 

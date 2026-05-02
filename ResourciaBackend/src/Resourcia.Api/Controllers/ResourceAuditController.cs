@@ -204,7 +204,7 @@ public class ResourceAuditController : ControllerBase
 
         await _dbContext.SaveChangesAsync(ct);
 
-        await _cache.InvalidateAsync($"resource:v5:{resourceId}");
+        await _cache.InvalidateAsync($"resource:v6:{resourceId}");
         await _cache.InvalidateAsync($"threads:{resourceId}");
         await _cache.InvalidateNamespaceAsync("search-results");
 

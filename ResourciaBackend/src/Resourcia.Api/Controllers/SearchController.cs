@@ -18,7 +18,7 @@ public class SearchController(AppDbContext db, CacheService cache) : ControllerB
     public async Task<IActionResult> Schema()
     {
         var response = await _cache.GetOrSetAsync(
-            "search:schema:v5",
+            "search:schema:v6",
             async () =>
             {
                 var filters = await _db.Filters

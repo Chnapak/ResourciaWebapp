@@ -306,21 +306,6 @@ public class Program
                     CreatedBy = "system"
                 });
 
-                // BOOL (toggle) - no FacetValues
-                db.Filters.Add(new FilterDefinitions
-                {
-                    Key = "isFree",
-                    Label = "Free only",
-                    Description = "Show only free resources",
-                    Kind = FilterKind.Boolean,  // use your enum value (Boolean/Bool)
-                    IsMulti = false,
-                    IsActive = true,
-                    SortOrder = 3,
-                    ResourceField = "IsFree",
-                    CreatedAt = now,
-                    CreatedBy = "system"
-                });
-
                 // NUMBER (range input) - no FacetValues
                 db.Filters.Add(new FilterDefinitions
                 {
@@ -337,8 +322,34 @@ public class Program
                 });
 
                 await db.SaveChangesAsync();
+            }
 
+            if (!await db.Filters.AnyAsync(f => f.Key == "monetization"))
+            {
+                var now = SystemClock.Instance.GetCurrentInstant();
 
+                db.Filters.Add(new FilterDefinitions
+                {
+                    Key = "monetization",
+                    Label = "Monetization",
+                    Description = "How the resource is paid for or accessed.",
+                    Kind = FilterKind.Facet,
+                    IsMulti = false,
+                    IsActive = true,
+                    SortOrder = 3,
+                    FacetValues = new List<FacetValues>
+                    {
+                        new FacetValues { Value = "free", Label = "Free", IsActive = true, SortOrder = 1 },
+                        new FacetValues { Value = "freemium", Label = "Freemium", IsActive = true, SortOrder = 2 },
+                        new FacetValues { Value = "free-trial", Label = "Free trial", IsActive = true, SortOrder = 3 },
+                        new FacetValues { Value = "subscription", Label = "Subscription", IsActive = true, SortOrder = 4 },
+                        new FacetValues { Value = "one-time-purchase", Label = "One-time purchase", IsActive = true, SortOrder = 5 },
+                        new FacetValues { Value = "open-source", Label = "Open source", IsActive = true, SortOrder = 6 },
+                        new FacetValues { Value = "unknown", Label = "Unknown", IsActive = true, SortOrder = 99 },
+                    },
+                    CreatedAt = now,
+                    CreatedBy = "system"
+                });
 
                 await db.SaveChangesAsync();
             }

@@ -4,6 +4,7 @@ import { FilterKind } from '../../../../../../../../shared/models/filter-kind';
 import { ResourceDetailModel } from '../../../../../../../../shared/models/resource-detail';
 import { Filter as SearchSchemaFilter } from '../../../../../../../../shared/models/search-schema';
 import { RouterLink } from '@angular/router';
+import { getMonetizationFacet, getMonetizationLabel, isFreeMonetizationValue, isMonetizationKey } from '../../../../../../../../shared/utils/monetization.utils';
 
 /**
  * Tone variants for info row styling.
@@ -122,6 +123,11 @@ export class ResourceInfoCardComponent implements OnInit {
     const domain = this.getDomain(this.resource?.url);
     const language = this.getFacetValue(['language', 'lang']);
     const difficulty = this.getFacetValue(['difficulty', 'level']);
+    const monetizationFacet = getMonetizationFacet(this.resource?.facets);
+    const monetizationLabel = getMonetizationLabel(this.resource?.facets, this.resource?.isFree);
+    const monetizationIsFree = monetizationFacet
+      ? isFreeMonetizationValue(monetizationFacet.value)
+      : !!this.resource?.isFree;
 
     return [
       this.createRow('Type', type, 'Not specified', 'blue', true),
@@ -131,10 +137,10 @@ export class ResourceInfoCardComponent implements OnInit {
       this.createRow('Language', language),
       this.createRow('Difficulty', difficulty, 'Not specified', 'amber'),
       {
-        label: 'Cost',
-        value: this.resource?.isFree ? 'Free' : 'Paid',
-        tone: this.resource?.isFree ? 'green' : 'default',
-        pill: !!this.resource?.isFree,
+        label: 'Monetization',
+        value: monetizationLabel,
+        tone: monetizationIsFree ? 'green' : 'default',
+        pill: monetizationIsFree,
       },
     ];
   }
@@ -319,7 +325,8 @@ export class ResourceInfoCardComponent implements OnInit {
       'savescount',
     ]);
 
-    return reservedFacetKeys.has(filter.key.toLowerCase())
+    return isMonetizationKey(filter.key)
+      || reservedFacetKeys.has(filter.key.toLowerCase())
       || reservedResourceFields.has(filter.resourceField?.toLowerCase() ?? '');
   }
 

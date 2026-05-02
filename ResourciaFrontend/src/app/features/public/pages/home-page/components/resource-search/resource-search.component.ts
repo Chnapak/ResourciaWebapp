@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SearchService } from '../../../../../../core/services/search.service';
 import { Filter as SearchSchemaFilter, FilterValue } from '../../../../../../shared/models/search-schema';
 import { FilterKind } from '../../../../../../shared/models/filter-kind';
+import { isMonetizationKey } from '../../../../../../shared/utils/monetization.utils';
 
 /**
  * Supported UI controls for home page filters.
@@ -116,7 +117,10 @@ export class ResourceSearchComponent implements OnInit {
       this.isUsesAiFilter(filter) && (filter.kind === FilterKind.Boolean || filter.kind === FilterKind.Facet));
 
     this.addPreferredFilter(selected, available, (filter) =>
-      filter.kind === FilterKind.Boolean && this.matchesFilter(filter, ['isfree', 'price', 'cost']));
+      filter.kind === FilterKind.Facet && this.isMonetizationFilter(filter));
+
+    this.addPreferredFilter(selected, available, (filter) =>
+      filter.kind === FilterKind.Boolean && this.matchesFilter(filter, ['isfree']));
 
     this.addPreferredFilter(selected, available, (filter) =>
       filter.kind === FilterKind.Facet && this.matchesFilter(filter, ['type', 'resourcetype', 'resource-type', 'format']));
@@ -208,6 +212,15 @@ export class ResourceSearchComponent implements OnInit {
   }
 
   /**
+   * Detects pricing/monetization filters even if the admin labels them differently.
+   */
+  private isMonetizationFilter(filter: SearchSchemaFilter): boolean {
+    return isMonetizationKey(filter.key)
+      || isMonetizationKey(filter.label)
+      || isMonetizationKey(filter.resourceField);
+  }
+
+  /**
    * The home hero intentionally shows "Uses AI" in place of author.
    */
   private isAuthorFilter(filter: SearchSchemaFilter): boolean {
@@ -286,6 +299,10 @@ export class ResourceSearchComponent implements OnInit {
    * Placeholder text for facet filters (select inputs).
    */
   private toFacetPlaceholder(filter: SearchSchemaFilter): string {
+    if (this.isMonetizationFilter(filter)) {
+      return 'Any pricing';
+    }
+
     const label = this.toDisplayLabel(filter, 'Filter').toLowerCase();
     return `Any ${label}`;
   }
@@ -298,7 +315,7 @@ export class ResourceSearchComponent implements OnInit {
       return 'Any AI usage';
     }
 
-    if (this.matchesFilter(filter, ['isfree', 'price', 'cost'])) {
+    if (this.matchesFilter(filter, ['isfree'])) {
       return 'Any access';
     }
 
@@ -314,7 +331,7 @@ export class ResourceSearchComponent implements OnInit {
       return value ? 'Uses AI' : 'Does not use AI';
     }
 
-    if (this.matchesFilter(filter, ['isfree', 'price', 'cost'])) {
+    if (this.matchesFilter(filter, ['isfree'])) {
       return value ? (filter.label?.trim() || 'Free only') : 'Paid only';
     }
 

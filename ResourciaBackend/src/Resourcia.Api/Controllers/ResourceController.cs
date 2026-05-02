@@ -263,7 +263,7 @@ public class ResourceController(
         resource.UpdatedAtUtc = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync(ct);
 
-        await _cache.InvalidateAsync($"resource:v5:{id}");
+        await _cache.InvalidateAsync($"resource:v6:{id}");
         await InvalidateSearchResultsAsync();
 
         var afterSnapshot = await _auditService.BuildSnapshotAsync(id, ct);
@@ -292,7 +292,7 @@ public class ResourceController(
     public async Task<IActionResult> Schema(CancellationToken ct)
     {
         var response = await _cache.GetOrSetAsync(
-            "resource:schema:v1",
+            "resource:schema:v2",
             async () =>
             {
                 var filters = await _dbContext.Filters
@@ -338,7 +338,7 @@ public class ResourceController(
     {
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
         var resource = await _cache.GetOrSetAsync(
-            $"resource:v5:{id}",
+            $"resource:v6:{id}",
             async () =>
             {
                 var rawResource = await _dbContext.Set<Resource>()
@@ -447,7 +447,7 @@ public class ResourceController(
     public async Task<IActionResult> Search(CancellationToken ct)
     {
         var searchVersion = await _cache.GetNamespaceVersionAsync("search-results");
-        var cacheKey = $"search:v5:{searchVersion}:{Request.QueryString}";
+        var cacheKey = $"search:v6:{searchVersion}:{Request.QueryString}";
 
         var result = await _cache.GetOrSetAsync(cacheKey, async () =>
         {
@@ -973,7 +973,7 @@ public class ResourceController(
         resource.SavesCount += 1;
         await _dbContext.SaveChangesAsync();
 
-        await _cache.InvalidateAsync($"resource:v5:{id}");
+        await _cache.InvalidateAsync($"resource:v6:{id}");
 
         return Ok(new
         {
@@ -1008,7 +1008,7 @@ public class ResourceController(
         resource.SavesCount = Math.Max(resource.SavesCount - 1, 0);
         await _dbContext.SaveChangesAsync();
 
-        await _cache.InvalidateAsync($"resource:v5:{id}");
+        await _cache.InvalidateAsync($"resource:v6:{id}");
 
         return Ok(new
         {
@@ -1463,6 +1463,9 @@ public class ResourceController(
         await _cache.InvalidateAsync("search:schema:v3");
         await _cache.InvalidateAsync("search:schema:v4");
         await _cache.InvalidateAsync("search:schema:v5");
+        await _cache.InvalidateAsync("search:schema:v6");
+        await _cache.InvalidateAsync("resource:schema:v1");
+        await _cache.InvalidateAsync("resource:schema:v2");
     }
 
     private async Task InvalidateSearchResultsAsync()

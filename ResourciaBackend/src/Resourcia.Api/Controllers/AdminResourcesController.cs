@@ -97,7 +97,7 @@ public class AdminResourcesController : ControllerBase
 
         await _dbContext.SaveChangesAsync();
 
-        await _cache.InvalidateAsync($"resource:v5:{id}");
+        await _cache.InvalidateAsync($"resource:v6:{id}");
         await _cache.InvalidateAsync($"threads:{id}");
         await _cache.InvalidateNamespaceAsync("search-results");
         await InvalidateSearchSchemaAsync();
@@ -133,7 +133,7 @@ public class AdminResourcesController : ControllerBase
 
         await _dbContext.SaveChangesAsync();
 
-        await _cache.InvalidateAsync($"resource:v5:{id}");
+        await _cache.InvalidateAsync($"resource:v6:{id}");
         await _cache.InvalidateAsync($"threads:{id}");
         await _cache.InvalidateNamespaceAsync("search-results");
         await InvalidateSearchSchemaAsync();
@@ -151,6 +151,9 @@ public class AdminResourcesController : ControllerBase
         await _cache.InvalidateAsync("search:schema:v3");
         await _cache.InvalidateAsync("search:schema:v4");
         await _cache.InvalidateAsync("search:schema:v5");
+        await _cache.InvalidateAsync("search:schema:v6");
+        await _cache.InvalidateAsync("resource:schema:v1");
+        await _cache.InvalidateAsync("resource:schema:v2");
     }
 
     private string? GetCurrentDisplayName()

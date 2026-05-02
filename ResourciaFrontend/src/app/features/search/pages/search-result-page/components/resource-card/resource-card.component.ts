@@ -3,6 +3,7 @@ import { ButtonComponent } from '../../../../../../shared/ui/button/button.compo
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SearchResultResourceModel } from '../../../../../../shared/models/search-result-resource';
+import { getMonetizationFacet, getMonetizationLabel, isFreeMonetizationValue, isMonetizationKey } from '../../../../../../shared/utils/monetization.utils';
 
 /**
  * Card view for a single resource in search results.
@@ -88,6 +89,23 @@ export class ResourceCardComponent {
     return 'Resource';
   }
 
+  /** Display monetization label derived from the monetization facet. */
+  get monetizationLabel(): string {
+    return getMonetizationLabel(this.resource?.facets, this.resource?.isFree);
+  }
+
+  /** Styling class for the monetization badge. */
+  get monetizationBadgeClass(): string {
+    const monetizationFacet = getMonetizationFacet(this.resource?.facets);
+    const isFree = monetizationFacet
+      ? isFreeMonetizationValue(monetizationFacet.value)
+      : !!this.resource?.isFree;
+
+    return isFree
+      ? 'bg-green-50 text-green-700 border-green-100'
+      : 'bg-blue-50 text-blue-700 border-blue-100';
+  }
+
   /** Display average rating or a "New" badge. */
   get ratingText(): string {
     const averageRating = this.resource?.ratings?.averageRating ?? 0;
@@ -107,7 +125,10 @@ export class ResourceCardComponent {
     }
 
     const facetTags = this.resource.facets
-      .filter((facet) => !['type', 'resourcetype', 'resource-type', 'format'].includes(facet.key.toLowerCase()))
+      .filter((facet) =>
+        !['type', 'resourcetype', 'resource-type', 'format'].includes(facet.key.toLowerCase())
+        && !isMonetizationKey(facet.key)
+      )
       .map((facet) => facet.label?.trim() || facet.value?.trim())
       .filter((value): value is string => !!value);
 
