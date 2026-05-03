@@ -83,13 +83,12 @@ jobs:
             fi
 
             git fetch --all --prune
-            git fetch origin '+refs/tags/*:refs/tags/*'
+            git fetch origin '+refs/tags/*:refs/tags/*' || true
 
             if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null; then
               git checkout --detach "refs/tags/$deploy_ref"
             else
-              git checkout "$deploy_ref"
-              git pull --ff-only origin "$deploy_ref"
+              git checkout -B "$deploy_ref" "origin/$deploy_ref"
             fi
 
             cd ResourciaBackend/src
