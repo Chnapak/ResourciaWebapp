@@ -82,7 +82,8 @@ jobs:
               exit 1
             fi
 
-            git fetch --all --tags --prune --force
+            git fetch --all --prune
+            git fetch origin --tags --force
 
             if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null; then
               git checkout --detach "refs/tags/$deploy_ref"
