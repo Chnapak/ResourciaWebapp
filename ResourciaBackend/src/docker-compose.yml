@@ -97,6 +97,7 @@ services:
       - BACKUP_SUFFIX_COMMAND=sh /scripts/upload-backups.sh
     volumes:
       - resourcia-db-backups:/backups
+      - ./scripts/upload-backups.sh:/scripts/upload-backups.sh:ro
     depends_on:
       - resourcia.db
 
