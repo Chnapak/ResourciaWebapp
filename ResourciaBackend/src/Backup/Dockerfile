@@ -1,6 +1,6 @@
 FROM postgres:17-alpine
 
-RUN apk add --no-cache aws-cli dcron
+RUN apk add --no-cache rclone
 
 COPY backup.sh /backup.sh
 COPY crontab /etc/crontabs/root
