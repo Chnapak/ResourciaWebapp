@@ -83,8 +83,7 @@ jobs:
             fi
 
             git fetch --all --prune
-            git tag -l | xargs -r git tag -d
-            git fetch --tags
+            git fetch origin '+refs/tags/*:refs/tags/*'
 
             if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null; then
               git checkout --detach "refs/tags/$deploy_ref"
