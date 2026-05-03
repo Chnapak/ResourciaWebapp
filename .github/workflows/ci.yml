@@ -127,7 +127,7 @@ jobs:
     steps:
       - name: Deploy via SSH
         if: ${{ env.DEPLOY_HOST != '' }}
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ env.DEPLOY_HOST }}
           username: ${{ env.DEPLOY_USER }}

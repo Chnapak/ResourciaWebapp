@@ -58,7 +58,7 @@ jobs:
           exit "$missing"
 
       - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ env.VPS_HOST }}
           username: ${{ env.VPS_USER }}
