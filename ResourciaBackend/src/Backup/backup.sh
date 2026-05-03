@@ -4,7 +4,7 @@ set -eu
 # Cron does not inherit Docker environment variables.
 # Read them from PID 1's environment (set by Docker at container start).
 if [ -r /proc/1/environ ]; then
-  export $(cat /proc/1/environ | tr '\0' '\n' | grep -E '^(POSTGRES_|BACKUP_S3_|AWS_)')
+  export $(cat /proc/1/environ | tr '\0' '\n' | grep -E '^(POSTGRES_|BACKUP_S3_|AWS_)' | xargs)
 fi
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
@@ -31,6 +31,7 @@ rclone copy "${BACKUP_DIR}/${FILENAME}" \
   --s3-access-key-id="${BACKUP_S3_ACCESS_KEY}" \
   --s3-secret-access-key="${BACKUP_S3_SECRET_KEY}" \
   --s3-endpoint="${BACKUP_S3_ENDPOINT}" \
+  --s3-no-check-bucket \
   --no-traverse \
   -v
 echo "[backup] Upload complete"
