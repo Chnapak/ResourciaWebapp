@@ -4,7 +4,11 @@ set -eu
 # Cron does not inherit Docker environment variables.
 # Read them from PID 1's environment (set by Docker at container start).
 if [ -r /proc/1/environ ]; then
-  export $(cat /proc/1/environ | tr '\0' '\n' | grep -E '^(POSTGRES_|BACKUP_S3_|AWS_)' | xargs)
+  while IFS= read -r -d '' var; do
+    case "$var" in
+      POSTGRES_*|BACKUP_S3_*|AWS_*) export "$var" ;;
+    esac
+  done < /proc/1/environ
 fi
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
