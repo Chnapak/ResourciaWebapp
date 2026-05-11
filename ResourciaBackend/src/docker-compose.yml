@@ -89,6 +89,7 @@ services:
     environment:
       - POSTGRES_HOST=resourcia.db
       - BACKUP_KEEP_DAYS=7
+      - BACKUP_HEALTHCHECK_URL=${BACKUP_HEALTHCHECK_URL}
     volumes:
       - resourcia-db-backups:/backups
     depends_on:
