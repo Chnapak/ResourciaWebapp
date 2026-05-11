@@ -79,15 +79,15 @@ jobs:
             cd "$app_path"
 
             echo "[deploy] Fetching"
+            rm -f .git/index.lock
             git fetch --all --prune || true
             git fetch origin '+refs/tags/*:refs/tags/*' || true
 
             echo "[deploy] Checking out ${deploy_ref}"
             if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null 2>&1; then
-              git -c advice.detachedHead=false checkout "refs/tags/$deploy_ref"
+              git checkout --detach "refs/tags/$deploy_ref"
             else
-              git checkout -B "$deploy_ref" "origin/$deploy_ref" || \
-                git reset --hard "origin/$deploy_ref"
+              git reset --hard "origin/$deploy_ref"
             fi
 
             echo "[deploy] Starting containers"
