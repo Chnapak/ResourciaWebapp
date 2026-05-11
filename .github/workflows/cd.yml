@@ -82,7 +82,7 @@ jobs:
               exit 1
             fi
 
-            git fetch --all --prune
+            git fetch --all --prune || true
             git fetch origin '+refs/tags/*:refs/tags/*' || true
 
             if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null; then
