@@ -80,6 +80,7 @@ services:
       - resourcia.api
 
   resourcia.backup:
+    restart: unless-stopped
     build:
       context: ./Backup
       dockerfile: Dockerfile
