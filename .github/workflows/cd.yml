@@ -84,11 +84,13 @@ jobs:
             git fetch origin '+refs/tags/*:refs/tags/*' || true
 
             echo "[deploy] Checking out ${deploy_ref}"
+            set -x
             if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null 2>&1; then
               git checkout --detach "refs/tags/$deploy_ref"
             else
               git reset --hard "origin/$deploy_ref"
             fi
+            set +x
 
             echo "[deploy] Starting containers"
             cd ResourciaBackend/src
