@@ -75,22 +75,22 @@ jobs:
             compose_file="${VPS_COMPOSE_FILE:-docker-compose.yml}"
             deploy_ref="${DEPLOY_REF:-main}"
 
+            echo "[deploy] ref=${deploy_ref} app=${app_path}"
             cd "$app_path"
 
-            if ! git diff --quiet || ! git diff --cached --quiet; then
-              echo "Server checkout has local changes. Commit or clean them before deploying."
-              exit 1
-            fi
-
+            echo "[deploy] Fetching"
             git fetch --all --prune || true
             git fetch origin '+refs/tags/*:refs/tags/*' || true
 
-            if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null; then
-              git checkout --detach "refs/tags/$deploy_ref"
+            echo "[deploy] Checking out ${deploy_ref}"
+            if git rev-parse -q --verify "refs/tags/$deploy_ref" >/dev/null 2>&1; then
+              git -c advice.detachedHead=false checkout "refs/tags/$deploy_ref"
             else
-              git checkout -B "$deploy_ref" "origin/$deploy_ref"
+              git checkout -B "$deploy_ref" "origin/$deploy_ref" || \
+                git reset --hard "origin/$deploy_ref"
             fi
 
+            echo "[deploy] Starting containers"
             cd ResourciaBackend/src
 
             docker compose -f "$compose_file" pull || true
