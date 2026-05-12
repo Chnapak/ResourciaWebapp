@@ -1,12 +1,12 @@
 /**
  * Full-page registration view with Turnstile captcha.
  */
-import { AfterViewInit, Component, inject } from '@angular/core';
-import { 
-  AbstractControl, FormBuilder, Validators, ValidatorFn, ValidationErrors, 
-  FormsModule, ReactiveFormsModule 
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import {
+  AbstractControl, FormBuilder, Validators, ValidatorFn, ValidationErrors,
+  FormsModule, ReactiveFormsModule
 } from '@angular/forms';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { RegisterModel } from '../../models/register';
 import { environment } from '../../../../../environments/environment';
@@ -24,13 +24,11 @@ declare var turnstile: any;
 /**
  * Collects registration info and triggers confirmation emails.
  */
-export class RegistrationPageComponent {
-  /** Form builder for the registration form. */
+export class RegistrationPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  /** Auth service used to register users. */
   private readonly authService = inject(AuthService);
-  /** Router used for navigation after successful registration. */
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   /** Turnstile site key for captcha rendering. */
   public readonly siteKey = environment.siteKey;
@@ -57,7 +55,13 @@ export class RegistrationPageComponent {
   resendButtonText = 'Resend Email';
 
 
-  /** Renders the Turnstile widget after the view initializes. */
+  ngOnInit(): void {
+    const email = this.route.snapshot.queryParamMap.get('email');
+    if (email) {
+      this.form.patchValue({ email });
+    }
+  }
+
   ngAfterViewInit() {
     turnstile.render('#turnstile-container', {
     sitekey: this.siteKey,

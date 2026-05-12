@@ -8,5 +8,5 @@ public class EnvironmentOptions
     public required string SenderEmail { get; set; }
     public required string SenderName { get; set; }
     public string CompleteProfileUrl { get; set; } = string.Empty;
-    public string FrontendRegisterUrl { get; set; } = "/register";
+    public string FrontendRegisterUrl { get; set; } = "/signup";
 }
