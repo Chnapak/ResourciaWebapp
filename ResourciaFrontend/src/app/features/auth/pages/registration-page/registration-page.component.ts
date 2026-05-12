@@ -167,7 +167,8 @@ export class RegistrationPageComponent implements OnInit {
       error: (error) => {
         console.error('Registration failed:', error);
         this.isSubmitting = false;
-      
+        turnstile.reset('#turnstile-container');
+
         const errors = error?.error?.errors;
 
         if (errors) {
@@ -178,14 +179,14 @@ export class RegistrationPageComponent implements OnInit {
           if (errors.Email?.includes('REGISTRATION_INVITE_REQUIRED')) {
             this.inviteRequired = true;
           }
-          
+
           if (errors.DisplayName?.includes('USERNAME_ALREADY_IN_USE')) {
             this.usernameInUse = true;
           }
           if (!this.emailInUse && !this.usernameInUse && !this.inviteRequired) {
             this.generalError = true;
           }
-          } else {
+        } else {
           this.generalError = true;
         }
       },
