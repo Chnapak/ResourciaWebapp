@@ -389,7 +389,7 @@ public class AuthController : ControllerBase
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         var url = $"{_environmentSettings.FrontendHostUrl.TrimEnd('/')}/{_environmentSettings.FrontendResetPasswordUrl.TrimStart('/')}";
         var escapedToken = Uri.EscapeDataString(token);
-        await _emailSenderService.AddEmail("Password Reset", $"You can reset your password by clicking <a href='{url}/?token={escapedToken}&email={user.Email}'>here</a>", user.Email, user.DisplayName);
+        await _emailSenderService.AddEmail("Reset your password", EmailTemplates.PasswordReset($"{url}/?token={escapedToken}&email={user.Email}"), user.Email, user.DisplayName);
         return Ok();
     }
 
@@ -527,7 +527,7 @@ public class AuthController : ControllerBase
 
         var url = $"{_environmentSettings.FrontendHostUrl.TrimEnd('/')}/{_environmentSettings.FrontendConfirmUrl.TrimStart('/')}";
         var escapedToken = Uri.EscapeDataString(token);
-        await _emailSenderService.AddEmail("Registration", $"Please confirm your email by clicking <a href='{url}/?token={escapedToken}&email={newUser.Email}'>here</a>", newUser.Email, newUser.DisplayName);
+        await _emailSenderService.AddEmail("Confirm your email address", EmailTemplates.EmailConfirmation($"{url}/?token={escapedToken}&email={newUser.Email}"), newUser.Email, newUser.DisplayName);
 
         return token;
     }

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Resourcia.Api.Models.Admin;
+using Resourcia.Api.Options;
 using Resourcia.Api.Services;
 using Resourcia.Data.Entities;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,10 +16,17 @@ namespace Resourcia.Api.Controllers;
 public class AdminBetaInvitesController : ControllerBase
 {
     private readonly RegistrationInviteService _registrationInviteService;
+    private readonly EmailSenderService _emailSenderService;
+    private readonly EnvironmentOptions _environmentOptions;
 
-    public AdminBetaInvitesController(RegistrationInviteService registrationInviteService)
+    public AdminBetaInvitesController(
+        RegistrationInviteService registrationInviteService,
+        EmailSenderService emailSenderService,
+        IOptions<EnvironmentOptions> environmentOptions)
     {
         _registrationInviteService = registrationInviteService;
+        _emailSenderService = emailSenderService;
+        _environmentOptions = environmentOptions.Value;
     }
 
     [HttpGet]
@@ -48,11 +57,18 @@ public class AdminBetaInvitesController : ControllerBase
             GetActorName(),
             ct);
 
+        if (result.Status == CreateBetaInviteStatus.Created)
+        {
+            var registerUrl = $"{_environmentOptions.FrontendHostUrl.TrimEnd('/')}/{_environmentOptions.FrontendRegisterUrl.TrimStart('/')}?email={Uri.EscapeDataString(result.Invite!.Email)}";
+            await _emailSenderService.AddEmail(
+                "You're invited to Resourcia",
+                EmailTemplates.BetaInvite(registerUrl),
+                result.Invite.Email);
+            return CreatedAtAction(nameof(GetInvites), ToModel(result.Invite));
+        }
+
         return result.Status switch
         {
-            CreateBetaInviteStatus.Created => CreatedAtAction(
-                nameof(GetInvites),
-                ToModel(result.Invite!)),
             CreateBetaInviteStatus.AlreadyExists => Conflict(new { error = "INVITE_ALREADY_EXISTS" }),
             CreateBetaInviteStatus.EmailAlreadyRegistered => Conflict(new { error = "EMAIL_ALREADY_REGISTERED" }),
             _ => BadRequest(new { error = "EMAIL_INVALID" })
