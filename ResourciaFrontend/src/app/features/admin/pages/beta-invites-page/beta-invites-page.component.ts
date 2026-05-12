@@ -55,7 +55,6 @@ export class BetaInvitesPageComponent implements OnInit {
         this.toaster.show('Invite created.', 'success');
       },
       error: (err) => {
-        console.error('Failed to create invite', err);
         this.inviteError = this.mapInviteError(err?.error?.error);
         this.isSubmitting = false;
       }
@@ -82,8 +81,7 @@ export class BetaInvitesPageComponent implements OnInit {
         );
         this.toaster.show('Invite revoked.', 'success');
       },
-      error: (err) => {
-        console.error('Failed to revoke invite', err);
+      error: () => {
         this.toaster.show('Failed to revoke invite.', 'error');
       }
     });
@@ -111,8 +109,7 @@ export class BetaInvitesPageComponent implements OnInit {
         this.invites = response.items;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Failed to load beta invites', err);
+      error: () => {
         this.registrationMode = null;
         this.error = 'Failed to load beta invites.';
         this.isLoading = false;

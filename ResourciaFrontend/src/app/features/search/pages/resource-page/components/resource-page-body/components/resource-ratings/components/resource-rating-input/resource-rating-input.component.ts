@@ -71,7 +71,6 @@ export class ResourceRatingInputComponent implements OnInit {
       this.auth.runPendingAction();
       this.rating = action.payload.star;
       this.reviewControl.setValue(action.payload.text || '');
-      console.log('Running pending action with payload:', action.payload);
     }
   }
 
@@ -82,7 +81,7 @@ export class ResourceRatingInputComponent implements OnInit {
         this.currentUserReview = review;
         this.showInput = !review;
       },
-      error: (err: any) => console.error('Failed to fetch user review', err)
+      error: () => {}
     });
   }
 
@@ -155,8 +154,7 @@ export class ResourceRatingInputComponent implements OnInit {
         this.deleting = false;
         this.reviewChange.emit(); // Notify parent to refresh reviews
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.error = "Failed to delete review.";
         this.deleting = false;
       }
@@ -186,10 +184,9 @@ export class ResourceRatingInputComponent implements OnInit {
         this.fetchUserReview();
         this.reviewChange.emit(); // Notify parent to refresh reviews
       },
-      error: (err: any) => {
+      error: () => {
         this.submitting = false;
         this.error = 'Failed to submit review.';
-        console.error('Review submission error', err);
       }
     });
 

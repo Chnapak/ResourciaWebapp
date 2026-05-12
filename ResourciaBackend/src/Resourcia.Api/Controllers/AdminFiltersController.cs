@@ -309,7 +309,6 @@ public class AdminFiltersController : ControllerBase
         });
     }
 
-    // TODO: Patch instead of Put
     [HttpPatch("{id:guid}")]
     public async Task<ActionResult<FilterDefinitions>> PatchFilter(Guid id, [FromBody] JsonPatchDocument<CreateFilterDefinitionModel> patchDoc)
     {

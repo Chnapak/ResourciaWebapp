@@ -57,11 +57,9 @@ export class AuthLinksComponent {
   }
 
   upgradeUser() {
-    console.log('Upgrade user');
   }
 
   deactivateUser() {
-    console.log('Deactivate user');
   }
 
   onLogoutClick(): void {

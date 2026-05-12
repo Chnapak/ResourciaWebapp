@@ -100,7 +100,6 @@ export class SearchResultPageComponent implements OnInit {
       });
     },
     (err) => {
-      console.error('Failed to load search schema', err);
       this.schemaLoaded = true;
     });
   }
@@ -126,9 +125,6 @@ export class SearchResultPageComponent implements OnInit {
       texts: {}
     };
 
-    console.log('clear all filters');
-    console.log('query', this.buildQuery());
-
     this.updateUrl(1);
 
     this.toaster.show('All filters cleared', 'success');
@@ -150,9 +146,6 @@ export class SearchResultPageComponent implements OnInit {
     }
 
     this.updateUrl(1);
-
-    console.log('facet change', filter, value);
-    console.log('query', this.buildQuery());
   }
 
   /** Handle changes to a numeric range filter. */
@@ -173,9 +166,6 @@ export class SearchResultPageComponent implements OnInit {
     }
 
     this.updateUrl(1);
-
-    console.log('range change', filter, type, value);
-    console.log('query', this.buildQuery());
   }
 
   /** Handle changes to a boolean filter. */
@@ -187,9 +177,6 @@ export class SearchResultPageComponent implements OnInit {
     }
 
     this.updateUrl(1);
-
-    console.log('boolean change', filter, value);
-    console.log('query', this.buildQuery());
   }
 
   /** Handle changes to a free-text filter. */
@@ -203,9 +190,6 @@ export class SearchResultPageComponent implements OnInit {
     }
 
     this.updateUrl(1);
-
-    console.log('text change', filter, value);
-    console.log('query', this.buildQuery());
   }
 
 
@@ -342,10 +326,8 @@ export class SearchResultPageComponent implements OnInit {
         this.isLoading = false;
         this.hasLoaded = true;
 
-        console.log('Resources:', results);
       },
       error: err => {
-        console.error('Failed to load resources', err);
         this.toaster.show('Failed to load resources', 'error');
         this.isLoading = false;
         this.hasLoaded = true;

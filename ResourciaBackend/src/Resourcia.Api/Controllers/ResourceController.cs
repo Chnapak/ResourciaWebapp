@@ -1129,7 +1129,7 @@ public class ResourceController(
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ERROR] Failed to delete file {filePath} for Image {imageId} by User {userId}: {ex.Message}");
+                _logger.LogError(ex, "Failed to delete file {FilePath} for image {ImageId} by user {UserId}", filePath, imageId, userId);
             }
         }
 

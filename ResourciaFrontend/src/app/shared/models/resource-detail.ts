@@ -2,6 +2,7 @@ import { ResourceModel } from "./resource";
 import { RatingsModel } from "./ratings";
 import { FacetModel } from "./facet";
 import { Review } from "./review";
+import { DiscussionThread } from "./discussion-thread";
 
 export interface ResourceDetailModel extends ResourceModel {
   description: string;
@@ -18,5 +19,5 @@ export interface ResourceDetailModel extends ResourceModel {
   createdAtUtc: string; // ISO string; can convert to Date if you want
   updatedAtUtc: string;
   reviews: Review[];
-  discussions: any[];         // TODO: define proper type if known
+  discussions: DiscussionThread[];
 }

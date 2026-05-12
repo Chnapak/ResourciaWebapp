@@ -83,8 +83,7 @@ export class UsersAdminPageComponent implements OnInit {
         this.selectedIds = new Set([...this.selectedIds].filter(id => validIds.has(id)));
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Failed to load users', err);
+      error: () => {
         this.users = [];
         this.selectedIds.clear();
         this.isLoading = false;

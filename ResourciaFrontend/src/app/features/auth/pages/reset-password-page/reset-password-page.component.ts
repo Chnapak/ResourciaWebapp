@@ -86,15 +86,12 @@ export class ResetPasswordPageComponent {
       email: this.route.snapshot.queryParamMap.get('email') || ''
     };
 
-    console.log('Reset password payload:', payload);
-
     this.authService.resetPassword(payload).subscribe({
       next: async () => {
         this.isSubmitting = false;
         await this.router.navigate(['/login'], { queryParams: { reset: '1' } });
       },
       error: (err) => {
-        console.error('Reset password error:', err);
         this.handleError(err)
       },
     });

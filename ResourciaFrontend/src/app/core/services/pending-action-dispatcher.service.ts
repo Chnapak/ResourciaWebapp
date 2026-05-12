@@ -40,27 +40,11 @@ export class PendingActionDispatcher {
     }
   }
 
-  /** Placeholder replay for review submissions. */
-  private replayReview(payload: any): void {
-    // TODO: inject and call ReviewService.submitReview(payload) when implemented
-    console.info('[PendingActionDispatcher] Would replay SUBMIT_REVIEW:', payload);
-  }
+  private replayReview(_payload: unknown): void {}
 
-  /** Placeholder replay for review votes. */
-  private replayVote(payload: any): void {
-    // TODO: inject and call ReviewService.voteReview(payload) when implemented
-    console.info('[PendingActionDispatcher] Would replay VOTE_REVIEW:', payload);
-  }
+  private replayVote(_payload: unknown): void {}
 
-  /** Placeholder replay for discussion comments. */
-  private replayComment(payload: any): void {
-    // TODO: inject and call DiscussionService.addComment(payload) when implemented
-    console.info('[PendingActionDispatcher] Would replay ADD_COMMENT:', payload);
-  }
+  private replayComment(_payload: unknown): void {}
 
-  /** Placeholder replay for resource submissions. */
-  private replaySubmitResource(payload: any): void {
-    // TODO: inject and call ResourceService.createResource(payload) when implemented
-    console.info('[PendingActionDispatcher] Would replay SUBMIT_RESOURCE:', payload);
-  }
+  private replaySubmitResource(_payload: unknown): void {}
 }

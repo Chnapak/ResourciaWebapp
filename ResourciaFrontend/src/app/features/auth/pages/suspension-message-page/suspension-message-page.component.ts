@@ -29,9 +29,6 @@ export class SuspensionMessagePageComponent implements OnInit  {
 
   /** Initializes suspension details from navigation state. */
   ngOnInit() {
-    const nav = this.router.getCurrentNavigation();
-    console.log(history.state);
-
     if (history.state) {
       this.reason = history.state.reason;
       this.type = history.state.type;

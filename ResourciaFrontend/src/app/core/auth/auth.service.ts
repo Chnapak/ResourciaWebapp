@@ -302,7 +302,6 @@ export class AuthService {
   runPendingAction(): PendingAction | null {
     const action = this.peekPendingAction();
     this.pendingAction = null;
-    console.log('Running pending action:', action);
     localStorage.removeItem('pendingAction');
     return action;
   }

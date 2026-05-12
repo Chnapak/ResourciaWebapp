@@ -57,8 +57,7 @@ export class ResourceReviewListComponent implements OnChanges {
             ? res.totalItems
             : fallbackReviews.length;
         },
-        error: (err) => {
-          console.error('Failed to load reviews', err);
+        error: () => {
           this.reviews = fallbackReviews;
           this.totalItems = fallbackReviews.length;
         }
@@ -81,9 +80,7 @@ export class ResourceReviewListComponent implements OnChanges {
           this.page = res.page;
           this.totalItems = res.totalItems;
         },
-        error: (err) => {
-          console.error('Failed to load more reviews', err);
-        }
+        error: () => {}
       });
   }
 

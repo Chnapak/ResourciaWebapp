@@ -37,7 +37,6 @@ public class Program
 
             using var migrationScope = migrationHost.Services.CreateScope();
             await migrationScope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
-            Console.WriteLine("[migrator] All migrations applied.");
             return;
         }
 

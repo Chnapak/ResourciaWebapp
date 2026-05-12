@@ -134,9 +134,8 @@ export class FilterRowComponent extends TableRowBase {
         this.hydrateDraft();
         this.toaster.show('Filter updated.', 'success');
       },
-      error: (err) => {
+      error: () => {
         this.isSaving = false;
-        console.error('Failed to update filter', err);
         this.toaster.show('Failed to update filter.', 'error');
       }
     });
@@ -158,8 +157,7 @@ export class FilterRowComponent extends TableRowBase {
       next: (updatedFilter) => {
         this.filter.isActive = updatedFilter.isActive;
       },
-      error: (err) => {
-        console.error('Failed to toggle filter', err);
+      error: () => {
         this.toaster.show('Failed to toggle filter.', 'error');
       }
     });
@@ -177,8 +175,7 @@ export class FilterRowComponent extends TableRowBase {
         this.deleted.emit(this.filter.id);
         this.toaster.show('Filter deleted.', 'success');
       },
-      error: (err) => {
-        console.error('Failed to delete filter', err);
+      error: () => {
         this.toaster.show('Failed to delete filter.', 'error');
       }
     });

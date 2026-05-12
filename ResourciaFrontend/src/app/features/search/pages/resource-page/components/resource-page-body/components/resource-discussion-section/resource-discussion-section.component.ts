@@ -38,7 +38,6 @@ export class ResourceDiscussionSectionComponent implements OnChanges {
   /** Reload threads when the resource input changes. */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['resource'] && this.resource?.id) {
-      console.log('Resource arrived:', this.resource);
       this.loadThreads();
     }
   }
@@ -50,12 +49,10 @@ export class ResourceDiscussionSectionComponent implements OnChanges {
       next: (threads) => {
         this.threads = threads;
         this.loading = false;
-        console.log('Loaded threads:', threads);
       },
       error: () => {
         this.error = 'Failed to load discussions.';
         this.loading = false;
-        console.error('Error loading threads for resource', this.resourceId);
       }
     });
   }

@@ -145,9 +145,7 @@ export class UserRowComponent extends TableRowBase {
         next: () => {
           this.user.status = 'suspended';
         },
-        error: (error) => {
-          console.error('Failed to suspend user', error);
-        }
+        error: () => {}
       }
       );
     } else {

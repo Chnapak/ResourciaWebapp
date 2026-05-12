@@ -38,7 +38,6 @@ export class ResourceDiscussionThreadComponent implements OnInit {
   /** Resume any pending reply action after login. */
   ngOnInit() {
     const action = this.auth.peekPendingAction();
-    console.log('Pending action on thread init:', action);
     if (!action) return;
 
     switch (action.type) {
@@ -83,9 +82,7 @@ export class ResourceDiscussionThreadComponent implements OnInit {
         this.replyContent = '';
         this.showReplyInput = false;
       },
-      error: (err) => {
-        console.error('Failed to send reply:', err);
-      }
+      error: () => {}
     });
 
     this.replyContent = '';

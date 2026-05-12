@@ -69,8 +69,7 @@ export class ResourceHistoryPageComponent implements OnInit {
           this.selectEntry(this.entries[0]);
         }
       },
-      error: (err) => {
-        console.error('Failed to load audit history', err);
+      error: () => {
         this.error = 'Failed to load audit history.';
         this.isLoading = false;
       }
@@ -91,8 +90,7 @@ export class ResourceHistoryPageComponent implements OnInit {
         this.selectedDetail = detail;
         this.isDetailLoading = false;
       },
-      error: (err) => {
-        console.error('Failed to load audit entry', err);
+      error: () => {
         this.toaster.show('Failed to load audit entry details.', 'error');
         this.isDetailLoading = false;
       }
@@ -127,8 +125,7 @@ export class ResourceHistoryPageComponent implements OnInit {
           this.toaster.show('Resource reverted.', 'success');
           this.loadAudit();
         },
-        error: (err) => {
-          console.error('Failed to revert resource', err);
+        error: () => {
           this.isRevertSubmitting = false;
           this.toaster.show('Failed to revert resource.', 'error');
         }

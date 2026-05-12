@@ -165,7 +165,6 @@ export class RegistrationPageComponent implements OnInit {
         popUp?.classList.add('success');
       },
       error: (error) => {
-        console.error('Registration failed:', error);
         this.isSubmitting = false;
         turnstile.reset('#turnstile-container');
 
@@ -195,7 +194,6 @@ export class RegistrationPageComponent implements OnInit {
 
   /** Resends the confirmation email and starts cooldown. */
   resendEmail() {
-    console.log('Resending Email...');
     this.startCooldown();
 
     const formData = this.form.getRawValue();
@@ -207,9 +205,8 @@ export class RegistrationPageComponent implements OnInit {
       next: () => {
 
       },
-      error: (error) => {
-        console.error('Resend failed:', error)
-      }
+      error: () => {}
+
     });
   }
 

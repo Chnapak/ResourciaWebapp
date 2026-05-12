@@ -100,7 +100,6 @@ export class ResourcePageComponent {
         this.loadImages(id);
       },
       error: (err) => {
-        console.error('Error fetching resource:', err);
         this.error = 'Failed to load resource.';
         this.loading = false;
       },
@@ -164,8 +163,7 @@ export class ResourcePageComponent {
           'success'
         );
       },
-      error: (error) => {
-        console.error('Error updating favorites:', error);
+      error: () => {
         this.favoritePending = false;
         this.toaster.show('Could not update favorites right now.', 'error');
       },
@@ -205,8 +203,7 @@ export class ResourcePageComponent {
         this.toaster.show('Thanks! Your changes were saved.', 'success');
         this.fetchResource(this.resourceId!);
       },
-      error: (error) => {
-        console.error('Error updating resource:', error);
+      error: () => {
         this.suggestSubmitting = false;
         this.toaster.show('Could not save changes right now.', 'error');
       },
@@ -222,8 +219,7 @@ export class ResourcePageComponent {
 
     this.resourceService.getSaveState(resourceId).subscribe({
       next: (state) => this.applySaveState(state),
-      error: (error) => {
-        console.error('Error loading save state:', error);
+      error: () => {
         this.applySaveState({ isSaved: false, savesCount: this.resource?.savesCount ?? 0 });
       },
     });
@@ -238,8 +234,7 @@ export class ResourcePageComponent {
         this.images = images ?? [];
         this.imagesLoading = false;
       },
-      error: (error) => {
-        console.error('Error loading resource images:', error);
+      error: () => {
         this.images = [];
         this.imagesLoading = false;
       }
@@ -352,8 +347,7 @@ export class ResourcePageComponent {
         this.toaster.show('Images uploaded successfully.', 'success');
         this.loadImages(this.resourceId!);
       },
-      error: (error) => {
-        console.error('Error uploading resource images:', error);
+      error: () => {
         this.imageUploadPending = false;
         this.toaster.show('Failed to upload images. Please try again.', 'error');
       }
@@ -391,8 +385,7 @@ export class ResourcePageComponent {
         }
         this.loadImages(this.resourceId!);
       },
-      error: (error) => {
-        console.error('Error deleting resource image:', error);
+      error: () => {
         this.imageDeletePendingId = null;
         this.toaster.show('Failed to remove image.', 'error');
       }

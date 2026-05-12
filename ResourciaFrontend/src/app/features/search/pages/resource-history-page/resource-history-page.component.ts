@@ -64,8 +64,7 @@ export class ResourceHistoryPageComponent implements OnInit {
           this.selectEntry(this.entries[0]);
         }
       },
-      error: (err) => {
-        console.error('Failed to load audit history', err);
+      error: () => {
         this.error = 'Failed to load resource history.';
         this.isLoading = false;
       }
@@ -86,8 +85,7 @@ export class ResourceHistoryPageComponent implements OnInit {
         this.selectedDetail = detail;
         this.isDetailLoading = false;
       },
-      error: (err) => {
-        console.error('Failed to load audit entry', err);
+      error: () => {
         this.toaster.show('Failed to load history details.', 'error');
         this.isDetailLoading = false;
       }

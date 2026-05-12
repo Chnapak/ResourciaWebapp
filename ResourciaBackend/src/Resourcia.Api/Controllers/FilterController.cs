@@ -43,7 +43,6 @@ public class FilterController(AppDbContext dbContext) : ControllerBase
                     .ToList()
             })
             .ToListAsync();
-        Console.WriteLine(filters);
         return Ok(filters);
     }
 

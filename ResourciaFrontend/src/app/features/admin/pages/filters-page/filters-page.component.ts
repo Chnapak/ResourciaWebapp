@@ -222,7 +222,6 @@ export class FiltersAdminPageComponent implements OnInit {
       },
       error: (err) => {
         this.isCreating = false;
-        console.error('Failed to create filter', err);
         this.toaster.show(this.extractErrorMessage(err) ?? 'Failed to create filter.', 'error');
       }
     });
@@ -282,8 +281,7 @@ export class FiltersAdminPageComponent implements OnInit {
         this.selectedKeys = new Set([...this.selectedKeys].filter(id => validIds.has(id)));
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Failed to load filters', err);
+      error: () => {
         this.schema = [];
         this.selectedKeys.clear();
         this.isLoading = false;

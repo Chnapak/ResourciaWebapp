@@ -42,7 +42,6 @@ export class ChapterSectionComponent implements AfterViewInit {
   /** Initialize intersection observers once the view is ready. */
   ngAfterViewInit(): void {
     this.setupChapterObserver();
-    console.log("init done")
   }
 
   /** Create the observer that adds the in-view class when chapters enter viewport. */
@@ -53,7 +52,6 @@ export class ChapterSectionComponent implements AfterViewInit {
           if (entry.isIntersecting) {
             const el = entry.target as HTMLElement;
             this.renderer.addClass(el, 'in-view');
-            //this.setActive(el.id);
           }
         });
       },

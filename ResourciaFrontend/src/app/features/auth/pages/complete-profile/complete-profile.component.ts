@@ -50,7 +50,6 @@ export class CompleteProfileComponent {
     this.registrationToken = this.route.snapshot.queryParamMap.get('registrationToken');
     
     if (!this.registrationToken) {
-      console.error('Registration token is missing from the URL.');
       this.generalError = true;
     }
   }
@@ -80,7 +79,6 @@ export class CompleteProfileComponent {
         });
       },
       error: (err) => {
-        console.log(err)
         this.isSubmitting = false;
         // Check for the 'USERNAME_ALREADY_IN_USE' error you set in C#
         const validationErrors = err.error?.errors;

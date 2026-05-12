@@ -61,8 +61,7 @@ export class ResourcesAdminPageComponent implements OnInit {
         );
         this.toaster.show('Resource deleted.', 'success');
       },
-      error: (err) => {
-        console.error('Failed to delete resource', err);
+      error: () => {
         this.toaster.show('Failed to delete resource.', 'error');
       }
     });
@@ -92,8 +91,7 @@ export class ResourcesAdminPageComponent implements OnInit {
         );
         this.toaster.show('Resource restored.', 'success');
       },
-      error: (err) => {
-        console.error('Failed to restore resource', err);
+      error: () => {
         this.toaster.show('Failed to restore resource.', 'error');
       }
     });
@@ -118,8 +116,7 @@ export class ResourcesAdminPageComponent implements OnInit {
         this.resources = response.items;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Failed to load resources', err);
+      error: () => {
         this.error = 'Failed to load resources.';
         this.isLoading = false;
       }
