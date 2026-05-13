@@ -12,10 +12,10 @@ public class Discussions
 {
     public Guid Id { get; set; }
     public Guid ResourceId { get; set; }
-    public Resource Resource { get; set; }
+    public Resource Resource { get; set; } = null!;
     public Guid UserId { get; set; }
     public AppUser User { get; set; } = null!;
-    public string Content { get; set; }
+    public string Content { get; set; } = null!;
     public Instant CreatedAt { get; set; }
     public List<DiscussionReplies> Replies { get; set; } = new();
 }

@@ -14,9 +14,9 @@ public class DiscussionReplies
 {
     public Guid Id { get; set; }
     public Guid DiscussionId { get; set; }
-    public Discussions Discussions { get; set; }
+    public Discussions Discussions { get; set; } = null!;
     public Guid UserId { get; set; }
     public AppUser User { get; set; } = null!;
-    public string Content { get; set; }
+    public string Content { get; set; } = null!;
     public Instant CreatedAt { get; set; }
 }

@@ -2,5 +2,5 @@
 
 public class AdminBanModel
 {
-    public string reason { get; set; }
+    public string? reason { get; set; }
 }

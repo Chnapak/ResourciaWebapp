@@ -28,16 +28,22 @@ public class IdentitySeed
         }
 
         var adminEmail = _ownerDetails.GetValue<string>("Email");
+        if (string.IsNullOrWhiteSpace(adminEmail))
+            return;
+
         var adminUser = await _userManager.FindByEmailAsync(adminEmail);
 
         if (adminUser == null)
         {
-            var adminUsername = _ownerDetails.GetValue<string>("Username");
+            var adminUsername = _ownerDetails.GetValue<string>("Username") ?? string.Empty;
             var adminPassword = _ownerDetails.GetValue<string>("Password");
             var adminHandle = _ownerDetails.GetValue<string>("Handle");
 
+            if (string.IsNullOrWhiteSpace(adminPassword))
+                return;
+
             var now = _clock.GetCurrentInstant();
-            var baseHandleSource = string.IsNullOrWhiteSpace(adminUsername) ? adminEmail ?? "owner" : adminUsername;
+            var baseHandleSource = string.IsNullOrWhiteSpace(adminUsername) ? adminEmail : adminUsername;
             var handleSource = string.IsNullOrWhiteSpace(adminHandle) ? baseHandleSource : adminHandle;
             var handle = ProfileHandleUtility.BuildHandle(handleSource);
             if (string.IsNullOrWhiteSpace(handle))

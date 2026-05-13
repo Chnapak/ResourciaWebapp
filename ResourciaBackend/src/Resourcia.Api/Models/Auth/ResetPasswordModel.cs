@@ -8,5 +8,5 @@ public class ResetPasswordModel
     [EmailAddress]
     public string Email { get; set; } = null!;
     public string Token { get; set; } = null!;
-    public string NewPassword { get; set; }
+    public string NewPassword { get; set; } = null!;
 }

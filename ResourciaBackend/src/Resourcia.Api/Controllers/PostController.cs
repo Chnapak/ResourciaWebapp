@@ -79,7 +79,7 @@ public class PostController(IClock clock, IApplicationMapper mapper, AppDbContex
     }
 
     [HttpGet("api/Post")]
-    public async Task<ActionResult<List<DetailPostModel>>> GetList()
+    public ActionResult<List<DetailPostModel>> GetList()
     {
         var models = _dbContext
             .Posts

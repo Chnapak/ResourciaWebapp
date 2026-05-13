@@ -20,5 +20,5 @@ public class ResourceRatings
     public int Count4 { get; set; }
     public int Count5 { get; set; }
 
-    public Resource Resource { get; set; }
+    public Resource Resource { get; set; } = null!;
 }
