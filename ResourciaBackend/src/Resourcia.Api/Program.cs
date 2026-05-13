@@ -26,11 +26,8 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-
-        Log.Logger = new LoggerConfiguration()
-     .WriteTo.Console()
-     .CreateBootstrapLogger();
-        try {
+        try
+        {
             if (Environment.GetEnvironmentVariable("MIGRATE_ONLY") == "true")
             {
                 var migrationHost = Host.CreateDefaultBuilder(args)
