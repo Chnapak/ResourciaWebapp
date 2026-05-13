@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Resourcia.Api.Models.Admin;
+using Resourcia.Api.Utils;
 using Resourcia.Data;
 using Resourcia.Data.Entities.Identity;
 
@@ -19,12 +20,14 @@ public class AdminUsersController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly AppDbContext _dbContext;
     private readonly IClock _clock;
+    private readonly ILogger<AdminUsersController> _logger;
 
-    public AdminUsersController(UserManager<AppUser> userManager, AppDbContext dbContext, IClock clock)
+    public AdminUsersController(UserManager<AppUser> userManager, AppDbContext dbContext, IClock clock, ILogger<AdminUsersController> logger)
     {
         _userManager = userManager;
         _dbContext = dbContext;
         _clock = clock;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -181,6 +184,8 @@ public class AdminUsersController : ControllerBase
         user.Status = UserStatus.Suspended;
         user.ModerationReason = suspensionRequest.reason;
         await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddDays(suspensionRequest.durationDays));
+        _logger.LogWarning("Admin {AdminId} suspended user {TargetUserId} for {DurationDays} days. Reason: {Reason}",
+            User.GetUserId(), id, suspensionRequest.durationDays, suspensionRequest.reason);
         return NoContent();
     }
 
@@ -199,6 +204,7 @@ public class AdminUsersController : ControllerBase
         user.Status = UserStatus.Active;
         user.ModerationReason = null;
         await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+        _logger.LogInformation("Admin {AdminId} unsuspended user {TargetUserId}", User.GetUserId(), id);
         return NoContent();
     }
 
@@ -217,6 +223,8 @@ public class AdminUsersController : ControllerBase
         user.Status = UserStatus.Banned;
         user.ModerationReason = banRequest.reason;
         await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+        _logger.LogWarning("Admin {AdminId} permanently banned user {TargetUserId}. Reason: {Reason}",
+            User.GetUserId(), id, banRequest.reason);
         return NoContent();
     }
 
@@ -235,6 +243,7 @@ public class AdminUsersController : ControllerBase
         user.Status = UserStatus.Active;
         user.ModerationReason = null;
         await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+        _logger.LogInformation("Admin {AdminId} unbanned user {TargetUserId}", User.GetUserId(), id);
         return NoContent();
     }
 
@@ -255,6 +264,7 @@ public class AdminUsersController : ControllerBase
         user.DeletedAt = _clock.GetCurrentInstant();
         await _userManager.UpdateAsync(user);
 
+        _logger.LogWarning("Admin {AdminId} deleted user account {TargetUserId}", User.GetUserId(), id);
         return NoContent();
 
     }

@@ -38,6 +38,7 @@ public class AuthController : ControllerBase
     private readonly EmailSenderService _emailSenderService;
     private readonly ExternalAuthService _externalAuthService;
     private readonly RegistrationInviteService _registrationInviteService;
+    private readonly ILogger<AuthController> _logger;
 
     public AuthController(
         IClock clock,
@@ -49,7 +50,8 @@ public class AuthController : ControllerBase
         IOptions<JwtSettings> options,
         IOptions<EnvironmentOptions> environmentSettings,
         ExternalAuthService externalAuthService,
-        RegistrationInviteService registrationInviteService)
+        RegistrationInviteService registrationInviteService,
+        ILogger<AuthController> logger)
     {
         _clock = clock;
         _dbContext = dbContext;
@@ -61,6 +63,7 @@ public class AuthController : ControllerBase
         _environmentSettings = environmentSettings.Value;
         _externalAuthService = externalAuthService;
         _registrationInviteService = registrationInviteService;
+        _logger = logger;
     }
 
     // We will also add verion of endpoint into post controller
@@ -78,6 +81,7 @@ public class AuthController : ControllerBase
 
         if (!captchaVerificationResult)
         {
+            _logger.LogWarning("Registration captcha failed from {IpAddress}", ipAddress);
             ModelState.AddModelError(string.Empty, "CAPTCHA_VERIFICATION_FAILED");
             return ValidationProblem(ModelState);
         }
@@ -91,6 +95,7 @@ public class AuthController : ControllerBase
         var inviteAllowsRegistration = await _registrationInviteService.CanRegisterAsync(model.Email);
         if (!inviteAllowsRegistration)
         {
+            _logger.LogWarning("Registration blocked — invite required for {Email}", model.Email);
             ModelState.AddModelError<RegisterModel>(x => x.Email, "REGISTRATION_INVITE_REQUIRED");
         }
 
@@ -155,7 +160,8 @@ public class AuthController : ControllerBase
         await GenerateEmailConfirmation(newUser);
 
         await transaction.CommitAsync();
-        
+
+        _logger.LogInformation("User {UserId} registered", newUser.Id);
         return NoContent();
     }
 
@@ -222,6 +228,8 @@ public class AuthController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
+        _logger.LogInformation("Email confirmed for user {UserId}", user.Id);
+
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
         var refreshToken = await GenerateRefreshTokenAsync(user.Id, _jwtSettings.RefreshTokenExpirationInDays);
@@ -246,6 +254,7 @@ public class AuthController : ControllerBase
 
         if (user == null)
         {
+            _logger.LogWarning("Failed login attempt for unknown email {Email}", email);
             ModelState.AddModelError(string.Empty, "LOGIN_FAILED");
             return ValidationProblem(ModelState);
         }
@@ -268,6 +277,7 @@ public class AuthController : ControllerBase
                 lockoutInstant = Instant.FromDateTimeOffset(lockoutEnd.Value);
             }
 
+            _logger.LogWarning("Login blocked — user {UserId} is locked out until {LockoutEnd}", user.Id, lockoutInstant);
             return Unauthorized(new
             {
                 error = "USER_LOCKED_OUT",
@@ -278,6 +288,7 @@ public class AuthController : ControllerBase
 
         if (!signInResult.Succeeded)
         {
+            _logger.LogWarning("Failed login attempt for user {UserId}", user.Id);
             ModelState.AddModelError(string.Empty, "LOGIN_FAILED");
             return ValidationProblem(ModelState);
         }
@@ -287,6 +298,8 @@ public class AuthController : ControllerBase
             ModelState.AddModelError(string.Empty, "DEACTIVATED_ACCOUNT");
             return Unauthorized(ModelState);
         }
+
+        _logger.LogInformation("User {UserId} logged in", user.Id);
 
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = GenerateAccessToken(user.Id, user.Email!, user.DisplayName!, roles, _jwtSettings.AccessTokenExpirationInMinutes);
@@ -340,6 +353,7 @@ public class AuthController : ControllerBase
                 return Redirect(BuildFrontendLoginErrorRedirect("deactivated_account"));
             }
 
+            _logger.LogInformation("User {UserId} signed in via {Provider}", externalLogin.User.Id, info.LoginProvider);
             await SignInWithJwtCookiesAsync(externalLogin.User);
             return Redirect(BuildFrontendUrl(safeReturnUrl));
         }
@@ -347,6 +361,7 @@ public class AuthController : ControllerBase
         if (externalLogin.Status == ExternalLoginCallbackStatus.NeedsProfile
             && !string.IsNullOrWhiteSpace(externalLogin.RegistrationToken))
         {
+            _logger.LogInformation("New OAuth user from {Provider} directed to complete profile setup", info.LoginProvider);
             var completeProfilePath = NormalizeFrontendReturnUrl(_environmentSettings.CompleteProfileUrl);
             var redirectUrl =
                 $"{BuildFrontendUrl(completeProfilePath)}?registrationToken={Uri.EscapeDataString(externalLogin.RegistrationToken)}";
@@ -354,6 +369,7 @@ public class AuthController : ControllerBase
             return Redirect(redirectUrl);
         }
 
+        _logger.LogWarning("External login failed for {Provider}: {ErrorCode}", info?.LoginProvider, externalLogin.ErrorCode ?? "external_login_failed");
         return Redirect(BuildFrontendLoginErrorRedirect(externalLogin.ErrorCode ?? "external_login_failed"));
     }
 
@@ -370,6 +386,7 @@ public class AuthController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
+        _logger.LogInformation("User {UserId} completed external login setup", result.User.Id);
         await SignInWithJwtCookiesAsync(result.User);
         return Ok();
     }
@@ -386,6 +403,7 @@ public class AuthController : ControllerBase
         {
             return Ok();
         }
+        _logger.LogInformation("Password reset requested for user {UserId}", user.Id);
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         var url = $"{_environmentSettings.FrontendHostUrl.TrimEnd('/')}/{_environmentSettings.FrontendResetPasswordUrl.TrimStart('/')}";
         var escapedToken = Uri.EscapeDataString(token);
@@ -410,7 +428,8 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Token invalid or password does not meet requirements");
         }
-        return Ok();    
+        _logger.LogInformation("Password reset completed for user {UserId}", user.Id);
+        return Ok();
     }
 
     [HttpPost("RefreshToken")]

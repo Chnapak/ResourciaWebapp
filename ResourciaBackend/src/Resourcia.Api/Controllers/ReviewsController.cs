@@ -30,12 +30,14 @@ public class ReviewsController : ControllerBase
     private readonly ReviewService _reviews;
     private readonly AppDbContext _db;
     private readonly CacheService _cache;
+    private readonly ILogger<ReviewsController> _logger;
 
-    public ReviewsController(ReviewService reviews, AppDbContext db, CacheService cache)
+    public ReviewsController(ReviewService reviews, AppDbContext db, CacheService cache, ILogger<ReviewsController> logger)
     {
         _reviews = reviews;
         _db      = db;
         _cache   = cache;
+        _logger  = logger;
     }
 
     // =========================================================================
@@ -84,7 +86,10 @@ public class ReviewsController : ControllerBase
         var (review, error, status) = await _reviews.CreateReviewAsync(id, userId, model, ct);
 
         if (status == 201)
+        {
+            _logger.LogInformation("User {UserId} posted review {ReviewId} for resource {ResourceId}", userId, review?.Id, id);
             await InvalidateResourceAsync(id);
+        }
 
         return status switch
         {
@@ -153,7 +158,11 @@ public class ReviewsController : ControllerBase
         var (_, error, status) = await _reviews.DeleteReviewAsync(reviewId, userId, isAdmin, ct);
 
         if (status == 204)
+        {
+            if (isAdmin)
+                _logger.LogWarning("Admin {AdminId} deleted review {ReviewId} on resource {ResourceId}", userId, reviewId, id);
             await InvalidateResourceAsync(id);
+        }
 
         return status switch
         {

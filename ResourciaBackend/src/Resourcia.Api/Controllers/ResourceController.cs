@@ -104,6 +104,9 @@ public class ResourceController(
             return Conflict(new { error = "Could not create resource.", detail = e.InnerException?.Message ?? e.Message });
         }
 
+        _logger.LogInformation("User {UserId} created resource {ResourceId} \"{Title}\"",
+            GetCurrentDisplayName(), resource.Id, resource.Title);
+
         await InvalidateSearchSchemaAsync();
         await InvalidateSearchResultsAsync();
 
@@ -265,6 +268,8 @@ public class ResourceController(
 
         await _cache.InvalidateAsync($"resource:v6:{id}");
         await InvalidateSearchResultsAsync();
+
+        _logger.LogInformation("User {UserId} updated resource {ResourceId}", GetCurrentDisplayName(), id);
 
         var afterSnapshot = await _auditService.BuildSnapshotAsync(id, ct);
         var actionType = filtersChanged && !coreChanged
