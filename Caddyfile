@@ -40,3 +40,7 @@ resourcia.net {
         reverse_proxy resourcia.frontend:80
     }
 }
+
+seq.resourcia.net {
+	reverse_proxy resourcia.seq:80
+}
