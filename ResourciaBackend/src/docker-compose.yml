@@ -27,7 +27,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:5000
       - REDIS_URL=redis://resourcia.redis:6379
-      - Serilog__WriteTo__1__Args__serverUrl=http://resourcia.seq:80
     volumes:
       - resourcia-api-data-protection:/home/app/.aspnet/DataProtection-Keys
       - resourcia-api-uploads:/app/wwwroot/uploads
