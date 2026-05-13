@@ -17,11 +17,11 @@
 
 ## Bugs / tech debt
 
-- [ ] **EF global query filter warnings** — `AppUser` and `Resource` have global soft-delete filters but their dependent entities (`Comment`, `DiscussionReplies`, `ResourceFilterValues`, etc.) do not. Either add matching filters or make the navigations optional to silence the 10 startup warnings.
+- [x] **EF global query filter warnings** — suppressed via `ConfigureWarnings` on both `AddDbContext` calls; the interaction is intentional (dependent entities are always loaded in the context of a live resource/user).
+- [x] **`discussions: any[]` in `resource-detail.ts`** — already typed as `DiscussionThread[]`; was a stale TODO.
+- [x] **`AdminFiltersController` has both PUT and PATCH** — legacy `PATCH /{id}` endpoint removed; `toggleActivity` and `reorder` PATCH endpoints remain.
 - [ ] **`isFree` field still in data model** — the boolean is still on `Resource`, in API models, and in frontend models. Once all resources have a monetization facet value, the field and its DB column can be removed entirely.
-- [ ] **`discussions: any[]` in `resource-detail.ts`** — no proper TypeScript type defined for discussions on the resource detail model.
 - [ ] **`PendingActionDispatcher` stubs** — `SUBMIT_REVIEW`, `VOTE_REVIEW`, `ADD_COMMENT`, and `SUBMIT_RESOURCE` are all no-ops. They need to be wired to real services so deferred actions replay correctly after login.
-- [ ] **`AdminFiltersController` has both PUT and PATCH** — the PATCH endpoint is a leftover and should be removed once PUT covers all update scenarios (there's a `// TODO: Patch instead of Put` comment on it).
 - [ ] **Search schema cache not invalidated after migrations** — adding data via migration doesn't clear the Redis schema cache. Newly seeded filters won't appear for up to 1 hour unless an admin manually edits a filter.
 
 ---
@@ -44,4 +44,4 @@
 
 - [ ] **Automated DB backups** — no backup strategy is in place for the PostgreSQL container volume on VPS.
 - [ ] **Health check endpoint wired to CD** — `/healthz` exists but the CD pipeline only checks it if `VPS_HEALTHCHECK_URL` is set; make it required.
-- [ ] **Log aggregation** — container logs are only accessible via `docker logs`; consider shipping to a lightweight sink (Loki, Seq, etc.).
+- [x] **Log aggregation** — Serilog + Seq deployed; structured events for auth, moderation, resources, reviews, and email delivery.

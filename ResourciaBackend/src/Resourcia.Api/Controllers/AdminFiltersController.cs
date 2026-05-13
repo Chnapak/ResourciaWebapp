@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
-using Npgsql;
 using Resourcia.Api.Models.Admin;
 using Resourcia.Api.Models.Filters;
 using Resourcia.Api.Services;
@@ -307,55 +305,6 @@ public class AdminFiltersController : ControllerBase
             LastChangeAt = filter.CreatedAt,
             ModifiedBy = filter.ModifiedBy
         });
-    }
-
-    [HttpPatch("{id:guid}")]
-    public async Task<ActionResult<FilterDefinitions>> PatchFilter(Guid id, [FromBody] JsonPatchDocument<CreateFilterDefinitionModel> patchDoc)
-    {
-        if (patchDoc == null)
-            return BadRequest("No patch document provided.");
-
-        var filter = await _dbContext.Filters
-            .SingleOrDefaultAsync(currentFilter => currentFilter.Id == id && currentFilter.DeletedAt == null);
-        if (filter == null)
-            return NotFound($"Filter with id '{id}' not found.");
-
-        var filterDto = new CreateFilterDefinitionModel
-        {
-            Key = filter.Key,
-            Label = filter.Label,
-            Description = filter.Description,
-            Kind = filter.Kind,
-            IsMulti = filter.IsMulti,
-            ResourceField = filter.ResourceField
-        };
-        // Apply the patch to the entity
-        patchDoc.ApplyTo(filterDto);
-
-        // Validate after applying patch
-        if (!TryValidateModel(filterDto))
-            return ValidationProblem(ModelState);
-
-        filter.Key = filterDto.Key;
-        filter.Label = filterDto.Label;
-        filter.Description = filterDto.Description;
-        filter.Kind = filterDto.Kind;
-        filter.IsMulti = filterDto.IsMulti;
-        filter.ResourceField = filterDto.ResourceField;
-        filter.ModifiedAt = _clock.GetCurrentInstant();
-        filter.ModifiedBy = GetCurrentDisplayName();
-
-        try
-        {
-            await _dbContext.SaveChangesAsync();
-            await InvalidateSearchSchemaAsync();
-        }
-        catch (DbUpdateException ex) when (ex.InnerException is PostgresException pg && pg.SqlState == "23505")
-        {
-            return Conflict($"A filter with key '{filterDto.Key}' already exists.");
-        }
-
-        return Ok(filter);
     }
 
     [HttpPatch("{id:guid}/toggleActivity")]

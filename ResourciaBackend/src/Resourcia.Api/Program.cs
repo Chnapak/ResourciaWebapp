@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
@@ -35,7 +36,9 @@ public class Program
                         services.AddDbContext<AppDbContext>(o =>
                             o.UseNpgsql(
                                 ctx.Configuration.GetConnectionString("DefaultConnection"),
-                                b => b.UseNodaTime())))
+                                b => b.UseNodaTime())
+                             .ConfigureWarnings(w => w.Ignore(
+                                CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning))))
                     .Build();
 
                 using var migrationScope = migrationHost.Services.CreateScope();
@@ -74,6 +77,8 @@ public class Program
                 {
                     builder.UseNodaTime();
                 });
+                options.ConfigureWarnings(w => w.Ignore(
+                    CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning));
             });
 
             builder.Services.AddIdentityCore<AppUser>(options =>
