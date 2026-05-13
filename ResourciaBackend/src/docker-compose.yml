@@ -100,9 +100,10 @@ services:
 
   resourcia.seq:
     image: datalust/seq:latest
+    env_file:
+      - ../../.env
     environment:
       - ACCEPT_EULA=Y
-      - SEQ_FIRSTRUN_ADMINPASSWORD=${SEQ_ADMIN_PASSWORD}
     expose:
       - "80"
     volumes:
